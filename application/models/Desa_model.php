@@ -18,99 +18,99 @@ class Desa_model extends CI_Model {
 		$this->load->model('wilayah_model');
 	}
 
-		/**
-		 * @param 	array 	$data
-		 * @return 	string 	$hasil
-		 * @return 	array   $data
-		 */
-		public function insert(&$data)
+	/**
+	 * @param 	array 	$data
+	 * @return 	string 	$hasil
+	 * @return 	array   $data
+	 */
+	public function insert(&$data)
+	{
+		$desa = $this->siapkanData($data);
+		$desa_id = $this->isDesaBaru($desa);
+		if (empty($desa_id))
 		{
-				$desa = $this->siapkanData($data);
-				$desa_id = $this->isDesaBaru($desa);
-				if (empty($desa_id))
-				{
-						$desa_id = $this->insertDesa($desa);
-						$hasil = "<br>Desa baru: ".$desa_id;
-				}
-				else
-				{
-						$this->db->where('id', $desa_id)->update('desa', $desa);
-						$hasil = "<br>Desa lama: ".$desa_id;
-				}
-				$data['id'] = $desa_id; // Kembalikan untuk tabel akses
-				return $hasil;
+				$desa_id = $this->insertDesa($desa);
+				$hasil = "<br>Desa baru: ".$desa_id;
+		}
+		else
+		{
+				$this->db->where('id', $desa_id)->update('desa', $desa);
+				$hasil = "<br>Desa lama: ".$desa_id;
+		}
+		$data['id'] = $desa_id; // Kembalikan untuk tabel akses
+		return $hasil;
+	}
+
+	private function insertDesa($data)
+	{
+		// Cek apakah nama desa ada di Permen
+		$tbl_region_id = $this->wilayah_model->cek_baku($data);
+		if (empty($tbl_region_id)) {
+			$data['jenis'] = 2; // jenis = 2 jika nama desa tidak baku
+		}
+		// Masalah dengan auto_increment meloncat. Paksa supaya berurutan.
+		// https://ubuntuforums.org/showthread.php?t=2086550
+		$sql = "ALTER TABLE desa AUTO_INCREMENT = 1";
+		$this->db->query($sql);
+		// Desa baru, hanya satu tgl_akses terisi
+		if (isset($data['tgl_akses_lokal']))
+			$data['tgl_rekam_lokal'] = $data['tgl_akses_lokal'];
+		else
+			$data['tgl_rekam_hosting'] = $data['tgl_akses_hosting'];
+		$this->db->insert('desa', $data);
+		$desa_id = $this->db->insert_id();
+		$this->notifikasi($data);
+		// Kalau desa baku simpan id dari tabel desa di tbl_region
+		if (!empty($tbl_region_id)) {
+			$this->db->where('id',$tbl_region_id)->update('tbl_regions', array('desa_id' => $desa_id));
+		}
+		return $desa_id;
+	}
+
+	private function siapkanData($data)
+	{
+			$desa = array();
+			$desa['nama_desa']      = $data['nama_desa'];
+			$desa['kode_desa']      = $data['kode_desa'];
+			$desa['kode_pos']       = $data['kode_pos'];
+			$desa['nama_kecamatan'] = $data['nama_kecamatan'];
+			$desa['kode_kecamatan'] = $data['kode_kecamatan'];
+			$desa['nama_kabupaten'] = $data['nama_kabupaten'];
+			$desa['kode_kabupaten'] = $data['kode_kabupaten'];
+			$desa['nama_provinsi']  = $data['nama_provinsi'];
+			$desa['kode_provinsi']  = $data['kode_provinsi'];
+			$desa['lat']            = $data['lat'];
+			$desa['lng']            = $data['lng'];
+			$desa['alamat_kantor']  = $data['alamat_kantor'];
+			// Cek lokal
+			$is_local = (is_local($data['url']) or is_local($data['ip_address']));
+			$jenis = ($is_local) ? '_lokal' : '_hosting';
+			$desa['url'.$jenis]         = $data['url'];
+			$desa['ip'.$jenis]          = $data['ip_address'];
+			$desa['versi'.$jenis]       = $data['version'];
+			$desa['tgl_akses'.$jenis]   = $data['tgl_ubah'];
+
+			return $desa;
 		}
 
-		private function insertDesa($data)
-		{
-				// Cek apakah nama desa ada di Permen
-				$tbl_region_id = $this->wilayah_model->cek_baku($data);
-				if (empty($tbl_region_id)) {
-					$data['jenis'] = 2; // jenis = 2 jika nama desa tidak baku
-				}
-				// Masalah dengan auto_increment meloncat. Paksa supaya berurutan.
-				// https://ubuntuforums.org/showthread.php?t=2086550
-				$sql = "ALTER TABLE desa AUTO_INCREMENT = 1";
-				$this->db->query($sql);
-				// Desa baru, hanya satu tgl_akses terisi
-				if (isset($data['tgl_akses_lokal']))
-					$data['tgl_rekam_lokal'] = $data['tgl_akses_lokal'];
-				else
-					$data['tgl_rekam_hosting'] = $data['tgl_akses_hosting'];
-				$this->db->insert('desa', $data);
-				$desa_id = $this->db->insert_id();
-				$this->notifikasi($data);
-				// Kalau desa baku simpan id dari tabel desa di tbl_region
-				if (!empty($tbl_region_id)) {
-					$this->db->where('id',$tbl_region_id)->update('tbl_regions', array('desa_id' => $desa_id));
-				}
-				return $desa_id;
-		}
-
-		private function siapkanData($data)
-		{
-				$desa = array();
-				$desa['nama_desa']      = $data['nama_desa'];
-				$desa['kode_desa']      = $data['kode_desa'];
-				$desa['kode_pos']       = $data['kode_pos'];
-				$desa['nama_kecamatan'] = $data['nama_kecamatan'];
-				$desa['kode_kecamatan'] = $data['kode_kecamatan'];
-				$desa['nama_kabupaten'] = $data['nama_kabupaten'];
-				$desa['kode_kabupaten'] = $data['kode_kabupaten'];
-				$desa['nama_provinsi']  = $data['nama_provinsi'];
-				$desa['kode_provinsi']  = $data['kode_provinsi'];
-				$desa['lat']            = $data['lat'];
-				$desa['lng']            = $data['lng'];
-				$desa['alamat_kantor']  = $data['alamat_kantor'];
-				// Cek lokal
-				$is_local = (is_local($data['url']) or is_local($data['ip_address']));
-				$jenis = ($is_local) ? '_lokal' : '_hosting';
-				$desa['url'.$jenis]         = $data['url'];
-				$desa['ip'.$jenis]          = $data['ip_address'];
-				$desa['versi'.$jenis]       = $data['version'];
-				$desa['tgl_akses'.$jenis]   = $data['tgl_ubah'];
-
-				return $desa;
-		}
-
-		/**
-		 * Desa dianggap mempunyai nama unik (desa, kecamatan, kabupaten, provinsi).
-		 * Dengan demikian bisa ada beberapa record desa untuk suatu desa sebenarnya
-		 * karena perbaikan nama yang mungkin dilakukan berkali-kali.
-		 * Record desa dengan nama lama tidak akan diupdate lagi dan bisa dihapus kalau
-		 * sesudah tidak diakses dalam tenggang waktu yang ditentukan
-		 */
-		private function isDesaBaru($data)
-		{
-				$cek_desa = array(
-					"nama_desa"       => strtolower($data['nama_desa']),
-					"nama_kecamatan"  => strtolower($data['nama_kecamatan']),
-					"nama_kabupaten"  => strtolower($data['nama_kabupaten']),
-					"nama_provinsi"   => strtolower($data['nama_provinsi'])
-					);
-				$query = $this->db->select('id')->where($cek_desa)->get('desa');
-				return ($query->num_rows() > 0) ? $query->row()->id : NULL;
-		}
+	/**
+	 * Desa dianggap mempunyai nama unik (desa, kecamatan, kabupaten, provinsi).
+	 * Dengan demikian bisa ada beberapa record desa untuk suatu desa sebenarnya
+	 * karena perbaikan nama yang mungkin dilakukan berkali-kali.
+	 * Record desa dengan nama lama tidak akan diupdate lagi dan bisa dihapus kalau
+	 * sesudah tidak diakses dalam tenggang waktu yang ditentukan
+	 */
+	private function isDesaBaru($data)
+	{
+			$cek_desa = array(
+				"nama_desa"       => strtolower($data['nama_desa']),
+				"nama_kecamatan"  => strtolower($data['nama_kecamatan']),
+				"nama_kabupaten"  => strtolower($data['nama_kabupaten']),
+				"nama_provinsi"   => strtolower($data['nama_provinsi'])
+				);
+			$query = $this->db->select('id')->where($cek_desa)->get('desa');
+			return ($query->num_rows() > 0) ? $query->row()->id : NULL;
+	}
 
 	/*
 	 * Normalkan nama wilayah. Hilangkan sebutan wilayah.
