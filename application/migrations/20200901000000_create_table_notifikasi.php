@@ -26,7 +26,24 @@ class Migration_Create_table_notifikasi extends CI_Migration {
 				UNIQUE KEY (kode)
 			)";
 			$this->db->query($query);
+
+			$query = "
+			CREATE TABLE `notifikasi_desa` (
+				`id` INT(11) NOT NULL AUTO_INCREMENT,
+				`id_desa` INT(11) NOT NULL,
+				`id_notifikasi` INT(11) NOT NULL,
+				`status` TINYINT(2) NOT NULL DEFAULT 0,
+				PRIMARY KEY (`id`),
+				UNIQUE KEY (id_desa, id_notifikasi)
+			)";
+			$this->db->query($query);
+			$this->dbforge->add_column('notifikasi_desa', array(
+	    	'CONSTRAINT notifikasi_desa_fk FOREIGN KEY (id_notifikasi) REFERENCES notifikasi (id) ON DELETE CASCADE ON UPDATE CASCADE'
+			));
+			$this->dbforge->add_column('notifikasi_desa', array(
+	    	'CONSTRAINT desa_notifikasi_fk FOREIGN KEY (id_desa) REFERENCES desa (id) ON DELETE CASCADE ON UPDATE CASCADE'
+			));
 		}
-		
+
 	}
 }
