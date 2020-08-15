@@ -10,9 +10,9 @@ class Track extends CI_Controller {
   }
 
   public function desa(){
-    echo "<pre>";
+    /*echo "<pre>";
     print_r($_POST);
-    echo "</pre>";
+    echo "</pre>";*/
     $this->load->model('desa_model');
     $data = $_POST;
     $data = $this->desa_model->normalkanData($data);
@@ -20,6 +20,11 @@ class Track extends CI_Controller {
     $this->load->model('akses_model');
     $result1 = $this->desa_model->insert($data);
     $result2 = $this->akses_model->insert($data);
-    echo "<pre><br>Result: ".$result1." ".$result2."</pre>";
+    //echo "<pre><br>Result: ".$result1." ".$result2."</pre>";
+    $this->load->model('notif_model');
+    $notif = $this->notif_model->get_semua_notif();
+    $this->notif_model->non_aktifkan($notif); // non aktfikan agar tidak dikirim berulang kali
+    echo json_encode($notif);
   }
+
 }
