@@ -26,6 +26,7 @@ class Notif_model extends CI_Model {
 		return $semua_notif;
 	}
 
+	// Catat pengiriman notifikasi
 	// Non-aktifkan notififikasi untuk desa $id_desa
 	// Asumsi saat ini setiap notifikasi hanya dikirim sekali
 	public function non_aktifkan($notif, $id_desa)
@@ -41,6 +42,7 @@ class Notif_model extends CI_Model {
 			{
 				$this->db
 					->set('status', 0)
+					->set('tgl_kirim', date("Y-m-d H:i:s"))
 					->where('id', $ada->id)
 					->update('notifikasi_desa');
 			}
@@ -48,6 +50,7 @@ class Notif_model extends CI_Model {
 			{
 				$this->db
 					->set('status', 0)
+					->set('tgl_kirim', date("Y-m-d H:i:s"))
 					->set('id_notifikasi', $data['id'])
 					->set('id_desa', $id_desa)
 					->insert('notifikasi_desa');
