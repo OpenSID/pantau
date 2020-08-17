@@ -11,17 +11,31 @@ class Notif_model extends CI_Model {
   // Ambil notifikasi untuk $id_desa
 	public function get_semua_notif($id_desa)
 	{
+		$this->db
+			->select('nd.id')
+			->from('notifikasi_desa nd')
+			->where('nd.id_notifikasi = n.id')
+			->where('nd.id_desa', $id_desa)
+			->where('nd.status <>', 0)
+			->limit(1);
+		$perlu_notifikasi = $this->db->get_compiled_select();
+
+		$this->db
+			->select('nd.id')
+			->from('notifikasi_desa nd')
+			->where('nd.id_notifikasi = n.id')
+			->where('nd.id_desa', $id_desa)
+			->limit(1);
+		$sdh_pernah = $this->db->get_compiled_select();
+
 		$semua_notif = $this->db->select('n.*')
 			->from('notifikasi n')
-			->join('notifikasi_desa nd', 'nd.id_notifikasi = n.id', 'left')
 			->where('n.aktif', 1)
 			->group_start()
-				->where('nd.id_desa IS NULL')->or_where('nd.id_desa', $id_desa)
+				->where("($perlu_notifikasi) IS NOT NULL")
+				->or_where("($sdh_pernah) IS NULL")
 			->group_end()
-			->group_start()
-				->where('nd.status IS NULL')->or_where('nd.status <>', 0)
-			->group_end()
-			->get('notifikasi')->result_array();
+			->get()->result_array();
 
 		return $semua_notif;
 	}
