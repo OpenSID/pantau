@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development')
   $config['base_url'] = 'http://scotchbox.local/tracksid';
 else
-  $config['base_url'] = 'http://tracksid.bangundesa.info/';
+  $config['base_url'] = APP_URL;
 
 /*
 |--------------------------------------------------------------------------
