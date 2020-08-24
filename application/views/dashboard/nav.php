@@ -29,6 +29,7 @@
       <?php if (admin_logged_in()): ?>
         <li><a href="<?= site_url('laporan/review')?>"><i class="fa fa-bookmark"></i> <span>Review Desa</span></a></li>
         <li><a href="<?= site_url('akses/bersihkan')?>"><i class="fa fa-refresh"></i> <span>Bersihkan Data Akses</span></a></li>
+        <li><a href="<?= site_url('notifikasi/index')?>"><i class="fa fa-rss-square"></i> <span>Notifikasi</span></a></li>
       <?php endif; ?>
   	</ul>
 	</section>
