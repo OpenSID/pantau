@@ -20,7 +20,6 @@ class Dashboard extends CI_Controller {
 	 */
   function __construct(){
     parent::__construct();
-    session_start();
     $this->load->helper('url');
     $this->load->model('desa_model');
     $this->load->model('kabupaten_model');

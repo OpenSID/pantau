@@ -7,7 +7,10 @@ class Track extends CI_Controller {
   {
     parent::__construct();
     $this->load->helper('url');
-    session_start();
+  }
+
+  public function index()
+  {
   }
 
   public function desa()

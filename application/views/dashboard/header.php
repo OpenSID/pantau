@@ -26,6 +26,9 @@
 				width: 25px;
 			}
 		</style>
+		<script type="text/javascript">
+			BASE_URL = '<?= base_url() ?>';
+		</script>
 	</head>
 	<body class="skin-purple sidebar-mini ">
 		<div class="wrapper">

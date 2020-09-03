@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development')
   $config['base_url'] = 'http://jimmy73.com/tracksid/';
 else
-  $config['base_url'] = 'https://pantau.opensid.my.id/';
+  $config['base_url'] = APP_URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -318,7 +318,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'keytracksid';
 
 /*
 |--------------------------------------------------------------------------

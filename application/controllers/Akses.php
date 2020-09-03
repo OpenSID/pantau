@@ -5,7 +5,6 @@ class Akses extends CI_Controller {
 
   function __construct(){
     parent::__construct();
-    session_start();
     $this->load->helper('url');
     if (!admin_logged_in()) redirect('login');
   }

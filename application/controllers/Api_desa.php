@@ -2,19 +2,22 @@
 
 class Api_desa extends CI_Controller
 {
-    public function __construct()
-    {
-      parent::__construct();
-			session_start();
-			$this->load->model('desa_model');
-      $this->load->helper('url');
-      if (!admin_logged_in())
-        exit("Anda tidak mempunyai akses ke menu ini.");
-    }
-   public function delete($id)
-    {
-      json_encode($this->desa_model->hapus($id));
-      redirect('laporan/review');
+  public function __construct()
+  {
+    parent::__construct();
+		$this->load->model('desa_model');
+    $this->load->helper('url');
+    if (!admin_logged_in())
+      exit("Anda tidak mempunyai akses ke menu ini.");
+  }
 
-    }
+  public function index()
+  {
+  }
+
+  public function delete($id)
+  {
+    json_encode($this->desa_model->hapus($id));
+    redirect('laporan/review');
+  }
 }

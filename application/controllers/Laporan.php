@@ -5,7 +5,6 @@ class Laporan extends Public_Controller {
 
   function __construct(){
     parent::__construct();
-    session_start();
     $this->load->model('desa_model');
     $this->load->model('kabupaten_model');
     $this->load->helper('url');
