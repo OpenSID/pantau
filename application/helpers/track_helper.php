@@ -47,4 +47,25 @@
     print("<pre>".print_r($data, true)."</pre>");
   }
 
+  function tgl_in($tgl)
+  {
+    $tgl = strtotime($tgl);
+    $tgl = date("Y-m-d", $tgl);
+    return $tgl;
+  }
+
+  function date_is_empty($tgl) {
+    return (is_null($tgl) || substr($tgl, 0, 10)=='0000-00-00');
+  }
+
+  function tgl_out($tgl, $replace_with='-')
+  {
+    if (date_is_empty($tgl)) return $replace_with;
+
+    $tgl = strtotime($tgl);
+    $tgl = date("d-M-Y", $tgl);
+    return $tgl;
+  }
+
+
 ?>

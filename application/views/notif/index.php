@@ -9,7 +9,7 @@
 		<h1>Notifikasi<small>Daftar Notifkasi ke OpenSID</small></h1>
 		<ol class="breadcrumb">
 			<li><a href="<?= site_url(); ?>"><i class="fa fa-home"></i> Dashboard</a></li>
-			<li class="active">Data Suplemen</li>
+			<li class="active">Daftar Notifikasi</li>
 		</ol>
 	</section>
 	<section class="content container-fluid">

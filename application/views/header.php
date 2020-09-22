@@ -11,23 +11,23 @@
 	<meta name="author" content="">
 
 	<!-- css -->
-	<link href="<?php echo base_url('assets/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet">
-	<link href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/datatables/css/dataTables.bootstrap.min.css')?>" rel="stylesheet">
-  <link href="<?php echo base_url('assets/css/laporan.css')?>" rel="stylesheet">
-	<link href="<?php echo base_url('assets/css/style.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
+  <link href="<?= base_url('assets/datatables/css/dataTables.bootstrap.min.css')?>" rel="stylesheet">
+  <link href="<?= base_url('assets/css/laporan.css')?>" rel="stylesheet">
+	<link href="<?= base_url('assets/css/style.css')?>" rel="stylesheet">
 
 	<!-- js -->
 	<!-- Ambil confirmation dialog dari https://ethaizone.github.io/Bootstrap-Confirmation/#install
 	-->
-	<script src="<?php echo base_url('assets/jquery/jquery-3.2.1.js')?>"></script>
-  <script src="<?php echo base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
-	<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js') ?>"></script>
-	<script src="<?php echo base_url('assets/js/bootstrap-tooltip.js') ?>"></script> <!-- diperlukan bootstrap-confirmation -->
-	<script src="<?php echo base_url('assets/js/bootstrap-confirmation.js') ?>"></script>
-	<script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js')?>"></script>
-	<script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js')?>"></script>
-	<script src="<?php echo base_url('assets/js/script.js') ?>"></script>
+	<script src="<?= base_url('assets/jquery/js/jquery-3.2.1.js')?>"></script>
+  <script src="<?= base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
+	<script src="<?= base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap-tooltip.js')?>"></script> <!-- diperlukan bootstrap-confirmation -->
+	<script src="<?= base_url('assets/js/bootstrap-confirmation.js')?>"></script>
+	<script src="<?= base_url('assets/datatables/js/jquery.dataTables.min.js')?>"></script>
+	<script src="<?= base_url('assets/datatables/js/dataTables.bootstrap.min.js')?>"></script>
+	<script src="<?= base_url('assets/js/script.js')?>"></script>
 
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

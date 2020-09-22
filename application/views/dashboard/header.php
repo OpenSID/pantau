@@ -16,11 +16,15 @@
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>bower_components/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>bower_components/ionicons/css/ionicons.min.css">
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+		<!-- Select2 -->
+		<link rel="stylesheet" href="<?= base_url()?>assets/bootstrap/css/select2.min.css">
+		<!-- bootstrap datepicker -->
+		<link href="<?= base_url('assets/bootstrap/css/bootstrap-datepicker.min.css')?>" rel="stylesheet" >
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>dist/css/AdminLTE.min.css">
 		<!-- AdminLTE Skins. -->
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>dist/css/skins/_all-skins.min.css">
 		<link rel="stylesheet" href="<?= base_url().$adminlte?>plugins/pace/pace.min.css">
-		<link href="<?php echo base_url('assets/css/style.css') ?>" rel="stylesheet">
+		<link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
 		<style type="text/css">
 			.navbar-nav>.user-menu .user-image {
 				width: 25px;

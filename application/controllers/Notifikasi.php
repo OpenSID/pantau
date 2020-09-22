@@ -24,7 +24,7 @@ class Notifikasi extends Admin_Controller{
 	 */
 	function index()
 	{
-		$params['limit'] = 2; // jumlah records per halaman
+		$params['limit'] = 20; // jumlah records per halaman
 		$params['offset'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
 		$filter = $this->input->post('jenis');

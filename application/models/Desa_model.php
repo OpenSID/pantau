@@ -476,5 +476,64 @@ class Desa_model extends CI_Model {
 		$this->db->where("jenis = 2");
 		$this->db->delete('desa');
 	}
+
+	private function list_desa_ajax_sql($cari='')
+	{
+		$this->db
+				->from('desa');
+		if ($cari)
+		{
+			$cari = $this->db->escape_like_str($cari);
+			$this->db
+				->group_start()
+					->like('nama_desa', $cari)
+					->or_like('nama_kecamatan', $cari)
+				->group_end();
+		}
+	}
+
+	/*
+	 * Mengambil semua data desa untuk pilihan di form pelanggan
+	 */
+	public function list_desa_ajax($cari='', $page=1)
+	{
+		// Hitung jumlah total
+		$this->list_desa_ajax_sql($cari);
+		$jml = $this->db->select('count(id) as jml')
+				->get()->row()->jml;
+
+		// Ambil penduduk sebatas paginasi
+    $resultCount = 25;
+    $offset = ($page - 1) * $resultCount;
+
+    $this->list_desa_ajax_sql($cari);
+		$this->db
+				->distinct()
+				->select('id, nama_desa, nama_kecamatan, nama_kabupaten, nama_provinsi')
+				->limit($resultCount, $offset);
+		$data = $this->db->get()->result_array();
+
+		//Format untuk daftar pilihan select2 di form surat
+		$desa = array();
+		foreach ($data as $row)
+		{
+			$nama = addslashes($row['nama_desa']);
+			$info_pilihan_desa = "Desa {$row['nama_desa']}, Kab {$row['nama_kabupaten']}";
+			$desa[] = array('id' => $row['id'], 'text' => $info_pilihan_desa);
+		}
+
+    $endCount = $offset + $resultCount;
+    $morePages = $endCount < $jml;
+
+    $hasil = array(
+      "results" => $desa,
+      "pagination" => array(
+        "more" => $morePages
+      )
+    );
+
+		return $hasil;
+	}
+
 }
 ?>
