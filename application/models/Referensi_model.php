@@ -16,10 +16,12 @@ define("SERVER_NOTIF", serialize([
 ]));
 
 define("JENIS_PELANGGAN", serialize([
-	1 => 'hosting dan update',
+	1 => 'hosting + update',
 	2 => 'hosting saja',
 	3 => 'premium',
 	4 => 'update saja',
+	5 => 'hosting + domain',
+	6 => 'hosting + domain + update'
 ]));
 
 define("STATUS_LANGGANAN", serialize([
