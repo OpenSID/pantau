@@ -23,7 +23,7 @@ class Kabupaten_model extends CI_Model
   // TODO: Perbaiki supaya bisa jalan dengan sql_mode ONLY_FULL_GROUP_BY
   public function belum_ada_desa()
   {
-    $this->db->query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+    $this->db->query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
     $sql = "
       SELECT a.region_code, a.region_name as nama_kabupaten, c.region_name as nama_provinsi, b.jml_desa
         from
