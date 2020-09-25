@@ -132,6 +132,10 @@ class Pelanggan_model extends CI_Model {
 				# sebentar lagi berakhir
 				$this->db->where('DATEDIFF(tgl_akhir, CURDATE()) < 22 AND DATEDIFF(tgl_akhir, CURDATE()) > 0');
 				break;
+			case '5':
+				# baru berakhir
+				$this->db->where('DATEDIFF(CURDATE(), tgl_akhir) < 22 AND DATEDIFF(CURDATE(), tgl_akhir) > 0');
+				break;
 
 			default:
 				$this->db->where('status_langganan', $filter);

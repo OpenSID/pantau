@@ -28,7 +28,8 @@ define("STATUS_LANGGANAN", serialize([
 	1 => 'aktif',
 	2 => 'suspended',
 	3 => 'tidak aktif',
-	4 => 'sebentar lagi berkahir'
+	4 => 'sebentar lagi berakhir',
+	5 => 'baru berakhir'
 ]));
 
 define("PELAKSANA", serialize([
