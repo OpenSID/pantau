@@ -124,12 +124,27 @@ class Pelanggan_model extends CI_Model {
 		}
 	}
 
+	private function filter_status($filter)
+	{
+		switch ($filter)
+		{
+			case '4':
+				# sebentar lagi berakhir
+				$this->db->where('DATEDIFF(tgl_akhir, CURDATE()) < 22 AND DATEDIFF(tgl_akhir, CURDATE()) > 0');
+				break;
+
+			default:
+				$this->db->where('status_langganan', $filter);
+				break;
+		}
+	}
+
 	private function set_filter()
 	{
 		if (empty($filter = $this->session->filter)) return;
 		if (! empty($filter['jenis'])) $this->db->where('jenis_langganan', $filter['jenis']);
 		if (! empty($filter['pelaksana'])) $this->db->where('pelaksana', $filter['pelaksana']);
-		if (! empty($filter['status'])) $this->db->where('status_langganan', $filter['status']);
+		if (! empty($filter['status'])) $this->filter_status($filter['status']);
 	}
 
 	public function get_all_pelanggan($params = array())
@@ -148,7 +163,6 @@ class Pelanggan_model extends CI_Model {
 			->from('pelanggan p')
 			->join('desa d', 'p.id_desa = d.id')
 			->get()->result_array();
-
 		return $data;
 	}
 

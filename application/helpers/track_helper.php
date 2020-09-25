@@ -47,8 +47,15 @@
     print("<pre>".print_r($data, true)."</pre>");
   }
 
+  /*
+  * Termasuk mengubah dari Ind ke En supaya bisa masuk ke MySQL
+  */
   function tgl_in($tgl)
   {
+    $tgl = str_replace (
+      array('Mei', 'Ags', 'Okt', 'Des'),
+      array('May', 'Aug', 'Oct', 'Dec'),
+        $tgl);
     $tgl = strtotime($tgl);
     $tgl = date("Y-m-d", $tgl);
     return $tgl;
@@ -58,12 +65,28 @@
     return (is_null($tgl) || substr($tgl, 0, 10)=='0000-00-00');
   }
 
+  /*
+  * Termasuk mengubah dari En ke Ind untuk tampilan dan datetimepicker
+  */
   function tgl_out($tgl, $replace_with='-')
   {
     if (date_is_empty($tgl)) return $replace_with;
 
     $tgl = strtotime($tgl);
     $tgl = date("d-M-Y", $tgl);
+    $tgl = str_replace (
+      array('May', 'Aug', 'Oct', 'Dec'),
+      array('Mei', 'Ags', 'Okt', 'Des'),
+        $tgl);
+    return $tgl;
+  }
+
+  function tgl_format($tgl, $format='d-m-Y')
+  {
+    if (date_is_empty($tgl)) return;
+
+    $tgl = strtotime($tgl);
+    $tgl = date($format, $tgl);
     return $tgl;
   }
 

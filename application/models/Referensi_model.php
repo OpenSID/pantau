@@ -27,7 +27,8 @@ define("JENIS_PELANGGAN", serialize([
 define("STATUS_LANGGANAN", serialize([
 	1 => 'aktif',
 	2 => 'suspended',
-	3 => 'tidak aktif'
+	3 => 'tidak aktif',
+	4 => 'sebentar lagi berkahir'
 ]));
 
 define("PELAKSANA", serialize([

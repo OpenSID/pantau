@@ -16,15 +16,13 @@ $(document).ready(function()
 
 	$('.tgl_mulai').datetimepicker({
 		locale:'id',
-		format: 'DD-MM-YYYY',
-		useCurrent: false,
-		date: moment(new Date())
+		format: 'DD-MMM-YYYY',
+		defaultDate: moment(new Date()),
 	});
 	$('.tgl_akhir').datetimepicker({
 		locale:'id',
-		format: 'DD-MM-YYYY',
-		useCurrent: false,
-		date: moment(new Date()).add(1, 'Y')
+		format: 'DD-MMM-YYYY',
+		defaultDate: moment(new Date()).add(1, 'Y'),
 	});
 	$('.tgl_mulai').datetimepicker().on('dp.change', function (e) {
 		$('.tgl_akhir').data('DateTimePicker').minDate(moment(new Date(e.date)));

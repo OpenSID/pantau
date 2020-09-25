@@ -86,7 +86,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input title="Tanggal Mulai" class="form-control input-sm required tgl_mulai" name="tgl_mulai" type="text"/>
+								<input title="Tanggal Mulai" class="form-control input-sm required tgl_mulai" name="tgl_mulai" type="text" value="<?= $this->input->post('tgl_mulai') ?: tgl_out($pelanggan['tgl_mulai'])?>"/>
 							</div>
 							<span class="text-danger"><?= form_error('tgl_mulai');?></span>
 						</div>
@@ -98,7 +98,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input title="Tanggal Akhir" class="form-control input-sm required tgl_akhir" name="tgl_akhir" type="text"/>
+								<input title="Tanggal Akhir" class="form-control input-sm required tgl_akhir" name="tgl_akhir" type="text" value="<?= $this->input->post('tgl_akhir') ?: tgl_out($pelanggan['tgl_akhir'])?>"/>
 							</div>
 							<span class="text-danger"><?= form_error('tgl_akhir');?></span>
 						</div>
