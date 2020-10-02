@@ -30,8 +30,9 @@
         -------------------------->
 
         <div>
-            <input type="hidden" name="arg_id_local" value="<?php echo $is_local?>">
-            <input type="hidden" name="arg_kab" value="<?php echo $kab?>">
+            <input type="hidden" name="arg_id_local" value="<?= $is_local?>">
+            <input type="hidden" id="arg_akses" name="arg_akses" value="<?= $akses?>">
+            <input type="hidden" name="arg_kab" value="<?= $kab?>">
         </div>
 
         <div class="panel panel-default">
@@ -133,6 +134,7 @@ $(document).ready(function() {
 
     $('#is_local').val($('input[name=arg_id_local').val());
     $('#kab').val($('input[name=arg_kab').val());
+    $('#akses').val($('input[name=arg_akses').val());
 
     //datatables
     table = $('#table').DataTable({

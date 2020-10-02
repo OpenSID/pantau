@@ -10,28 +10,31 @@ class Laporan extends Public_Controller {
     $this->load->helper('url');
   }
 
-  public function index($is_local='')
+  public function index($is_local='', $akses='')
   {
     $this->load->helper('form');
-    $opt = array('' => 'Semua',
+    $opt = array(' ' => 'Semua',
       '1' => 'Offline',
       '0' => 'Online'
     );
-    $data['form_server'] = form_dropdown('',$opt,'','id="is_local" class="form-control"');
+    $data['form_server'] = form_dropdown('', $opt, [' '], 'id="is_local" class="form-control"');
     $list_kab = $this->kabupaten_model->list_nama();
     $kab[''] = 'Semua kabupaten';
     foreach ($list_kab as $nama_kab){
       $kab[$nama_kab['nama_kabupaten']] = $nama_kab['nama_kabupaten'];
     }
     $data['form_kab'] = form_dropdown('',$kab,'','id="kab" class="form-control"');
-    $akses = array('' => 'Semua',
+    $list_akses = array('' => 'Semua',
+      '4' => 'Sejak tujuh hari yang lalu',
       '2' => 'Sejak dua bulan yang lalu',
       '1' => 'Sebelum dua bulan yang lalu',
       '3' => 'Sebelum empat bulan yang lalu'
     );
-    $data['form_akses'] = form_dropdown('',$akses,'','id="akses" class="form-control"');
+    $selected = [];
+    $data['form_akses'] = form_dropdown('', $list_akses, $selected, 'id="akses" class="form-control"');
 
     $data['is_local'] = $is_local;
+    $data['akses'] = $akses;
     $data['kab'] = $this->input->post('kab');
 
     $header = new stdClass();

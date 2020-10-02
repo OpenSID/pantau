@@ -165,37 +165,40 @@ class Desa_model extends CI_Model {
 
 	private function _get_main_query()
 	{
-		$main_sql = "FROM
-			desa
-			WHERE 1=1
-		";
-		return $main_sql;
+		$this->db->from('desa');
 	}
 
-	private function _get_filtered_query()
+	private function _get_filtered_query($post)
 	{
 		$filtered_query = $this->_get_main_query();
-		if($this->input->post('is_local') !== null) {
-			switch ($this->input->post('is_local')) {
+		if ($post['is_local'] !== null)
+		{
+			switch ($post['is_local'])
+			{
 				case '0':
-					$filtered_query .= " AND versi_hosting <> '' ";
+					$this->db->where("versi_hosting <> ''");
 					break;
 				case '1':
-					$filtered_query .= " AND versi_lokal <> '' ";
+					$this->db->where("versi_lokal <> ''");
 					break;
 			}
 		}
-		$kab = $this->input->post('kab');
-		if(!empty($kab)) {
-				$filtered_query .= " AND nama_kabupaten = '{$kab}'";
+		$kab = $post['kab'];
+		if ( ! empty($kab))
+		{
+			$this->db->where('nama_kabupaten', $kab);
 		}
-		$akses = $this->input->post('akses');
-		if(!empty($akses)) {
-			$filtered_query .= $this->_akses_query($akses);
-		}
-		$sSearch = $_POST['search']['value'];
-		$filtered_query .= " AND (nama_desa LIKE '%".$sSearch."%' or nama_kecamatan LIKE '%".$sSearch."%' or nama_kabupaten LIKE '%".$sSearch."%' or nama_provinsi LIKE '%".$sSearch."%') ";
-		return $filtered_query;
+		$akses = $post['akses'];
+		if ( ! empty($akses)) $this->_akses_query($akses);
+		$cari = $post['search']['value'];
+		$cari = $this->db->escape_like_str($cari);
+		$this->db
+			->group_start()
+				->like('nama_desa', $cari)
+				->or_like('nama_kecamatan', $cari)
+				->or_like('nama_kabupaten', $cari)
+				->or_like('nama_provinsi', $cari)
+			->group_end();
 	}
 
 	/* Filter menurut tanggal akses terkahir.
@@ -207,49 +210,59 @@ class Desa_model extends CI_Model {
 	{
 		switch ($akses) {
 			case '1':
-				$sql = " AND TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1 ";
+				$this->db->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1");
 				break;
 			case '2':
-				$sql = " AND TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1 ";
+				$this->db->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1");
 				break;
 			case '3':
-				$sql = " AND TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3 ";
+				$this->db->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3");
+				break;
+			case '4':
+				$this->db->where("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
 				break;
 			default:
-				$sql = "";
 				break;
 		}
-		return $sql;
 	}
 
 	function get_datatables()
 	{
-		$qry = "SELECT *, GREATEST(tgl_akses_lokal, tgl_akses_hosting) AS tgl_akses ".$this->_get_filtered_query();
-		if(isset($_POST['order'])) // here order processing
+		$post = $this->input->post();
+		$this->_get_filtered_query($post);
+		$this->db->select('*, GREATEST(tgl_akses_lokal, tgl_akses_hosting) AS tgl_akses');
+		if (isset($post['order'])) // here order processing
 		{
-			$sort_by = $this->column_order[$_POST['order']['0']['column']];
-			$sort_type = $_POST['order']['0']['dir'];
-			$qry .= " ORDER BY ".$sort_by." ".$sort_type;
-		} else {
-			$qry .= " ORDER BY nama_provinsi, nama_kabupaten, nama_kecamatan, nama_desa";
+			$sort_by = $this->column_order[$post['order']['0']['column']];
+			$sort_type = $post['order']['0']['dir'];
+			$this->db->order_by($sort_by, $sort_type);
 		}
-		if($_POST['length'] != -1)
-		 $qry .= " LIMIT ".$_POST['start'].", ".$_POST['length'];
-		$query = $this->db->query($qry);
-		return $query->result_array();
+		else
+		{
+			$this->db->order_by('nama_provinsi, nama_kabupaten, nama_kecamatan, nama_desa');
+		}
+		if ($post['length'] != -1) $this->db->limit($post['length'], $post['start']);
+		$data = $this->db->get()->result_array();
+		return $data;
 	}
 
 	function count_filtered()
 	{
-		$sql = "SELECT COUNT(*) AS jml ".$this->_get_filtered_query();
-		$jml = $this->db->query($sql)->row()->jml;
+		$this->_get_filtered_query($this->input->post());
+		$jml = $this->db
+			->select("COUNT(*) AS jml")
+			->get()
+			->row()->jml;
 		return $jml;
 	}
 
 	public function count_all()
 	{
-		$sql = "SELECT COUNT(*) AS jml ".$this->_get_main_query();
-		$jml = $this->db->query($sql)->row()->jml;
+		$this->_get_main_query();
+		$jml = $this->db
+			->select("COUNT(*) AS jml")
+			->get()
+			->row()->jml;
 		return $jml;
 	}
 
@@ -451,11 +464,11 @@ class Desa_model extends CI_Model {
 		else show_error($this->email->print_debugger());
 	}
 
-	public function  jmlDesa()
+	public function jmlDesa()
 	{
 		$this->db->select("count(*) as desa_total");
-		$this->db->select("(select count(*) from desa x where x.versi_lokal <> '') desa_offline");
-		$this->db->select("(select count(*) from desa x where x.versi_hosting <> '') desa_online");
+		$this->db->select("(select count(*) from desa x where x.versi_lokal <> '' and GREATEST(x.tgl_akses_lokal, x.tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY) desa_offline");
+		$this->db->select("(select count(*) from desa x where x.versi_hosting <> '' and GREATEST(x.tgl_akses_lokal, x.tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY) desa_online");
 		$this->db->select("count(distinct nama_kabupaten) as kabupaten_total");
 		$this->db->select("(select count(distinct nama_kabupaten) from desa x where x.versi_lokal <> '') kabupaten_offline");
 		$this->db->select("(select count(distinct nama_kabupaten) from desa x where x.versi_hosting <> '') kabupaten_online");
@@ -471,7 +484,6 @@ class Desa_model extends CI_Model {
 	*/
 	public function hapus_nonaktif_tdkterdaftar()
 	{
-		$this->db->where("url_hosting is null");
 		$this->db->where("GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH");
 		$this->db->where("jenis = 2");
 		$this->db->delete('desa');

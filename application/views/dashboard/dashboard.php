@@ -38,13 +38,13 @@
 							<div class="col-md-4">
 								<div class="small-box bg-blue">
 									<div class="inner">
-										<h3><?= $desa_total ?></h3>
-										<p>Total Desa</p>
+										<h3><?= $aktif ?></h3>
+										<p>Desa Aktif</p>
 									</div>
 									<div class="icon">
 										<i class="ion ion-location"></i>
 									</div>
-									<a href="<?=site_url('laporan')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
+									<a href="<?=site_url('laporan/index/2/4')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -56,7 +56,7 @@
 									<div class="icon">
 										<i class="ion ion-android-cloud-done"></i>
 									</div>
-									<a href="<?=site_url('laporan/index/0')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
+									<a href="<?=site_url('laporan/index/0/4')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -68,7 +68,7 @@
 									<div class="icon">
 										<i class="ion ion-android-cloud-outline"></i>
 									</div>
-									<a href="<?=site_url('laporan/index/1')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
+									<a href="<?=site_url('laporan/index/1/4')?>" class="small-box-footer">Lihat Detail  <i class="fa fa-arrow-circle-right"></i></a>
 								 </div>
 							</div>
 
@@ -76,8 +76,8 @@
 								<div class="info-box info-box-sm">
 									<span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
 									<div class="info-box-content">
-										<span class="info-box-text"><strong><?= $aktif ?></strong></span>
-											Aktif 7 hari terakhir
+										<span class="info-box-text"><strong><a href="<?=site_url('laporan')?>"><?= $desa_total ?></a></strong></span>
+											Total Desa
 									</div><!-- /.info-box-content -->
 								</div><!-- /.info-box -->
 							</div>

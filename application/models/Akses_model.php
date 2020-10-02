@@ -55,8 +55,11 @@ class Akses_model extends CI_Model{
     foreach ($list_desa as $desa)
     {
       // Hapus semua akses kecuali yang terakhir
-      $akses_terakhir = $this->db->select('id')->where('desa_id', $desa['id'])->order_by('tgl DESC')->limit(1)->get('akses')->row()->id;
-      $this->db->where('desa_id', $desa['id'])->where("id <>", $akses_terakhir)->delete('akses');
+      $akses_terakhir = $this->db->select('id')->where('desa_id', $desa['id'])->order_by('tgl DESC')->limit(1)->get('akses')->row();
+      if ($akses_terakhir)
+      {
+        $this->db->where('desa_id', $desa['id'])->where("id <>", $akses_terakhir->id)->delete('akses');
+      }
     }
   }
 
