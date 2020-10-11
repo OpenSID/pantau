@@ -10,7 +10,11 @@
 	.select2-results__option {
 		font-size: 14px !important;
 	}
+	.alert { margin-top: 10px; }
+	.profile-user-img {width: 200px;}
 </style>
+<link rel="stylesheet" href="<?= base_url('assets/jquery/css/jquery.fancybox.min.css') ?>" />
+<script src="<?= base_url('assets/js/jquery.fancybox.min.js') ?>"></script>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>Pelanggan <small>Tambah Pelanggan</small></h1>
@@ -24,8 +28,19 @@
 		<div class="box box-info">
 			<div class="box-header with-border">
 				<a href="<?= site_url('pelanggan')?>" class="btn btn-social btn-flat btn-info btn-sm visible-xs-block visible-sm-inline-block visible-md-inline-block visible-lg-inline-block"><i class="fa fa-arrow-circle-left"></i> Kembali Ke Daftar Pelanggan</a>
+				<?php if ($error): ?>
+					<div class="container-fluid">
+				    <div class="row">
+			        <div class="col-md-10 col-md-offset-1">
+								<div id="alert" class="alert alert-danger" role="alert">
+									<?= $error;?>
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
-			<form id="validasi" action="<?= site_url("pelanggan/form/".($id_pelanggan ?: $pelanggan['id'])); ?>" method="POST" class="form-horizontal">
+			<?= form_open_multipart(site_url("pelanggan/form/".($id_pelanggan ?: $pelanggan['id'])), ['id' => 'validasi', 'class' => 'form-horizontal', 'method' => 'POST']);?>
 				<input type="hidden" id="ubah_desa" name="ubah_desa" value="">
 				<div class="box-body">
 					<div class="form-group">
@@ -104,6 +119,20 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<?php if ($pelanggan['bukti']): ?>
+							<input type="hidden" name="bukti_lama" value="<?= $pelanggan['bukti']?>">
+							<a data-fancybox="images" data-options='{"caption" : "Bukti Pembayaran", "type" : "iframe"}' href="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>"><img class="profile-user-img img-responsive" src="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>" alt="Bukti Pembayaran"></a>
+							<p class="text-center"><label class="control-label"><input type="checkbox" name="hapus_bukti" value="<?= $pelanggan ['bukti']?>" /> Hapus Bukti</label></p>
+						<?php else: ?>
+							<img class="profile-user-img img-responsive" src="<?= base_url()?>assets/files/logo/home.png" alt="Belum Ada Bukti">
+						<?php endif; ?>
+						<label for="status_langganan" class="col-md-2 control-label">Bukti Pembayaran</label>
+						<div class="col-md-3">
+							<input type="file" name="bukti" size="20" />
+							<span class="text-danger"><?= form_error('status_langganan');?></span>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="status_langganan" class="col-md-2 control-label">Status Langganan</label>
 						<div class="col-md-3">
 							<select name="status_langganan" class="form-control">
@@ -136,3 +165,9 @@
 		</div>
 	</section>
 </div>
+<script type="text/javascript">
+  setTimeout(function () {
+    // Closing the alert
+    $('#alert').alert('close');
+  }, 5000);
+</script>

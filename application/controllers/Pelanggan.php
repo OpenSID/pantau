@@ -60,44 +60,44 @@ class Pelanggan extends Admin_Controller{
 	private function aksi($data)
 	{
 		$str = $this->load->view('pelanggan/pajax.index.php', ['data' => $data], TRUE);
-    return $str;
+		return $str;
 	}
 
-  public function ajax_list_pelanggan()
-  {
-    $list = $this->pelanggan_model->get_all_pelanggan();
+	public function ajax_list_pelanggan()
+	{
+		$list = $this->pelanggan_model->get_all_pelanggan();
 
-    $data = array();
-    $no = $_POST['start'];
-    foreach ($list as $pelanggan)
-    {
-      $no++;
-      $row = array();
-      $row[] = $no;
-      $row[] = $this->aksi($pelanggan);
-      $row[] = $pelanggan['domain'];
-      $row[] = $pelanggan['desa'];
-      $row[] = $pelanggan['nama'];
-      $row[] = $pelanggan['no_hp'];
-      $row[] = ucwords($this->referensi_model->list_ref(JENIS_PELANGGAN)[$pelanggan['jenis_langganan']]);
-      $row[] = tgl_out($pelanggan['tgl_akhir']);
-      $row[] = ucwords($this->referensi_model->list_ref(STATUS_LANGGANAN)[$pelanggan['status_langganan']]);
-      $row[] = $this->referensi_model->list_ref(PELAKSANA)[$pelanggan['pelaksana']];
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $pelanggan)
+		{
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = $this->aksi($pelanggan);
+			$row[] = $pelanggan['domain'];
+			$row[] = $pelanggan['desa'];
+			$row[] = $pelanggan['nama'];
+			$row[] = $pelanggan['no_hp'];
+			$row[] = ucwords($this->referensi_model->list_ref(JENIS_PELANGGAN)[$pelanggan['jenis_langganan']]);
+			$row[] = tgl_out($pelanggan['tgl_akhir']);
+			$row[] = ucwords($this->referensi_model->list_ref(STATUS_LANGGANAN)[$pelanggan['status_langganan']]);
+			$row[] = $this->referensi_model->list_ref(PELAKSANA)[$pelanggan['pelaksana']];
 
-      $data[] = $row;
-    }
+			$data[] = $row;
+		}
 
-    $output = array
-    (
-      "draw" => $_POST['draw'],
-      "recordsTotal" => $this->pelanggan_model->get_all_pelanggan_count(),
-      "recordsFiltered" => count($list),
-      "data" => $data,
-    );
+		$output = array
+		(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->pelanggan_model->get_all_pelanggan_count(),
+			"recordsFiltered" => count($list),
+			"data" => $data,
+		);
 
-    //output to json format
-    echo json_encode($output);
-  }
+		//output to json format
+		echo json_encode($output);
+	}
 
 	/*
 	 * Tambah dan ubah data pelanggan.
@@ -108,6 +108,8 @@ class Pelanggan extends Admin_Controller{
 	{
 		$data['pelanggan'] = null;
 		$data['id_pelanggan'] = null;
+		$data['error'] = null;
+		$upload = null;
 
 		if (empty($this->input->post('ubah_desa')) && $id)
 		{
@@ -149,16 +151,51 @@ class Pelanggan extends Admin_Controller{
 				'status_langganan' => $this->input->post('status_langganan'),
 				'pelaksana' => $this->input->post('pelaksana')
 			);
-			if ($id)
-				$this->pelanggan_model->update_pelanggan($id, $params);
-			else
+			if ($this->input->post('hapus_bukti'))
 			{
-				$this->pelanggan_model->add_pelanggan($params);
+				hapus_bukti($this->input->post('bukti_lama'));
+				$params['bukti'] = null;
 			}
-			redirect('pelanggan/index');
+			if ( ! empty($_FILES['bukti']['name'])) $upload = $this->do_upload();
+			if (empty($upload['error']))
+			{
+				if ( ! empty($_FILES['bukti']['name']))
+				{
+					$params['bukti'] = $upload['upload_data']['file_name'];
+					if ($bukti_lama = $this->input->post('bukti_lama')) hapus_bukti($bukti_lama);
+				}
+				if ($id)
+					$this->pelanggan_model->update_pelanggan($id, $params);
+				else
+				{
+					$this->pelanggan_model->add_pelanggan($params);
+				}
+				redirect('pelanggan/index');
+			}
 		}
+		$data['error'] = $upload['error'] ?: null;
 		if ($this->input->post('ubah_desa')) $data['id_pelanggan'] = $id;
 		$this->render_form($data);
+	}
+
+	private function do_upload()
+	{
+		$config['upload_path']          = './uploads/';
+		$config['allowed_types']        = 'gif|jpg|png';
+		$config['max_size']             = 1000;
+		$config['max_width']            = 4096;
+		$config['max_height']           = 1500;
+
+		$this->load->library('upload', $config);
+		if ( ! $this->upload->do_upload('bukti'))
+		{
+			$data['error'] = $this->upload->display_errors();
+		}
+    else
+    {
+      $data['upload_data'] = $this->upload->data();
+    }
+		return $data;
 	}
 
 	private function render_form($data)

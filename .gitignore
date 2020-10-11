@@ -44,3 +44,6 @@ installer
 config/*
 ## Coba folder
 coba/*
+## folder upload
+uploads/*
+!uploads/index.html
