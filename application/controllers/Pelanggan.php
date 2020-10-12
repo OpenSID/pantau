@@ -47,6 +47,7 @@ class Pelanggan extends Admin_Controller{
 
 		$data['jenis_pelanggan'] =  $this->referensi_model->list_ref(JENIS_PELANGGAN);
 		$data['status_langganan'] = $this->referensi_model->list_ref(STATUS_LANGGANAN);
+		$data['filter_langganan'] = $this->referensi_model->list_ref(FILTER_LANGGANAN);
 		$data['pelaksana'] = $this->referensi_model->list_ref(PELAKSANA);
 		$data['selected_filter'] = $filter;
 

@@ -28,8 +28,15 @@ define("STATUS_LANGGANAN", serialize([
 	1 => 'aktif',
 	2 => 'suspended',
 	3 => 'tidak aktif',
+]));
+
+define("FILTER_LANGGANAN", serialize([
+	1 => 'aktif',
+	2 => 'suspended',
+	3 => 'tidak aktif',
 	4 => 'sebentar lagi berakhir',
-	5 => 'baru berakhir'
+	5 => 'baru berakhir',
+	6 => 'sudah berakhir'
 ]));
 
 define("PELAKSANA", serialize([

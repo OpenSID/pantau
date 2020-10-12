@@ -28,7 +28,7 @@
 						</select>
 						<select class="form-control input-sm" name="filter[status]" onchange="$('#mainform').submit();">
 							<option value="">Pilih Status</option>
-							<?php foreach ($status_langganan as $key => $status): ?>
+							<?php foreach ($filter_langganan as $key => $status): ?>
 								<option value="<?= $key ?>" <?php $selected_filter && $key == $selected_filter['status'] && print('selected') ?>><?= ucwords($status) ?></option>
 							<?php endforeach ?>
 						</select>
