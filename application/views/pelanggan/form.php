@@ -14,7 +14,8 @@
 	.profile-user-img {width: 200px;}
 </style>
 <link rel="stylesheet" href="<?= base_url('assets/jquery/css/jquery.fancybox.min.css') ?>" />
-<script src="<?= base_url('assets/js/jquery.fancybox.min.js') ?>"></script>
+<script src="<?= base_url('assets/jquery/js/jquery-3.2.1.js')?>"></script>
+<script src="<?= base_url('assets/jquery/js/jquery.fancybox.min.js') ?>"></script>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>Pelanggan <small>Tambah Pelanggan</small></h1>
@@ -121,7 +122,7 @@
 					<div class="form-group">
 						<?php if ($pelanggan['bukti']): ?>
 							<input type="hidden" name="bukti_lama" value="<?= $pelanggan['bukti']?>">
-							<a data-fancybox="images" data-options='{"caption" : "Bukti Pembayaran", "type" : "iframe"}' href="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>"><img class="profile-user-img img-responsive" src="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>" alt="Bukti Pembayaran"></a>
+							<a data-fancybox="images" data-caption="Bukti Pembayaran" href="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>"><img class="profile-user-img img-responsive" src="<?= ambil_bukti($pelanggan['bukti'], 'kecil')?>" alt="Bukti Pembayaran"></a>
 							<p class="text-center"><label class="control-label"><input type="checkbox" name="hapus_bukti" value="<?= $pelanggan ['bukti']?>" /> Hapus Bukti</label></p>
 						<?php else: ?>
 							<img class="profile-user-img img-responsive" src="<?= base_url()?>assets/files/logo/home.png" alt="Belum Ada Bukti">
