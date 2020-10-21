@@ -76,8 +76,8 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'username' => 'rap',
+	'password' => 'Chieke@2611',
 	'database' => 'tracksid',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
@@ -99,4 +99,3 @@ $konfigurasi_db = konfigurasi_database();
 if(is_file($konfigurasi_db)) {
   include($konfigurasi_db);
 }
-

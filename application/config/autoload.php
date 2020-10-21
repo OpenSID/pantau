@@ -103,7 +103,7 @@ $autoload['helper'] = array('track', 'auth', 'str', 'upload', 'url', 'form', 'jw
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('sandi');
+$autoload['config'] = array('sandi', 'jwt');
 
 /*
 | -------------------------------------------------------------------
