@@ -1,0 +1,46 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Pelanggan_model_api extends CI_Model {
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+	}
+
+	public function get_admin_token_from_id($admin_id)
+	{
+		$this->db->select('token');
+		$this->db->from('users');
+		$this->db->where('id', $admin_id);
+		return $this->db->get()->row('token');
+	}
+
+	public function get_customer_token_from_id($customer_id)
+	{
+		$this->db->select('token');
+		$this->db->from('pelanggan');
+		$this->db->where('id', $customer_id);
+		return $this->db->get()->row('token');
+	}
+
+  public function api_get_all_customer()
+	{
+    $data = $this->db->get('pelanggan')->result_array();
+    $response['PELANGGAN PREMIUM']=$data;
+    return $response;
+  }
+
+	public function api_get_customer($customer_id)
+	{
+		$data = $this->db
+    ->where('id', $customer_id)
+    ->get('pelanggan')
+    ->result_array();
+
+    $response['PELANGGAN PREMIUM']=$data;
+    return $response;
+  }
+
+}

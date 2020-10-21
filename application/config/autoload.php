@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('track','auth', 'str', 'upload');
+$autoload['helper'] = array('track', 'auth', 'str', 'upload', 'url', 'form', 'jwt', 'authorization', 'date', 'donjolib', 'opensid');
 
 /*
 | -------------------------------------------------------------------
