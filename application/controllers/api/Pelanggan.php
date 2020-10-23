@@ -15,8 +15,8 @@ class Pelanggan extends REST_Controller
 
   public function admin_get()
   {
-    $admin_id = 1;
     $token = $this->input->get('token');
+    $admin_id = $this->pelanggan->get_admin_id_from_token($token);
     $admin_token = $this->pelanggan->get_admin_token_from_id($admin_id);
     if ($token === $admin_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
@@ -32,9 +32,9 @@ class Pelanggan extends REST_Controller
 
   public function admincs_get()
   {
-    $admin_id = 1;
     $token = $this->input->get('token');
     $customer_id = $this->input->get('id');
+    $admin_id = $this->pelanggan->get_admin_id_from_token($token);
     $admin_token = $this->pelanggan->get_admin_token_from_id($admin_id);
     if ($token === $admin_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);

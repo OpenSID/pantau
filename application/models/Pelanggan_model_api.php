@@ -17,6 +17,14 @@ class Pelanggan_model_api extends CI_Model {
 		return $this->db->get()->row('token');
 	}
 
+	public function get_admin_id_from_token($token)
+	{
+		$this->db->select('id');
+		$this->db->from('users');
+		$this->db->where('token', $token);
+		return $this->db->get()->row('id');
+	}
+
 	public function get_customer_token_from_id($customer_id)
 	{
 		$this->db->select('token');
