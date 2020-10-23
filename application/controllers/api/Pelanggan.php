@@ -50,8 +50,8 @@ class Pelanggan extends REST_Controller
 
   public function customer_get()
   {
-    $customer_id = $this->input->get('id');
     $token = $this->input->get('token');
+    $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);

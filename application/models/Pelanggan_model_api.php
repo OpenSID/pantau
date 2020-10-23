@@ -25,10 +25,18 @@ class Pelanggan_model_api extends CI_Model {
 		return $this->db->get()->row('token');
 	}
 
+	public function get_customer_id_from_token($token)
+	{
+		$this->db->select('id');
+		$this->db->from('pelanggan');
+		$this->db->where('token', $token);
+		return $this->db->get()->row('id');
+	}
+
   public function api_get_all_customer()
 	{
     $data = $this->db->get('pelanggan')->result_array();
-    $response['PELANGGAN PREMIUM']=$data;
+    $response['PELANGGAN_PREMIUM']=$data;
     return $response;
   }
 
@@ -39,7 +47,7 @@ class Pelanggan_model_api extends CI_Model {
     ->get('pelanggan')
     ->result_array();
 
-    $response['PELANGGAN PREMIUM']=$data;
+    $response['PELANGGAN_PREMIUM']=$data;
     return $response;
   }
 
