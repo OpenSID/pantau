@@ -14,6 +14,7 @@ class Admin_Controller extends MY_Controller
   function __construct()
   {
     parent::__construct();
+    if ( ! admin_logged_in()) redirect('/');
   }
 }
 

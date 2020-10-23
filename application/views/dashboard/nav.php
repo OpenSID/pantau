@@ -31,6 +31,7 @@
 				<li><a href="<?= site_url('akses/bersihkan')?>"><i class="fa fa-refresh"></i> <span>Bersihkan Data Akses</span></a></li>
 				<li><a href="<?= site_url('notifikasi/index')?>"><i class="fa fa-rss-square"></i> <span>Notifikasi</span></a></li>
 				<li><a href="<?= site_url('pelanggan/clear')?>"><i class="fa fa-rss-square"></i> <span>Pelanggan</span></a></li>
+				<li><a href="<?= site_url('user/clear')?>"><i class="fa fa-users"></i> <span>Pengguna</span></a></li>
 			<?php endif; ?>
 		</ul>
 	</section>

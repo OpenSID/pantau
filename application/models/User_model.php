@@ -140,9 +140,12 @@ class User_model extends CI_Model {
 		if (isset($_SESSION['cari']))
 		{
 			$keyword = $_SESSION['cari'];
-			$keyword = '%'.$this->db->escape_like_str($keyword).'%';
-			$search_sql = " AND (u.username LIKE '$keyword' OR u.nama LIKE '$keyword')";
-			return $search_sql;
+			$keyword = $this->db->escape_like_str($keyword);
+			$this->db
+				->group_start()
+					->like('u.username', $keyword)
+					->or_like('u.nama', $keyword)
+				->group_end();
 		}
 	}
 
@@ -151,17 +154,16 @@ class User_model extends CI_Model {
 		if (isset($_SESSION['filter']))
 		{
 			$filter = $_SESSION['filter'];
-			$filter_sql = " AND u.id_grup = $filter";
-			return $filter_sql;
+			$this->db->where('u.id_grup', $filter);
 		}
 	}
 
 	public function paging($page = 1, $o = 0)
 	{
-		$sql = "SELECT COUNT(*) AS jml " . $this->list_data_sql();
-		$query = $this->db->query($sql);
-		$row = $query->row_array();
-		$jml_data = $row['jml'];
+		$this->list_data_sql();
+		$jml_data = $this->db->select('COUNT(u.id) AS jml')
+			->get()
+			->row()->jml;
 
 		$this->load->library('paging');
 		$cfg['page'] = $page;
@@ -174,10 +176,10 @@ class User_model extends CI_Model {
 
 	private function list_data_sql()
 	{
-		$sql = " FROM users u, user_grup g WHERE u.id_grup = g.id ";
-		$sql .= $this->search_sql();
-		$sql .= $this->filter_sql();
-		return $sql;
+		$this->db->from('users u')
+			->join('user_grup g', 'u.id_grup = g.id', 'left');
+		$this->search_sql();
+		$this->filter_sql();
 	}
 
 	public function list_data($order = 0, $offset = 0, $limit = 500)
@@ -186,35 +188,32 @@ class User_model extends CI_Model {
 		switch($order)
 		{
 			case 1 :
-				$order_sql = ' ORDER BY u.username';
+				$this->db->order_by('u.username ASC');
 				break;
 			case 2:
-				$order_sql = ' ORDER BY u.username DESC';
+				$this->db->order_by('u.username DESC');
 				break;
 			case 3:
-				$order_sql = ' ORDER BY u.nama';
+				$this->db->order_by('u.nama ASC');
 				break;
 			case 4:
-				$order_sql = ' ORDER BY u.nama DESC';
+				$this->db->order_by('u.nama DESC');
 				break;
 			case 5:
-				$order_sql = ' ORDER BY g.nama';
+				$this->db->order_by('g.nama ASC');
 				break;
 			case 6:
-				$order_sql = ' ORDER BY g.nama DESC';
+				$this->db->order_by('g.nama DESC');
 				break;
 			default:
-				$order_sql = ' ORDER BY u.username';
+				$this->db->order_by('u.username ASC');
 		}
-		// Paging sql
-		$paging_sql = ' LIMIT '.$offset.','.$limit;
 		// Query utama
-		$sql = "SELECT u.*, g.nama as grup " . $this->list_data_sql();
-		$sql .= $order_sql;
-		$sql .= $paging_sql;
+		$this->list_data_sql();
 
-		$query = $this->db->query($sql);
-		$data = $query->result_array();
+		$data = $this->db->select('u.*, g.nama as grup')
+			->limit($limit, $offset)
+			->get()->result_array();
 
 		// Formating output
 		$j = $offset;
