@@ -17,14 +17,6 @@ class User_model_api extends CI_Model {
 		return $this->db->get()->row('token');
 	}
 
-	public function get_user_token_from_id($user_id)
-	{
-		$this->db->select('token');
-		$this->db->from('users');
-		$this->db->where('id', $user_id);
-		return $this->db->get()->row('token');
-	}
-
 	public function api_get_all_user()
 	{
     $data = $this->db->get('users')->result_array();

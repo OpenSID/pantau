@@ -48,21 +48,4 @@ class User extends REST_Controller
     $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
   }
 
-  public function user_get()
-  {
-    $user_id = $this->input->get('id');
-    $token = $this->input->get('token');
-    $user_token = $this->user->get_user_token_from_id($user_id);
-    if ($token === $user_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->user->api_get_user($user_id);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
-  }
-
 }
