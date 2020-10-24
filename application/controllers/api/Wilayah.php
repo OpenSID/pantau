@@ -21,6 +21,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $admin_id = $this->pelanggan->get_admin_id_from_token($token);
     $admin_token = $this->pelanggan->get_admin_token_from_id($admin_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $admin_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -30,7 +31,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function kodedesa_get()
@@ -39,6 +40,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -48,7 +50,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function kodekec_get()
@@ -57,6 +59,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -66,7 +69,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function kodekab_get()
@@ -75,6 +78,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -84,7 +88,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function kodeprov_get()
@@ -93,6 +97,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -102,7 +107,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function namadesa_get()
@@ -111,6 +116,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -120,7 +126,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function namakec_get()
@@ -129,6 +135,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -138,7 +145,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function namakab_get()
@@ -147,6 +154,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -156,7 +164,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function namaprov_get()
@@ -165,6 +173,7 @@ class Wilayah extends REST_Controller
     $token = $this->input->get('token');
     $customer_id = $this->pelanggan->get_customer_id_from_token($token);
     $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $customer_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -174,7 +183,7 @@ class Wilayah extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
 }

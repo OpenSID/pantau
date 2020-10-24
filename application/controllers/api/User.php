@@ -18,6 +18,7 @@ class User extends REST_Controller
     $admin_id = 1;
     $token = $this->input->get('token');
     $admin_token = $this->user->get_admin_token_from_id($admin_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $admin_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -27,7 +28,7 @@ class User extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
   public function admincs_get()
@@ -36,6 +37,7 @@ class User extends REST_Controller
     $token = $this->input->get('token');
     $user_id = $this->input->get('id');
     $admin_token = $this->user->get_admin_token_from_id($admin_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $admin_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
@@ -45,7 +47,7 @@ class User extends REST_Controller
         return;
       }
     }
-    $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
 }
