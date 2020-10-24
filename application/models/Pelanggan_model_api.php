@@ -22,6 +22,7 @@ class Pelanggan_model_api extends CI_Model {
 		$this->db->select('id');
 		$this->db->from('users');
 		$this->db->where('token', $token);
+		$this->db->where('id_grup', 1);
 		return $this->db->get()->row('id');
 	}
 

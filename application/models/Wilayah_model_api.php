@@ -8,6 +8,13 @@ class Wilayah_model_api extends CI_Model
 		$this->load->database();
 	}
 
+  public function api_get_all_wilayah()
+	{
+    $data = $this->db->get('kode_wilayah')->result();
+    $response['KODE_WILAYAH']=$data;
+    return $response;
+  }
+
 	public function api_get_kodedesa($kode)
 	{
     $data = $this->db
