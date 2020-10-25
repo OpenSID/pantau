@@ -50,8 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-$route['register'] = 'user/register';
-$route['login'] = 'user/login';
+$route['register'] = 'login/register';
+$route['login'] = 'login/login';
 $route['logout'] = 'user/logout';
 
 $route['default_controller'] = 'dashboard/index_baru';

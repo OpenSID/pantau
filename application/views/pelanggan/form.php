@@ -45,6 +45,13 @@
 				<input type="hidden" id="ubah_desa" name="ubah_desa" value="">
 				<div class="box-body">
 					<div class="form-group">
+						<label for="customerid" class="col-md-2 control-label"><span class="text-danger"></span>Customer ID</label>
+						<div class="col-md-2">
+							<input type="text" readonly name="customerid" class="form-control" placeholder="Customer ID" value="<?=$pelanggan['id']?>"/>
+							<span class="text-danger"><?= form_error('customerid');?></span>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="domain" class="col-md-2 control-label"><span class="text-danger">*</span>Domain</label>
 						<div class="col-md-5">
 							<input type="text" name="domain" class="form-control" placeholder="Contoh: cigelam.desa.id" value="<?= $this->input->post('domain') ?: $pelanggan['domain']?>"/>
@@ -157,6 +164,14 @@
 							<span class="text-danger"><?= form_error('pelaksana');?></span>
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="token" class="col-md-2 control-label">API Key</label>
+						<div class="col-md-5">
+							<textarea rows="3" class="form-control input-sm" name="token" id="token" placeholder="Token"><?= $this->input->post('token') ?: $pelanggan['token'] ?></textarea>
+							<span class="text-danger"><?= form_error('token');?></span>
+						</div>
+						<button class="btn btn-social btn-flat btn-info btn-sm" id="btn_simpan"><i class='fa fa-key'></i>Generate Key</button>
+					</div>
 				</div>
 				<div class="box-footer">
 					<button type="reset" class="btn btn-social btn-flat btn-danger btn-sm"><i class="fa fa-times"></i> Batal</button>
@@ -171,4 +186,19 @@
     // Closing the alert
     $('#alert').alert('close');
   }, 5000);
+
+	$('#btn_simpan').on('click', function() {
+		var id = $("#id_desa").val();
+		$.ajax({
+			url: '<?= site_url('pelanggan/generate_token')?>',
+			type: 'POST',
+			dataType: 'json',
+			data: {'id': id},
+			success: function(data){
+					$('[name="token"]').val(data);
+			}
+		});
+		return false;
+	});
+
 </script>

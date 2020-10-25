@@ -58,6 +58,42 @@ class Referensi_model extends CI_Model {
 		return $list_ref;
 	}
 
+	public function list_nama($tabel)
+	{
+		$data = $this->list_data($tabel);
+		$list = [];
+		foreach ($data as $key => $value)
+		{
+			$list[$value['id']] = $value['nama'];
+		}
+		return $list;
+	}
+
+	public function list_data($tabel, $kecuali='', $termasuk=null)
+	{
+		if ($kecuali) $this->db->where("id NOT IN ($kecuali)");
+
+		if ($termasuk) $this->db->where("id IN ($termasuk)");
+
+		$data = $this->db->select('*')->order_by('id')->get($tabel)->result_array();
+		return $data;
+	}
+
+	public function list_by_id($tabel)
+	{
+		$data = $this->db->order_by('id')
+			->get($tabel)
+			->result_array();
+		$data = array_combine(array_column($data, 'id'), $data);
+		return $data;
+	}
+
+	public function list_ref_flip($s_array)
+	{
+		$list = array_flip(unserialize($s_array));
+		return $list;
+	}
+
 
 }
 ?>

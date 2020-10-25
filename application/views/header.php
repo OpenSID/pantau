@@ -20,13 +20,20 @@
 	<!-- js -->
 	<!-- Ambil confirmation dialog dari https://ethaizone.github.io/Bootstrap-Confirmation/#install
 	-->
-	<script src="<?= base_url('assets/jquery/js/jquery-3.2.1.js')?>"></script>
-  <script src="<?= base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
-	<script src="<?= base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
-	<script src="<?= base_url('assets/js/bootstrap-tooltip.js')?>"></script> <!-- diperlukan bootstrap-confirmation -->
-	<script src="<?= base_url('assets/js/bootstrap-confirmation.js')?>"></script>
+	<?php $adminlte = 'vendor/almasaeed2010/adminlte/'; ?>
+	<script src="<?= base_url($adminlte.'bower_components/jquery/dist/jquery.min.js')?>"></script>
+	<script src="<?= base_url($adminlte.'bower_components/bootstrap/dist/js/bootstrap.min.js')?>"></script>
+	<script src="<?= base_url($adminlte.'dist/js/adminlte.min.js')?>"></script>
+
+	<script src="<?= base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
 	<script src="<?= base_url('assets/datatables/js/jquery.dataTables.min.js')?>"></script>
+	<script src="<?= base_url('assets/bootstrap/js/moment.min.js')?>"></script>
 	<script src="<?= base_url('assets/datatables/js/dataTables.bootstrap.min.js')?>"></script>
+	<!-- Select2 -->
+	<script src="<?= base_url()?>assets/bootstrap/js/select2.full.min.js"></script>
+	<!-- bootstrap Date time picker -->
+	<script src="<?= base_url('assets/bootstrap/js/bootstrap-datetimepicker.min.js')?>"></script>
+	<script src="<?= base_url('assets/bootstrap/js/id.js')?>"></script>
 	<script src="<?= base_url('assets/js/script.js')?>"></script>
 
 	<!--[if lt IE 9]>
@@ -101,4 +108,3 @@
 				</div><!-- .row -->
 			</div><!-- .container -->
 		<?php endif; ?>
-

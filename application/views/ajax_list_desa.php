@@ -117,11 +117,14 @@
 
     <!-- Ambil confirmation dialog dari https://ethaizone.github.io/Bootstrap-Confirmation/#install
     -->
-	  <script src="<?php echo base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
+    <script src="<?php echo base_url('assets/js/popper.js')?>"></script> <!-- diperlukan bootstrap -->
     <script src="<?php echo base_url('assets/js/bootstrap-tooltip.js') ?>"></script> <!-- diperlukan bootstrap-confirmation -->
     <script src="<?php echo base_url('assets/js/bootstrap-confirmation.js') ?>"></script>
     <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js')?>"></script>
     <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js')?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/moment.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap-datetimepicker.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/select2.full.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/js/script.js') ?>"></script>
 
 
