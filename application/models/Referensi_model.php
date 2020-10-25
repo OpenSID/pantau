@@ -79,24 +79,6 @@ class Referensi_model extends CI_Model {
 		return $data;
 	}
 
-	public function list_wajib_ktp()
-	{
-		$wajib_ktp = array_flip(unserialize(WAJIB_KTP));
-		return $wajib_ktp;
-	}
-
-	public function list_ktp_el()
-	{
-		$ktp_el = array_flip(unserialize(KTP_EL));
-		return $ktp_el;
-	}
-
-	public function list_status_rekam()
-	{
-		$status_rekam = array_flip(unserialize(STATUS_REKAM));
-		return $status_rekam;
-	}
-
 	public function list_by_id($tabel)
 	{
 		$data = $this->db->order_by('id')
