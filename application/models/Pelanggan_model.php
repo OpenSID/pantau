@@ -155,23 +155,34 @@ class Pelanggan_model extends CI_Model {
 		if (! empty($filter['status'])) $this->filter_status($filter['status']);
 	}
 
-	public function get_all_pelanggan($params = array())
+	private function get_filtered_query()
 	{
+		$this->db
+			->from('pelanggan p')
+			->join('desa d', 'p.id_desa = d.id', 'left');
+
 		$this->set_filter();
 		$this->set_search();
-		$this->set_order_by();
+	}
 
-		if (isset($params) && ! empty($params))
-		{
-			$this->db->limit($params['limit'], $params['offset']);
-		}
+	public function get_filtered_pelanggan()
+	{
+		$post = $this->input->post();
+		$this->get_filtered_query();
+		$this->set_order_by();
+		if ($post['length'] != -1) $this->db->limit($post['length'], $post['start']);
 		$data = $this->db
 			->select('p.*')
 			->select('CONCAT("Desa ", d.nama_desa, ", ", " Kec ", d.nama_kecamatan, ", ", " Kab ", d.nama_kabupaten, ", ", " Prov ", d.nama_provinsi) as desa')
-			->from('pelanggan p')
-			->join('desa d', 'p.id_desa = d.id')
 			->get()->result_array();
 		return $data;
+	}
+
+	public function count_filtered()
+	{
+		$this->get_filtered_query();
+		$count = $this->db->count_all_results();
+		return $count;
 	}
 
 	public function get_all_pelanggan_count()
