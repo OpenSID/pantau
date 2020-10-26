@@ -43,8 +43,6 @@ class Pelanggan extends Admin_Controller{
 			$filter = $this->session->filter;
 		}
 
-		$data['pelanggan'] = $this->pelanggan_model->get_all_pelanggan($params);
-
 		$data['jenis_pelanggan'] =  $this->referensi_model->list_ref(JENIS_PELANGGAN);
 		$data['status_langganan'] = $this->referensi_model->list_ref(STATUS_LANGGANAN);
 		$data['filter_langganan'] = $this->referensi_model->list_ref(FILTER_LANGGANAN);
@@ -66,7 +64,7 @@ class Pelanggan extends Admin_Controller{
 
 	public function ajax_list_pelanggan()
 	{
-		$list = $this->pelanggan_model->get_all_pelanggan();
+		$list = $this->pelanggan_model->get_filtered_pelanggan();
 
 		$data = array();
 		$no = $_POST['start'];
@@ -92,7 +90,7 @@ class Pelanggan extends Admin_Controller{
 		(
 			"draw" => $_POST['draw'],
 			"recordsTotal" => $this->pelanggan_model->get_all_pelanggan_count(),
-			"recordsFiltered" => count($list),
+			"recordsFiltered" => $this->pelanggan_model->count_filtered(),
 			"data" => $data,
 		);
 

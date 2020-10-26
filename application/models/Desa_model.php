@@ -226,7 +226,7 @@ class Desa_model extends CI_Model {
 		}
 	}
 
-	function get_datatables()
+	public function get_datatables()
 	{
 		$post = $this->input->post();
 		$this->_get_filtered_query($post);
@@ -246,7 +246,7 @@ class Desa_model extends CI_Model {
 		return $data;
 	}
 
-	function count_filtered()
+	public function count_filtered()
 	{
 		$this->_get_filtered_query($this->input->post());
 		$jml = $this->db
