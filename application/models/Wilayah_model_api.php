@@ -103,4 +103,15 @@ class Wilayah_model_api extends CI_Model
     return $response;
   }
 
+  public function api_get_desa($id_desa)
+	{
+    $data = $this->db
+    ->where('id', $id_desa)
+    ->get('desa')
+    ->result_array();
+
+    $response['KODE_WILAYAH']=$data;
+    return $response;
+  }
+
 }
