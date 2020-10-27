@@ -186,4 +186,40 @@ class Wilayah extends REST_Controller
     $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
+  public function desa_get()
+  {
+    $id_desa = $this->input->get('id_desa');
+    $token = $this->input->get('token');
+    $customer_id = $this->pelanggan->get_customer_id_from_token($token);
+    $customer_token = $this->pelanggan->get_customer_token_from_id($customer_id);
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $customer_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_desa($id_desa);
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
+  public function alldev_get()
+  {
+    $token = $this->input->get('token');
+    $dev_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw';
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_all_wilayah();
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
 }
