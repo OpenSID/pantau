@@ -25,10 +25,11 @@ class Dashboard extends CI_Controller {
     $this->load->model('kabupaten_model');
   }
 
-	public function index()
-	{
-		$this->load->view('dashboard');
-	}
+  // TODO: hapus script yg dibuat oleh mahasiswa MIT
+	// public function index()
+	// {
+	// 	$this->load->view('dashboard');
+	// }
 
 	public function index_baru()
 	{

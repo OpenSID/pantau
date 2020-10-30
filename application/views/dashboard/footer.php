@@ -1,9 +1,9 @@
 			<footer class="main-footer">
 				<div class="pull-right hidden-xs">
-				  	<b><a href="http://opensid.info">www.opensid.info</a></b>
+				  	<b><a href="https://opendesa.id">www.opendesa.id</a></b>
 				</div>
 		    <!-- Default to the left -->
-		    <strong>Copyright &copy; 2018 <a href="https://github.com/OpenSID/OpenSID">OpenSID</a>.</strong> All rights reserved.
+		    <strong>Hak Cipta &copy; 2018-2020 <a href="https:opendesa.id">OpenDesa</a>.</strong> Hak cipta dilindungi undang-undang.
 			</footer>
 		</div>
 
