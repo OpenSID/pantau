@@ -83,3 +83,8 @@ function formAction(idForm, action, target = '')
 	$('#'+idForm).attr('action', action);
 	$('#'+idForm).submit();
 }
+
+function copyToClipboard(element) {
+  $(element).select();
+  document.execCommand("copy");
+}

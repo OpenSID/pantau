@@ -170,7 +170,8 @@
 							<textarea rows="3" class="form-control input-sm" name="token" id="token" placeholder="Token"><?= $this->input->post('token') ?: $pelanggan['token'] ?></textarea>
 							<span class="text-danger"><?= form_error('token');?></span>
 						</div>
-						<button class="btn btn-social btn-flat btn-info btn-sm" id="btn_simpan"><i class='fa fa-key'></i>Generate Key</button>
+						<button class="btn btn-social btn-flat btn-info btn-sm" id="btn_simpan"><i class='fa fa-key'></i>Buat Key</button>
+						<button type="button" class="btn btn-social btn-flat btn-primary btn-sm" onclick="copyToClipboard('#token')"><i class='fa fa-key'></i>Salin ke Clipboard</button>
 					</div>
 				</div>
 				<div class="box-footer">
