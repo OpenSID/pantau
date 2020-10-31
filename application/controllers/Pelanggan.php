@@ -182,7 +182,7 @@ class Pelanggan extends Admin_Controller{
 		$config['allowed_types']        = 'gif|jpg|png';
 		$config['max_size']             = 1000;
 		$config['max_width']            = 4096;
-		$config['max_height']           = 1500;
+		$config['max_height']           = 2000;
 
 		$this->load->library('upload', $config);
 		if ( ! $this->upload->do_upload('bukti'))

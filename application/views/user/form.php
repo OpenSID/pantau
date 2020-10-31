@@ -96,8 +96,9 @@
 								<label for="token" class="col-sm-3 control-label">API Key</label>
 								<div class="col-sm-8">
 									<textarea rows="3" class="form-control input-sm" name="token" id="token" placeholder="Token"><?= $user->token ?></textarea>
-									<button class="btn btn-social btn-flat btn-info btn-sm" id="btn_simpan"><i class='fa fa-key'></i>Generate Key</button>
+									<button class="btn btn-social btn-flat btn-info btn-sm" id="btn_simpan"><i class='fa fa-key'></i>Buat Key</button>
 									<input class="hidden" type="text" id="id" name="id" value="<?=$user->id?>">
+									<button type="button" class="btn btn-social btn-flat btn-primary btn-sm" onclick="copyToClipboard('#token')"><i class='fa fa-key'></i>Salin ke Clipboard</button>
 								</div>
 							</div>
 						</div>
