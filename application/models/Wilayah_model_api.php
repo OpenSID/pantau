@@ -2,14 +2,6 @@
 
 class Wilayah_model_api extends CI_Model
 {
-
-  var $table = 'desa';
-	var $column_order = array(null, null, 'nama_desa','nama_kecamatan','nama_kabupaten','nama_provinsi','url_hosting','versi_lokal','versi_hosting','tgl_akses'); //set column field database for datatable orderable
-	var $column_order_kabupaten = array(null, 'nama_kabupaten','nama_provinsi','offline','online'); //set column field database for datatable orderable
-	var $column_order_versi = array(null, 'versi','offline','online'); //set column field database for datatable orderable
-	var $column_search = array('nama_desa','nama_kecamatan','nama_kabupaten','nama_provinsi'); //set column field database for datatable searchable
-	var $order = array('id' => 'asc'); // default order
-
   public function __construct()
   {
 		parent::__construct();
@@ -93,6 +85,120 @@ class Wilayah_model_api extends CI_Model
     ->result_array();
 
     $response['KODE_WILAYAH']=$data;
+    return $response;
+  }
+
+  //API Peta Desa Pengguna OpenSID
+  //Indonesia Bounding Box Coordinates : (95.2930261576, -10.3599874813, 141.03385176, 5.47982086834)
+  public function api_get_geojson_prov($prov)
+	{
+    $db_results = $this->db
+    ->where('nama_provinsi', $prov)
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa_prov = $db_results->num_rows();
+
+    $geojson = array(
+      'type'      => 'FeatureCollection',
+      'nama_provinsi'    => $prov,
+      'jml_desa_prov'    => $jml_desa_prov,
+      'features'  => array()
+    );
+
+		foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+    $response=$geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_kab($prov, $kab)
+	{
+    $db_results = $this->db
+    ->where('nama_provinsi', $prov)
+    //->where('nama_kab', $kab)
+    ->where("nama_kabupaten LIKE '$kab%'")
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+    $data = $db_results->result_array();
+    $jml_desa_kab = $db_results->num_rows();
+    $geojson = array(
+      'type'      => 'FeatureCollection',
+      'nama_provinsi'    => $prov,
+      'nama_kabupaten'  => $kab,
+      'jml_desa_kab'    => $jml_desa_kab,
+    );
+    $response=$geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_kec($prov, $kab, $kec)
+	{
+    $db_results = $this->db
+    ->where('nama_provinsi', $prov)
+    ->where("nama_kabupaten LIKE '$kab%'")
+    ->where("nama_kecamatan LIKE '$kec%'")
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+    $data = $db_results->result_array();
+    $jml_desa_kec = $db_results->num_rows();
+    $geojson = array(
+      'type'      => 'FeatureCollection',
+      'nama_provinsi'   => $prov,
+      'nama_kabupaten'  => $kab,
+      'nama_kecamatan'  => $kec,
+      'jml_desa_kec'    => $jml_desa_kec,
+    );
+    $response=$geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_neg()
+	{
+    $db_results = $this->db
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+    $data = $db_results->result_array();
+    $jml_desa = $db_results->num_rows();
+    $geojson = array(
+      'type'      => 'FeatureCollection',
+      'nama_negara'   => "INDONESIA",
+      'jml_desa'    => $jml_desa,
+    );
+    $response=$geojson;
     return $response;
   }
 
