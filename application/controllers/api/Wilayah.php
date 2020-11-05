@@ -16,24 +16,6 @@ class Wilayah extends REST_Controller
     $this->wilayah = $this->wilayah_model_api;
   }
 
-  public function all_get()
-  {
-    $token = $this->input->get('token');
-    $admin_id = $this->pelanggan->get_admin_id_from_token($token);
-    $admin_token = $this->pelanggan->get_admin_token_from_id($admin_id);
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $admin_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_all_wilayah();
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
-  }
-
   //API Halaman Pelanggan
   public function desa_get()
   {
@@ -59,7 +41,7 @@ class Wilayah extends REST_Controller
   {
     $cari = $this->input->get('q');
     $token = $this->input->get('token');
-    $dev_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw';
+    $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $dev_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
@@ -77,7 +59,7 @@ class Wilayah extends REST_Controller
   {
     $id_desa = $this->input->get('id_desa');
     $token = $this->input->get('token');
-    $dev_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwidGltZXN0YW1wIjoxNjAzNDY2MjM5fQ.HVCNnMLokF2tgHwjQhSIYo6-2GNXB4-Kf28FSIeXnZw';
+    $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $dev_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
