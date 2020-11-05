@@ -74,4 +74,79 @@ class Wilayah extends REST_Controller
     $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
+  //API Peta Desa Pengguna OpenSID
+  public function geoprov_get()
+  {
+    $prov = $this->input->get('prov');
+    $token = $this->input->get('token');
+    $dev_token = $this->config->item('dev_token');
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_geojson_prov($prov);
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
+  public function geokab_get()
+  {
+    $prov = $this->input->get('prov');
+    $kab = $this->input->get('kab');
+    $token = $this->input->get('token');
+    $dev_token = $this->config->item('dev_token');
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_geojson_kab($prov, $kab);
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
+  public function geokec_get()
+  {
+    $prov = $this->input->get('prov');
+    $kab = $this->input->get('kab');
+    $kec = $this->input->get('kec');
+    $token = $this->input->get('token');
+    $dev_token = $this->config->item('dev_token');
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_geojson_kec($prov, $kab, $kec);
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
+  public function geoneg_get()
+  {
+    $token = $this->input->get('token');
+    $dev_token = $this->config->item('dev_token');
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->api_get_geojson_neg();
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
 }
