@@ -41,13 +41,14 @@ class Wilayah extends REST_Controller
   {
     $cari = $this->input->get('q');
     $token = $this->input->get('token');
+    $page = $this->input->get('page');
     $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
     if ($token === $dev_token) {
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->list_desa_ajax($cari);
+        $response = $this->wilayah->list_desa_ajax($cari, $page);
         $this->response($response);
         return;
       }
