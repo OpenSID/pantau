@@ -47,14 +47,14 @@
 					<div class="form-group">
 						<label for="customerid" class="col-md-2 control-label"><span class="text-danger"></span>Customer ID</label>
 						<div class="col-md-2">
-							<input type="text" readonly name="customerid" class="form-control" placeholder="Customer ID" value="<?=$pelanggan['id']?>"/>
+							<input type="text" readonly id="customerid" name="customerid" class="form-control" placeholder="Customer ID" value="<?=$pelanggan['id']?>"/>
 							<span class="text-danger"><?= form_error('customerid');?></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="domain" class="col-md-2 control-label"><span class="text-danger">*</span>Domain</label>
 						<div class="col-md-5">
-							<input type="text" name="domain" class="form-control" placeholder="Contoh: cigelam.desa.id" value="<?= $this->input->post('domain') ?: $pelanggan['domain']?>"/>
+							<input type="text" id="domain" name="domain" class="form-control" placeholder="Contoh: cigelam.desa.id" value="<?= $this->input->post('domain') ?: $pelanggan['domain']?>"/>
 							<span class="text-danger"><?= form_error('domain');?></span>
 						</div>
 					</div>
@@ -189,14 +189,14 @@
   }, 5000);
 
 	$('#btn_simpan').on('click', function() {
-		var id = $("#id_desa").val();
+		var id = $('#customerid').val();
 		$.ajax({
 			url: '<?= site_url('pelanggan/generate_token')?>',
 			type: 'POST',
-			dataType: 'json',
-			data: {'id': id},
+			dataType: 'JSON',
+			data: {id:id},
 			success: function(data){
-					$('[name="token"]').val(data);
+				$('[name="token"]').val(data);
 			}
 		});
 		return false;
