@@ -244,6 +244,17 @@ class Pelanggan_model extends CI_Model {
 		return $ada;
 	}
 
+	public function generate_token($id)
+	{
+		$payload = array(
+			"iss" => "opensid",
+			"jti" => $id,
+		);
+		$payload['timestamp'] = now();
+		$data = AUTHORIZATION::generateToken($payload);
+		return $data;
+	}
+
 }
 
 ?>
