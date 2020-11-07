@@ -84,16 +84,30 @@ class Wilayah_model_api extends CI_Model
     ->get('kode_wilayah')
     ->result_array();
 
-    $response['KODE_WILAYAH']=$data;
+    $response['KODE_WILAYAH'] = $data;
     return $response;
+  }
+
+  // Ambil rincian wilayah desa dari tabel kode_wilayah
+  private function desa_by_kode($kode_desa)
+  {
+	  // Ubah 1101012001 dari OpenSID menjadi 11.01.01.2001
+    $kode = substr($kode_desa, 0, 2) . '.' . substr($kode_desa, 2, 2) . '.' . substr($kode_desa, 4, 2) . '.' . substr($kode_desa, 6);
+    $desa = $this->db
+    	->select('nama_prov, nama_kab, nama_kec')
+    	->where('kode_desa', $kode)
+    	->limit(1)
+    	->get('kode_wilayah')->row();
+    return $desa;
   }
 
   //API Peta Desa Pengguna OpenSID
   //Indonesia Bounding Box Coordinates : (95.2930261576, -10.3599874813, 141.03385176, 5.47982086834)
-  public function api_get_geojson_prov($prov)
+  public function api_get_geojson_prov($kode_desa)
 	{
+    $desa = $this->desa_by_kode($kode_desa);
     $db_results = $this->db
-    ->where('nama_provinsi', $prov)
+    ->where('nama_provinsi', $desa->nama_prov)
     ->where('lat BETWEEN -10 AND 6')
     ->where('lng BETWEEN 95 AND 142')
     ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
@@ -104,10 +118,10 @@ class Wilayah_model_api extends CI_Model
     $jml_desa_prov = $db_results->num_rows();
 
     $geojson = array(
-      'type'      => 'FeatureCollection',
-      'nama_provinsi'    => $prov,
-      'jml_desa_prov'    => $jml_desa_prov,
-      'features'  => array()
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'jml_desa_prov' => $jml_desa_prov,
+      'features' => array()
     );
 
 		foreach ($data as $row)
@@ -132,16 +146,17 @@ class Wilayah_model_api extends CI_Model
       );
       array_push($geojson['features'], $marker);
 		}
-    $response=$geojson;
+    $response = $geojson;
     return $response;
   }
 
-  public function api_get_geojson_kab($prov, $kab)
+  public function api_get_geojson_kab($kode_desa)
 	{
+    $desa = $this->desa_by_kode($kode_desa);
     $db_results = $this->db
-    ->where('nama_provinsi', $prov)
+    ->where('nama_provinsi', $desa->nama_prov)
     //->where('nama_kab', $kab)
-    ->where("nama_kabupaten LIKE '$kab%'")
+    ->like('nama_kabupaten', $desa->nama_kab, 'after')
     ->where('lat BETWEEN -10 AND 6')
     ->where('lng BETWEEN 95 AND 142')
     ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
@@ -150,21 +165,22 @@ class Wilayah_model_api extends CI_Model
     $data = $db_results->result_array();
     $jml_desa_kab = $db_results->num_rows();
     $geojson = array(
-      'type'      => 'FeatureCollection',
-      'nama_provinsi'    => $prov,
-      'nama_kabupaten'  => $kab,
-      'jml_desa_kab'    => $jml_desa_kab,
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'nama_kabupaten' => $desa->nama_kab,
+      'jml_desa_kab' => $jml_desa_kab,
     );
-    $response=$geojson;
+    $response = $geojson;
     return $response;
   }
 
-  public function api_get_geojson_kec($prov, $kab, $kec)
+  public function api_get_geojson_kec($kode_desa)
 	{
+    $desa = $this->desa_by_kode($kode_desa);
     $db_results = $this->db
-    ->where('nama_provinsi', $prov)
-    ->where("nama_kabupaten LIKE '$kab%'")
-    ->where("nama_kecamatan LIKE '$kec%'")
+    ->where('nama_provinsi', $desa->nama_prov)
+    ->like('nama_kabupaten', $desa->nama_kab, 'after')
+    ->like('nama_kecamatan', $desa->nama_kec, 'after')
     ->where('lat BETWEEN -10 AND 6')
     ->where('lng BETWEEN 95 AND 142')
     ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
@@ -173,13 +189,13 @@ class Wilayah_model_api extends CI_Model
     $data = $db_results->result_array();
     $jml_desa_kec = $db_results->num_rows();
     $geojson = array(
-      'type'      => 'FeatureCollection',
-      'nama_provinsi'   => $prov,
-      'nama_kabupaten'  => $kab,
-      'nama_kecamatan'  => $kec,
-      'jml_desa_kec'    => $jml_desa_kec,
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'nama_kabupaten' => $desa->nama_kab,
+      'nama_kecamatan' => $desa->nama_kec,
+      'jml_desa_kec' => $jml_desa_kec,
     );
-    $response=$geojson;
+    $response = $geojson;
     return $response;
   }
 
@@ -194,11 +210,11 @@ class Wilayah_model_api extends CI_Model
     $data = $db_results->result_array();
     $jml_desa = $db_results->num_rows();
     $geojson = array(
-      'type'      => 'FeatureCollection',
-      'nama_negara'   => "INDONESIA",
-      'jml_desa'    => $jml_desa,
+      'type' => 'FeatureCollection',
+      'nama_negara' => "INDONESIA",
+      'jml_desa' => $jml_desa,
     );
-    $response=$geojson;
+    $response = $geojson;
     return $response;
   }
 

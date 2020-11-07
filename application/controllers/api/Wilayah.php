@@ -77,7 +77,7 @@ class Wilayah extends REST_Controller
   //API Peta Desa Pengguna OpenSID
   public function geoprov_get()
   {
-    $prov = $this->input->get('prov');
+    $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
@@ -85,7 +85,7 @@ class Wilayah extends REST_Controller
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_prov($prov);
+        $response = $this->wilayah->api_get_geojson_prov($kode_desa);
         $this->response($response);
         return;
       }
@@ -95,8 +95,7 @@ class Wilayah extends REST_Controller
 
   public function geokab_get()
   {
-    $prov = $this->input->get('prov');
-    $kab = $this->input->get('kab');
+    $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
@@ -104,7 +103,7 @@ class Wilayah extends REST_Controller
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kab($prov, $kab);
+        $response = $this->wilayah->api_get_geojson_kab($kode_desa);
         $this->response($response);
         return;
       }
@@ -114,9 +113,7 @@ class Wilayah extends REST_Controller
 
   public function geokec_get()
   {
-    $prov = $this->input->get('prov');
-    $kab = $this->input->get('kab');
-    $kec = $this->input->get('kec');
+    $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
@@ -124,7 +121,7 @@ class Wilayah extends REST_Controller
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kec($prov, $kab, $kec);
+        $response = $this->wilayah->api_get_geojson_kec($kode_desa);
         $this->response($response);
         return;
       }
