@@ -10,7 +10,7 @@ class Pelanggan extends Admin_Controller{
 	{
 		parent::__construct();
 
-		$this->load->model(['pelanggan_model', 'referensi_model']);
+		$this->load->model(['pelanggan_model', 'referensi_model', 'pelanggan_model_api',]);
 		$this->load->helper('url');
 		$this->load->library('pagination');
 		//if ( ! admin_logged_in()) redirect('login'); enable development
@@ -246,11 +246,8 @@ class Pelanggan extends Admin_Controller{
 
 	public function generate_token()
 	{
-		$id = $this->input->get('id');
-		$tokenData = array();
-		$tokenData['id'] = $id;
-		$tokenData['timestamp'] = now();
-		$data = AUTHORIZATION::generateToken($tokenData);
+		$id = $this->input->post('id');
+		$data = $this->pelanggan_model->generate_token($id);
 		echo json_encode($data);
 	}
 
