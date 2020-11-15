@@ -19,8 +19,9 @@ class Track extends REST_Controller {
   {
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+    $token_verify = password_verify($dev_token, $token);
+    if ($token_verify) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
       if ($decodedToken != false) {
         $this->load->model('desa_model');
         $data = $_POST;
