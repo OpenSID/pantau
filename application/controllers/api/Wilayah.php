@@ -40,13 +40,12 @@ class Wilayah extends REST_Controller
   public function caridesa_get()
   {
     $cari = $this->input->get('q');
-    $page = $this->input->get('page');
     $token = $this->input->get('token');
+    $page = $this->input->get('page');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->list_desa_ajax($cari, $page);
@@ -62,10 +61,9 @@ class Wilayah extends REST_Controller
     $id_desa = $this->input->get('id_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->api_get_ambildesa($id_desa);
@@ -82,10 +80,9 @@ class Wilayah extends REST_Controller
     $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->api_get_geojson_prov($kode_desa);
@@ -101,10 +98,9 @@ class Wilayah extends REST_Controller
     $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->api_get_geojson_kab($kode_desa);
@@ -120,10 +116,9 @@ class Wilayah extends REST_Controller
     $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->api_get_geojson_kec($kode_desa);
@@ -138,10 +133,9 @@ class Wilayah extends REST_Controller
   {
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
-    $token_verify = password_verify($dev_token, $token);
     $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token_verify) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($dev_token);
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
         $response = $this->wilayah->api_get_geojson_neg();
