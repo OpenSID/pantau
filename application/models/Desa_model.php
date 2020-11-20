@@ -89,6 +89,8 @@ class Desa_model extends CI_Model {
 			$desa['ip'.$jenis]          = $data['ip_address'];
 			$desa['versi'.$jenis]       = $data['version'];
 			$desa['tgl_akses'.$jenis]   = $data['tgl_ubah'];
+			// default adalah opensid_valid == true
+			if (isset($data['opensid_valid'])) $desa['opensid_valid'] = $data['opensid_valid'];
 
 			return $desa;
 		}
@@ -136,22 +138,28 @@ class Desa_model extends CI_Model {
 		Jangan rekam, jika:
 		- ada kolom nama wilayah kurang dari 4 karakter, kecuali desa boleh 3 karakter
 		- ada kolom wilayah yang masih merupakan contoh (berisi karakter non-alpha atau tulisan 'contoh', 'demo' atau 'sampel')
+		- versi kosong, karena bukan OpenSID valid
 	*/
 	public function abaikan($data)
 	{
-		$regex = '/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i';
+		if (empty($data['version'])) return true;
+
 		$abaikan = false;
+		$regex = '/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i';
 		$desa = trim($data['nama_desa']);
 		$kec = trim($data['nama_kecamatan']);
 		$kab = trim($data['nama_kabupaten']);
 		$prov = trim($data['nama_provinsi']);
-		if ( strlen($desa)<3 OR strlen($kec)<4 OR strlen($kab)<4 OR strlen($prov)<4 ) {
+		if ( strlen($desa)<3 OR strlen($kec)<4 OR strlen($kab)<4 OR strlen($prov)<4 )
+		{
 			$abaikan = true;
-		} elseif (preg_match($regex, $desa) OR
+		}
+		elseif (preg_match($regex, $desa) OR
 				preg_match($regex, $kec) OR
 				preg_match($regex, $kab) OR
 				preg_match($regex, $prov)
-			 ) {
+			 )
+		{
 			$abaikan = true;
 		}
 		// Abaikan situs demo
