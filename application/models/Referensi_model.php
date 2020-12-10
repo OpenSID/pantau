@@ -36,7 +36,8 @@ define("FILTER_LANGGANAN", serialize([
 	3 => 'tidak aktif',
 	4 => 'sebentar lagi berakhir',
 	5 => 'baru berakhir',
-	6 => 'sudah berakhir'
+	6 => 'sudah berakhir',
+	7 => 'baru bulan ini'
 ]));
 
 define("PELAKSANA", serialize([

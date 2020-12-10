@@ -140,6 +140,10 @@ class Pelanggan_model extends CI_Model {
 				# sudah berakhir
 				$this->db->where('DATEDIFF(CURDATE(), tgl_akhir) > 0');
 				break;
+			case '7':
+				# baru bulan ini
+				$this->db->where('MONTH(tgl_mulai) = MONTH(CURRENT_DATE()) AND YEAR(tgl_mulai) = YEAR(CURRENT_DATE())');
+				break;
 
 			default:
 				$this->db->where('status_langganan', $filter);
