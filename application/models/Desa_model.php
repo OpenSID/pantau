@@ -82,6 +82,8 @@ class Desa_model extends CI_Model {
 			$desa['lat']            = $data['lat'];
 			$desa['lng']            = $data['lng'];
 			$desa['alamat_kantor']  = $data['alamat_kantor'];
+     	$desa['email_desa']			= $data['email_desa'];
+     	$desa['telepon'] 				= $data['telepon'];
 			// Cek lokal
 			$is_local = (is_local($data['url']) or is_local($data['ip_address']));
 			$jenis = ($is_local) ? '_lokal' : '_hosting';
