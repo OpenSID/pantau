@@ -35,7 +35,13 @@ class Wilayah_model extends CI_Model
       if ($hasil->num_rows() == 0) continue;
       // Cek kabupaten untuk kecamatan ini
       $wilayah = $hasil->row_array();
-      $hasil = $this->db->where('region_code',$wilayah['parent_code'])->where('region_name',$data['nama_kabupaten'])->get('tbl_regions');
+      $hasil = $this->db->where('region_code', $wilayah['parent_code'])
+        ->group_start()
+          ->where('region_name', $data['nama_kabupaten'])
+          ->or_where("REPLACE(region_name, 'KAB ', '') = '{$data['nama_kabupaten']}'")
+          ->or_where("REPLACE(region_name, 'KOTA ', '') = '{$data['nama_kabupaten']}'")
+        ->group_end()
+        ->get('tbl_regions');
       if ($hasil->num_rows() == 0) continue;
       // Cek provinsi untuk kabupaten ini
       $wilayah = $hasil->row_array();
