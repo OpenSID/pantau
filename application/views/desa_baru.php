@@ -9,12 +9,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Desa Untuk Diperiksa
-        <small>(Desa non-aktif dengan nama tidak terdaftar)</small>
+        Desa Baru
+        <small>(Sejak Tujuh Hari Terakhir)</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?= site_url()?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li class="active">Periksa Desa</li>
+        <li class="active">Desa Baru</li>
       </ol>
     </section>
 
@@ -37,7 +37,8 @@
                     <th>Web</th>
                     <th>Versi Offline</th>
                     <th>Versi Online</th>
-                    <th>Akses Terakhir</th>
+                    <th>Email</th>
+                    <th>Telepon</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +47,6 @@
 
                   <td></td>
                   <td class="<?= $data->jenis == '2' ? 'highlight' : ''?>">
-										<button href="" onclick="deleteItem(<?php echo $data->id; ?>)" title="Hapus Data" type="button" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></button>
                   </td>
                   <td><?= $data->nama_desa ?></td>
                   <td><?= $data->nama_kecamatan ?></td>
@@ -55,7 +55,8 @@
                   <td><a href="http://<?= $data->url_hosting ?>" target='_blank'><?= $data->url_hosting ?></a></td>
                   <td><?= $data->versi_lokal ?></td>
                   <td><?= $data->versi_hosting ?></td>
-                  <td><?= $data->tgl_akses ?></td>
+                  <td><?= $data->email_desa ?></td>
+                  <td><?= $data->telepon ?></td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -71,7 +72,8 @@
                     <th>Web</th>
                     <th>Versi Offline</th>
                     <th>Versi Online</th>
-                    <th>Akses Terakhir</th>
+                    <th>Email</th>
+                    <th>Telepon</th>
                 </tr>
             </tfoot>
         </table>

@@ -208,6 +208,21 @@ class Laporan extends Public_Controller {
     $this->load->view('footer');
   }
 
+  public function desa_baru()
+  {
+    if (!admin_logged_in())
+      exit("Anda tidak mempunyai akses ke menu ini.");
+
+    $header = new stdClass();
+    $header->title = "Desa Pengguna OpenSID Baru";
+    $data = array();
+    $data['main'] = $this->desa_model->get_baru();
+    $this->load->view('dashboard/header', $header);
+    $this->load->view('dashboard/nav');
+    $this->load->view('desa_baru', $data);
+    $this->load->view('footer');
+  }
+
   private function _show_url($url) {
     if (empty($url)) return '';
     elseif (is_local($url)) return $url;
