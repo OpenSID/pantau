@@ -33,4 +33,16 @@ class Desa extends CI_Controller {
 		echo json_encode($desa);
 	}
 
+	public function lihat($desa_id)
+	{
+    $header = new stdClass();
+    $header->title = "Desa xxx";
+    $data['desa'] = $this->desa_model->get_desa($desa_id);
+
+    $this->load->view('dashboard/header', $header);
+    $this->load->view('dashboard/nav');
+    $this->load->view('desa/show', $data);
+    $this->load->view('footer');
+	}
+
 }

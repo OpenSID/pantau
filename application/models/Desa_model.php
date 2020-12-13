@@ -557,5 +557,16 @@ class Desa_model extends CI_Model {
 		return $hasil;
 	}
 
+	public function get_desa($desa_id)
+	{
+		$desa = $this->db
+			->select('d.*, r.region_code')
+			->from('desa d')
+			->join('tbl_regions r', 'r.desa_id = d.id', 'left')
+			->where('d.id', $desa_id)
+			->get()->row();
+		return $desa;
+	}
+
 }
 ?>

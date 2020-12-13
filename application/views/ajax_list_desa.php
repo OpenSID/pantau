@@ -159,6 +159,7 @@ $(document).ready(function() {
 
         //Set column definition initialisation properties.
         "columnDefs": [
+            { className: "padat", "targets": [ 1 ] },
             {
                 "targets": [ 0,1 ], //first column / numbering column
                 "orderable": false, //set not orderable

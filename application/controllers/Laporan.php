@@ -233,9 +233,8 @@ class Laporan extends Public_Controller {
   }
 
   private function _aksi($desa_id){
-    $str = '
-      <a class="btn btn-default" data-toggle="confirmation" data-href="'.site_url("desa/hapus/$desa_id").'"><span class="fa fa-trash"></span></a>
-    ';
+    // Gunakan view pecahan untuk menyiapkan HTML aksi
+    $str = $this->load->view('desa/pecah.aksi.php', ['desa_id' => $desa_id], TRUE);
     return $str;
   }
 }
