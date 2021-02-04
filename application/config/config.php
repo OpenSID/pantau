@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development')
-  $config['base_url'] = 'http://jimmy73.com/tracksid/';
+  $config['base_url'] = 'http://jimmy74.com/tracksid/';
 else
   $config['base_url'] = APP_URL;
 

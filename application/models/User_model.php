@@ -248,9 +248,8 @@ class User_model extends CI_Model {
 			redirect('user');
 		}
 
-		$pwHash = $this->generatePasswordHash($data['password']);
+		$pwHash = $this->hash_password($data['password']);
 		$data['password'] = $pwHash;
-		$data['session'] = md5(now());
 
 		$data['foto'] = $this->urusFoto();
 		$data['nama'] = strip_tags($data['nama']);
@@ -311,10 +310,9 @@ class User_model extends CI_Model {
 		}
 		if ($data['password'])
 		{
-			$pwHash = $this->generatePasswordHash($data['password']);
+			$pwHash = $this->hash_password($data['password']);
 			$data['password'] = $pwHash;
 		}
-
 		$data['foto'] = $this->urusFoto($idUser);
 		if (!$this->db->where('id', $idUser)->update('users', $data))
 		{

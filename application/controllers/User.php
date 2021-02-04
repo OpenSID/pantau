@@ -77,7 +77,6 @@ class User extends Admin_Controller {
 			$data['user'] = NULL;
 			$data['form_action'] = site_url("user/insert");
 		}
-
 		$data['user_group'] = $this->referensi_model->list_data("user_grup");
 
 		$this->load->view('dashboard/header');
@@ -126,6 +125,8 @@ class User extends Admin_Controller {
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
+		$this->form_validation->set_rules('username', 'Username', 'required');
+		$this->form_validation->set_rules('nama', 'Nama', 'required');
 		$this->form_validation->set_rules('password', 'Kata Sandi Baru', 'required|callback_syarat_sandi');
 		$this->form_validation->set_message('syarat_sandi','Harus 6 sampai 20 karakter dan sekurangnya berisi satu angka dan satu huruf besar dan satu huruf kecil');
 	}

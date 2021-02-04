@@ -48,7 +48,28 @@
 				$('.sidebar-menu li').removeClass("active");
 		    //Enable sidebar dinamic menu
 		    dinamicMenu();
-		  });
+
+				<!-- NOTIFICATION-->
+
+				if ($('#success-code').val() == 1)
+				{
+					notify = 'success';
+					notify_msg = 'Data berhasil disimpan';
+				}
+				else if ($('#success-code').val() == -1)
+				{
+					notify = 'error';
+					notify_msg = 'Data gagal disimpan <?= $_SESSION["error_msg"]?>';
+				}
+				else
+				{
+					notify = '';
+					notify_msg = '';
+				}
+				notification(notify, notify_msg);
+				$('#success-code').val('');
+			});
+
 	    /* DinamicMenu()
 	     * dinamic activate menu
 	     */
@@ -64,6 +85,5 @@
 	    };
 
 	  </script>
-
 	</body>
 </html>

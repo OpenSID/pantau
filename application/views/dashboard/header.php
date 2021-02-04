@@ -51,13 +51,13 @@
 								<li class="dropdown user user-menu">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 	                  <img src="<?= base_url($adminlte.'dist/img/user2-160x160.jpg')?>" class="img-circle user-image" alt="User Image">
-										<span class="hidden-xs">NAMA </span>
+										<span class="hidden-xs"><?= $this->session->nama ?> </span>
 									</a>
 									<ul class="dropdown-menu">
 										<li class="user-header">
 		                  <img src="<?= base_url($adminlte.'dist/img/user2-160x160.jpg')?>" class="img-circle" alt="User Image">
 											<p>Anda Login Sebagai</p>
-											<p><strong>NAMA</strong></p>
+											<p><strong><?= $this->session->nama ?></strong></p>
 										</li>
 										<li class="user-footer">
 											<div class="pull-left">
@@ -79,7 +79,7 @@
 					</div>
 				</nav>
 			</header>
-			<input id="success-code" type="hidden" value="$_SESSION['success']">
+			<input id="success-code" type="hidden" value="<?= $_SESSION['success'] ?>">
 			<!-- Untuk menampilkan modal bootstrap info pengguna login  -->
 			<div  class="modal fade" id="modalBox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class='modal-dialog'>

@@ -88,3 +88,16 @@ function copyToClipboard(element) {
   $(element).select();
   document.execCommand("copy");
 }
+
+function notification(type, message)
+{
+	if ( type =='') {return};
+	$('#maincontent').prepend(''
+		+'<div id="notification" class="alert alert-'+type+' alert-dismissible">'
+		+'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+		+ message+''
+		+'</div>'
+		+''
+	);
+}
+
