@@ -155,7 +155,6 @@ class Wilayah_model_api extends CI_Model
     $desa = $this->desa_by_kode($kode_desa);
     $db_results = $this->db
     ->where('nama_provinsi', $desa->nama_prov)
-    //->where('nama_kab', $kab)
     ->like('nama_kabupaten', $desa->nama_kab, 'after')
     ->where('lat BETWEEN -10 AND 6')
     ->where('lng BETWEEN 95 AND 142')
@@ -210,12 +209,356 @@ class Wilayah_model_api extends CI_Model
     $data = $db_results->result_array();
     $jml_desa = $db_results->num_rows();
     $geojson = array(
+      'type'      => 'FeatureCollection',
+      'nama_negara'   => "INDONESIA",
+      'jml_desa'    => $jml_desa,
+    );
+    $response=$geojson;
+    return $response;
+  }
+
+  //API Peta Desa Pengguna OpenSID by Selection
+  private function desa_by_prov($kode_desa)
+  {
+    $desa = $this->db
+    	->select('nama_prov, nama_kab, nama_kec')
+    	->where('nama_prov', $kode_desa)
+    	->limit(1)
+    	->get('kode_wilayah')->row();
+    return $desa;
+  }
+
+  private function desa_by_kab($kode_desa)
+  {
+    $desa = $this->db
+    	->select('nama_prov, nama_kab, nama_kec')
+    	->where('nama_kab', $kode_desa)
+    	->limit(1)
+    	->get('kode_wilayah')->row();
+    return $desa;
+  }
+
+  private function desa_by_kec($kode_desa)
+  {
+    $desa = $this->db
+    	->select('nama_prov, nama_kab, nama_kec')
+    	->where('nama_kec', $kode_desa)
+    	->limit(1)
+    	->get('kode_wilayah')->row();
+    return $desa;
+  }
+
+  private function desa_by_desa($kode_desa)
+  {
+    $desa = $this->db
+    	->select('nama_prov, nama_kab, nama_kec, nama_desa')
+    	->where('nama_desa', $kode_desa)
+    	->limit(1)
+    	->get('kode_wilayah')->row();
+    return $desa;
+  }
+
+  public function api_get_geojson_negara_select()
+	{
+    $db_results = $this->db
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa = $db_results->num_rows();
+
+    $geojson = array(
       'type' => 'FeatureCollection',
       'nama_negara' => "INDONESIA",
       'jml_desa' => $jml_desa,
+      'features' => array()
     );
+
+    foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+
     $response = $geojson;
     return $response;
   }
+
+  public function api_get_geojson_prov_select($kode_desa)
+	{
+    $desa = $this->desa_by_prov($kode_desa);
+    $db_results = $this->db
+    ->where('nama_provinsi', $desa->nama_prov)
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa_prov = $db_results->num_rows();
+
+    $geojson = array(
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'jml_desa_prov' => $jml_desa_prov,
+      'features' => array()
+    );
+
+		foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+    $response = $geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_kab_select($kode_desa)
+	{
+    $desa = $this->desa_by_kab($kode_desa);
+    $db_results = $this->db
+    ->where('nama_provinsi', $desa->nama_prov)
+    ->like('nama_kabupaten', $desa->nama_kab, 'after')
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa_kab = $db_results->num_rows();
+
+    $geojson = array(
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'nama_kabupaten' => $desa->nama_kab,
+      'jml_desa_kab' => $jml_desa_kab,
+      'features' => array()
+    );
+
+		foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+    $response = $geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_kec_select($kode_desa)
+	{
+    $desa = $this->desa_by_kec($kode_desa);
+    $db_results = $this->db
+    ->where('nama_provinsi', $desa->nama_prov)
+    ->like('nama_kabupaten', $desa->nama_kab, 'after')
+    ->like('nama_kecamatan', $desa->nama_kec, 'after')
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa_kec = $db_results->num_rows();
+
+    $geojson = array(
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'nama_kabupaten' => $desa->nama_kab,
+      'nama_kecamatan' => $desa->nama_kec,
+      'jml_desa_kec' => $jml_desa_kec,
+      'features' => array()
+    );
+
+		foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+    $response = $geojson;
+    return $response;
+  }
+
+  public function api_get_geojson_desa_select($kode_desa)
+	{
+    $desa = $this->desa_by_desa($kode_desa);
+    $db_results = $this->db
+    ->where('nama_provinsi', $desa->nama_prov)
+    ->like('nama_kabupaten', $desa->nama_kab, 'after')
+    ->like('nama_kecamatan', $desa->nama_kec, 'after')
+    ->like('nama_desa', $desa->nama_desa, 'after')
+    ->where('lat BETWEEN -10 AND 6')
+    ->where('lng BETWEEN 95 AND 142')
+    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
+    ->where('url_hosting <>', null)
+    ->get('desa');
+
+    $data = $db_results->result_array();
+    $jml_desa_desa = $db_results->num_rows();
+
+    $geojson = array(
+      'type' => 'FeatureCollection',
+      'nama_provinsi' => $desa->nama_prov,
+      'nama_kabupaten' => $desa->nama_kab,
+      'nama_kecamatan' => $desa->nama_kec,
+      'nama_desa' => $desa->nama_desa,
+      'jml_desa_desa' => $jml_desa_desa,
+      'features' => array()
+    );
+
+		foreach ($data as $row)
+		{
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+      array_push($geojson['features'], $marker);
+		}
+    $response = $geojson;
+    return $response;
+  }
+
+  public function list_provinsi()
+	{
+		$data = $this->db->select('nama_prov, kode_prov')
+			->order_by('kode_prov', 'ASC')
+      ->group_by('kode_prov')
+			->get('kode_wilayah')
+			->result_array();
+
+		return $data;
+	}
+
+  public function list_kabupaten($provinsi = '')
+	{
+		if ($provinsi)
+		{
+			$this->db
+				->where('nama_prov', urldecode($provinsi));
+		}
+
+		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab')
+      ->group_by('kode_kab')
+      ->order_by('nama_kab', 'ASC')
+			->get('kode_wilayah')
+			->result_array();
+
+		return $data;
+	}
+
+	public function list_kecamatan($provinsi = '', $kabupaten = '')
+	{
+		if ($provinsi && $kabupaten)
+		{
+			$this->db
+				->where('nama_prov', urldecode($provinsi))
+				->where('nama_kab', urldecode($kabupaten));
+		}
+
+		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab, nama_kec, kode_kec')
+      ->group_by('kode_kec')
+      ->order_by('nama_kec', 'ASC')
+			->get('kode_wilayah')
+			->result_array();
+
+		return $data;
+	}
+
+  public function list_desa($provinsi = '', $kabupaten = '', $kecamatan = '')
+	{
+		if ($provinsi && $kabupaten && $kecamatan)
+		{
+			$this->db
+				->where('nama_prov', urldecode($provinsi))
+				->where('nama_kab', urldecode($kabupaten))
+        ->where('nama_kec', urldecode($kecamatan));
+		}
+
+		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab, nama_kec, kode_kec, nama_desa, kode_desa')
+      ->group_by('kode_desa')
+      ->order_by('nama_desa', 'ASC')
+			->get('kode_wilayah')
+			->result_array();
+
+		return $data;
+	}
 
 }

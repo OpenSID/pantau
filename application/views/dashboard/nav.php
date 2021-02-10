@@ -13,6 +13,7 @@
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">MENU UTAMA</li>
 			<li><a href="<?= site_url()?>"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+			<li><a href="<?= site_url('peta')?>"><i class="fa fa-home"></i> <span>Peta OpenSID</span></a></li>
 			<li class="treeview">
 				<a href="#"><i class="fa fa-file-text"></i> <span>Laporan</span>
 					<span class="pull-right-container">
@@ -46,4 +47,3 @@
 		</ul>
 	</section>
 </aside>
-
