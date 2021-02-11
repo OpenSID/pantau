@@ -155,7 +155,7 @@ function pantau_desa(layer_desa, tracker_host, kode_desa, img, token)
   return pantau_desa;
 }
 
-function pantau_desa_negara(layer_desa, tracker_host, img, token)
+function pantau_desa_negara(peta, layer_desa, tracker_host, img, token)
 {
   var pantau_desa = $.getJSON(tracker_host + 'index.php/api/wilayah/geoneg_select?token=' + token, function(data){
     var datalayer = L.geoJson(data ,{
@@ -164,7 +164,21 @@ function pantau_desa_negara(layer_desa, tracker_host, img, token)
         layer.setIcon(custom_icon);
       },
     });
-    layer_desa.addLayer(datalayer);
+		var markers = new L.MarkerClusterGroup();
+		var markersList = [];
+		markersList.push(datalayer);
+		markers.addLayer(datalayer);
+		layer_desa.addLayer(markers);
+
+		var bounds = new L.LatLngBounds();
+		if (layer_desa instanceof L.FeatureGroup) {
+			bounds.extend(layer_desa.getBounds());
+		}
+		if (bounds.isValid()) {
+			peta.fitBounds(bounds);
+			peta._layersMaxZoom = 19;
+		}
+
     var infodesa = data;
     var nama_negara = data.nama_negara;
     var jml_desa = data.jml_desa;
@@ -176,11 +190,12 @@ function pantau_desa_negara(layer_desa, tracker_host, img, token)
     })
 
   });
+
   return pantau_desa_negara;
 }
 
 //loading Peta Desa Pengguna OpenSID (Data dari API Server)
-function pantau_desa_prov(layer_desa, tracker_host, kode_desa, img, token)
+function pantau_desa_prov(peta, layer_desa, tracker_host, kode_desa, img, token)
 {
   var pantau_desa = $.getJSON(tracker_host + 'index.php/api/wilayah/geoprov_select?token=' + token + '&kode_desa=' + kode_desa, function(data){
     var datalayer = L.geoJson(data ,{
@@ -213,7 +228,21 @@ function pantau_desa_prov(layer_desa, tracker_host, kode_desa, img, token)
         layer.bindTooltip(feature.properties.desa, {sticky: true, direction: 'top'});
       },
     });
-    layer_desa.addLayer(datalayer);
+		var markers = new L.MarkerClusterGroup();
+		var markersList = [];
+		markersList.push(datalayer);
+		markers.addLayer(datalayer);
+		layer_desa.addLayer(markers);
+
+		var bounds = new L.LatLngBounds();
+		if (layer_desa instanceof L.FeatureGroup) {
+			bounds.extend(layer_desa.getBounds());
+		}
+		if (bounds.isValid()) {
+			peta.fitBounds(bounds);
+			peta._layersMaxZoom = 19;
+		}
+
     var infodesa = data;
     var nama_prov = infodesa.nama_provinsi;
     var jml_desa_prov = infodesa.jml_desa_prov;
@@ -229,7 +258,7 @@ function pantau_desa_prov(layer_desa, tracker_host, kode_desa, img, token)
 }
 
 //loading Peta Desa Pengguna OpenSID (Data dari API Server)
-function pantau_desa_kab(layer_desa, tracker_host, kode_desa, img, token)
+function pantau_desa_kab(peta, layer_desa, tracker_host, kode_desa, img, token)
 {
   var pantau_desa = $.getJSON(tracker_host + 'index.php/api/wilayah/geokab_select?token=' + token + '&kode_desa=' + kode_desa, function(data){
     var datalayer = L.geoJson(data ,{
@@ -262,7 +291,21 @@ function pantau_desa_kab(layer_desa, tracker_host, kode_desa, img, token)
         layer.bindTooltip(feature.properties.desa, {sticky: true, direction: 'top'});
       },
     });
-    layer_desa.addLayer(datalayer);
+		var markers = new L.MarkerClusterGroup();
+		var markersList = [];
+		markersList.push(datalayer);
+		markers.addLayer(datalayer);
+		layer_desa.addLayer(markers);
+
+		var bounds = new L.LatLngBounds();
+		if (layer_desa instanceof L.FeatureGroup) {
+			bounds.extend(layer_desa.getBounds());
+		}
+		if (bounds.isValid()) {
+			peta.fitBounds(bounds);
+			peta._layersMaxZoom = 19;
+		}
+
     var infodesa = data;
     var lat = infodesa.lat;
     var lng = infodesa.lng;
@@ -278,7 +321,7 @@ function pantau_desa_kab(layer_desa, tracker_host, kode_desa, img, token)
 }
 
 //loading Peta Desa Pengguna OpenSID (Data dari API Server)
-function pantau_desa_kec(layer_desa, tracker_host, kode_desa, img, token)
+function pantau_desa_kec(peta, layer_desa, tracker_host, kode_desa, img, token)
 {
   var pantau_desa = $.getJSON(tracker_host + 'index.php/api/wilayah/geokec_select?token=' + token + '&kode_desa=' + kode_desa, function(data){
     var datalayer = L.geoJson(data ,{
@@ -311,7 +354,21 @@ function pantau_desa_kec(layer_desa, tracker_host, kode_desa, img, token)
         layer.bindTooltip(feature.properties.desa, {sticky: true, direction: 'top'});
       },
     });
-    layer_desa.addLayer(datalayer);
+		var markers = new L.MarkerClusterGroup();
+		var markersList = [];
+		markersList.push(datalayer);
+		markers.addLayer(datalayer);
+		layer_desa.addLayer(markers);
+
+		var bounds = new L.LatLngBounds();
+		if (layer_desa instanceof L.FeatureGroup) {
+			bounds.extend(layer_desa.getBounds());
+		}
+		if (bounds.isValid()) {
+			peta.fitBounds(bounds);
+			peta._layersMaxZoom = 19;
+		}
+
     var infodesa = data;
     var lat = infodesa.lat;
     var lng = infodesa.lng;
@@ -328,7 +385,7 @@ function pantau_desa_kec(layer_desa, tracker_host, kode_desa, img, token)
 }
 
 //loading Peta Desa Pengguna OpenSID (Data dari API Server)
-function pantau_desa_desa(layer_desa, tracker_host, kode_desa, img, token)
+function pantau_desa_desa(peta, layer_desa, tracker_host, kode_desa, img, token)
 {
   var pantau_desa = $.getJSON(tracker_host + 'index.php/api/wilayah/geodesa_select?token=' + token + '&kode_desa=' + kode_desa, function(data){
     var datalayer = L.geoJson(data ,{
@@ -361,7 +418,21 @@ function pantau_desa_desa(layer_desa, tracker_host, kode_desa, img, token)
         layer.bindTooltip(feature.properties.desa, {sticky: true, direction: 'top'});
       },
     });
-    layer_desa.addLayer(datalayer);
+		var markers = new L.MarkerClusterGroup();
+		var markersList = [];
+		markersList.push(datalayer);
+		markers.addLayer(datalayer);
+		layer_desa.addLayer(markers);
+
+		var bounds = new L.LatLngBounds();
+		if (layer_desa instanceof L.FeatureGroup) {
+			bounds.extend(layer_desa.getBounds());
+		}
+		if (bounds.isValid()) {
+			peta.fitBounds(bounds);
+			peta._layersMaxZoom = 19;
+		}
+
     var infodesa = data;
     var lat = infodesa.lat;
     var lng = infodesa.lng;

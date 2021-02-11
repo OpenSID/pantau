@@ -3,6 +3,8 @@
 <link rel="stylesheet" href="<?= base_url()?>assets/css/L.Control.Locate.min.css" />
 <link rel="stylesheet" href="<?= base_url()?>assets/css/mapbox-gl.css" />
 <link rel="stylesheet" href="<?= base_url()?>assets/css/peta.css">
+<link rel="stylesheet" href="<?= base_url()?>assets/css/MarkerCluster.css" />
+<link rel="stylesheet" href="<?= base_url()?>assets/css/MarkerCluster.Default.css" />
 
 <style>
 	#map
@@ -188,8 +190,6 @@ function select_options(select, params)
     var bound = [[-10.3599874813, 95.2930261576], [5.47982086834,141.03385176]];
     mymap.fitBounds(bound);
 
-    var layer_desa = L.featureGroup();
-
     //Menampilkan BaseLayers Peta
     var baseLayers = getBaseLayers(mymap, '<?= $this->config->item('mapbox_token')?>');
 
@@ -201,9 +201,11 @@ function select_options(select, params)
 
     L.control.layers(baseLayers, null, {position: 'topleft', collapsed: true}).addTo(mymap);
 
+		var layer_desa = L.featureGroup();
+
     //loading Peta Desa Pengguna OpenSID (Negara)
     layer_desa.clearLayers();
-    pantau_desa_negara(layer_desa, '<?= base_url()?>', "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
+    pantau_desa_negara(mymap, layer_desa, '<?= base_url()?>', "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
     mymap.addLayer(layer_desa);
 
     //loading Peta Desa Pengguna OpenSID (Provinsi)
@@ -216,7 +218,7 @@ function select_options(select, params)
       select_options(kabupaten, provinsi);
 
       layer_desa.clearLayers();
-      pantau_desa_prov(layer_desa, '<?= base_url()?>', provinsi, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
+      pantau_desa_prov(mymap, layer_desa, '<?= base_url()?>', provinsi, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
       mymap.addLayer(layer_desa);
 
 			setTimeout(function () {
@@ -225,6 +227,7 @@ function select_options(select, params)
 				$('#desa_online3').hide();
 				$('#desa_online4').hide();
 			});
+
     });
 
     //loading Peta Desa Pengguna OpenSID (Kabupaten)
@@ -240,7 +243,7 @@ function select_options(select, params)
       select_options(kecamatan, params);
 
       layer_desa.clearLayers();
-      pantau_desa_kab(layer_desa, '<?= base_url()?>', kabupaten, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
+      pantau_desa_kab(mymap, layer_desa, '<?= base_url()?>', kabupaten, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
       mymap.addLayer(layer_desa);
 
 			setTimeout(function () {
@@ -263,7 +266,7 @@ function select_options(select, params)
       select_options(desa, params);
 
       layer_desa.clearLayers();
-      pantau_desa_kec(layer_desa, '<?= base_url()?>', kecamatan, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
+      pantau_desa_kec(mymap, layer_desa, '<?= base_url()?>', kecamatan, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
       mymap.addLayer(layer_desa);
 
 			setTimeout(function () {
@@ -281,7 +284,7 @@ function select_options(select, params)
       let desa = $(this).val();
 
       layer_desa.clearLayers();
-      pantau_desa_desa(layer_desa, '<?= base_url()?>', desa, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
+      pantau_desa_desa(mymap, layer_desa, '<?= base_url()?>', desa, "<?= base_url()?>favicon.ico", "<?= $this->config->item('dev_token')?>");
       mymap.addLayer(layer_desa);
 
 			setTimeout(function () {
@@ -294,18 +297,7 @@ function select_options(select, params)
 			location.reload();
 		});
 
-		mymap.on('layeradd layerremove', function () {
-			setTimeout(function () {
-				var bounds = new L.LatLngBounds();
-				if (layer_desa instanceof L.FeatureGroup) {
-					bounds.extend(layer_desa.getBounds());
-				}
-				if (bounds.isValid()) {
-					mymap.fitBounds(bounds);
-					mymap._layersMaxZoom = 19;
-				}
-			});
-		});
+		
 
   }; //EOF window.onload
 
@@ -319,3 +311,5 @@ function select_options(select, params)
 <script src="<?= base_url()?>assets/js/peta.js"></script>
 <script src="<?= base_url()?>assets/js/mapbox-gl.js"></script>
 <script src="<?= base_url()?>assets/js/leaflet-mapbox-gl.js"></script>
+<script src="<?= base_url()?>assets/js/leaflet.markercluster.js"></script>
+<script src="<?= base_url()?>assets/js/turf.min.js"></script>
