@@ -258,14 +258,22 @@ class Wilayah_model_api extends CI_Model
     return $desa;
   }
 
-  public function api_get_geojson_negara_select()
-	{
+  // Ambil desa yg berisi data lokasi valid, yg diakses dalam 7 hari yg lalu
+  private function api_get_geojson_select()
+  {
     $db_results = $this->db
+    ->where("concat('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+    ->where("concat('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
     ->where('lat BETWEEN -10 AND 6')
     ->where('lng BETWEEN 95 AND 142')
-    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
-    ->where('url_hosting <>', null)
+    ->where("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY")
     ->get('desa');
+    return $db_results;
+  }
+
+  public function api_get_geojson_negara_select()
+	{
+    $db_results = $this->api_get_geojson_select();
 
     $data = $db_results->result_array();
     $jml_desa = $db_results->num_rows();
@@ -299,13 +307,8 @@ class Wilayah_model_api extends CI_Model
   public function api_get_geojson_prov_select($kode_desa)
 	{
     $desa = $this->desa_by_prov($kode_desa);
-    $db_results = $this->db
-    ->where('nama_provinsi', $desa->nama_prov)
-    ->where('lat BETWEEN -10 AND 6')
-    ->where('lng BETWEEN 95 AND 142')
-    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
-    ->where('url_hosting <>', null)
-    ->get('desa');
+    $this->db->where('nama_provinsi', $desa->nama_prov);
+    $db_results = $this->api_get_geojson_select();
 
     $data = $db_results->result_array();
     $jml_desa_prov = $db_results->num_rows();
@@ -346,14 +349,10 @@ class Wilayah_model_api extends CI_Model
   public function api_get_geojson_kab_select($kode_desa)
 	{
     $desa = $this->desa_by_kab($kode_desa);
-    $db_results = $this->db
-    ->where('nama_provinsi', $desa->nama_prov)
-    ->like('nama_kabupaten', $desa->nama_kab, 'after')
-    ->where('lat BETWEEN -10 AND 6')
-    ->where('lng BETWEEN 95 AND 142')
-    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
-    ->where('url_hosting <>', null)
-    ->get('desa');
+    $this->db
+      ->where('nama_provinsi', $desa->nama_prov)
+      ->like('nama_kabupaten', $desa->nama_kab, 'after');
+    $db_results = $this->api_get_geojson_select();
 
     $data = $db_results->result_array();
     $jml_desa_kab = $db_results->num_rows();
@@ -395,15 +394,11 @@ class Wilayah_model_api extends CI_Model
   public function api_get_geojson_kec_select($kode_desa)
 	{
     $desa = $this->desa_by_kec($kode_desa);
-    $db_results = $this->db
-    ->where('nama_provinsi', $desa->nama_prov)
-    ->like('nama_kabupaten', $desa->nama_kab, 'after')
-    ->like('nama_kecamatan', $desa->nama_kec, 'after')
-    ->where('lat BETWEEN -10 AND 6')
-    ->where('lng BETWEEN 95 AND 142')
-    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
-    ->where('url_hosting <>', null)
-    ->get('desa');
+    $this->db
+      ->where('nama_provinsi', $desa->nama_prov)
+      ->like('nama_kabupaten', $desa->nama_kab, 'after')
+      ->like('nama_kecamatan', $desa->nama_kec, 'after');
+    $db_results = $this->api_get_geojson_select();
 
     $data = $db_results->result_array();
     $jml_desa_kec = $db_results->num_rows();
@@ -446,16 +441,12 @@ class Wilayah_model_api extends CI_Model
   public function api_get_geojson_desa_select($kode_desa)
 	{
     $desa = $this->desa_by_desa($kode_desa);
-    $db_results = $this->db
-    ->where('nama_provinsi', $desa->nama_prov)
-    ->like('nama_kabupaten', $desa->nama_kab, 'after')
-    ->like('nama_kecamatan', $desa->nama_kec, 'after')
-    ->like('nama_desa', $desa->nama_desa, 'after')
-    ->where('lat BETWEEN -10 AND 6')
-    ->where('lng BETWEEN 95 AND 142')
-    ->where("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_hosting, tgl_akses_hosting), NOW()) <= 1") //sejak dua bulan yang lalu
-    ->where('url_hosting <>', null)
-    ->get('desa');
+    $this->db
+      ->where('nama_provinsi', $desa->nama_prov)
+      ->like('nama_kabupaten', $desa->nama_kab, 'after')
+      ->like('nama_kecamatan', $desa->nama_kec, 'after')
+      ->like('nama_desa', $desa->nama_desa, 'after');
+    $db_results = $this->api_get_geojson_select();
 
     $data = $db_results->result_array();
     $jml_desa_desa = $db_results->num_rows();

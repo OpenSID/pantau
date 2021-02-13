@@ -18,7 +18,7 @@
   <section class="content-header">
     <h1>
       Desa Pengguna OpenSID
-      <small>Pengguna aktif dalam 2 bulan terakhir</small>
+      <small>Pengguna aktif dalam 7 hari terakhir</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="<?= site_url()?>"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -297,7 +297,7 @@ function select_options(select, params)
 			location.reload();
 		});
 
-		
+
 
   }; //EOF window.onload
 

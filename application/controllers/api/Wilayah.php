@@ -77,60 +77,27 @@ class Wilayah extends REST_Controller
   //API Peta Desa Pengguna OpenSID
   public function geoprov_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_prov($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_get('api_get_geojson_prov');
   }
 
   public function geokab_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kab($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_get('api_get_geojson_kab');
   }
 
   public function geokec_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kec($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_get('api_get_geojson_kec');
   }
 
   public function geoneg_get()
   {
+    $this->geo_get('api_get_geojson_neg');
+  }
+
+  private function geo_get($api_get_wilayah)
+  {
+    $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
     $dev_token = $this->config->item('dev_token');
     $invalidLogin = ['status' => '401 Unauthorized'];
@@ -138,7 +105,10 @@ class Wilayah extends REST_Controller
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_neg();
+        if ($api_get_wilayah == 'api_get_geojson_neg')
+          $response = $this->wilayah->$api_get_wilayah();
+        else
+          $response = $this->wilayah->$api_get_wilayah($kode_desa);
         $this->response($response);
         return;
       }
@@ -146,78 +116,33 @@ class Wilayah extends REST_Controller
     $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
+
   public function geoneg_select_get()
   {
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_negara_select();
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_select_get('api_get_geojson_negara_select');
   }
 
   public function geoprov_select_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_prov_select($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_select_get('api_get_geojson_prov_select');
   }
 
   public function geokab_select_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kab_select($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_select_get('api_get_geojson_kab_select');
   }
 
   public function geokec_select_get()
   {
-    $kode_desa = $this->input->get('kode_desa');
-    $token = $this->input->get('token');
-    $dev_token = $this->config->item('dev_token');
-    $invalidLogin = ['status' => '401 Unauthorized'];
-    if ($token === $dev_token) {
-      $decodedToken = AUTHORIZATION::validateTimestamp($token);
-      if ($decodedToken != false) {
-        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_kec_select($kode_desa);
-        $this->response($response);
-        return;
-      }
-    }
-    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+    $this->geo_select_get('api_get_geojson_kec_select');
   }
 
   public function geodesa_select_get()
+  {
+    $this->geo_select_get('api_get_geojson_desa_select');
+  }
+
+  private function geo_select_get($api_get_geojson_select)
   {
     $kode_desa = $this->input->get('kode_desa');
     $token = $this->input->get('token');
@@ -227,7 +152,10 @@ class Wilayah extends REST_Controller
       $decodedToken = AUTHORIZATION::validateTimestamp($token);
       if ($decodedToken != false) {
         $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-        $response = $this->wilayah->api_get_geojson_desa_select($kode_desa);
+        if ($ap_get_wilayah == 'api_get_geojson_negara_select')
+          $response = $this->wilayah->$api_get_geojson_select();
+        else
+          $response = $this->wilayah->$api_get_geojson_select($kode_desa);
         $this->response($response);
         return;
       }
