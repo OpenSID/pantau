@@ -271,6 +271,29 @@ class Wilayah_model_api extends CI_Model
     return $db_results;
   }
 
+  private function set_marker_desa($row)
+  {
+      $marker = array(
+        'type' => 'Feature',
+        'properties' => array(
+          'desa' => $row['nama_desa'],
+          'kec' => $row['nama_kecamatan'],
+          'kab' => $row['nama_kabupaten'],
+          'prov' => $row['nama_provinsi'],
+          'web' => $row['url_hosting'],
+          'alamat' => $row['alamat_kantor'],
+        ),
+        'geometry' => array(
+          'type' => 'Point',
+          'coordinates' => array(
+            $row['lng'],
+            $row['lat']
+          )
+        )
+      );
+    return $marker;
+  }
+
   public function api_get_geojson_negara_select()
 	{
     $db_results = $this->api_get_geojson_select();
@@ -287,16 +310,7 @@ class Wilayah_model_api extends CI_Model
 
     foreach ($data as $row)
 		{
-      $marker = array(
-        'type' => 'Feature',
-        'geometry' => array(
-          'type' => 'Point',
-          'coordinates' => array(
-            $row['lng'],
-            $row['lat']
-          )
-        )
-      );
+      $marker = $this->set_marker_desa($row);
       array_push($geojson['features'], $marker);
 		}
 
@@ -322,24 +336,7 @@ class Wilayah_model_api extends CI_Model
 
 		foreach ($data as $row)
 		{
-      $marker = array(
-        'type' => 'Feature',
-        'properties' => array(
-          'desa' => $row['nama_desa'],
-          'kec' => $row['nama_kecamatan'],
-          'kab' => $row['nama_kabupaten'],
-          'prov' => $row['nama_provinsi'],
-          'web' => $row['url_hosting'],
-          'alamat' => $row['alamat_kantor'],
-        ),
-        'geometry' => array(
-          'type' => 'Point',
-          'coordinates' => array(
-            $row['lng'],
-            $row['lat']
-          )
-        )
-      );
+      $marker = $this->set_marker_desa($row);
       array_push($geojson['features'], $marker);
 		}
     $response = $geojson;
@@ -367,24 +364,7 @@ class Wilayah_model_api extends CI_Model
 
 		foreach ($data as $row)
 		{
-      $marker = array(
-        'type' => 'Feature',
-        'properties' => array(
-          'desa' => $row['nama_desa'],
-          'kec' => $row['nama_kecamatan'],
-          'kab' => $row['nama_kabupaten'],
-          'prov' => $row['nama_provinsi'],
-          'web' => $row['url_hosting'],
-          'alamat' => $row['alamat_kantor'],
-        ),
-        'geometry' => array(
-          'type' => 'Point',
-          'coordinates' => array(
-            $row['lng'],
-            $row['lat']
-          )
-        )
-      );
+      $marker = $this->set_marker_desa($row);
       array_push($geojson['features'], $marker);
 		}
     $response = $geojson;
@@ -414,24 +394,7 @@ class Wilayah_model_api extends CI_Model
 
 		foreach ($data as $row)
 		{
-      $marker = array(
-        'type' => 'Feature',
-        'properties' => array(
-          'desa' => $row['nama_desa'],
-          'kec' => $row['nama_kecamatan'],
-          'kab' => $row['nama_kabupaten'],
-          'prov' => $row['nama_provinsi'],
-          'web' => $row['url_hosting'],
-          'alamat' => $row['alamat_kantor'],
-        ),
-        'geometry' => array(
-          'type' => 'Point',
-          'coordinates' => array(
-            $row['lng'],
-            $row['lat']
-          )
-        )
-      );
+      $marker = $this->set_marker_desa($row);
       array_push($geojson['features'], $marker);
 		}
     $response = $geojson;
@@ -463,24 +426,7 @@ class Wilayah_model_api extends CI_Model
 
 		foreach ($data as $row)
 		{
-      $marker = array(
-        'type' => 'Feature',
-        'properties' => array(
-          'desa' => $row['nama_desa'],
-          'kec' => $row['nama_kecamatan'],
-          'kab' => $row['nama_kabupaten'],
-          'prov' => $row['nama_provinsi'],
-          'web' => $row['url_hosting'],
-          'alamat' => $row['alamat_kantor'],
-        ),
-        'geometry' => array(
-          'type' => 'Point',
-          'coordinates' => array(
-            $row['lng'],
-            $row['lat']
-          )
-        )
-      );
+      $marker = $this->set_marker_desa($row);
       array_push($geojson['features'], $marker);
 		}
     $response = $geojson;

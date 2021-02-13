@@ -162,6 +162,30 @@ function pantau_desa_negara(peta, layer_desa, tracker_host, img, token)
       onEachFeature: function (feature, layer) {
         var custom_icon = L.icon({"iconSize": [16, 16], "iconUrl": img});
         layer.setIcon(custom_icon);
+        var popup_0 = L.popup({"maxWidth": "100%"});
+        var customOptions = {'maxWidth': '325', 'className' : 'covid_pop'};
+        var html_a = $('<div id="html_a" style="width: 100.0%; height: 100.0%;">'
+        + '<h4><b style="color:red">' + feature.properties.desa + '</b></h4>'
+        + '<table>'
+        + '<tr>'
+        + '<td><b style="color:green">Alamat : ' + feature.properties.alamat + '</b></td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td><b style="color:green">Kecamatan : ' + feature.properties.kec + '</b></td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td><b style="color:green">Kab/Kota : ' + feature.properties.kab + '</b></td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td><b style="color:green">Provinsi : ' + feature.properties.prov + '</b></td>'
+        + '</tr>'
+        + '<tr>'
+        + '<td><b style="color:green">Website : ' + '<a href="' + 'http://' + feature.properties.web + '" + " target=\"_blank\">' + 'http://' + feature.properties.web + '</a>' + '</b></td>'
+        + '</tr>'
+        + '</table></div>')[0];
+        popup_0.setContent(html_a);
+        layer.bindPopup(popup_0, customOptions);
+        layer.bindTooltip(feature.properties.desa, {sticky: true, direction: 'top'});
       },
     });
 		var markers = new L.MarkerClusterGroup();
