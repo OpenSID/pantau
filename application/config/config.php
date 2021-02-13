@@ -23,10 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-if (defined('ENVIRONMENT') AND ENVIRONMENT == 'development')
-  $config['base_url'] = 'http://jimmy74.com/tracksid/';
-else
-  $config['base_url'] = APP_URL;
+$config['base_url'] = APP_URL;
 
 /*
 |--------------------------------------------------------------------------
