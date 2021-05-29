@@ -74,6 +74,25 @@ class Wilayah extends REST_Controller
     $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
   }
 
+  public function kodedesa_get()
+  {
+    $cari = $this->input->get('q');
+    $token = $this->input->get('token');
+    $page = $this->input->get('page');
+    $dev_token = $this->config->item('dev_token');
+    $invalidLogin = ['status' => '401 Unauthorized'];
+    if ($token === $dev_token) {
+      $decodedToken = AUTHORIZATION::validateTimestamp($token);
+      if ($decodedToken != false) {
+        $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+        $response = $this->wilayah->desa_by_kode($cari);
+        $this->response($response);
+        return;
+      }
+    }
+    $this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+  }
+
   //API Peta Desa Pengguna OpenSID
   public function geoprov_get()
   {

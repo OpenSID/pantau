@@ -89,12 +89,12 @@ class Wilayah_model_api extends CI_Model
   }
 
   // Ambil rincian wilayah desa dari tabel kode_wilayah
-  private function desa_by_kode($kode_desa)
+  public function desa_by_kode($kode_desa)
   {
 	  // Ubah 1101012001 dari OpenSID menjadi 11.01.01.2001
     $kode = substr($kode_desa, 0, 2) . '.' . substr($kode_desa, 2, 2) . '.' . substr($kode_desa, 4, 2) . '.' . substr($kode_desa, 6);
     $desa = $this->db
-    	->select('nama_prov, nama_kab, nama_kec')
+    	->select(['kode_prov', 'nama_prov', 'kode_kab', 'nama_kab', 'kode_kec', 'nama_kec', 'kode_desa', 'nama_desa'])
     	->where('kode_desa', $kode)
     	->limit(1)
     	->get('kode_wilayah')->row();
