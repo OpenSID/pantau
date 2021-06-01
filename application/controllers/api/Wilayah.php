@@ -76,7 +76,7 @@ class Wilayah extends REST_Controller
 
   public function kodedesa_get()
   {
-    $cari = $this->input->get('q');
+    $cari = $this->input->get('kode');
     $token = $this->input->get('token');
     $page = $this->input->get('page');
     $dev_token = $this->config->item('dev_token');
