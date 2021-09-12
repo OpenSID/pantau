@@ -11,7 +11,7 @@
     <section class="content-header">
       <h1>
         Wilayah Administratif
-        <small>(Permendagri No. 56 Tahun 2015)</small>
+        <small>(Permendagri No. 77 Tahun 2019)</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="<?= site_url()?>"><i class="fa fa-dashboard"></i> Home</a></li>
