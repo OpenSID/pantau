@@ -512,4 +512,20 @@ class Wilayah_model_api extends CI_Model
 
 		return $data;
 	}
+
+	public function list_wilayah($provinsi = null, $kabupaten = null, $kecamatan = null)
+	{
+
+		if ($provinsi && $kabupaten && $kecamatan) {
+			$data = $this->list_desa($provinsi, $kabupaten, $kecamatan);
+		} elseif ($provinsi && $kabupaten) {
+			$data = $this->list_kecamatan($provinsi, $kabupaten);
+		} elseif ($provinsi) {
+			$data = $this->list_kabupaten($provinsi);
+		} else {
+			$data = $this->list_provinsi();
+		}
+
+		return $data;
+	}
 }

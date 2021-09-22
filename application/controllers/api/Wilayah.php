@@ -6,6 +6,8 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 class Wilayah extends REST_Controller
 {
+	protected $valid_token;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,6 +16,7 @@ class Wilayah extends REST_Controller
 		$this->load->model(['pelanggan_model_api', 'referensi_model']);
 		$this->pelanggan = $this->pelanggan_model_api;
 		$this->wilayah = $this->wilayah_model_api;
+		$this->valid_token = $this->config->item('dev_token');
 	}
 
 	//API Halaman Pelanggan
@@ -198,5 +201,24 @@ class Wilayah extends REST_Controller
 			}
 		}
 		$this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+	}
+
+	// TODO : Sederhanakan auth api
+	// Untuk OpenDK
+	public function list_wilayah_get() {
+		$token = $this->get('token');
+		$provinsi = $this->get('provinsi');
+		$kabupaten = $this->get('kabupaten');
+		$kecamatan = $this->get('kecamatan');
+
+		if ($token === $this->valid_token)
+		{
+			$decodedToken = AUTHORIZATION::validateTimestamp($token);
+			if ($decodedToken != false) {
+				$response = $this->wilayah->list_wilayah($provinsi, $kabupaten, $kecamatan);
+				$this->response($response, REST_Controller::HTTP_OK);
+			}
+		}
+		$this->set_response(['status' => '401 Unauthorized'], REST_Controller::HTTP_UNAUTHORIZED);
 	}
 }
