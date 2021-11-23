@@ -448,9 +448,12 @@ class Wilayah_model_api extends CI_Model
 		return $response;
 	}
 
-	public function list_provinsi()
+	public function list_provinsi($cari = null)
 	{
-		$data = $this->db->select('nama_prov, kode_prov')
+		if ($cari) $this->db->like('nama_prov', $cari);
+
+		$data = $this->db
+			->select('nama_prov, kode_prov')
 			->order_by('kode_prov', 'ASC')
 			->group_by('kode_prov')
 			->get('kode_wilayah')
@@ -459,15 +462,22 @@ class Wilayah_model_api extends CI_Model
 		return $data;
 	}
 
-	public function list_kabupaten($provinsi = '')
+	// TODO : Sederhanakan Parameter Sesuai Tingkatan
+	public function list_kabupaten($provinsi = null, $cari = null)
 	{
 		if ($provinsi)
 		{
 			$this->db
-				->where('nama_prov', urldecode($provinsi));
+				->group_start()
+					->where('nama_prov', urldecode($provinsi))
+					->or_where('kode_prov', $provinsi)
+				->group_end();
 		}
 
-		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab')
+		if ($cari) $this->db->like('nama_kab', $cari);
+
+		$data = $this->db
+			->select('nama_prov, kode_prov, nama_kab, kode_kab')
 			->group_by('kode_kab')
 			->order_by('nama_kab', 'ASC')
 			->get('kode_wilayah')
@@ -476,16 +486,26 @@ class Wilayah_model_api extends CI_Model
 		return $data;
 	}
 
-	public function list_kecamatan($provinsi = '', $kabupaten = '')
+	// TODO : Sederhanakan Parameter Sesuai Tingkatan
+	public function list_kecamatan($provinsi = null, $kabupaten = null, $cari = null)
 	{
 		if ($provinsi && $kabupaten)
 		{
 			$this->db
-				->where('nama_prov', urldecode($provinsi))
-				->where('nama_kab', urldecode($kabupaten));
+				->group_start()
+					->where('nama_prov', urldecode($provinsi))
+					->or_where('kode_prov', $provinsi)
+				->group_end()
+				->group_start()
+					->where('nama_kab', urldecode($kabupaten))
+					->or_where('kode_kab', $kabupaten)
+				->group_end();
 		}
 
-		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab, nama_kec, kode_kec')
+		if ($cari) $this->db->like('nama_kec', $cari);
+
+		$data = $this->db
+			->select('nama_prov, kode_prov, nama_kab, kode_kab, nama_kec, kode_kec')
 			->group_by('kode_kec')
 			->order_by('nama_kec', 'ASC')
 			->get('kode_wilayah')
@@ -494,15 +514,27 @@ class Wilayah_model_api extends CI_Model
 		return $data;
 	}
 
-	public function list_desa($provinsi = '', $kabupaten = '', $kecamatan = '')
+	// TODO : Sederhanakan Parameter Sesuai Tingkatan
+	public function list_desa($provinsi = null, $kabupaten = null, $kecamatan = null, $cari = null)
 	{
 		if ($provinsi && $kabupaten && $kecamatan)
 		{
 			$this->db
-				->where('nama_prov', urldecode($provinsi))
-				->where('nama_kab', urldecode($kabupaten))
-				->where('nama_kec', urldecode($kecamatan));
+				->group_start()
+					->where('nama_prov', urldecode($provinsi))
+					->or_where('kode_prov', $provinsi)
+				->group_end()
+				->group_start()
+					->where('nama_kab', urldecode($kabupaten))
+					->or_where('kode_kab', $kabupaten)
+				->group_end()
+				->group_start()
+					->where('nama_kec', urldecode($kecamatan))
+					->or_where('kode_kec', $kecamatan)
+				->group_end();
 		}
+
+		if ($cari) $this->db->like('nama_desa', $cari);
 
 		$data = $this->db->select('nama_prov, kode_prov, nama_kab, kode_kab, nama_kec, kode_kec, nama_desa, kode_desa')
 			->group_by('kode_desa')
@@ -511,5 +543,28 @@ class Wilayah_model_api extends CI_Model
 			->result_array();
 
 		return $data;
+	}
+
+	// TODO :  Buat per tingkat wilayag, hanya gunakan parameter cari dan kode.
+	public function list_wilayah($kode = null, $cari = null)
+	{
+		if (strlen($kode) == 8) {
+			$data = $this->list_desa(substr($kode, 0, 2), substr($kode, 0, 5), $kode, $cari);
+		} elseif (strlen($kode) == 5) {
+			$data = $this->list_kecamatan(substr($kode, 0, 2), $kode, $cari);
+		} elseif (strlen($kode) == 2) {
+			$data = $this->list_kabupaten($kode, $cari);
+		} else {
+			$data = $this->list_provinsi($cari);
+		}
+
+		$response = [
+			"results" => $data,
+			"pagination" => [
+				"more" => false
+			]
+		];
+
+		return $response;
 	}
 }

@@ -6,6 +6,8 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 class Wilayah extends REST_Controller
 {
+	protected $valid_token;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,6 +16,7 @@ class Wilayah extends REST_Controller
 		$this->load->model(['pelanggan_model_api', 'referensi_model']);
 		$this->pelanggan = $this->pelanggan_model_api;
 		$this->wilayah = $this->wilayah_model_api;
+		$this->valid_token = $this->config->item('dev_token');
 	}
 
 	//API Halaman Pelanggan
@@ -198,5 +201,23 @@ class Wilayah extends REST_Controller
 			}
 		}
 		$this->set_response($invalidLogin, REST_Controller::HTTP_UNAUTHORIZED);
+	}
+
+	public function list_wilayah_get()
+	{
+		$token = $this->get('token');
+		$kode = $this->get('kode');
+		$cari = $this->get('cari');
+
+		if ($token === $this->valid_token && AUTHORIZATION::validateTimestamp($token))
+		{
+			if ($data = $this->wilayah->list_wilayah($kode, $cari)) {
+				$this->response($data, REST_Controller::HTTP_OK);
+			} else {
+				$this->response(['status' => '404 Not Found'], REST_Controller::HTTP_NOT_FOUND);
+			}
+		}
+
+		$this->set_response(['status' => '401 Unauthorized'], REST_Controller::HTTP_UNAUTHORIZED);
 	}
 }
