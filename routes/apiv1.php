@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\TrackController;
-use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\V1\WilayahController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,17 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('wilayah')
-    ->middleware('tracksid')
     ->group(function () {
+        Route::get('/', [WilayahController::class, 'index']);
+        Route::get('provinsi', [WilayahController::class, 'provinsi']);
+        Route::get('kabupaten', [WilayahController::class, 'kabupaten']);
+        Route::get('kecamatan', [WilayahController::class, 'kecamatan']);
         Route::get('desa', [WilayahController::class, 'desa']);
-        Route::get('caridesa', [WilayahController::class, 'cariDesa']);
-        Route::get('ambildesa', [WilayahController::class, 'ambilDesa']);
-        Route::get('kodedesa', [WilayahController::class, 'kodeDesa']);
-        Route::get('list_wilayah', [WilayahController::class, 'listWilayah']);
     });
 
 Route::prefix('track')
-    ->middleware('tracksid')
     ->group(function () {
         Route::post('desa', TrackController::class);
     });
