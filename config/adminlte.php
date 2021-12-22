@@ -67,8 +67,8 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
     'usermenu_profile_url' => false,
 
     /*
@@ -191,7 +191,7 @@ return [
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -224,13 +224,8 @@ return [
     |
     */
 
-    'menu' => [
-        // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
+    'menu'                 => [
+        // Navbar items
         [
             'type'         => 'darkmode-widget',
             'topnav_right' => true, // Or "topnav => true" to place on the left.
@@ -239,88 +234,74 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'type'         => 'sidebar-menu-search',
+            'text'         => 'search',
+        ],
 
-        // Sidebar items:
+        // Menu
+        ['header'          => 'MENU UTAMA'],
         [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text'         => 'Dashboard',
+            'url'          => 'dashboard',
+            'icon'         => 'fas fa-tachometer-alt',
         ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text'         => 'Peta OpenSID',
+            'url'          => 'peta',
+            'icon'         => 'fas fa-map-marked-alt',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
+            'text'         => 'Laporan',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
                 [
-                    'text' => 'level_one',
+                    'text' => 'Desa OpenSID',
                     'url'  => '#',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'Kabupaten OpenSID',
+                    'url'  => '#',
                 ],
                 [
-                    'text' => 'level_one',
+                    'text' => 'Versi OpenSID',
                     'url'  => '#',
                 ],
             ],
         ],
-        ['header' => 'labels'],
         [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
+            'can'          => 'is-admin',
+            'text'         => 'Wilayah Administratif',
+            'url'          => 'peta',
+            'icon'         => 'fas fa-map',
         ],
         [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
+            'text'         => 'Review Desa',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Desa Tidak Aktif',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Desa Baru',
+                    'url'  => '#',
+                ],
+            ],
+        ],
+
+
+        // Settings
+        ['header'          => 'account_settings'],
+        [
+            'text'         => 'profile',
+            'url'          => 'admin/settings',
+            'icon'         => 'fas fa-fw fa-user',
         ],
         [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
+            'text'         => 'change_password',
+            'url'          => 'admin/settings',
+            'icon'         => 'fas fa-fw fa-lock',
         ],
     ],
 
