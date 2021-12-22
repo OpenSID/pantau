@@ -71,7 +71,7 @@ class Desa extends Model
      */
     public function setIpHostingAttribute(array $value)
     {
-        if (is_local($value['url']) || is_local($value['ip_address'])) {
+        if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
             $this->attributes['ip_hosting'] = $value['ip_address'];
         }
     }
@@ -111,7 +111,7 @@ class Desa extends Model
      */
     public function setVersiHostingAttribute(array $value)
     {
-        if (is_local($value['url']) || is_local($value['ip_address'])) {
+        if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
             $this->attributes['versi_hosting'] = $value['version'];
         }
     }
@@ -151,7 +151,7 @@ class Desa extends Model
      */
     public function setUrlHostingAttribute($value)
     {
-        if (is_local($value['url']) || is_local($value['ip_address'])) {
+        if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
             $this->attributes['url_hosting'] = $value['url'];
         }
     }
@@ -191,7 +191,7 @@ class Desa extends Model
      */
     public function setTglAksesHostingAttribute(array $value)
     {
-        if (is_local($value['url']) || is_local($value['ip_address'])) {
+        if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
             $this->attributes['tgl_akses_hosting'] = now();
         }
     }

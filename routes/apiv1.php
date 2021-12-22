@@ -15,16 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::prefix('wilayah')
-//     ->group(function () {
-//         Route::get('/', [WilayahController::class, 'index']);
-//         Route::get('provinsi', [WilayahController::class, 'provinsi']);
-//         Route::get('kabupaten', [WilayahController::class, 'kabupaten']);
-//         Route::get('kecamatan', [WilayahController::class, 'kecamatan']);
-//         Route::get('desa', [WilayahController::class, 'desa']);
-//     });
+Route::prefix('wilayah')
+    ->group(function () {
+        Route::get('/', [WilayahController::class, 'index']);
+        Route::get('provinsi', [WilayahController::class, 'provinsi']);
+        Route::get('kabupaten', [WilayahController::class, 'kabupaten']);
+        Route::get('kecamatan', [WilayahController::class, 'kecamatan']);
+        Route::get('desa', [WilayahController::class, 'desa']);
+    });
 
-// Route::prefix('track')
-//     ->group(function () {
-//         Route::post('desa', TrackController::class);
-//     });
+Route::prefix('track')
+    ->group(function () {
+        Route::post('desa', TrackController::class);
+    });
