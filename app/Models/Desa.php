@@ -27,13 +27,13 @@ class Desa extends Model
     protected $guarded = [];
 
     /**
-     * Define a one-to-one relationship.
+     * Define a one-to-many relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function akses()
     {
-        return $this->hasOne(Akses::class);
+        return $this->hasMany(Akses::class);
     }
 
     /**
@@ -153,6 +153,46 @@ class Desa extends Model
     {
         if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
             $this->attributes['url_hosting'] = $value['url'];
+        }
+    }
+
+    /**
+     * Set tanggal rekam lokal.
+     *
+     * ```php
+     * $value = [
+     *   'url'        => 'http://opensid-premium.test',
+     *   'ip_address' => '127.0.0.1',
+     * ];
+     * ```
+     *
+     * @param array $value
+     * @return void
+     */
+    public function setTglRekamLokalAttribute(array $value)
+    {
+        if (is_local($value['url']) || is_local($value['ip_address'])) {
+            $this->attributes['tgl_rekam_lokal'] = now();
+        }
+    }
+
+    /**
+     * Set tanggal rekam hosting.
+     *
+     * ```php
+     * $value = [
+     *   'url'        => 'http://opensid-premium.test',
+     *   'ip_address' => '127.0.0.1',
+     * ];
+     * ```
+     *
+     * @param array $value
+     * @return void
+     */
+    public function setTglRekamHostingAttribute(array $value)
+    {
+        if (! is_local($value['url']) || ! is_local($value['ip_address'])) {
+            $this->attributes['tgl_rekam_hosting'] = now();
         }
     }
 

@@ -27,14 +27,27 @@ class TrackRequest extends FormRequest
 
         return [
             "nama_desa" => ["required", "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
-            "kode_desa" => "required",
+            "kode_desa" => [
+                "required",
+                "exists:kode_wilayah,kode_desa",
+                "unique:desa,kode_desa,{$this->kode_desa},kode_desa",
+            ],
             "kode_pos" => "required",
             "nama_kecamatan" => ["required", "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
-            "kode_kecamatan" => "required",
+            "kode_kecamatan" => [
+                "required",
+                "exists:kode_wilayah,kode_kec"
+            ],
             "nama_kabupaten" => ["required", "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
-            "kode_kabupaten" => "required",
+            "kode_kabupaten" => [
+                "required",
+                "exists:kode_wilayah,kode_kab"
+            ],
             "nama_provinsi" => ["required", "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
-            "kode_provinsi" => "required",
+            "kode_provinsi" => [
+                "required",
+                "exists:kode_wilayah,kode_prov"
+            ],
             "lat" => "required",
             "lng" => "required",
             "alamat_kantor" => "required",
@@ -90,6 +103,14 @@ class TrackRequest extends FormRequest
                 'ip_address' => $this->ip_address,
             ],
             'url_hosting' => [
+                'url' => $this->url,
+                'ip_address' => $this->ip_address,
+            ],
+            'tgl_rekam_lokal' => [
+                'url' => $this->url,
+                'ip_address' => $this->ip_address,
+            ],
+            'tgl_rekam_hosting' => [
                 'url' => $this->url,
                 'ip_address' => $this->ip_address,
             ],

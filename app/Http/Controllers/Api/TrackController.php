@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackRequest;
+use App\Models\Akses;
 use App\Models\Desa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -32,6 +33,8 @@ class TrackController extends Controller
                         'ip_hosting',
                         'versi_lokal',
                         'versi_hosting',
+                        'tgl_rekam_lokal',
+                        'tgl_rekam_hosting',
                         'tgl_akses_lokal',
                         'tgl_akses_hosting',
                         'url_lokal',
@@ -43,9 +46,8 @@ class TrackController extends Controller
                 )
             );
 
-            $desa->akses()->updateOrCreate(
-                ['desa_id' => $desa->id],
-                $request->only(['url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
+            Akses::create(
+                $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
             );
 
             DB::commit();

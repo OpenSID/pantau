@@ -22,7 +22,12 @@ class DesaSeeder extends Seeder
                 $query
                     ->on(DB::raw("lower(d.nama_desa)"), '=', DB::raw("lower(k.nama_desa)"))
                     ->on(DB::raw("lower(d.nama_kecamatan)"), '=', DB::raw("lower(k.nama_kec)"))
-                    ->on(DB::raw("lower(d.nama_kabupaten)"), '=', DB::raw("lower(k.nama_kab)"))
+                    ->on(function($query) {
+                        $query
+                            ->orOn(DB::raw("lower(d.nama_kabupaten)"), '=', DB::raw("lower(k.nama_kab)"))
+                            ->orOn(DB::raw("lower(d.nama_kabupaten)"), '=', DB::raw("lower(replace(k.nama_kab, 'KAB ', ''))"))
+                            ->orOn(DB::raw("lower(d.nama_kabupaten)"), '=', DB::raw("lower(replace(k.nama_kab, 'KOTA ', ''))"));
+                    })
                     ->on(DB::raw("lower(d.nama_provinsi)"), '=', DB::raw("lower(k.nama_prov)"));
             })
             ->update(['d.kode_desa' => DB::raw('k.kode_desa')]);
