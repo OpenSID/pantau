@@ -63,6 +63,9 @@ class WilayahController extends Controller
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->orWhere('nama_kab', 'like', "%{$request->search}%");
             })
+            ->when($request->filled('kode_prov'), function ($query) use ($request) {
+                $query->where('kode_prov', $request->kode_prov);
+            })
             ->when($request->filled('kode_kab'), function ($query) use ($request) {
                 $query->where('kode_kab', $request->kode_kab);
             })
@@ -76,6 +79,9 @@ class WilayahController extends Controller
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->orWhere('nama_kec', 'like', "%{$request->search}%");
             })
+            ->when($request->filled('kode_kab'), function ($query) use ($request) {
+                $query->where('kode_kab', $request->kode_kab);
+            })
             ->when($request->filled('kode_kec'), function ($query) use ($request) {
                 $query->where('kode_kec', $request->kode_kec);
             })
@@ -88,6 +94,9 @@ class WilayahController extends Controller
         return $this->wilayah->desa()
             ->when($request->filled('search'), function ($query) use ($request) {
                 $query->orWhere('nama_desa', 'like', "%{$request->search}%");
+            })
+            ->when($request->filled('kode_kec'), function ($query) use ($request) {
+                $query->where('kode_kec', $request->kode_kec);
             })
             ->when($request->filled('kode_desa'), function ($query) use ($request) {
                 $query->where('kode_desa', $request->kode_desa);

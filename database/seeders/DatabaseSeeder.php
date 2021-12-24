@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(GrupSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(SanctumAksesTokenSeeder::class);
         $this->call(RegionSeeder::class);
         $this->call(DesaSeeder::class);
         $this->call(AksesSeeder::class);

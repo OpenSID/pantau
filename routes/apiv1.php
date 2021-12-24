@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('wilayah')
+    ->middleware(['auth:sanctum', 'ability:pantau-wilayah'])
     ->group(function () {
         Route::get('/', [WilayahController::class, 'index']);
         Route::get('provinsi', [WilayahController::class, 'provinsi']);
@@ -25,6 +26,7 @@ Route::prefix('wilayah')
     });
 
 Route::prefix('track')
+    ->middleware(['auth:sanctum', 'ability:pantau-track'])
     ->group(function () {
         Route::post('desa', TrackController::class);
     });

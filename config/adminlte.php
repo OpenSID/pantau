@@ -272,7 +272,7 @@ return [
         [
             'can'          => 'is-admin',
             'text'         => 'Wilayah Administratif',
-            'url'          => 'peta',
+            'url'          => 'wilayah',
             'icon'         => 'fas fa-map',
         ],
         [
@@ -361,7 +361,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -420,6 +420,21 @@ return [
                 ],
             ],
         ],
+        'leaflet' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'assets/leaflet/leaflet.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'assets/leaflet/leaflet.js',
+                ],
+            ],
+        ]
     ],
 
     /*

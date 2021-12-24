@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PetaController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,12 +38,19 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
     });
 
+// peta
+Route::prefix('peta')
+    ->group(function () {
+        Route::get('/', PetaController::class);
+    });
+
 // laporan
 Route::prefix('laporan')
     ->group(function () {
         // TODO: laporan
     });
 
+// review
 Route::prefix('review')
     ->middleware('auth')
     ->group(function () {
