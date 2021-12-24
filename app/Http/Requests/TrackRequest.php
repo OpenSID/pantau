@@ -80,6 +80,7 @@ class TrackRequest extends FormRequest
         // Merge request attribute.
         $this->merge([
             // Request attribute for table desa.
+            'opensid_valid' => preg_replace("/-premium.*|pasca-|-pasca/", '', $this->version),
             'ip_lokal' => [
                 'url' => $this->url,
                 'ip_address' => $this->ip_address,

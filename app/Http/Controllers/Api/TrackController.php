@@ -39,7 +39,7 @@ class TrackController extends Controller
                         'tgl_akses_hosting',
                         'url_lokal',
                         'url_hosting',
-                        // 'opensid_valid',
+                        'opensid_valid',
                         'email_desa',
                         'telepon',
                     ]

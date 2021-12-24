@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Notifikasi extends Model
 {
     use HasFactory;
+
+    /** {@inheritdoc} */
+    protected $table = 'notifikasi';
 }
