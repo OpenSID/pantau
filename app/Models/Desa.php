@@ -80,6 +80,21 @@ class Desa extends Model
     }
 
     /**
+     * Scope a query review desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeReviewDesa($query)
+    {
+        return $query
+            ->select(['*'])
+            ->selectRaw("date_format(greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)),'%Y-%m-%d') as tgl_akses")
+            ->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) < now() - interval 4 month")
+            ->where('jenis', 2);
+    }
+
+    /**
      * Scope a query kabupaten kosong.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

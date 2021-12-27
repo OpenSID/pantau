@@ -276,16 +276,19 @@ return [
             'icon'         => 'fas fa-map',
         ],
         [
+            'can'          => 'is-admin',
             'text'         => 'Review Desa',
             'icon'         => 'fas fa-file-alt',
             'submenu'      => [
                 [
+                    'can'  => 'is-admin',
                     'text' => 'Desa Tidak Aktif',
-                    'url'  => '#',
+                    'url'  => 'review/non-aktif',
                 ],
                 [
+                    'can'  => 'is-admin',
                     'text' => 'Desa Baru',
-                    'url'  => '#',
+                    'url'  => 'review/desa-baru',
                 ],
             ],
         ],

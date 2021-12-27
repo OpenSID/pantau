@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
@@ -65,5 +66,6 @@ Route::prefix('wilayah')
 Route::prefix('review')
     ->middleware('auth')
     ->group(function () {
-        // TODO: review
+        Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
+        Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
     });
