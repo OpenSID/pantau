@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
+use App\Http\Controllers\WilayahController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +49,16 @@ Route::prefix('peta')
 // laporan
 Route::prefix('laporan')
     ->group(function () {
-        // TODO: laporan
+        Route::get('desa', [LaporanController::class, 'desa']);
+        Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
+        Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
+        Route::get('versi', [LaporanController::class, 'versi']);
+    });
+
+// wilayah
+Route::prefix('wilayah')
+    ->group(function () {
+        Route::get('/', WilayahController::class);
     });
 
 // review

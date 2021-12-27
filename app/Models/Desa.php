@@ -100,11 +100,20 @@ class Desa extends Model
     {
         return $query
             ->select(['nama_kabupaten', 'nama_provinsi'])
-            ->selectRaw("group_concat(distinct versi_lokal order by versi_lokal) as versi_lokal")
-            ->selectRaw("group_concat(distinct versi_hosting order by versi_hosting) as versi_hosting")
             ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_lokal <> '') as offline")
             ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_hosting <> '') as online")
             ->groupBy(['nama_kabupaten', 'nama_provinsi']);
+    }
+
+    /**
+     * Scope a query versi OpenSID.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVersiOpenSID($query)
+    {
+        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x");
     }
 
     /**

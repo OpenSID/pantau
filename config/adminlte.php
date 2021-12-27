@@ -257,15 +257,15 @@ return [
             'submenu'      => [
                 [
                     'text' => 'Desa OpenSID',
-                    'url'  => '#',
+                    'url'  => 'laporan/desa',
                 ],
                 [
                     'text' => 'Kabupaten OpenSID',
-                    'url'  => '#',
+                    'url'  => 'laporan/kabupaten',
                 ],
                 [
                     'text' => 'Versi OpenSID',
-                    'url'  => '#',
+                    'url'  => 'laporan/versi',
                 ],
             ],
         ],
