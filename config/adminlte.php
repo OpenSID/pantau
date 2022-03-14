@@ -292,6 +292,12 @@ return [
                 ],
             ],
         ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Bersihkan Data Akses',
+            'url'          => 'akses/bersihkan',
+            'icon'         => 'fas fa-refresh',
+        ],
 
 
         // Settings
