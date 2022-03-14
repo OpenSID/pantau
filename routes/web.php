@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
@@ -68,4 +69,14 @@ Route::prefix('review')
     ->group(function () {
         Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
+    });
+
+// review
+Route::prefix('admin')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('profile', [AdminController::class, 'profile']);
+        Route::post('profile', [AdminController::class, 'profileUpdate']);
+        Route::get('reset-password', [AdminController::class, 'resetPassword']);
+        Route::post('reset-password', [AdminController::class, 'resetPasswordUpdate']);
     });
