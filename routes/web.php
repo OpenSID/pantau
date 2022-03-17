@@ -5,6 +5,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\PenggunaController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -68,4 +69,10 @@ Route::prefix('review')
     ->group(function () {
         Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
+    });
+
+Route::middleware('auth')
+    ->group(function () {
+        Route::resource('akun-pengguna',  PenggunaController::class);
+        Route::get('get/akun-pengguna', [PenggunaController::class, 'getAkunPengguna'])->name('get.akun-pengguna');
     });

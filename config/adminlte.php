@@ -292,6 +292,11 @@ return [
                 ],
             ],
         ],
+        [
+            'text'         => 'Akun Pengguna',
+            'url'          => 'akun-pengguna',
+            'icon'         => 'fas fa-users',
+        ],
 
 
         // Settings
