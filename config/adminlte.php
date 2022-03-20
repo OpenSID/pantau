@@ -292,6 +292,11 @@ return [
                 ],
             ],
         ],
+        [
+            'text'         => 'Notifikasi',
+            'url'          => 'notifikasi',
+            'icon'         => 'fa fa-rss-square',
+        ],
 
 
         // Settings

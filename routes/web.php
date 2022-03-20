@@ -5,6 +5,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\NotifikasiController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -68,4 +69,13 @@ Route::prefix('review')
     ->group(function () {
         Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
+    });
+
+// notifikasi
+Route::middleware('auth')
+    ->group(function () {
+        Route::resource('notifikasi', NotifikasiController::class);
+        Route::get('get/notifikasi', [NotifikasiController::class, 'getNotifikasi'])->name('get.notifikasi');
+        Route::get('notifikasi/edit/{id}', [NotifikasiController::class, 'edit'])->name('notifikasi.edit');
+        Route::post('notifikasi/update/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
     });
