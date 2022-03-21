@@ -11,4 +11,52 @@ class Notifikasi extends Model
 
     /** {@inheritdoc} */
     protected $table = 'notifikasi';
+
+    public static function get_semua_notif($id_desa)
+    {
+        $semua_notif = [];
+        foreach(Notifikasi::all() as $item)
+        {
+            $semua_notif[] = Notifikasi::select('notifikasi.*')
+                ->join('notifikasi_desa', 'notifikasi_desa.id_notifikasi', '=', 'notifikasi.id')
+                ->where([
+                    'id_notifikasi'=>$item['id'],
+                    'id_desa'=>$id_desa,
+                ])
+                ->where('status', '!=', 0)
+                ->get();
+        }
+
+        return $semua_notif;
+    }
+
+    public static function non_aktifkan($notif, $id_desa)
+    {
+        foreach ($notif as $data)
+        {
+            $ada = NotifikasiDesa::where([
+                'id_notifikasi'=>$data['id'],
+                'id_desa'=>$id_desa,
+            ])->first();
+            if ($ada)
+            {
+                NotifikasiDesa::where('id', $ada->id)
+                    ->update([
+                        'status'=>0,
+                        'tgl_kirim'=>date("Y-m-d H:i:s")
+                    ]);
+            }
+            else
+            {
+                NotifikasiDesa::insert([
+                        'id_notifikasi'=>$data['id'],
+                        'id_desa'=>$id_desa,
+                        'status'=>0,
+                        'tgl_kirim'=>date("Y-m-d H:i:s"),
+                        'created_at'=>date("Y-m-d H:i:s"),
+                        'updated_at'=>date("Y-m-d H:i:s")
+                    ]);
+            }
+        }
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackRequest;
 use App\Models\Akses;
 use App\Models\Desa;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -50,6 +51,9 @@ class TrackController extends Controller
                 $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
             );
 
+            $notif = Notifikasi::get_semua_notif($desa->id);
+            Notifikasi::non_aktifkan($notif, $desa->id);
+
             DB::commit();
 
         } catch (\Exception $e) {
@@ -59,6 +63,6 @@ class TrackController extends Controller
             return response()->json('Failed', 422);
         }
 
-        return response()->json('ok');
+        return response()->json($notif);
     }
 }
