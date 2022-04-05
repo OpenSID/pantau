@@ -74,5 +74,5 @@ Route::prefix('review')
 // akses
 Route::prefix('akses')
     ->group(function () {
-        Route::get('bersihkan', [AksesController::class, 'bersihkan']);
+        Route::get('bersihkan', WilayahController::class);
     });

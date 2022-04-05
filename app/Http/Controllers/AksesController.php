@@ -9,10 +9,11 @@ use Illuminate\Http\Request;
 
 class AksesController extends Controller
 {
-    public function bersihkan()
+    public function __invoke()
     {
         Akses::bersihkan();
         Desa::hapus_nonaktif_tdkterdaftar();
         return redirect('review/non-aktif');
     }
+
 }
