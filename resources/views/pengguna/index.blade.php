@@ -118,7 +118,7 @@
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{route('get.akun-pengguna')}}',
+                ajax: '{{route('akun-pengguna.datatables')}}',
                 columns: [
                     { data: 'username', name: 'username' },
                     { data: 'name', name: 'name' },

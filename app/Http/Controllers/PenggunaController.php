@@ -10,7 +10,7 @@ use Yajra\DataTables\DataTables;
 
 class PenggunaController extends Controller
 {
-    public function getAkunPengguna()
+    public function show()
     {
         $data = User::orderBy('id', 'desc');
         return DataTables::of($data)

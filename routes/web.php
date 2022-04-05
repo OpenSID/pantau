@@ -74,5 +74,5 @@ Route::prefix('review')
 Route::middleware('auth')
     ->group(function () {
         Route::resource('akun-pengguna',  PenggunaController::class);
-        Route::get('get/akun-pengguna', [PenggunaController::class, 'getAkunPengguna'])->name('get.akun-pengguna');
+        Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
     });
