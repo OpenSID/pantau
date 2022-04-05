@@ -79,7 +79,7 @@
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{route('get.notifikasi')}}',
+                ajax: '{{url('notifikasi/show')}}',
                 columns: [
                     { data: 'action', name: 'action', orderable: false, searchable: false },
                     { data: 'frekuensi', name: 'frekuensi' },

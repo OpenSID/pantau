@@ -75,7 +75,6 @@ Route::prefix('review')
 Route::middleware('auth')
     ->group(function () {
         Route::resource('notifikasi', NotifikasiController::class);
-        Route::get('get/notifikasi', [NotifikasiController::class, 'getNotifikasi'])->name('get.notifikasi');
         Route::get('notifikasi/edit/{id}', [NotifikasiController::class, 'edit'])->name('notifikasi.edit');
         Route::post('notifikasi/update/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
     });

@@ -9,7 +9,7 @@ use Yajra\DataTables\DataTables;
 
 class NotifikasiController extends Controller
 {
-    public function getNotifikasi()
+    public function show()
     {
         $data = Notifikasi::orderBy('id', 'desc');
         return DataTables::of($data)
