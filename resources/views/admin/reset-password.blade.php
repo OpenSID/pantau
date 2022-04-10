@@ -9,9 +9,22 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            @if($errors->any())
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    {{$errors->first()}}
+            @if(session('alert'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{session('alert')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -43,7 +56,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Re-enter new Password</label>
-                                    <input type="password" name="re_password" class="form-control">
+                                    <input type="password" name="password_confirmation" class="form-control">
                                 </div>
                             </div>
                         </div>

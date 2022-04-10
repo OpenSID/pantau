@@ -16,6 +16,12 @@ class AdminController extends Controller
 
     public function profileUpdate(Request $request)
     {
+        $request->validate([
+            'username' => 'required|max:255',
+            'name' => 'required|max:255',
+            'email' => 'required|max:255',
+        ]);
+
         User::where('id', Auth::user()->id)
             ->update([
                 'username'=>$request->username,
@@ -23,7 +29,7 @@ class AdminController extends Controller
                 'email'=>$request->email
             ]);
 
-        return redirect()->back()->withErrors(['msg'=>'Berhasil diperbarui']);
+        return redirect()->back()->withAlert('Berhasil diperbarui');
     }
 
     public function resetPassword()
@@ -33,15 +39,15 @@ class AdminController extends Controller
 
     public function resetPasswordUpdate(Request $request)
     {
-        if($request->password != $request->re_password)
-        {
-            return redirect()->back()->withErrors(['msg' => 'Password tidak sama']);
-        }
+        $request->validate([
+            'password' => 'required|confirmed',
+        ]);
+
         User::where('id', Auth::user()->id)
             ->update([
                 'password'=>Hash::make($request->password)
             ]);
 
-        return redirect()->back()->withErrors(['msg'=>'Berhasil diperbarui']);
+        return redirect()->back()->withAlert('Berhasil diperbarui');
     }
 }
