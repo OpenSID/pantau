@@ -41,22 +41,12 @@ class PenggunaController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'id_grup' => 'required',
             'name' => 'required|max:255',
             'username' => 'required|max:255',
             'email' => 'required|max:255',
         ]);
-
-        if ($validator->fails())
-        {
-            $messages = '';
-            foreach ($validator->getMessageBag()->toArray() as $key => $value)
-            {
-                $messages .= $value[0] .' ';
-            }
-            return redirect()->back()->withDanger($messages);
-        }
 
         $simpan = new User;
         $simpan->id_grup = $request->id_grup;
@@ -70,22 +60,12 @@ class PenggunaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'id_grup' => 'required',
             'name' => 'required|max:255',
             'username' => 'required|max:255',
             'email' => 'required|max:255',
         ]);
-
-        if ($validator->fails())
-        {
-            $messages = '';
-            foreach ($validator->getMessageBag()->toArray() as $key => $value)
-            {
-                $messages .= $value[0] .' ';
-            }
-            return redirect()->back()->withDanger($messages);
-        }
 
         User::where('id', $id)
             ->update([
