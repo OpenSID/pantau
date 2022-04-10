@@ -49,7 +49,7 @@ class NotifikasiController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'kode' => 'required|max:100',
             'judul' => 'required|max:100',
             'jenis' => 'required',
@@ -58,16 +58,6 @@ class NotifikasiController extends Controller
             'frekuensi' => 'required',
             'aktif' => 'required',
         ]);
-
-        if ($validator->fails())
-        {
-            $messages = '';
-            foreach ($validator->getMessageBag()->toArray() as $key => $value)
-            {
-                $messages .= $value[0] .' ';
-            }
-            return redirect()->back()->withDanger($messages);
-        }
 
         $simpan = new Notifikasi;
         $simpan->aktif = $request->aktif;
@@ -83,7 +73,7 @@ class NotifikasiController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'kode' => 'required|max:100',
             'judul' => 'required|max:100',
             'jenis' => 'required',
@@ -92,16 +82,6 @@ class NotifikasiController extends Controller
             'frekuensi' => 'required',
             'aktif' => 'required',
         ]);
-
-        if ($validator->fails())
-        {
-            $messages = '';
-            foreach ($validator->getMessageBag()->toArray() as $key => $value)
-            {
-                $messages .= $value[0] .' ';
-            }
-            return redirect()->back()->withDanger($messages);
-        }
 
         Notifikasi::where('id', $id)
             ->update([

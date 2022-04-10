@@ -34,29 +34,14 @@ class Notifikasi extends Model
     {
         foreach ($notif as $data)
         {
-            $ada = NotifikasiDesa::where([
+            NotifikasiDesa::updateOrInsert([
                 'id_notifikasi'=>$data['id'],
                 'id_desa'=>$id_desa,
-            ])->first();
-            if ($ada)
-            {
-                NotifikasiDesa::where('id', $ada->id)
-                    ->update([
-                        'status'=>0,
-                        'tgl_kirim'=>date("Y-m-d H:i:s")
-                    ]);
-            }
-            else
-            {
-                NotifikasiDesa::insert([
-                        'id_notifikasi'=>$data['id'],
-                        'id_desa'=>$id_desa,
-                        'status'=>0,
-                        'tgl_kirim'=>date("Y-m-d H:i:s"),
-                        'created_at'=>date("Y-m-d H:i:s"),
-                        'updated_at'=>date("Y-m-d H:i:s")
-                    ]);
-            }
+            ],
+            [
+                'status'=>0,
+                'tgl_kirim'=>date("Y-m-d H:i:s")
+            ]);
         }
     }
 }
