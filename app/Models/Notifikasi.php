@@ -12,7 +12,7 @@ class Notifikasi extends Model
     /** {@inheritdoc} */
     protected $table = 'notifikasi';
 
-    public static function get_semua_notif($id_desa)
+    public static function getSemuaNotif($id_desa)
     {
         $semua_notif = [];
         foreach(Notifikasi::all() as $item)
@@ -30,7 +30,7 @@ class Notifikasi extends Model
         return $semua_notif;
     }
 
-    public static function non_aktifkan($notif, $id_desa)
+    public static function nonAktifkan($notif, $id_desa)
     {
         foreach ($notif as $data)
         {

@@ -51,8 +51,8 @@ class TrackController extends Controller
                 $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
             );
 
-            $notif = Notifikasi::get_semua_notif($desa->id);
-            Notifikasi::non_aktifkan($notif, $desa->id);
+            $notif = Notifikasi::getSemuaNotif($desa->id);
+            Notifikasi::nonAktifkan($notif, $desa->id);
 
             DB::commit();
 
