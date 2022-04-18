@@ -59,6 +59,7 @@ Route::prefix('laporan')
 
 // wilayah
 Route::prefix('wilayah')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/', WilayahController::class);
     });
@@ -73,6 +74,7 @@ Route::prefix('review')
 
 // akses
 Route::prefix('akses')
+    ->middleware('auth')
     ->group(function () {
         Route::get('bersihkan', WilayahController::class);
     });

@@ -12,7 +12,7 @@ class AksesController extends Controller
     public function __invoke()
     {
         Akses::bersihkan();
-        Desa::hapus_nonaktif_tdkterdaftar();
+        Desa::hapusNonaktifTidakTerdaftar();
         return redirect('review/non-aktif');
     }
 
