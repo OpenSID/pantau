@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Notifikasi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class NotifikasiController extends Controller
