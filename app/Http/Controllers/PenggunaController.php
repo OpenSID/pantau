@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\PenggunaRequest;
 
 class PenggunaController extends Controller
 {
@@ -38,14 +39,9 @@ class PenggunaController extends Controller
         return redirect()->back()->withAlert('Pengguna berhasil dihapus');
     }
 
-    public function store(Request $request)
+    public function store(PenggunaRequest $request)
     {
-        $request->validate([
-            'id_grup' => 'required',
-            'name' => 'required|max:255',
-            'username' => 'required|max:255',
-            'email' => 'required|max:255',
-        ]);
+        $validated = $request->validated();
 
         $simpan = new User;
         $simpan->id_grup = $request->id_grup;
@@ -57,14 +53,9 @@ class PenggunaController extends Controller
         return redirect()->route('akun-pengguna.index')->withAlert('Pengguna baru berhasil tersimpan');
     }
 
-    public function update(Request $request, $id)
+    public function update(PenggunaRequest $request, $id)
     {
-        $request->validate([
-            'id_grup' => 'required',
-            'name' => 'required|max:255',
-            'username' => 'required|max:255',
-            'email' => 'required|max:255',
-        ]);
+        $validated = $request->validated();
 
         User::where('id', $id)
             ->update([
