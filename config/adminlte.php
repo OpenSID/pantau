@@ -308,13 +308,13 @@ return [
         [
             'can'          => 'is-admin',
             'text'         => 'profile',
-            'url'          => 'admin/settings',
+            'url'          => 'profile',
             'icon'         => 'fas fa-fw fa-user',
         ],
         [
             'can'          => 'is-admin',
             'text'         => 'change_password',
-            'url'          => 'admin/settings',
+            'url'          => 'profile/reset-password',
             'icon'         => 'fas fa-fw fa-lock',
         ],
     ],
