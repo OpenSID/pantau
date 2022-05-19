@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <div class="card card-outline card-info col-lg-9">
+    <div class="card card-outline card-info col-lg-12">
         <div class="card-header">
             <h3 class="card-title">Desa Pengguna</h3>
         </div>
@@ -24,9 +24,6 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -40,9 +37,6 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -56,9 +50,6 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -107,7 +98,7 @@
     </div>
     <!-- /.card -->
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="card collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Desa baru dalam 7 hari terakhir</h3>
@@ -140,7 +131,7 @@
             </div>
         </div>
     </div>
-    <div class="card col-lg-9">
+    <div class="card col-lg-12">
         <div class="card-header">
             <h3 class="card-title">Kabupaten Pengguna</h3>
         </div>
@@ -157,9 +148,6 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -173,9 +161,6 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -189,9 +174,6 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -200,7 +182,7 @@
     </div>
     <!-- /.card -->
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="card collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Kabupaten yang belum ada desa OpenSID</h3>
