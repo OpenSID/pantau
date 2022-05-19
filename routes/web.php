@@ -76,5 +76,5 @@ Route::prefix('review')
 Route::prefix('akses')
     ->middleware('auth')
     ->group(function () {
-        Route::get('bersihkan', WilayahController::class);
+        Route::get('bersihkan', AksesController::class);
     });
