@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // admin permission.
         Gate::define('is-admin', function (Authenticatable $user) {
-            return $user->id_grup === 1;
+            return (int) $user->id_grup === 1;
         });
     }
 }

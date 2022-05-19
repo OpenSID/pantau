@@ -75,6 +75,16 @@ class UserSeeder extends Seeder
                 "token" => null,
                 "created_at" => now(),
             ),
+            array(
+                "id_grup" => 1,
+                "name" => "Andi Fahruddin Akas",
+                "username" => "andifahruddinakas",
+                "email" => "andifahruddinakas@gmail.com",
+                "avatar" => "default.jpg",
+                "password" => '$2y$10$frHX2pWN3XQiZeljnpDtnOkMqWpTnajYVjFeKNR9K04oxlkyqpf9u',
+                "token" => null,
+                "created_at" => now(),
+            ),
         );
 
         DB::table('users')->insert($users);
