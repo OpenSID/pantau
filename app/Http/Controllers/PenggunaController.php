@@ -12,12 +12,11 @@ class PenggunaController extends Controller
 {
     public function show()
     {
-        $data = User::orderBy('id', 'desc');
-        return DataTables::of($data)
+        return DataTables::of(User::get())
             ->addColumn('action', function ($data){
-                $edit = '<a class="btn btn-warning" data-toggle="modal" data-target="#edit-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-id_grup="'.$data->id_grup.'">Ubah</a>';
-                $delete = '<a class="btn btn-danger" data-toggle="modal" data-target="#delete-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-name="'.$data->name.'">Hapus</a>';
-                return '<div class="btn btn-group">'.$edit.$delete.'</div>';
+                $edit = '<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-modal" data-submit="' . url('akun-pengguna/' . $data->id) . '" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-id_grup="'.$data->id_grup.'"><i class="fas fa-pencil-alt"></i></a>';
+                $delete = '<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-submit="' . url('akun-pengguna/' . $data->id) . '" data-name="'.$data->name.'"><i class="fas fa-trash"></i></a>';
+                return '<div class="btn btn-group">' . $edit . $delete . '</div>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -30,19 +29,18 @@ class PenggunaController extends Controller
 
     public function create()
     {
-        return view('pengguna.add');
+        return view('pengguna.form');
     }
 
     public function destroy($id)
     {
         User::where('id', $id)->delete();
+
         return redirect()->back()->withAlert('Pengguna berhasil dihapus');
     }
 
     public function store(PenggunaRequest $request)
     {
-        $validated = $request->validated();
-
         $simpan = new User;
         $simpan->id_grup = $request->id_grup;
         $simpan->name = $request->name;
@@ -50,13 +48,12 @@ class PenggunaController extends Controller
         $simpan->email = $request->email;
         $simpan->password = Hash::make($request->password);
         $simpan->save();
+
         return redirect()->route('akun-pengguna.index')->withAlert('Pengguna baru berhasil tersimpan');
     }
 
     public function update(PenggunaRequest $request, $id)
     {
-        $validated = $request->validated();
-
         User::where('id', $id)
             ->update([
                 'id_grup' => $request->id_grup,

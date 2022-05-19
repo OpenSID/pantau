@@ -25,10 +25,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="{{route('akun-pengguna.index')}}" class="btn btn-primary float-right">Data Pengguna</a>
+                            <a href="{{ route('akun-pengguna.index') }}" class="btn btn-primary float-right">Data
+                                Pengguna</a>
                         </div>
                     </div>
-                    <form method="post" action="{{route('akun-pengguna.store')}}">
+                    <form method="post" action="{{ route('akun-pengguna.store') }}">
                         @csrf
                         <div class="form-group">
                             <label>Group <span class="text-danger">*</span></label>

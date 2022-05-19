@@ -9,9 +9,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            @if(session('alert'))
+            @if (session('alert'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{session('alert')}}
+                    {{ session('alert') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -31,22 +31,20 @@
                 </div>
             @endif
             <div class="card card-outline card-primary">
+                <div class="card-header with-border">
+                    <a href="{{ route('akun-pengguna.create') }}" class="btn btn-primary btn-sm mb-3">Tambah Data</a>
+                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="{{route('akun-pengguna.create')}}" class="btn btn-primary float-right mb-3">Tambah Pengguna</a>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table" id="datatable">
                             <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Group</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th width="10%">Action</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Group</th>
+                                </tr>
                             </thead>
                         </table>
                     </div>
@@ -54,7 +52,8 @@
             </div>
 
             {{-- MODAL EDIT --}}
-            <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
+            <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label"
+                aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -86,7 +85,7 @@
                                     <input type="email" id="email" class="form-control" name="email">
                                 </div>
 
-                                <a type="button" class="btn btn-warning float-right ml-2" data-dismiss="modal">Batal</a>
+                                <a type="button" class="btn btn-danger float-right ml-2" data-dismiss="modal">Batal</a>
                                 <button class="btn btn-success float-right">Perbarui</button>
                             </form>
                         </div>
@@ -95,7 +94,8 @@
             </div>
 
             {{-- MODAL DELETE --}}
-            <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+            <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label"
+                aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -107,7 +107,7 @@
                             <form method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button  class="btn btn-danger">Ya</button>
+                                <button class="btn btn-danger">Ya</button>
                             </form>
                             <button type="button" class="btn btn-warning" data-dismiss="modal">Tidak, batalkan</button>
                         </div>
@@ -124,18 +124,35 @@
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{route('akun-pengguna.datatables')}}',
+                ajax: '{{ route('akun-pengguna.datatables') }}',
                 columns: [
-                    { data: 'username', name: 'username' },
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'id_grup', name: 'id_grup' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'username',
+                        name: 'username'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'id_grup',
+                        name: 'id_grup'
+                    },
                 ]
             });
         });
 
-        $('#edit-modal').on('show.bs.modal', function (event) {
+        $('#edit-modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var submit = button.data('submit')
             var username = button.data('username')
@@ -149,10 +166,10 @@
             modal.find('.modal-body #username').val(username)
             modal.find('.modal-body #name').val(name)
             modal.find('.modal-body #email').val(email)
-            modal.find('.modal-body #id_grup option[value='+id_grup+']').attr('selected','selected')
+            modal.find('.modal-body #id_grup option[value=' + id_grup + ']').attr('selected', 'selected')
         });
 
-        $('#delete-modal').on('show.bs.modal', function (event) {
+        $('#delete-modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var name = button.data('name')
             var submit = button.data('submit')
