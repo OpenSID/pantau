@@ -32,4 +32,11 @@ class Akses extends Model
     {
         return $this->belongsTo(Desa::class);
     }
+
+    public static function bersihkan()
+    {
+        $desa_id = self::latest('tgl')->get()->unique('desa_id')->toArray();
+
+        return self::whereNotIn('id', array_column($desa_id, 'id'))->delete();
+    }
 }

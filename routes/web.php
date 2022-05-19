@@ -5,6 +5,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\AksesController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,7 @@ Route::prefix('laporan')
 
 // wilayah
 Route::prefix('wilayah')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/', WilayahController::class);
     });
@@ -68,4 +70,11 @@ Route::prefix('review')
     ->group(function () {
         Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
+    });
+
+// akses
+Route::prefix('akses')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('bersihkan', AksesController::class);
     });
