@@ -18,15 +18,15 @@ class ProfileController extends Controller
     {
         $request->validate([
             'username' => 'required|max:255',
-            'name' => 'required|max:255',
-            'email' => 'required|max:255',
+            'name'     => 'required|max:255',
+            'email'    => 'required|max:255',
         ]);
 
         User::where('id', Auth::user()->id)
             ->update([
-                'username'=>$request->username,
-                'name'=>$request->name,
-                'email'=>$request->email
+                'username' => $request->username,
+                'name'     => $request->name,
+                'email'    => $request->email
             ]);
 
         return redirect()->back()->withAlert('Berhasil diperbarui');
@@ -45,7 +45,7 @@ class ProfileController extends Controller
 
         User::where('id', Auth::user()->id)
             ->update([
-                'password'=>Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
 
         return redirect()->back()->withAlert('Berhasil diperbarui');
