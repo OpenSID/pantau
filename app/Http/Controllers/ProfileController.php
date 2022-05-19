@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminController extends Controller
+class ProfileController extends Controller
 {
-    public function profile()
+    public function index()
     {
         return view('admin.profile');
     }
 
-    public function profileUpdate(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'username' => 'required|max:255',

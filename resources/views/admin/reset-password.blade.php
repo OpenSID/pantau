@@ -9,9 +9,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            @if(session('alert'))
+            @if (session('alert'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{session('alert')}}
+                    {{ session('alert') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -32,19 +32,21 @@
             @endif
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <form method="post" action="{{url('admin/reset-password')}}">
+                    <form method="post" action="{{ url('profile/reset-password') }}">
                         @csrf
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" name="username" class="form-control" value="{{Auth::user()->username}}" readonly>
+                            <input type="text" name="username" class="form-control" value="{{ Auth::user()->username }}"
+                                readonly>
                         </div>
                         <div class="form-group">
                             <label>Nama</label>
-                            <input type="text" name="name" class="form-control" value="{{Auth::user()->name}}" readonly>
+                            <input type="text" name="name" class="form-control" value="{{ Auth::user()->name }}" readonly>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="{{Auth::user()->email}}" readonly>
+                            <input type="email" name="email" class="form-control" value="{{ Auth::user()->email }}"
+                                readonly>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

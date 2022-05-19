@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
@@ -80,12 +80,12 @@ Route::prefix('akses')
         Route::get('bersihkan', AksesController::class);
     });
 
-Route::prefix('admin')
+Route::prefix('profile')
     ->middleware('auth')
     ->group(function () {
-        Route::get('profile', [AdminController::class, 'profile']);
-        Route::post('profile', [AdminController::class, 'profileUpdate']);
-        Route::get('reset-password', [AdminController::class, 'resetPassword']);
-        Route::post('reset-password', [AdminController::class, 'resetPasswordUpdate']);
+        Route::get('/', [ProfileController::class, 'index']);
+        Route::post('update', [ProfileController::class, 'update']);
+        Route::get('reset-password', [ProfileController::class, 'resetPassword']);
+        Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
     });
 
