@@ -243,7 +243,7 @@ return [
         ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Dashboard',
-            'url'          => 'dashboard',
+            'url'          => '/',
             'icon'         => 'fas fa-tachometer-alt',
         ],
         [
@@ -295,13 +295,18 @@ return [
 
 
         // Settings
-        ['header'          => 'account_settings'],
         [
+            'header'       => 'account_settings',
+            'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
             'text'         => 'profile',
             'url'          => 'admin/settings',
             'icon'         => 'fas fa-fw fa-user',
         ],
         [
+            'can'          => 'is-admin',
             'text'         => 'change_password',
             'url'          => 'admin/settings',
             'icon'         => 'fas fa-fw fa-lock',
