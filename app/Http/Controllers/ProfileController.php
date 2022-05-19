@@ -11,7 +11,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('admin.profile');
+        return view('profile.index');
     }
 
     public function update(Request $request)
@@ -34,7 +34,7 @@ class ProfileController extends Controller
 
     public function resetPassword()
     {
-        return view('admin.reset-password');
+        return view('profile.reset-password');
     }
 
     public function resetPasswordUpdate(Request $request)
