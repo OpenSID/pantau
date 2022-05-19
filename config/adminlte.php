@@ -243,7 +243,7 @@ return [
         ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Dashboard',
-            'url'          => 'dashboard',
+            'url'          => '/',
             'icon'         => 'fas fa-tachometer-alt',
         ],
         [
@@ -293,6 +293,12 @@ return [
             ],
         ],
         [
+            'can'          => 'is-admin',
+            'text'         => 'Bersihkan Data Akses',
+            'url'          => 'akses/bersihkan',
+            'icon'         => 'fas fa-recycle',
+        ],
+        [
             'text'         => 'Akun Pengguna',
             'url'          => 'akun-pengguna',
             'icon'         => 'fas fa-users',
@@ -300,15 +306,20 @@ return [
 
 
         // Settings
-        ['header'          => 'account_settings'],
         [
+            'header'       => 'account_settings',
+            'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
             'text'         => 'profile',
-            'url'          => 'admin/settings',
+            'url'          => 'profile',
             'icon'         => 'fas fa-fw fa-user',
         ],
         [
+            'can'          => 'is-admin',
             'text'         => 'change_password',
-            'url'          => 'admin/settings',
+            'url'          => 'profile/reset-password',
             'icon'         => 'fas fa-fw fa-lock',
         ],
     ],

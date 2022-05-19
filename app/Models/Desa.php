@@ -36,7 +36,7 @@ class Desa extends Model
 
     /**
      * Define a many-to-many relationship.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function notifikasi()
@@ -133,7 +133,7 @@ class Desa extends Model
 
     /**
      * Set opensid valid attribute.
-     * 
+     *
      * @param mixed $value
      * @return void
      */
@@ -342,5 +342,10 @@ class Desa extends Model
         if (!is_local($value['url']) || !is_local($value['ip_address'])) {
             $this->attributes['tgl_akses_hosting'] = now();
         }
+    }
+
+    public static function hapusNonaktifTidakTerdaftar()
+    {
+        return DB::raw("DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2");
     }
 }
