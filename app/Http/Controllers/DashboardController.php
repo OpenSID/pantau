@@ -20,6 +20,7 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
+            'desaBaru'   => $this->desa->desaBaru()->count(),
         ]);
     }
 

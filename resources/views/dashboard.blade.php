@@ -103,6 +103,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Desa baru dalam 7 hari terakhir</h3>
                     <div class="card-tools">
+                        <span data-toggle="tooltip" title="{{ $desaBaru }} Desa Baru" class="badge badge-primary">{{ $desaBaru }}</span>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-plus"></i>
                         </button>
