@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Tambah Pengguna Baru')
+@section('title', 'Tambah Pengguna')
 
 @section('content_header')
-    <h1>Tambah Pengguna Baru</h1>
+    <h1>Tambah Pengguna</h1>
 @stop
 
 @section('content')
