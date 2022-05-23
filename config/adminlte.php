@@ -298,17 +298,22 @@ return [
             'url'          => 'akses/bersihkan',
             'icon'         => 'fas fa-recycle',
         ],
+
+        // Manajemen Pengguna
+        [
+            'header'       => 'manajemen_pengguna',
+            'can'          => 'is-admin',
+        ],
         [
             'can'          => 'is-admin',
-            'text'         => 'Akun Pengguna',
+            'text'         => 'Pengguna',
             'url'          => 'akun-pengguna',
             'icon'         => 'fas fa-users',
         ],
 
-
         // Settings
         [
-            'header'       => 'account_settings',
+            'header'       => 'pengaturan',
             'can'          => 'is-admin',
         ],
         [
