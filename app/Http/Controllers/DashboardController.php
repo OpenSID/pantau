@@ -19,8 +19,9 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard', [
-            'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
-            'desaBaru'   => $this->desa->desaBaru()->count(),
+            'jumlahDesa'      => $this->desa->jumlahDesa()->get()->first(),
+            'desaBaru'        => $this->desa->desaBaru()->count(),
+            'kabupatenKosong' => collect($this->desa->kabupatenKosong())->count(),
         ]);
     }
 
