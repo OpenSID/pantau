@@ -3,12 +3,12 @@
 @section('title', 'Profile')
 
 @section('content_header')
-    <h1>Profile</h1>
+    <h1>Profil<small class="font-weight-light ml-1 text-md">Data Profil</small></h1>
 @stop
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             @if (session('alert'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('alert') }}

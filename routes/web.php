@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\AksesController;
+use App\Http\Controllers\PenggunaController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -89,3 +90,8 @@ Route::prefix('profile')
         Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
     });
 
+Route::middleware('auth')
+    ->group(function () {
+        Route::resource('akun-pengguna', PenggunaController::class);
+        Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
+    });
