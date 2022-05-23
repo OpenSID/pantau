@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <div class="card card-outline card-info col-lg-9">
+    <div class="card card-outline card-info col-lg-12">
         <div class="card-header">
             <h3 class="card-title">Desa Pengguna</h3>
         </div>
@@ -24,9 +24,6 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -40,9 +37,6 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -56,9 +50,6 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -107,11 +98,12 @@
     </div>
     <!-- /.card -->
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="card collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Desa baru dalam 7 hari terakhir</h3>
                     <div class="card-tools">
+                        <span data-toggle="tooltip" title="{{ $desaBaru }} Desa Baru" class="badge badge-primary">{{ $desaBaru }}</span>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -140,7 +132,7 @@
             </div>
         </div>
     </div>
-    <div class="card col-lg-9">
+    <div class="card col-lg-12">
         <div class="card-header">
             <h3 class="card-title">Kabupaten Pengguna</h3>
         </div>
@@ -157,9 +149,6 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -173,9 +162,6 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -189,9 +175,6 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -200,11 +183,12 @@
     </div>
     <!-- /.card -->
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="card collapsed-card">
                 <div class="card-header">
                     <h3 class="card-title">Kabupaten yang belum ada desa OpenSID</h3>
                     <div class="card-tools">
+                        <span data-toggle="tooltip" title="{{ $kabupatenKosong }} Kabupaten Belum ada OpenSID" class="badge badge-primary">{{ $kabupatenKosong }}</span>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-plus"></i>
                         </button>

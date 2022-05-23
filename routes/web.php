@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AksesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\NotifikasiController;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +62,7 @@ Route::prefix('laporan')
 
 // wilayah
 Route::prefix('wilayah')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/', WilayahController::class);
     });
@@ -71,10 +75,32 @@ Route::prefix('review')
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
     });
 
+// akses
+Route::prefix('akses')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('bersihkan', AksesController::class);
+    });
+
 // notifikasi
 Route::middleware('auth')
     ->group(function () {
         Route::resource('notifikasi', NotifikasiController::class);
         Route::get('notifikasi/edit/{id}', [NotifikasiController::class, 'edit'])->name('notifikasi.edit');
         Route::post('notifikasi/update/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
+    });
+
+Route::prefix('profile')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [ProfileController::class, 'index']);
+        Route::post('update', [ProfileController::class, 'update']);
+        Route::get('reset-password', [ProfileController::class, 'resetPassword']);
+        Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
+    });
+
+Route::middleware('auth')
+    ->group(function () {
+        Route::resource('akun-pengguna', PenggunaController::class);
+        Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
     });

@@ -18,7 +18,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Aksi</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
@@ -54,11 +53,6 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    data: null,
                     searchable: false,
                     orderable: false
                 },
