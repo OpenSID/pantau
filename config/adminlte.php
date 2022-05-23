@@ -299,6 +299,7 @@ return [
             'icon'         => 'fas fa-recycle',
         ],
         [
+            'can'          => 'is-admin',
             'text'         => 'Akun Pengguna',
             'url'          => 'akun-pengguna',
             'icon'         => 'fas fa-users',
