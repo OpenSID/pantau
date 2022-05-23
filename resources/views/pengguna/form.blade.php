@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <ul>
@@ -22,13 +22,15 @@
                 </div>
             @endif
             <div class="card card-outline card-primary">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="{{ route('akun-pengguna.index') }}" class="btn btn-primary float-right">Data
-                                Pengguna</a>
+                <div class="card-header">
+                    <div class="float-left">
+                        <div class="btn-group">
+                            <a href="{{ route('akun-pengguna.index') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                            </a>
                         </div>
                     </div>
+                </div>
+                <div class="card-body">
                     <form method="post" action="{{ route('akun-pengguna.store') }}">
                         @csrf
                         <div class="form-group">
@@ -51,7 +53,8 @@
                         </div>
 
                         <div class="form-group">
-                            <button class="btn btn-success">Simpan</button>
+                            <button class="btn btn-danger">Batal</button>
+                            <button class="btn btn-success float-right">Simpan</button>
                         </div>
                     </form>
                 </div>
