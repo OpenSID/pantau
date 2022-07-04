@@ -19,11 +19,11 @@ class CreateDesaTable extends Migration
             $table->string('kode_desa')->nullable()->index();
             $table->string('kode_pos', 6);
             $table->string('nama_kecamatan', 100)->index();
-            $table->integer('kode_kecamatan')->index();
+            $table->string('kode_kecamatan')->index();
             $table->string('nama_kabupaten', 100)->index();
-            $table->integer('kode_kabupaten')->index();
+            $table->string('kode_kabupaten')->index();
             $table->string('nama_provinsi', 100)->index();
-            $table->integer('kode_provinsi')->index();
+            $table->string('kode_provinsi')->index();
             $table->string('lat', 20);
             $table->string('lng', 20);
             $table->string('alamat_kantor', 200);

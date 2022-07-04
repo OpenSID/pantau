@@ -30,12 +30,20 @@ class DesaSeeder extends Seeder
                     })
                     ->on(DB::raw("lower(d.nama_provinsi)"), '=', DB::raw("lower(k.nama_prov)"));
             })
-            ->update(['d.kode_desa' => DB::raw('k.kode_desa')]);
+            ->update([
+                'd.kode_desa' => DB::raw('k.kode_desa'),
+                'd.kode_kecamatan' => DB::raw('k.kode_kec'),
+                'd.kode_kabupaten' => DB::raw('k.kode_kab'),
+                'd.kode_provinsi' => DB::raw('k.kode_prov'),
+            ]);
 
         DB::table('desa')->where('tgl_rekam_lokal', '<', '0000-01-01 00:00:00')->update(['tgl_rekam_lokal' => null]);
         DB::table('desa')->where('tgl_rekam_hosting', '<', '0000-01-01 00:00:00')->update(['tgl_rekam_hosting' => null]);
         DB::table('desa')->where('tgl_akses_lokal', '<', '0000-01-01 00:00:00')->update(['tgl_akses_lokal' => null]);
         DB::table('desa')->where('tgl_akses_hosting', '<', '0000-01-01 00:00:00')->update(['tgl_akses_hosting' => null]);
         DB::table('desa')->update(['created_at' => now()]);
+
+        // hapus duplikat desa
+        DB::raw("delete t1 from desa t1 inner join desa t2 where t1.id < t2.id and t1.kode_desa = t2.kode_desa");
     }
 }

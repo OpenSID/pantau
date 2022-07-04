@@ -7,9 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class TrackRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function authorize()
     {
@@ -17,14 +15,10 @@ class TrackRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function rules()
     {
-        $this->mergeRequestAttribute();
-
         return [
             "nama_desa" => ["required", "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
             "kode_desa" => [
@@ -61,6 +55,49 @@ class TrackRequest extends FormRequest
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function prepareForValidation()
+    {
+        $type = $this->isLocal($this->only(['url', 'ip_address']));
+
+        // Merge request attribute.
+        $this->merge([
+            // Request attribute for table desa.
+            'kode_desa'         => kode_wilayah($this->kode_desa),
+            'kode_kecamatan'    => kode_wilayah($this->kode_kecamatan),
+            'kode_kabupaten'    => kode_wilayah($this->kode_kabupaten),
+            'kode_provinsi'     => kode_wilayah($this->kode_provinsi),
+            'opensid_valid'     => preg_replace("/-premium.*|pasca-|-pasca/", '', $this->version),
+            "url_{$type}"       => $this->url,
+            "ip_{$type}"        => $this->ip_address,
+            "versi_{$type}"     => $this->version,
+            "tgl_akses_{$type}" => now(),
+
+            // Request attribute for table akses.
+            'url_referrer'      => $this->url,
+            'request_uri'       => $this->getRequestUri(),
+            'client_ip'         => $this->ip(),
+            'external_ip'       => $this->external_ip ?: $this->ip(),
+            'opensid_version'   => $this->version,
+            'tgl'               => now(),
+        ]);
+    }
+
+    /**
+     * Periksa lokal/hosting attribute.
+     * 
+     * @param array $attributes
+     * @return string
+     */
+    protected function isLocal(array $attributes)
+    {
+        return is_local($attributes['url']) || is_local($attributes['ip_address'])
+            ? 'lokal'
+            : 'hosting';
+    }
+
+    /**
      * List abikan domain.
      * 
      * @return string
@@ -71,68 +108,52 @@ class TrackRequest extends FormRequest
     }
 
     /**
-     * Merge request to attribute.
-     * 
-     * @return $this
+     * Request where data attribute.
+     *
+     * @return array
      */
-    protected function mergeRequestAttribute()
+    public function requestWhere()
     {
-        // Merge request attribute.
-        $this->merge([
-            // Request attribute for table desa.
-            'opensid_valid' => preg_replace("/-premium.*|pasca-|-pasca/", '', $this->version),
-            'ip_lokal' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'ip_hosting' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'versi_lokal' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-                'version' => $this->version,
-            ],
-            'versi_hosting' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-                'version' => $this->version,
-            ],
-            'url_lokal' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'url_hosting' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'tgl_rekam_lokal' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'tgl_rekam_hosting' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'tgl_akses_lokal' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-            'tgl_akses_hosting' => [
-                'url' => $this->url,
-                'ip_address' => $this->ip_address,
-            ],
-
-            // Request attribute for table akses.
-            'url_referrer' => $this->url,
-            'request_uri' => $this->getRequestUri(),
-            'client_ip' => $this->ip(),
-            'external_ip' => $this->external_ip ?: $this->ip(),
-            'opensid_version' => $this->version,
-            'tgl' => now(),
+        return $this->only([
+            'kode_desa', 'kode_kecamatan', 'kode_kabupaten', 'kode_provinsi'
         ]);
+    }
 
-        return $this;
+    /**
+     * Request data attribute.
+     *
+     * @return array
+     */
+    public function requestData()
+    {
+        if (isset($this->tgl_akses_lokal)) {
+            $this->merge(['tgl_rekam_lokal' => $this->tgl_akses_lokal]);
+        } else {
+            $this->merge(['tgl_rekam_hosting' => $this->tgl_akses_hosting]);
+        }
+
+        return $this->only([
+            'kode_pos',
+            'nama_desa',
+            'nama_kecamatan',
+            'nama_kabupaten',
+            'nama_provinsi',
+            'lat',
+            'lng',
+            'alamat_kantor',
+            'ip_lokal',
+            'ip_hosting',
+            'versi_lokal',
+            'versi_hosting',
+            'tgl_rekam_lokal',
+            'tgl_rekam_hosting',
+            'tgl_akses_lokal',
+            'tgl_akses_hosting',
+            'url_lokal',
+            'url_hosting',
+            'opensid_valid',
+            'email_desa',
+            'telepon',
+        ]);
     }
 }

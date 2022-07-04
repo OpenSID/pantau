@@ -26,23 +26,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->bootLogQuery();
-    }
-
-    protected function bootLogQuery()
-    {
-        if ($this->app->environment('local')) {
-            Event::listen(QueryExecuted::class, function ($query) {
-                $bindings = collect($query->bindings)->map(function ($param) {
-                    if (is_numeric($param)) {
-                        return $param;
-                    } else {
-                        return "'$param'";
-                    }
-                });
-
-                $this->app->log->debug(Str::replaceArray('?', $bindings->toArray(), $query->sql));
-            });
-        }
     }
 }

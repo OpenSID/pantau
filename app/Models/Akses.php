@@ -13,9 +13,6 @@ class Akses extends Model
     protected $table = 'akses';
 
     /** {@inheritdoc} */
-    public $timestamps = false;
-
-    /** {@inheritdoc} */
     protected $fillable = ['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'];
 
     /** {@inheritdoc} */

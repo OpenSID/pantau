@@ -7,6 +7,7 @@ use App\Http\Requests\TrackRequest;
 use App\Models\Akses;
 use App\Models\Desa;
 use App\Models\Notifikasi;
+use App\Models\NotifikasiDesa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -17,44 +18,28 @@ class TrackController extends Controller
         DB::beginTransaction();
 
         try {
-            $desa = Desa::updateOrCreate(
-                $request->only(['nama_desa', 'nama_kecamatan', 'nama_kabupaten', 'nama_provinsi']),
-                $request->only(
-                    [
-                        'kode_pos',
-                        'kode_desa',
-                        'kode_kecamatan',
-                        'kode_kabupaten',
-                        'kode_provinsi',
-                        'lat',
-                        'lng',
-                        'alamat_kantor',
-                        // 'jenis',
-                        'ip_lokal',
-                        'ip_hosting',
-                        'versi_lokal',
-                        'versi_hosting',
-                        'tgl_rekam_lokal',
-                        'tgl_rekam_hosting',
-                        'tgl_akses_lokal',
-                        'tgl_akses_hosting',
-                        'url_lokal',
-                        'url_hosting',
-                        'opensid_valid',
-                        'email_desa',
-                        'telepon',
-                    ]
-                )
+            $desa = Desa::query()->updateOrCreate(
+                $request->requestWhere(),
+                $request->requestData()
             );
 
-            Akses::create(
-                $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
-            );
+            $akses = Akses::query()->where('desa_id', $desa->id)->whereDate('tgl', date('Y-m-d'))->first();
 
-            $notif = Notifikasi::getSemuaNotif($desa->id);
-            Notifikasi::nonAktifkan($notif, $desa->id);
+            if ($akses) {
+                $akses->tgl = $request->tgl;
+                $akses->save();
+            } else {
+                Akses::create(
+                    $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
+                );
+            }
+
+            $notifikasi = Notifikasi::semuaNotifDesa($desa->id);
+            NotifikasiDesa::nonAktifkan(collect($notifikasi), $desa->id);
 
             DB::commit();
+
+            return response()->json($notifikasi);
 
         } catch (\Exception $e) {
             Log::error($e);
@@ -62,7 +47,5 @@ class TrackController extends Controller
 
             return response()->json('Failed', 422);
         }
-
-        return response()->json($notif);
     }
 }

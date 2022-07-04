@@ -270,7 +270,6 @@ return [
             ],
         ],
         [
-            'can'          => 'is-admin',
             'text'         => 'Wilayah Administratif',
             'url'          => 'wilayah',
             'icon'         => 'fas fa-map',
@@ -297,11 +296,6 @@ return [
             'text'         => 'Bersihkan Data Akses',
             'url'          => 'akses/bersihkan',
             'icon'         => 'fas fa-recycle',
-        ],
-        [
-            'text'         => 'Notifikasi',
-            'url'          => 'notifikasi',
-            'icon'         => 'fa fa-rss-square',
         ],
 
         // Manajemen Pengguna
