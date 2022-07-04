@@ -76,6 +76,15 @@ Route::prefix('akses')
         Route::get('bersihkan', AksesController::class);
     });
 
+// notifikasi
+Route::middleware('auth')
+    ->group(function () {
+        Route::resource('notifikasi', NotifikasiController::class);
+        Route::get('notifikasi/edit/{id}', [NotifikasiController::class, 'edit'])->name('notifikasi.edit');
+        Route::post('notifikasi/update/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
+    });
+
+
 Route::prefix('profile')
     ->middleware('auth')
     ->group(function () {

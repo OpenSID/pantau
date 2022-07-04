@@ -12,10 +12,10 @@ class NotifikasiController extends Controller
     {
         $data = Notifikasi::orderBy('id', 'desc');
         return DataTables::of($data)
-            ->editColumn('isi', function($data){
+            ->editColumn('isi', function ($data) {
                 return htmlspecialchars_decode(stripslashes($data->isi));
             })
-            ->addColumn('action', function ($data){
+            ->addColumn('action', function ($data) {
                 $edit = '<a class="btn btn-warning" href="'.route('notifikasi.edit', ['id'=>$data->id]).'">Ubah</a>';
                 $delete = '<a class="btn btn-danger" data-toggle="modal" data-target="#delete-modal" data-submit="'.url('notifikasi/'.$data->id).'" data-judul="'.$data->judul.'">Hapus</a>';
                 return '<div class="btn btn-group">'.$edit.$delete.'</div>';
