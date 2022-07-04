@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Desa extends Model
 {
@@ -72,13 +73,9 @@ class Desa extends Model
      */
     public function scopeDesaBaru($query)
     {
-        // return $query
-        //     ->select(['*'])
-        //     ->selectRaw("if(versi_lokal is null, `tgl_rekam_hosting`, if(versi_hosting is null, `tgl_rekam_lokal`, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam")
-        //     ->whereRaw("(select if(versi_lokal is null, tgl_rekam_hosting, if(versi_hosting is null, tgl_rekam_lokal, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam) >= date(now()) - interval 7 day")
-        //     ->orderBy("tgl_rekam");
-
         return $query
+            ->select(['*'])
+            ->selectRaw("(CASE WHEN (tgl_rekam_lokal > tgl_rekam_hosting) THEN versi_lokal else versi_hosting end) as versi")
             ->where('created_at', '>=', now()->subDay(7));
     }
 
@@ -150,5 +147,10 @@ class Desa extends Model
     public static function hapusNonaktifTidakTerdaftar()
     {
         return DB::raw("DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2");
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        return $this->attributes['created_at'] = Carbon::parse($date)->format('d/m/Y');
     }
 }
