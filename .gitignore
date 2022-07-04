@@ -1,49 +1,16 @@
-.DS_Store
-
-application/cache/*
-!application/cache/index.html
-!application/cache/.htaccess
-
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
-
-user_guide/*
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
-installer
-
-# File vendor yang diperlukan
-!vendor/almasaeed2010/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css
-!vendor/almasaeed2010/adminlte/bower_components/font-awesome/css/font-awesome.min.css
-!vendor/almasaeed2010/adminlte/bower_components/ionicons/css/ionicons.min.css
-!vendor/almasaeed2010/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css
-!vendor/almasaeed2010/adminlte/dist/css/AdminLTE.min.css
-!vendor/almasaeed2010/adminlte/dist/css/skins/_all-skins.min.css
-!vendor/almasaeed2010/adminlte/plugins/pace/pace.min.css
-!vendor/almasaeed2010/adminlte/bower_components/jquery/dist/jquery.min.js
-!vendor/almasaeed2010/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js
-!vendor/almasaeed2010/adminlte/dist/js/adminlte.min.js
-
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
-
-## Sublime Text cache files
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-
-## Configuration files
-config/*
-## Coba folder
-coba/*
-## folder upload
-uploads/*
-!uploads/index.html
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+composer.lock
