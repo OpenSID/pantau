@@ -11,6 +11,7 @@ use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
+use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +106,7 @@ Route::prefix('kabupaten')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [KabupatenController::class, 'index']);
+        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
     });
 
 // Wilayah Kecamatan

@@ -21,7 +21,7 @@ class Region extends Model
     ];
 
     /**
-     * Scope a query daftar kabupaten.
+     * Scope a query daftar provinsi.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -29,5 +29,16 @@ class Region extends Model
     public function scopeProvinsi($query)
     {
         return $query->where('parent_code', 0);
+    }
+
+    /**
+     * Scope a query daftar kabupaten.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKabupaten($query)
+    {
+        return $query->whereRaw('LENGTH(parent_code) = 2');
     }
 }
