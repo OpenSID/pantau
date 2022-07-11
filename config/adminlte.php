@@ -306,19 +306,25 @@ return [
         [
             'can'          => 'is-admin',
             'text'         => 'Provinsi',
-            'url'          => 'wilayah/provinsi',
+            'url'          => 'provinsi',
             'icon'         => 'fas fa-users',
         ],
         [
             'can'          => 'is-admin',
             'text'         => 'Kabupaten',
-            'url'          => 'wilayah/kabupaten',
+            'url'          => 'kabupaten',
             'icon'         => 'fas fa-users',
         ],
         [
             'can'          => 'is-admin',
             'text'         => 'Kecamatan',
-            'url'          => 'wilayah/kabupaten',
+            'url'          => 'kecamatan',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Desa',
+            'url'          => 'desa',
             'icon'         => 'fas fa-users',
         ],
 
