@@ -298,9 +298,33 @@ return [
             'icon'         => 'fas fa-recycle',
         ],
 
+        // Data Wilayah
+        [
+            'header'       => 'wilayah',
+            'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Provinsi',
+            'url'          => 'wilayah/provinsi',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kabupaten',
+            'url'          => 'wilayah/kabupaten',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kecamatan',
+            'url'          => 'wilayah/kabupaten',
+            'icon'         => 'fas fa-users',
+        ],
+
         // Manajemen Pengguna
         [
-            'header'       => 'manajemen_pengguna',
+            'header'       => 'pengguna',
             'can'          => 'is-admin',
         ],
         [
