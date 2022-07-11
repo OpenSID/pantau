@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 
-class KabupatenController extends Controller
+class KecamatanController extends Controller
 {
     public function index()
     {
-        return view('admin.wilayah.kabupaten.index');
+        return view('admin.wilayah.kecamatan.index');
     }
 
     public function datatables(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::kabupaten()->get())->addIndexColumn()->make(true);
+            return DataTables::of(Region::kecamatan()->get())->addIndexColumn()->make(true);
         }
 
         abort(404);

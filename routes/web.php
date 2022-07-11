@@ -12,6 +12,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
+use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +115,7 @@ Route::prefix('kecamatan')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [KecamatanController::class, 'index']);
+        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
     });
 
 // Wilayah Desa / Keluarahan

@@ -41,4 +41,15 @@ class Region extends Model
     {
         return $query->whereRaw('LENGTH(parent_code) = 2');
     }
+
+    /**
+     * Scope a query daftar kecamatan.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKecamatan($query)
+    {
+        return $query->whereRaw('LENGTH(parent_code) = 5');
+    }
 }
