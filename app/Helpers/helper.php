@@ -3,7 +3,7 @@
 if (! function_exists('kode_wilayah')) {
     /**
      * Kode wilayah dengan titik dari 5201142005 --> 52.01.14.2005
-     * 
+     *
      * @param mixed $kode_wilayah
      * @return string
      */
@@ -20,7 +20,7 @@ if (! function_exists('kode_wilayah')) {
 if (! function_exists('is_local')) {
     /**
      * Validasi local ip.
-     * 
+     *
      * @param mixed $url
      * @return bool
      */
@@ -31,5 +31,25 @@ if (! function_exists('is_local')) {
         } else {
             return false;
         }
+    }
+}
+
+if (! function_exists('fixDomainName')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return string
+     */
+    function fixDomainName($url = '')
+    {
+        $strToLower = strtolower(trim($url));
+        $httpPregReplace = preg_replace('/^http:\/\//i', '', $strToLower);
+        $httpsPregReplace = preg_replace('/^https:\/\//i', '', $httpPregReplace);
+        $wwwPregReplace = preg_replace('/^www\./i', '', $httpsPregReplace);
+        $explodeToArray = explode('/', $wwwPregReplace);
+        $finalDomainName = trim($explodeToArray[0]);
+
+        return $finalDomainName;
     }
 }
