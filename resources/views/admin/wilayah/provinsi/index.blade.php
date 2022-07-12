@@ -15,8 +15,9 @@
                         <table class="table" id="datatable">
                             <thead>
                                 <tr>
-                                    <th width="10%" nowrap>Kode Provinsi</th>
-                                    <th>Nama Provinsi</th>
+                                    <th width="5%" nowrap>NO</th>
+                                    <th width="20%" nowrap>KODE WILAYAH</th>
+                                    <th>NAMA WILAYAH</th>
                                 </tr>
                             </thead>
                         </table>
@@ -34,6 +35,11 @@
                 serverSide: true,
                 ajax: "{{ route('provinsi.datatables') }}",
                 columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        searchable: false,
+                        orderable: false
+                    }, {
                         data: 'region_code',
                         name: 'region_code'
                     },
