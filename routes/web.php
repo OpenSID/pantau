@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
@@ -123,4 +124,5 @@ Route::prefix('desa')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [DesaController::class, 'index']);
+        Route::get('/datatables', [DesaController::class, 'datatables'])->name('desa.datatables');
     });

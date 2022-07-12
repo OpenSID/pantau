@@ -52,4 +52,15 @@ class Region extends Model
     {
         return $query->whereRaw('LENGTH(parent_code) = 5');
     }
+
+    /**
+     * Scope a query daftar desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDesa($query)
+    {
+        return $query->whereRaw('LENGTH(parent_code) = 8');
+    }
 }
