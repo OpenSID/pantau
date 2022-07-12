@@ -25,16 +25,16 @@ class Region extends Model
      *
      * @var array
      */
-    protected $with = ['childs'];
+    protected $with = ['parent'];
 
     /**
      * Define a one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function childs()
+    public function parent()
     {
-        return $this->hasMany(self::class, 'parent_code', 'region_code');
+        return $this->hasMany(self::class, 'region_code', 'parent_code');
     }
 
     /**
