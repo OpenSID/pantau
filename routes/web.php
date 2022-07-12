@@ -124,5 +124,9 @@ Route::prefix('desa')
     ->middleware('auth')
     ->group(function () {
         Route::get('/', [DesaController::class, 'index']);
-        Route::get('/datatables', [DesaController::class, 'datatables'])->name('desa.datatables');
+        Route::get('/create', [DesaController::class, 'create']);
+        Route::post('/store', [DesaController::class, 'store']);
+        Route::get('/edit/{$desa}', [DesaController::class, 'edit']);
+        Route::post('/update/{$desa}', [DesaController::class, 'update']);
+        Route::delete('/destroy/{$desa}', [DesaController::class, 'destroy']);
     });

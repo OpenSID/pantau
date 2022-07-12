@@ -42,7 +42,7 @@
                 serverSide: true,
                 searchable: true,
                 orderable: true,
-                ajax: "{{ route('desa.datatables') }}",
+                ajax: "{{ url('desa') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
