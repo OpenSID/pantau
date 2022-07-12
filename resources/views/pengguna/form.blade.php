@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Tambah Provinsi')
+@section('title', 'Tambah Pengguna')
 
 @section('content_header')
-    <h1>Provinsi<small class="font-weight-light ml-1 text-md">Tambah Provinsi</small></h1>
+    <h1>Pengguna<small class="font-weight-light ml-1 text-md">Tambah Pengguna</small></h1>
 @stop
 
 @section('content')
@@ -25,13 +25,14 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ route('akun-Provinsi.index') }}" class="btn btn-sm btn-block btn-secondary"><i class="fas fa-arrow-left"></i>
+                            <a href="{{ route('akun-pengguna.index') }}" class="btn btn-sm btn-block btn-secondary"><i
+                                    class="fas fa-arrow-left"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('akun-Provinsi.store') }}">
+                    <form method="post" action="{{ route('akun-pengguna.store') }}">
                         @csrf
                         <div class="form-group">
                             <label>Group <span class="text-danger">*</span></label>
