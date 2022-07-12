@@ -16,9 +16,8 @@
                             <thead>
                                 <tr>
                                     <th width="5%" nowrap>NO</th>
-                                    <th width="10%" nowrap>KODE PROVINSI</th>
+                                    <th width="10%" nowrap>KODE WILAYAH</th>
                                     <th>NAMA PROVINSI</th>
-                                    <th width="10%" nowrap>KODE KABUPATEN</th>
                                     <th>NAMA KABUPATEN</th>
                                 </tr>
                             </thead>
@@ -45,16 +44,12 @@
                         orderable: false
                     },
                     {
-                        data: 'kode_provinsi',
-                        name: 'kode_provinsi'
+                        data: 'region_code',
+                        name: 'region_code'
                     },
                     {
                         data: 'nama_provinsi',
                         name: 'nama_provinsi'
-                    },
-                    {
-                        data: 'region_code',
-                        name: 'region_code'
                     },
                     {
                         data: 'region_name',

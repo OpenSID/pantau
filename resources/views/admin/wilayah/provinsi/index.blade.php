@@ -17,7 +17,7 @@
                                 <tr>
                                     <th width="5%" nowrap>NO</th>
                                     <th width="20%" nowrap>KODE WILAYAH</th>
-                                    <th>NAMA WILAYAH</th>
+                                    <th>PROVINSI</th>
                                 </tr>
                             </thead>
                         </table>

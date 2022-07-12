@@ -19,9 +19,6 @@ class KabupatenController extends Controller
         if ($request->ajax()) {
             return DataTables::of(Region::kabupaten()->get())
                 ->addIndexColumn()
-                ->addColumn('kode_provinsi', static function ($row) {
-                    return $row->parent->region_code;
-                })
                 ->addColumn('nama_provinsi', static function ($row) {
                     return $row->parent->region_name;
                 })
