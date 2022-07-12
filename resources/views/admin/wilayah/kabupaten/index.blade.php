@@ -44,16 +44,16 @@
                         orderable: false
                     },
                     {
-                        data: 'region_code',
-                        name: 'region_code'
+                        data: 'kode',
+                        name: 'kode'
                     },
                     {
-                        data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        data: 'provinsi',
+                        name: 'provinsi'
                     },
                     {
-                        data: 'region_name',
-                        name: 'region_name'
+                        data: 'kabupaten',
+                        name: 'kabupaten'
                     },
                 ],
                 order: [

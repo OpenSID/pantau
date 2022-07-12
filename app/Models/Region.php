@@ -21,23 +21,6 @@ class Region extends Model
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = ['parent'];
-
-    /**
-     * Define a one-to-one relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
-     */
-    public function parent()
-    {
-        return $this->hasOne(self::class, 'region_code', 'parent_code');
-    }
-
-    /**
      * Scope a query daftar provinsi.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -56,7 +39,15 @@ class Region extends Model
      */
     public function scopeKabupaten($query)
     {
-        return $query->whereRaw('LENGTH(parent_code) = 2');
+        return $query
+                ->select(
+                    'tbl_regions.id',
+                    'tbl_regions.region_code AS kode',
+                    'tbl_regions.region_name AS kabupaten',
+                    'prov.region_name AS provinsi'
+                )
+                ->leftJoin('tbl_regions AS prov', 'tbl_regions.parent_code', '=', 'prov.region_code')
+                ->whereRaw('LENGTH(tbl_regions.parent_code) = 2');
     }
 
     /**
@@ -67,7 +58,17 @@ class Region extends Model
      */
     public function scopeKecamatan($query)
     {
-        return $query->whereRaw('LENGTH(parent_code) = 5');
+        return $query
+                ->select(
+                    'tbl_regions.id',
+                    'tbl_regions.region_code AS kode',
+                    'tbl_regions.region_name AS kecamatan',
+                    'kab.region_name AS kabupaten',
+                    'prov.region_name AS provinsi',
+                )
+                ->join('tbl_regions AS kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
+                ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
+                ->whereRaw('LENGTH(tbl_regions.parent_code) = 5');
     }
 
     /**
@@ -78,6 +79,18 @@ class Region extends Model
      */
     public function scopeDesa($query)
     {
-        return $query->whereRaw('LENGTH(parent_code) = 8');
+        return $query
+                ->select(
+                    'tbl_regions.id',
+                    'tbl_regions.region_code AS kode',
+                    'tbl_regions.region_name AS desa',
+                    'kec.region_name AS kecamatan',
+                    'kab.region_name AS kabupaten',
+                    'prov.region_name AS provinsi',
+                )
+                ->join('tbl_regions AS kec', 'tbl_regions.parent_code', '=', 'kec.region_code')
+                ->join('tbl_regions AS kab', 'kec.parent_code', '=', 'kab.region_code')
+                ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
+                ->whereRaw('LENGTH(tbl_regions.parent_code) = 8');
     }
 }

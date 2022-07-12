@@ -17,7 +17,7 @@ class ProvinsiController extends Controller
     public function datatables(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::provinsi()->get())
+            return DataTables::of(Region::provinsi())
                 ->addIndexColumn()
                 ->make(true);
         }

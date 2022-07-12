@@ -46,24 +46,24 @@
                         orderable: false
                     },
                     {
-                        data: 'region_code',
-                        name: 'region_code'
+                        data: 'kode',
+                        name: 'kode'
                     },
                     {
-                        data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        data: 'provinsi',
+                        name: 'provinsi'
                     },
                     {
-                        data: 'nama_kabupaten',
-                        name: 'nama_kabupaten'
+                        data: 'kabupaten',
+                        name: 'kabupaten'
                     },
                     {
-                        data: 'nama_kecamatan',
-                        name: 'nama_kecamatan'
+                        data: 'kecamatan',
+                        name: 'kecamatan'
                     },
                     {
-                        data: 'region_name',
-                        name: 'region_name'
+                        data: 'desa',
+                        name: 'desa'
                     },
                 ],
                 order: [

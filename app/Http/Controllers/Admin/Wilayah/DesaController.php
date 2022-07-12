@@ -17,17 +17,8 @@ class DesaController extends Controller
     public function datatables(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::desa()->get())
+            return DataTables::of(Region::desa())
                 ->addIndexColumn()
-                ->addColumn('nama_provinsi', static function ($row) {
-                    return $row->parent->parent->parent->region_name;
-                })
-                ->addColumn('nama_kabupaten', static function ($row) {
-                    return $row->parent->parent->region_name;
-                })
-                ->addColumn('nama_kecamatan', static function ($row) {
-                    return $row->parent->region_name;
-                })
                 ->make(true);
         }
 
