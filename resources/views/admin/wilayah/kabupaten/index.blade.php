@@ -33,6 +33,8 @@
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                searchable: true,
+                orderable: true,
                 ajax: "{{ route('kabupaten.datatables') }}",
                 columns: [{
                         data: 'DT_RowIndex',
@@ -47,6 +49,9 @@
                         data: 'region_name',
                         name: 'region_name'
                     },
+                ],
+                order: [
+                    [1, 'asc']
                 ]
             });
         });
