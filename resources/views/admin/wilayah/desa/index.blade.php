@@ -10,12 +10,16 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
+                <div class="card-header with-border">
+                    <a href="{{ url('desa/create') }}" class="btn btn-primary btn-sm mb-3">Tambah Data</a>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table" id="datatable">
                             <thead>
                                 <tr>
                                     <th width="5%" nowrap>NO</th>
+                                    <th width="5%" nowrap>AKSI</th>
                                     <th width="10%" nowrap>KODE WILAYAH</th>
                                     <th>NAMA PROVINSI</th>
                                     <th>NAMA KABUPATEN</th>
@@ -46,6 +50,12 @@
                         orderable: false
                     },
                     {
+                        data: 'action',
+                        name: 'action',
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
                         data: 'kode',
                         name: 'kode'
                     },
@@ -67,7 +77,7 @@
                     },
                 ],
                 order: [
-                    [1, 'asc']
+                    [2, 'asc']
                 ]
             });
         });
