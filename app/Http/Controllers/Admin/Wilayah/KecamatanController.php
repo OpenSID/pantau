@@ -17,7 +17,21 @@ class KecamatanController extends Controller
     public function datatables(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::kecamatan()->get())->addIndexColumn()->make(true);
+            return DataTables::of(Region::kecamatan()->get())
+                ->addIndexColumn()
+                ->addColumn('kode_provinsi', static function ($row) {
+                    return $row->parent->parent->region_code;
+                })
+                ->addColumn('nama_provinsi', static function ($row) {
+                    return $row->parent->parent->region_name;
+                })
+                ->addColumn('kode_kabupaten', static function ($row) {
+                    return $row->parent->region_code;
+                })
+                ->addColumn('nama_kabupaten', static function ($row) {
+                    return $row->parent->region_name;
+                })
+                ->make(true);
         }
 
         abort(404);
