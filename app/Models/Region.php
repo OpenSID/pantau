@@ -28,13 +28,13 @@ class Region extends Model
     protected $with = ['parent'];
 
     /**
-     * Define a one-to-many relationship.
+     * Define a one-to-one relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
     public function parent()
     {
-        return $this->hasMany(self::class, 'region_code', 'parent_code');
+        return $this->hasOne(self::class, 'region_code', 'parent_code');
     }
 
     /**
