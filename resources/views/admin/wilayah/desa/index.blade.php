@@ -56,24 +56,24 @@
                         orderable: false
                     },
                     {
-                        data: 'kode',
-                        name: 'kode'
+                        data: 'kode_desa',
+                        name: 'kode_desa'
                     },
                     {
-                        data: 'provinsi',
-                        name: 'provinsi'
+                        data: 'nama_provinsi',
+                        name: 'nama_provinsi'
                     },
                     {
-                        data: 'kabupaten',
-                        name: 'kabupaten'
+                        data: 'nama_kabupaten',
+                        name: 'nama_kabupaten'
                     },
                     {
-                        data: 'kecamatan',
-                        name: 'kecamatan'
+                        data: 'nama_kecamatan',
+                        name: 'nama_kecamatan'
                     },
                     {
-                        data: 'desa',
-                        name: 'desa'
+                        data: 'nama_desa',
+                        name: 'nama_desa'
                     },
                 ],
                 order: [

@@ -126,7 +126,7 @@ Route::prefix('desa')
         Route::get('/', [DesaController::class, 'index']);
         Route::get('/create', [DesaController::class, 'create']);
         Route::post('/store', [DesaController::class, 'store']);
-        Route::get('/edit/{$desa}', [DesaController::class, 'edit']);
-        Route::post('/update/{$desa}', [DesaController::class, 'update']);
-        Route::delete('/destroy/{$desa}', [DesaController::class, 'destroy']);
+        Route::get('/edit/{id}', [DesaController::class, 'edit']);
+        Route::post('/update/{id}', [DesaController::class, 'update']);
+        Route::delete('/destroy/{id}', [DesaController::class, 'destroy']);
     });

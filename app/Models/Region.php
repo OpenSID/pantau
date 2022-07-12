@@ -28,7 +28,12 @@ class Region extends Model
      */
     public function scopeProvinsi($query)
     {
-        return $query->where('parent_code', 0);
+        return $query
+            ->select(
+                'tbl_regions.id',
+                'tbl_regions.region_code AS kode_provinsi',
+                'tbl_regions.region_name AS nama_provinsi',
+            )->where('parent_code', 0);
     }
 
     /**
@@ -42,9 +47,10 @@ class Region extends Model
         return $query
                 ->select(
                     'tbl_regions.id',
-                    'tbl_regions.region_code AS kode',
-                    'tbl_regions.region_name AS kabupaten',
-                    'prov.region_name AS provinsi'
+                    'tbl_regions.region_code AS kode_kabupaten',
+                    'tbl_regions.region_name AS nama_kabupaten',
+                    'prov.region_code AS kode_provinsi',
+                    'prov.region_name AS nama_provinsi'
                 )
                 ->leftJoin('tbl_regions AS prov', 'tbl_regions.parent_code', '=', 'prov.region_code')
                 ->whereRaw('LENGTH(tbl_regions.parent_code) = 2');
@@ -61,10 +67,12 @@ class Region extends Model
         return $query
                 ->select(
                     'tbl_regions.id',
-                    'tbl_regions.region_code AS kode',
-                    'tbl_regions.region_name AS kecamatan',
-                    'kab.region_name AS kabupaten',
-                    'prov.region_name AS provinsi',
+                    'tbl_regions.region_code AS kode_kecamatan',
+                    'tbl_regions.region_name AS nama_kecamatan',
+                    'kab.region_code AS kode_kabupaten',
+                    'kab.region_name AS nama_kabupaten',
+                    'prov.region_code AS kode_provinsi',
+                    'prov.region_name AS nama_provinsi',
                 )
                 ->join('tbl_regions AS kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
                 ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
@@ -82,11 +90,14 @@ class Region extends Model
         return $query
                 ->select(
                     'tbl_regions.id',
-                    'tbl_regions.region_code AS kode',
-                    'tbl_regions.region_name AS desa',
-                    'kec.region_name AS kecamatan',
-                    'kab.region_name AS kabupaten',
-                    'prov.region_name AS provinsi',
+                    'tbl_regions.region_code AS kode_desa',
+                    'tbl_regions.region_name AS nama_desa',
+                    'kec.region_code AS kode_kecamatan',
+                    'kec.region_name AS nama_kecamatan',
+                    'kab.region_code AS kode_kabupaten',
+                    'kab.region_name AS nama_kabupaten',
+                    'prov.region_code AS kode_provinsi',
+                    'prov.region_name AS nama_provinsi',
                 )
                 ->join('tbl_regions AS kec', 'tbl_regions.parent_code', '=', 'kec.region_code')
                 ->join('tbl_regions AS kab', 'kec.parent_code', '=', 'kab.region_code')

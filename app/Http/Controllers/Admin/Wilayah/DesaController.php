@@ -37,12 +37,29 @@ class DesaController extends Controller
     {
     }
 
-    public function edit(Region $desa)
+    public function edit($id)
     {
-        return view('admin.wilayah.desa.edit');
+        $desa = Region::desa()->findOrFail($id);
+        $daftarProvinsi = Region::provinsi()->pluck('nama_provinsi', 'kode_provinsi');
+        $daftarKabupaten = Region::kabupaten()->pluck('nama_kabupaten', 'kode_kabupaten');
+        $daftarKecamatan = Region::kecamatan()->pluck('nama_kecamatan', 'kode_kecamatan');
+
+        // dd(compact('desa'));
+        // dd(compact('desa', 'daftarProvinsi', 'daftarKabupaten', 'daftarKecamatan'));
+
+        return view('admin.wilayah.desa.edit', compact('desa', 'daftarProvinsi', 'daftarKabupaten', 'daftarKecamatan'));
     }
 
-    public function update(Region $desa)
+    public function update($id)
     {
+    }
+
+    public function destroy($id)
+    {
+        if (Region::desa()->destroy($id)) {
+            return redirect()->with('alert-success', 'Data berhasil dihapus');
+        }
+
+        return back()->with('alert-error', 'Data gagal dihapus');
     }
 }
