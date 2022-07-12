@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Tambah Data Desa')
+@section('title', 'Ubah Data Desa')
 
 @section('content_header')
-    <h1>Desa<small class="font-weight-light ml-1 text-md">Tambah Data Desa</small></h1>
+    <h1>Desa<small class="font-weight-light ml-1 text-md">Ubah Data Desa</small></h1>
 @stop
 
 @section('content')
@@ -25,111 +25,209 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('desa') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-left"></i>
+                            <a href="{{ url('desa') }}" class="btn btn-block btn-secondary"><i
+                                    class="fas fa-arrow-circle-left"></i> Kembali Ke Daftar Desa
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <form method="post" action="{{ url('desa/store') }}">
+                <form method="post" action="{{ url('desa/store') }}">
+                    <div class="card-body">
                         @csrf
-                        <div class="form-group">
-                            <label class="control-label col-md-4 col-sm-3 col-xs-12">Provinsi <span
-                                    class="required">*</span></label>
-                            <div class="col-md-2 col-sm-3 col-xs-12">
+
+                        <div class="row">
+                            <label class="control-label col-sm-12">Provinsi <span class="required">*</span></label>
+                            <div class="col-4">
                                 <input id="provinsi_id" class="form-control" placeholder="00" type="text" readonly
                                     value="" />
                                 <input id="nama_provinsi" type="hidden" name="nama_provinsi" value="" />
                             </div>
-                            <div class="col-md-5 col-sm-6 col-xs-12">
+                            <div class="col-8">
                                 <select class="form-control" id="list_provinsi" name="provinsi_id" style="width: 100%;">
                                     <option selected value="" disabled>Pilih Provinsi</option>
                                 </select>
                             </div>
                         </div>
+                        <hr>
 
-                        <div class="form-group">
-                            <label class="control-label col-md-4 col-sm-3 col-xs-12">Kabupaten <span
-                                    class="required">*</span></label>
-                            <div class="col-md-2 col-sm-3 col-xs-12">
+                        <div class="row">
+                            <label class="control-label col-sm-12">Kabupaten <span class="required">*</span></label>
+                            <div class="col-4">
                                 <input id="kabupaten_id" class="form-control" placeholder="00.00" type="text" readonly
                                     value="" />
                                 <input id="nama_kabupaten" type="hidden" name="nama_kabupaten" value="" />
                             </div>
-                            <div class="col-md-5 col-sm-6 col-xs-12">
+                            <div class="col-8">
                                 <select class="form-control" id="list_kabupaten" name="kabupaten_id" style="width: 100%;">
                                     <option selected value="" disabled>Pilih Kabupaten</option>
                                 </select>
                             </div>
                         </div>
+                        <hr>
 
-                        <div class="form-group">
-                            <label class="control-label col-md-4 col-sm-3 col-xs-12">Kecamatan <span
-                                    class="required">*</span></label>
-                            <div class="col-md-2 col-sm-3 col-xs-12">
+                        <div class="row">
+                            <label class="control-label col-sm-12">Kecamatan <span class="required">*</span></label>
+                            <div class="col-4">
                                 <input id="kecamatan_id" class="form-control" placeholder="00.00.00" type="text" readonly
                                     value="" />
                                 <input id="nama_kecamatan" type="hidden" name="nama_kecamatan" value="" />
                             </div>
-                            <div class="col-md-5 col-sm-6 col-xs-12">
+                            <div class="col-8">
                                 <select class="form-control" id="list_kecamatan" name="kecamatan_id"
                                     data-placeholder="Pilih kecamatan" style="width: 100%;">
                                     <option selected value="" disabled>Pilih Kecamatan</option>
                                 </select>
                             </div>
                         </div>
+                        <hr>
 
-                        {{-- <div class="form-group">
-                            <label>Pilih Provinsi <span class="text-danger">*</span></label>
-                            <select name="provinsi" class="form-control" required>
-                                @foreach ($daftarProvinsi as $key => $item)
-                                    <option value="{{ $key }}">{{ $key }} | {{ $item }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <label class="control-label col-sm-12">Desa <span class="required">*</span></label>
+                            <div class="col-4">
+                                <input name="kode_desa" class="form-control" value="{{ $desa->kode_desa }}" required />
+                            </div>
+                            <div class="col-8">
+                                <input name="nama_desa" class="form-control" value="{{ $desa->nama_desa }}" required />
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label>Pilih Kabupaten <span class="text-danger">*</span></label>
-                            <select name="kabupaten" class="form-control" required>
-                                @foreach ($daftarKabupaten as $key => $item)
-                                    <option value="{{ $key }}">{{ $key }} | {{ $item }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="reset" class="btn btn-danger btn-block"><i class="fas fa-times"></i>
+                                    Batal</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-success btn-block float-right"><i class="fas fa-save"></i>
+                                    Simpan</button>
+                            </div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Pilih Kecamatan <span class="text-danger">*</span></label>
-                            <select name="kecamatan" class="form-control" required>
-                                @foreach ($daftarKecamatan as $key => $item)
-                                    <option value="{{ $key }}">{{ $key }} | {{ $item }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-
-                        <div class="form-group">
-                            <label>Kode Desa <span class="text-danger">*</span></label>
-                            <input name="kode_desa" class="form-control" value="{{ $desa->kode_desa }}" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label>Nama Desa <span class="text-danger">*</span></label>
-                            <input name="nama_desa" class="form-control" value="{{ $desa->nama_desa }}" required />
-                        </div>
-
-                        <div class="form-group">
-                            <button class="btn btn-danger">Batal</button>
-                            <button class="btn btn-success float-right">Simpan</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 @endsection
-@include('admin.wilayah.desa.edit')
-@push('scripts')
+@push('js')
+    <script>
+        $(function() {
+
+            const host = "{{ url('api/wilayah/list_wilayah/') }}";
+            const token = "{{ config('tracksid.sandi.dev_token') }}";
+
+            $('#list_provinsi').select2({
+                ajax: {
+                    url: host + '?token=' + token,
+                    dataType: 'json',
+                    delay: 400,
+                    data: function(params) {
+                        return {
+                            cari: params.term,
+                            page: params.page || 1,
+                        };
+                    },
+                    processResults: function(response, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: $.map(response.results, function(item) {
+                                return {
+                                    id: item.kode_prov,
+                                    text: item.nama_prov,
+                                }
+                            }),
+                            pagination: response.pagination
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            list_kabupaten();
+
+            $('#list_provinsi').change(function() {
+                $("#provinsi_id").val($('#list_provinsi').val());
+                $("#nama_provinsi").val($('#list_provinsi option:selected').text());
+
+                list_kabupaten();
+            });
+
+            list_kecamatan();
+
+            $('#list_kabupaten').change(function() {
+                $("#kabupaten_id").val($('#list_kabupaten').val());
+                $("#nama_kabupaten").val($('#list_kabupaten option:selected').text());
+
+                list_kecamatan();
+            });
+
+            $('#list_kecamatan').change(function() {
+                $("#kecamatan_id").val($('#list_kecamatan').val());
+                $("#nama_kecamatan").val($('#list_kecamatan option:selected').text());
+            });
+
+            function list_kabupaten() {
+                $('#list_kabupaten').select2({
+                    ajax: {
+                        url: host + '?token=' + token + '&kode=' + $('#list_provinsi')
+                            .val(),
+                        dataType: 'json',
+                        delay: 400,
+                        data: function(params) {
+                            return {
+                                cari: params.term,
+                                page: params.page || 1,
+                            };
+                        },
+                        processResults: function(response, params) {
+                            params.page = params.page || 1;
+
+                            return {
+                                results: $.map(response.results, function(item) {
+                                    return {
+                                        id: item.kode_kab,
+                                        text: item.nama_kab,
+                                    }
+                                }),
+                                pagination: response.pagination
+                            };
+                        },
+                        cache: true
+                    }
+                });
+            }
+
+            function list_kecamatan() {
+                $('#list_kecamatan').select2({
+                    ajax: {
+                        url: host + '?token=' + token + '&kode=' + $('#list_kabupaten')
+                            .val(),
+                        dataType: 'json',
+                        delay: 400,
+                        data: function(params) {
+                            return {
+                                cari: params.term,
+                                page: params.page || 1,
+                            };
+                        },
+                        processResults: function(response, params) {
+                            params.page = params.page || 1;
+
+                            return {
+                                results: $.map(response.results, function(item) {
+                                    return {
+                                        id: item.kode_kec,
+                                        text: item.nama_kec
+                                    }
+                                }),
+                                pagination: response.pagination
+                            };
+                        },
+                        cache: true
+                    }
+                });
+            }
+        })
+    </script>
 @endpush

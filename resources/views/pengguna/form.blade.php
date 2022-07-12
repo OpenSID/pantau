@@ -26,7 +26,7 @@
                     <div class="float-left">
                         <div class="btn-group">
                             <a href="{{ route('akun-pengguna.index') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-left"></i>
+                                    class="fas fa-arrow-circle-left"></i>
                             </a>
                         </div>
                     </div>
