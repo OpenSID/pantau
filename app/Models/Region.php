@@ -21,6 +21,23 @@ class Region extends Model
     ];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['childs'];
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function childs()
+    {
+        return $this->hasMany(self::class, 'parent_code', 'region_code');
+    }
+
+    /**
      * Scope a query daftar provinsi.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
