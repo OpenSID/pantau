@@ -40,7 +40,7 @@
                             <label class="control-label col-sm-12">Provinsi <span class="required">*</span></label>
                             <div class="col-4">
                                 <input id="kode_provinsi" class="form-control" placeholder="00" type="text"
-                                    value="{{ $desa->kode_provinsi }}" readonly />
+                                    value="{{ $desa->kode_provinsi }}" readonly required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_provinsi" data-placeholder="Pilih Provinsi"
@@ -58,7 +58,7 @@
                             <label class="control-label col-sm-12">Kabupaten <span class="required">*</span></label>
                             <div class="col-4">
                                 <input id="kode_kabupaten" class="form-control" placeholder="00.00" type="text"
-                                    value="{{ $desa->kode_kabupaten }}" readonly />
+                                    value="{{ $desa->kode_kabupaten }}" readonly required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_kabupaten" data-placeholder="Pilih Kabupaten"
@@ -76,7 +76,7 @@
                             <label class="control-label col-sm-12">Kecamatan <span class="required">*</span></label>
                             <div class="col-4">
                                 <input id="kode_kecamatan" name="parent_code" class="form-control" placeholder="00.00.00"
-                                    type="text" value="{{ $desa->kode_kecamatan }}" readonly />
+                                    type="text" value="{{ $desa->kode_kecamatan }}" readonly required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_kecamatan" data-placeholder="Pilih Kecamatan"
@@ -108,12 +108,28 @@
                                 </div>
                             @endif
                         </div>
+                        <hr>
+
+                        <div class="row">
+                            <label class="control-label col-sm-12">Desa Persiapan <span class="required">*</span></label>
+                            <div class="col-4">
+                                <select class="form-control" id="jenis" name="jenis" style="width: 100%;" required>
+                                    <option {{ $desa->jenis ? 'selected' : '' }} value="1">Ya</option>
+                                    <option {{ $desa->jenis ? '' : 'selected' }} value="0">Tidak</option>
+                                </select>
+                            </div>
+                            <div class="col-8">
+                                <input name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"
+                                    maxlength="250" value="{{ $desa->keterangan }}" />
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6">
-                                <button type="reset" class="btn btn-sm btn-danger btn-block"><i class="fas fa-times"></i>
+                                <button type="reset" class="btn btn-sm btn-danger btn-block"><i
+                                        class="fas fa-times"></i>
                                     Batal</button>
                             </div>
                             <div class="col-6">
@@ -134,6 +150,8 @@
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
             $('[data-mask]').inputmask();
+
+            $('#keterangan').hide();
 
             $('#list_provinsi').select2({
                 ajax: {
@@ -271,6 +289,16 @@
                     }
                 });
             }
+
+            $('#jenis').on('change', function() {
+                if (this.value == 1) {
+                    $('#keterangan').show();
+                    $('#keterangan').addClass('required');
+                } else {
+                    $('#keterangan').hide();
+                    $('#keterangan').removeClass('required');
+                }
+            });
         })
     </script>
 @endpush

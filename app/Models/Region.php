@@ -18,8 +18,19 @@ class Region extends Model
         'region_code',
         'region_name',
         'new_region_name',
+        'jenis',
+        'keterangan',
         'parent_code',
         'desa_id',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'jenis' => 'boolean',
     ];
 
     /**
@@ -35,6 +46,8 @@ class Region extends Model
                 'tbl_regions.id',
                 'tbl_regions.region_code AS kode_provinsi',
                 'tbl_regions.region_name AS nama_provinsi',
+                'tbl_regions.jenis',
+                'tbl_regions.keterangan',
             )->where('parent_code', 0);
     }
 
@@ -52,7 +65,9 @@ class Region extends Model
                     'tbl_regions.region_code AS kode_kabupaten',
                     'tbl_regions.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
-                    'prov.region_name AS nama_provinsi'
+                    'prov.region_name AS nama_provinsi',
+                    'tbl_regions.jenis',
+                    'tbl_regions.keterangan',
                 )
                 ->leftJoin('tbl_regions AS prov', 'tbl_regions.parent_code', '=', 'prov.region_code')
                 ->whereRaw('LENGTH(tbl_regions.parent_code) = 2');
@@ -75,6 +90,8 @@ class Region extends Model
                     'kab.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
+                    'tbl_regions.jenis',
+                    'tbl_regions.keterangan',
                 )
                 ->join('tbl_regions AS kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
                 ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
@@ -101,6 +118,8 @@ class Region extends Model
                     'kab.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
+                    'tbl_regions.jenis',
+                    'tbl_regions.keterangan',
                 )
                 ->join('tbl_regions AS kec', 'tbl_regions.parent_code', '=', 'kec.region_code')
                 ->join('tbl_regions AS kab', 'kec.parent_code', '=', 'kab.region_code')

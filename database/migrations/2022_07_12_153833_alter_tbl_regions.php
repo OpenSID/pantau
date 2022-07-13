@@ -17,6 +17,8 @@ class AlterTblRegions extends Migration
     {
         Schema::table('tbl_regions', function (Blueprint $table) {
             $table->string('new_region_name', 80)->nullable(true)->after('region_name');
+            $table->integer('jenis')->default('0')->after('new_region_name');
+            $table->text('keterangan')->nullable(true)->after('jenis');
             $table->timestamps();
             $table->integer('created_by')->nullable(true)->after('desa_id');
             $table->integer('updated_by')->nullable(true)->after('created_at');

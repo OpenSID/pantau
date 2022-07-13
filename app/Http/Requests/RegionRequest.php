@@ -27,6 +27,8 @@ class RegionRequest extends FormRequest
             'region_code' => 'required|string|min:2|max:15',
             'region_name' => 'required|string|min:1|max:80',
             'parent_code' => 'required|string|min:2|max:15',
+            'jenis'       => 'required|in:1,0',
+            'keterangan'  => 'string|max:250'
         ];
     }
 }
