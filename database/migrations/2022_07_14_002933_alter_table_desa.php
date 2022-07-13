@@ -13,7 +13,9 @@ class AlterTableDesa extends Migration
      */
     public function up()
     {
-        
+        Schema::table('desa', function (Blueprint $table) {
+            $table->string('sebutan_desa', 80)->default('Desa')->after('telepon');
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ class AlterTableDesa extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('desa', function (Blueprint $table) {
+            $table->dropColumn('sebutan_desa');
+        });
     }
 }

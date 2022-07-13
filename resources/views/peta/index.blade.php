@@ -136,27 +136,25 @@
                     icon: icon(DaftarDesa[x].logo)
                 });
                 marker.bindPopup(
-                    '<div id="html_a" style="width: 100.0%; height: 100.0%;">' +
-                    '<h4><b style="color:red">'
-                    DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></h4>' +
-                    '<table>' +
+                    '<h6><b>' + DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></h6>' +
+                    '<b><table width="100%">' +
                     '<tr>' +
-                    '<td><b style="color:green">Alamat : ' + DaftarDesa[x].alamat + '</b></td>' +
+                    '<td>Kecamatan</td><td> : ' + DaftarDesa[x].kecamatan + '</b></td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td><b style="color:green">Kecamatan : ' + DaftarDesa[x].kecamatan + '</b></td>' +
+                    '<td>Kab/Kota</td><td> : ' + DaftarDesa[x].kabupaten + '</b></td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td><b style="color:green">Kab/Kota : ' + DaftarDesa[x].kabupaten + '</b></td>' +
+                    '<td>Provinsi</td><td> : ' + DaftarDesa[x].provinsi + '</b></td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td><b style="color:green">Provinsi : ' + DaftarDesa[x].provinsi + '</b></td>' +
+                    '<td>Alamat</td><td> : ' + DaftarDesa[x].alamat + '</b></td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td><b style="color:green">Website : ' + '<a href="' + 'http://' + DaftarDesa[x].web +
-                    '" + " target=\"_blank\">' + 'http://' + DaftarDesa[x].web + '</a>' + '</b></td>' +
+                    '<td>Website</td><td> : ' + '<a href="' + DaftarDesa[x].web +
+                    '" + " target=\"_blank\">' + DaftarDesa[x].web + '</a>' + '</b></td>' +
                     '</tr>' +
-                    '</table></div>'
+                    '</table></b>'
                 );
                 markers.addLayer(marker);
             }
