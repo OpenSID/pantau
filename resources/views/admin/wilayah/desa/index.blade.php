@@ -35,6 +35,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.components.global_delete')
 @endsection
 @section('js')
     <script>

@@ -17,7 +17,7 @@ class DesaController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $edit   = '<a href="' . url('desa/' . $data->id . '/edit') . '" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
-                    $delete = '<button data-href="' . url('desa/destroy/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $delete = '<button data-href="' . url('desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
                     return '<div class="btn btn-group">' . $edit . $delete . '</div>';
                 })
@@ -64,10 +64,10 @@ class DesaController extends Controller
 
     public function destroy($id)
     {
-        if (Region::desa()->destroy($id)) {
-            return redirect()->with('alert-success', 'Data berhasil dihapus');
+        if (Region::destroy($id)) {
+            return redirect('desa')->with('success', 'Data berhasil dihapus');
         }
 
-        return back()->with('alert-error', 'Data gagal dihapus');
+        return redirect('desa')->with('error', 'Data gagal dihapus');
     }
 }
