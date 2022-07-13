@@ -39,7 +39,7 @@ class AlterTblRegions extends Migration
     public function down()
     {
         Schema::table('tbl_regions', function ($table) {
-            $table->dropColumn(['new_region_name', 'created_by', 'updated_by', 'created_at', 'updated_at']);
+            $table->dropColumn(['new_region_name', 'jenis', 'keterangan', 'created_by', 'updated_by', 'created_at', 'updated_at']);
         });
     }
 }
