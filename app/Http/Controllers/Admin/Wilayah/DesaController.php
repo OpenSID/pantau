@@ -21,7 +21,14 @@ class DesaController extends Controller
 
                     return '<div class="btn btn-group">' . $edit . $delete . '</div>';
                 })
-                ->rawColumns(['action'])
+                ->editColumn('nama_desa', function ($data) {
+                    if ($data->nama_desa_baru) {
+                        return $data->nama_desa_baru . '<br><code title="Permendagri No. 77 Tahun 2019">' .$data->nama_desa . '</code>';
+                    }
+
+                    return $data->nama_desa;
+                })
+                ->rawColumns(['action', 'nama_desa'])
                 ->make(true);
         }
         
@@ -54,8 +61,15 @@ class DesaController extends Controller
     public function update(RegionRequest $request, $id)
     {
         $input = $request->all();
+        $desa = Region::desa()->find($id);
 
-        if (Region::desa()->find($id)->update($input)) {
+        if ($desa->region_name != $input['region_name']) {
+            $input['new_region_name'] = $input['region_name'];
+
+            unset($input['region_name']);
+        }
+
+        if ($desa->update($input)) {
             return redirect('desa')->with('success', 'Data berhasil diubah');
         }
 

@@ -99,9 +99,14 @@
                             </div>
                             <div class="col-8">
                                 <input name="region_name" id="region_name" class="form-control" placeholder="Nama Desa"
-                                    maxlength="80" value="{{ $desa->nama_desa }}"
+                                    maxlength="80" value="{{ $desa->nama_desa_baru ?? $desa->nama_desa }}"
                                     @if (!$desa->nama_desa) 'disabled' @endif required />
                             </div>
+                            @if ($desa->nama_desa_baru)
+                                <div class="col-12">
+                                    <p><code>Permendagri No. 77 Tahun 2019 : {{ $desa->nama_desa }}</code></p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

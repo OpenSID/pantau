@@ -17,6 +17,7 @@ class Region extends Model
     protected $fillable = [
         'region_code',
         'region_name',
+        'new_region_name',
         'parent_code',
         'desa_id',
     ];
@@ -93,6 +94,7 @@ class Region extends Model
                     'tbl_regions.id',
                     'tbl_regions.region_code AS kode_desa',
                     'tbl_regions.region_name AS nama_desa',
+                    'tbl_regions.new_region_name AS nama_desa_baru',
                     'kec.region_code AS kode_kecamatan',
                     'kec.region_name AS nama_kecamatan',
                     'kab.region_code AS kode_kabupaten',

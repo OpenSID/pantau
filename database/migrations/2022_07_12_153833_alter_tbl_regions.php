@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Models\Region;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,17 +16,17 @@ class AlterTblRegions extends Migration
     public function up()
     {
         Schema::table('tbl_regions', function (Blueprint $table) {
-            $table->string('new_region_name', 80)->after('region_name');
+            $table->string('new_region_name', 80)->nullable(true)->after('region_name');
             $table->timestamps();
             $table->integer('created_by')->nullable(true)->after('desa_id');
             $table->integer('updated_by')->nullable(true)->after('created_at');
         });
 
         // Tambahkan data awal
-        Region::whereNull('created_at')->update(['created_at' => now(), 'updated_at' => now()]);
+        DB::table('tbl_regions')->whereNull('created_at')->update(['created_at' => now(), 'updated_at' => now()]);
 
         $user = User::first()->id;
-        Region::whereNull('created_by')->update(['created_by' => $user, 'updated_by' => $user]);
+        DB::table('tbl_regions')->whereNull('created_by')->update(['created_by' => $user, 'updated_by' => $user]);
     }
 
     /**
