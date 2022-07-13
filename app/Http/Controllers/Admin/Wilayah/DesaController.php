@@ -6,7 +6,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
-use App\Models\Desa;
+use App\Http\Requests\RegionRequest;
 
 class DesaController extends Controller
 {
@@ -33,21 +33,20 @@ class DesaController extends Controller
         return view('admin.wilayah.desa.create');
     }
 
-    public function store()
+    public function store(RegionRequest $request)
     {
+        $input = $request->all();
+
+        $desa  = Region::create($input);
+
+        return back()->with('success', 'User created successfully.');
     }
 
     public function edit($id)
     {
-        $desa = Region::desa()->findOrFail($id);
-        $daftarProvinsi = Region::provinsi()->pluck('nama_provinsi', 'kode_provinsi');
-        $daftarKabupaten = Region::kabupaten()->pluck('nama_kabupaten', 'kode_kabupaten');
-        $daftarKecamatan = Region::kecamatan()->pluck('nama_kecamatan', 'kode_kecamatan');
-
-        // dd(compact('desa'));
-        // dd(compact('desa', 'daftarProvinsi', 'daftarKabupaten', 'daftarKecamatan'));
-
-        return view('admin.wilayah.desa.edit', compact('desa', 'daftarProvinsi', 'daftarKabupaten', 'daftarKecamatan'));
+        return view('admin.wilayah.desa.edit', [
+            'desa' => Region::desa()->findOrFail($id),
+        ]);
     }
 
     public function update($id)

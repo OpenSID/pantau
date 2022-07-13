@@ -38,13 +38,12 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Provinsi <span class="required">*</span></label>
                             <div class="col-4">
-                                <input id="provinsi_id" class="form-control" placeholder="00" type="text" readonly
-                                    value="" />
-                                <input id="nama_provinsi" type="hidden" name="nama_provinsi" value="" />
+                                <input id="kode_provinsi" class="form-control" placeholder="00" type="text" readonly />
                             </div>
                             <div class="col-8">
-                                <select class="form-control" id="list_provinsi" name="provinsi_id" style="width: 100%;">
-                                    <option selected value="" disabled>Pilih Provinsi</option>
+                                <select class="form-control" id="list_provinsi" data-placeholder="Pilih Provinsi"
+                                    style="width: 100%;" required>
+                                    <option selected>Pilih Provinsi</option>
                                 </select>
                             </div>
                         </div>
@@ -53,13 +52,13 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Kabupaten <span class="required">*</span></label>
                             <div class="col-4">
-                                <input id="kabupaten_id" class="form-control" placeholder="00.00" type="text" readonly
-                                    value="" />
-                                <input id="nama_kabupaten" type="hidden" name="nama_kabupaten" value="" />
+                                <input id="kode_kabupaten" class="form-control" placeholder="00.00" type="text"
+                                    readonly />
                             </div>
                             <div class="col-8">
-                                <select class="form-control" id="list_kabupaten" name="kabupaten_id" style="width: 100%;">
-                                    <option selected value="" disabled>Pilih Kabupaten</option>
+                                <select class="form-control" id="list_kabupaten" data-placeholder="Pilih Kabupaten"
+                                    style="width: 100%;" disabled required>
+                                    <option selected>Pilih Kabupaten</option>
                                 </select>
                             </div>
                         </div>
@@ -68,14 +67,13 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Kecamatan <span class="required">*</span></label>
                             <div class="col-4">
-                                <input id="kecamatan_id" class="form-control" placeholder="00.00.00" type="text" readonly
-                                    value="" />
-                                <input id="nama_kecamatan" type="hidden" name="nama_kecamatan" value="" />
+                                <input id="kode_kecamatan" name="parent_code" class="form-control" placeholder="00.00.00"
+                                    type="text" readonly />
                             </div>
                             <div class="col-8">
-                                <select class="form-control" id="list_kecamatan" name="kecamatan_id"
-                                    data-placeholder="Pilih kecamatan" style="width: 100%;">
-                                    <option selected value="" disabled>Pilih Kecamatan</option>
+                                <select class="form-control" id="list_kecamatan" data-placeholder="Pilih Kecamatan"
+                                    style="width: 100%;" disabled required>
+                                    <option selected>Pilih Kecamatan</option>
                                 </select>
                             </div>
                         </div>
@@ -84,10 +82,12 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Desa <span class="required">*</span></label>
                             <div class="col-4">
-                                <input name="kode_desa" class="form-control" required />
+                                <input name="region_code" id="region_code" class="form-control" placeholder="00.00.00.0000"
+                                    data-mask required disabled />
                             </div>
                             <div class="col-8">
-                                <input name="nama_desa" class="form-control" required />
+                                <input name="region_name" id="region_name" class="form-control" placeholder="Nama Desa"
+                                    maxlength="80" required disabled />
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,6 @@
 @push('js')
     <script>
         $(function() {
-
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
@@ -147,24 +146,49 @@
             list_kabupaten();
 
             $('#list_provinsi').change(function() {
-                $("#provinsi_id").val($('#list_provinsi').val());
-                $("#nama_provinsi").val($('#list_provinsi option:selected').text());
+                $("#kode_provinsi").val($('#list_provinsi').val());
+
+                // Kosongkan pilihan kab, kec, dan isian desa
+                $("#list_kabupaten").attr('disabled', false);
+                $("#list_kabupaten").val('');
+                $("#kode_kabupaten").val('');
+
+                $("#list_kecamatan").attr('disabled', true);
+                $("#list_kecamatan").val('');
+                $("#kode_kecamatan").val('');
+
+                $("#region_code").attr('disabled', true);
+                $("#region_name").attr('disabled', true);
+                $("#region_code").val('');
+                $("#region_name").val('');
 
                 list_kabupaten();
             });
 
             list_kecamatan();
-
             $('#list_kabupaten').change(function() {
-                $("#kabupaten_id").val($('#list_kabupaten').val());
-                $("#nama_kabupaten").val($('#list_kabupaten option:selected').text());
+                $("#kode_kabupaten").val($('#list_kabupaten').val());
+
+                // Kosongkan pilihan kec, dan isian desa
+                $("#list_kecamatan").attr('disabled', false);
+                $("#list_kecamatan").val('');
+                $("#kode_kecamatan").val('');
+
+                $("#region_code").attr('disabled', true);
+                $("#region_name").attr('disabled', true);
+                $("#region_code").val('');
+                $("#region_name").val('');
 
                 list_kecamatan();
             });
 
             $('#list_kecamatan').change(function() {
-                $("#kecamatan_id").val($('#list_kecamatan').val());
-                $("#nama_kecamatan").val($('#list_kecamatan option:selected').text());
+                $("#kode_kecamatan").val($('#list_kecamatan').val());
+                $("#region_code").attr('data-inputmask', "'mask':'" + $('#list_kecamatan').val() +
+                    ".9999'");
+                $("#region_code").attr('disabled', false);
+                $("#region_name").attr('disabled', false);
+                $('[data-mask]').inputmask();
             });
 
             function list_kabupaten() {
