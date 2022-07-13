@@ -31,8 +31,9 @@
                         </div>
                     </div>
                 </div>
-                <form method="post" action="{{ url('desa/store') }}">
+                <form method="post" action="{{ url('desa/' . $desa->id) }}">
                     <div class="card-body">
+                        @method('PUT')
                         @csrf
 
                         <div class="row">

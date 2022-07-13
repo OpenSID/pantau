@@ -120,13 +120,7 @@ Route::prefix('kecamatan')
     });
 
 // Wilayah Desa / Keluarahan
-Route::prefix('desa')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('/', [DesaController::class, 'index']);
-        Route::get('/create', [DesaController::class, 'create']);
-        Route::post('/store', [DesaController::class, 'store']);
-        Route::get('/edit/{id}', [DesaController::class, 'edit']);
-        Route::post('/update/{id}', [DesaController::class, 'update']);
-        Route::delete('/destroy/{id}', [DesaController::class, 'destroy']);
-    });
+Route::resource('desa', '\App\Http\Controllers\Admin\Wilayah\DesaController', [
+        'except' => ['show']
+    ])
+    ->middleware('auth');
