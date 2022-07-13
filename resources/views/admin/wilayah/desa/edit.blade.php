@@ -102,11 +102,17 @@
                                     maxlength="80" value="{{ $desa->nama_desa_baru ?? $desa->nama_desa }}"
                                     @if (!$desa->nama_desa) 'disabled' @endif required />
                             </div>
-                            @if ($desa->nama_desa_baru)
+                            @if ($desa->nama_desa_baru && $desa->jenis == false)
                                 <div class="col-12">
                                     <p><code>Permendagri No. 77 Tahun 2019 : {{ $desa->nama_desa }}</code></p>
                                 </div>
                             @endif
+
+                            <div class="col-12" id="desa_persiapan" {{ $desa->jenis ? '' : 'style="display: none"' }}>
+                                <code>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
+                                    kode kecamatan seperti halnya kode desa biasa. Kemudian awali nomor urut desa dengan dua
+                                    digit '99' (contoh: 62.01.02.9901)</code>
+                            </div>
                         </div>
                         <hr>
 
@@ -118,9 +124,9 @@
                                     <option {{ $desa->jenis ? '' : 'selected' }} value="0">Tidak</option>
                                 </select>
                             </div>
-                            <div class="col-8">
-                                <input name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"
-                                    maxlength="250" value="{{ $desa->keterangan }}" />
+                            <div class="col-8" {{ $desa->jenis ? '' : 'style="display: none"' }} id="keterangan">
+                                <input name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250"
+                                    value="{{ $desa->keterangan }}" />
                             </div>
                         </div>
                     </div>
@@ -150,8 +156,6 @@
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
             $('[data-mask]').inputmask();
-
-            $('#keterangan').hide();
 
             $('#list_provinsi').select2({
                 ajax: {
@@ -294,9 +298,11 @@
                 if (this.value == 1) {
                     $('#keterangan').show();
                     $('#keterangan').addClass('required');
+                    $('#desa_persiapan').show();
                 } else {
                     $('#keterangan').hide();
                     $('#keterangan').removeClass('required');
+                    $('#desa_persiapan').hide();
                 }
             });
         })

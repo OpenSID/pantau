@@ -91,6 +91,11 @@
                                 <input name="region_name" id="region_name" class="form-control" placeholder="Nama Desa"
                                     maxlength="80" required disabled />
                             </div>
+                            <div class="col-12" id="desa_persiapan" style="display: none">
+                                <code>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
+                                    kode kecamatan seperti halnya kode desa biasa. Kemudian awali nomor urut desa dengan dua
+                                    digit '99' (contoh: 62.01.02.9901)</code>
+                            </div>
                         </div>
                         <hr>
 
@@ -102,9 +107,8 @@
                                     <option value="0" selected>Tidak</option>
                                 </select>
                             </div>
-                            <div class="col-8">
-                                <input name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan"
-                                    maxlength="250" />
+                            <div class="col-8" style="display: none" id="keterangan">
+                                <input name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" />
                             </div>
                         </div>
                     </div>
@@ -133,8 +137,6 @@
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
             $('[data-mask]').inputmask();
-
-            $('#keterangan').hide();
 
             $('#list_provinsi').select2({
                 ajax: {
@@ -278,9 +280,11 @@
                 if (this.value == 1) {
                     $('#keterangan').show();
                     $('#keterangan').addClass('required');
+                    $('#desa_persiapan').show();
                 } else {
                     $('#keterangan').hide();
                     $('#keterangan').removeClass('required');
+                    $('#desa_persiapan').hide();
                 }
             });
         })
