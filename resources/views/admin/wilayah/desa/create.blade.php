@@ -25,7 +25,7 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('desa') }}" class="btn btn-block btn-secondary"><i
+                            <a href="{{ url('desa') }}" class="btn btn-sm btn-block btn-secondary"><i
                                     class="fas fa-arrow-circle-left"></i> Kembali Ke Daftar Desa
                             </a>
                         </div>
@@ -95,11 +95,11 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6">
-                                <button type="reset" class="btn btn-danger btn-block"><i class="fas fa-times"></i>
+                                <button type="reset" class="btn btn-sm btn-danger btn-block"><i class="fas fa-times"></i>
                                     Batal</button>
                             </div>
                             <div class="col-6">
-                                <button class="btn btn-success btn-block float-right"><i class="fas fa-save"></i>
+                                <button class="btn btn-sm btn-success btn-block float-right"><i class="fas fa-save"></i>
                                     Simpan</button>
                             </div>
                         </div>

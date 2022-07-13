@@ -24,7 +24,7 @@ class RegionRequest extends FormRequest
     public function rules()
     {
         return [
-            'region_code' => 'required|string|min:2|max:15|unique:tbl_regions,region_code,' . $this->id,
+            'region_code' => 'required|string|min:2|max:15',
             'region_name' => 'required|string|min:1|max:80',
             'parent_code' => 'required|string|min:2|max:15',
         ];

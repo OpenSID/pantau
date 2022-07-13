@@ -41,7 +41,7 @@ class DesaController extends Controller
             return redirect('desa')->with('success', 'Data berhasil disimpan');
         }
 
-        return back()->with('error', 'Data berhasil disimpan');
+        return back()->with('error', 'Data gagal disimpan');
     }
 
     public function edit($id)
@@ -51,8 +51,15 @@ class DesaController extends Controller
         ]);
     }
 
-    public function update($id)
+    public function update(RegionRequest $request, $id)
     {
+        $input = $request->all();
+
+        if (Region::desa()->find($id)->update($input)) {
+            return redirect('desa')->with('success', 'Data berhasil diubah');
+        }
+
+        return back()->with('error', 'Data gagal diubah');
     }
 
     public function destroy($id)
