@@ -37,9 +37,11 @@ class DesaController extends Controller
     {
         $input = $request->all();
 
-        $desa  = Region::create($input);
+        if (Region::create($input)) {
+            return redirect('desa')->with('success', 'Data berhasil disimpan');
+        }
 
-        return back()->with('success', 'User created successfully.');
+        return back()->with('error', 'Data berhasil disimpan');
     }
 
     public function edit($id)
