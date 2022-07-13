@@ -42,12 +42,12 @@
                         searchable: false,
                         orderable: false
                     }, {
-                        data: 'region_code',
-                        name: 'region_code'
+                        data: 'kode_provinsi',
+                        name: 'kode_provinsi'
                     },
                     {
-                        data: 'region_name',
-                        name: 'region_name'
+                        data: 'nama_provinsi',
+                        name: 'nama_provinsi'
                     },
                 ],
                 order: [
