@@ -21,13 +21,13 @@ class DesaController extends Controller
 
                     return '<div class="btn btn-group">' . $edit . $delete . '</div>';
                 })
-                ->editColumn('nama_desa', function ($data) {
-                    if ($data->nama_desa_baru) {
-                        return $data->nama_desa_baru . '<br><code title="Permendagri No. 77 Tahun 2019">' .$data->nama_desa . '</code>';
-                    }
+                // ->editColumn('nama_desa', function ($data) {
+                //     if ($data->nama_desa_baru) {
+                //         return $data->nama_desa_baru . '<br><code title="Permendagri No. 77 Tahun 2019">' .$data->nama_desa . '</code>';
+                //     }
 
-                    return $data->nama_desa;
-                })
+                //     return $data->nama_desa;
+                // })
                 ->rawColumns(['action', 'nama_desa'])
                 ->make(true);
         }

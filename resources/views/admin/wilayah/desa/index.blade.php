@@ -27,6 +27,7 @@
                                     <th>NAMA KABUPATEN</th>
                                     <th>NAMA KECAMATAN</th>
                                     <th>NAMA DESA</th>
+                                    <th>NAMA DESA UBAHAN</th>
                                 </tr>
                             </thead>
                         </table>
@@ -61,23 +62,27 @@
                     },
                     {
                         data: 'kode_desa',
-                        name: 'kode_desa'
+                        name: 'tbl_regions.region_code'
                     },
                     {
                         data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        name: 'prov.region_name'
                     },
                     {
                         data: 'nama_kabupaten',
-                        name: 'nama_kabupaten'
+                        name: 'kab.region_name'
                     },
                     {
                         data: 'nama_kecamatan',
-                        name: 'nama_kecamatan'
+                        name: 'kec.region_name'
                     },
                     {
                         data: 'nama_desa',
-                        name: 'nama_desa'
+                        name: 'tbl_regions.region_name'
+                    },
+                    {
+                        data: 'nama_desa_baru',
+                        name: 'tbl_regions.new_region_name'
                     },
                 ],
                 order: [
