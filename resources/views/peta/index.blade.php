@@ -87,80 +87,50 @@
         crossorigin=""></script>
     <script>
         $(document).ready(function() {
+            var url = "{{ url('peta/desa') }}";
 
-            var DaftarDesa = [{
-                    'desa': 'bali',
-                    'logo': 'default',
-                    'tipe': 'online',
-                    'koordinat': [-
-                        8.439771599521729,
-                        115.19934061914685
-                    ],
-                },
-                {
-                    'desa': 'mataram',
-                    'logo': 'default',
-                    'tipe': 'online',
-                    'koordinat': [-
-                        8.53539246061938, 116.20129354298115
-                    ],
-                },
-                {
-                    'desa': 'malang',
-                    'logo': 'default',
-                    'tipe': 'online',
-                    'koordinat': [-
-                        8.017891590877028, 112.69006283953787
-                    ],
-                },
-                {
-                    'desa': 'madura',
-                    'logo': 'default',
-                    'tipe': 'online',
-                    'koordinat': [-
-                        7.072546448844008, 113.30969167873265
-                    ],
-                },
-                {
-                    'desa': 'makassar',
-                    'logo': 'default',
-                    'tipe': 'offline',
-                    'koordinat': [-2.644568843057757, 119.61914062500001],
-                },
-                {
-                    'desa': 'ambon',
-                    'logo': 'default',
-                    'tipe': 'offline',
-                    'koordinat': [-3.4169189298481557, 128.2675775885582],
-                },
-            ];
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: "check",
+                success: function(response) {
 
-            var mapCenter = [
-                {{ config('leaflet.map_center_latitude') }},
-                {{ config('leaflet.map_center_longitude') }}
-            ];
+                    // Susun lokasi
+                    var Desa = lokasi(response);
 
-            // Icon
-            var logo = L.icon({
-                iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
-                iconSize: [20, 20],
+                    // // Buat peta
+                    peta(Desa[0], Desa[1]);
+                }
             });
+        });
 
+        function lokasi(DaftarDesa) {
             var DesaOnline = [];
             var DesaOffline = [];
 
             for (var x = 0; x < DaftarDesa.length; x++) {
                 if (DaftarDesa[x].tipe == 'online') {
-                    DesaOnline.push(L.marker(DaftarDesa[x].koordinat).bindPopup(DaftarDesa[x].desa));
+                    DesaOnline.push(L.marker(DaftarDesa[x].koordinat, {
+                        icon: icon(DaftarDesa[x].logo)
+                    }).bindPopup(DaftarDesa[x].nama_desa));
                 } else {
                     DesaOffline.push(L.marker(DaftarDesa[x].koordinat, {
-                        icon: logo
-                    }).bindPopup(DaftarDesa[x].desa));
+                        icon: icon(DaftarDesa[x].logo)
+                    }).bindPopup(DaftarDesa[x].nama_desa));
                 }
             }
 
+            return [DesaOnline, DesaOffline];
+        }
+
+        function peta(DesaOnline, DesaOffline) {
+            var mapCenter = [
+                {{ config('leaflet.map_center_latitude') }},
+                {{ config('leaflet.map_center_longitude') }}
+            ];
+
             // Desa Online
-            var Online = L.layerGroup(DesaOnline);
+            var Online = L.layerGroup(DesaOnline, DesaOffline);
 
             var mbAttr =
                 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
@@ -206,6 +176,15 @@
             });
             layerControl.addBaseLayer(satellite, 'Satellite');
             layerControl.addOverlay(Offline, 'Offline');
-        });
+        }
+
+        function icon(url) {
+            var icon = "{{ url('assets/img/opensid_logo.png') }}";
+
+            return L.icon({
+                iconUrl: url ?? icon,
+                iconSize: [20, 20],
+            });
+        }
     </script>
 @endsection

@@ -151,4 +151,22 @@ class Desa extends Model
     {
         return DB::raw("DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2");
     }
+
+    /**
+     * Scope a query desa map.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    // public function scopeDesaMap($query)
+    // {
+    //     return $query
+    //         ->select(['*'])
+    //         ->selectRaw("if(versi_lokal is null, `tgl_rekam_hosting`, if(versi_hosting is null, `tgl_rekam_lokal`, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam")
+    //         ->whereRaw("(select if(versi_lokal is null, tgl_rekam_hosting, if(versi_hosting is null, tgl_rekam_lokal, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam) >= date(now()) - interval 7 day")
+    //         ->orderBy("tgl_rekam");
+
+    //     return $query
+    //         ->where('created_at', '>=', now()->subDay(7));
+    // }
 }
