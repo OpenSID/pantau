@@ -17,14 +17,11 @@ class PetaController extends Controller
 
         $geoJSONdata = $desa->map(function ($desa) {
             return [
-                'kode_desa' => $desa->kode_desa,
-                'nama_desa' => $desa->nama_desa,
-                'kode_kecamatan' => $desa->kode_kecamatan,
-                'nama_kecamatan' => $desa->nama_kecamatan,
-                'kode_kabupaten' => $desa->kode_kabupaten,
-                'nama_kabupaten' => $desa->nama_kabupaten,
-                'kode_provinsi' => $desa->kode_provinsi,
-                'nama_provinsi' => $desa->nama_provinsi,
+                'sebutan_desa' => $desa->sebutan_desa ?? 'Desa',
+                'desa' => $desa->nama_desa,
+                'kecamatan' => $desa->nama_kecamatan,
+                'kabupaten' => $desa->nama_kabupaten,
+                'provinsi' => $desa->nama_provinsi,
                 'web'           => $desa->url_hosting,
                 'versi'         => $desa->opensid_valid,
                 'logo' => null,

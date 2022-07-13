@@ -135,7 +135,29 @@
                 var marker = L.marker(DaftarDesa[x].koordinat, {
                     icon: icon(DaftarDesa[x].logo)
                 });
-                marker.bindPopup(DaftarDesa[x].nama_desa);
+                marker.bindPopup(
+                    '<div id="html_a" style="width: 100.0%; height: 100.0%;">' +
+                    '<h4><b style="color:red">'
+                    DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></h4>' +
+                    '<table>' +
+                    '<tr>' +
+                    '<td><b style="color:green">Alamat : ' + DaftarDesa[x].alamat + '</b></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td><b style="color:green">Kecamatan : ' + DaftarDesa[x].kecamatan + '</b></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td><b style="color:green">Kab/Kota : ' + DaftarDesa[x].kabupaten + '</b></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td><b style="color:green">Provinsi : ' + DaftarDesa[x].provinsi + '</b></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td><b style="color:green">Website : ' + '<a href="' + 'http://' + DaftarDesa[x].web +
+                    '" + " target=\"_blank\">' + 'http://' + DaftarDesa[x].web + '</a>' + '</b></td>' +
+                    '</tr>' +
+                    '</table></div>'
+                );
                 markers.addLayer(marker);
             }
 
