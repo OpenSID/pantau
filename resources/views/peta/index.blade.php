@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
         integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
         crossorigin="" />
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <style>
         #map {
             width: 100%;
@@ -85,6 +87,7 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
         integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
         crossorigin=""></script>
+    <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
     <script>
         $(document).ready(function() {
             var url = "{{ url('peta/desa') }}";
@@ -94,88 +97,49 @@
                 url: url,
                 data: "check",
                 success: function(response) {
-
-                    // Susun lokasi
-                    var Desa = lokasi(response);
-
                     // // Buat peta
-                    peta(Desa[0], Desa[1]);
+                    return peta(response);
                 }
             });
         });
 
-        function lokasi(DaftarDesa) {
-            var DesaOnline = [];
-            var DesaOffline = [];
-
-            for (var x = 0; x < DaftarDesa.length; x++) {
-                if (DaftarDesa[x].tipe == 'online') {
-                    DesaOnline.push(L.marker(DaftarDesa[x].koordinat, {
-                        icon: icon(DaftarDesa[x].logo)
-                    }).bindPopup(DaftarDesa[x].nama_desa));
-                } else {
-                    DesaOffline.push(L.marker(DaftarDesa[x].koordinat, {
-                        icon: icon(DaftarDesa[x].logo)
-                    }).bindPopup(DaftarDesa[x].nama_desa));
-                }
-            }
-
-            return [DesaOnline, DesaOffline];
-        }
-
-        function peta(DesaOnline, DesaOffline) {
+        function peta(DaftarDesa) {
             var mapCenter = [
                 {{ config('leaflet.map_center_latitude') }},
                 {{ config('leaflet.map_center_longitude') }}
             ];
-
-            // Desa Online
-            var Online = L.layerGroup(DesaOnline, DesaOffline);
+            var mapZoom = {{ config('leaflet.zoom_level') }}
 
             var mbAttr =
                 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
             var mbUrl =
                 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
-            var streets = L.tileLayer(mbUrl, {
+            var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 id: 'mapbox/streets-v11',
                 tileSize: 512,
                 zoomOffset: -1,
-                attribution: mbAttr
-            });
-
-            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                maxZoom: 18,
+                attribution: mbAttr,
             });
 
             var map = L.map('map', {
                 center: mapCenter,
-                zoom: {{ config('leaflet.zoom_level') }},
-                layers: [osm, Online]
+                zoom: mapZoom,
+                layers: [tiles]
             });
 
-            var baseLayers = {
-                'OpenStreetMap': osm,
-                'Streets': streets
-            };
+            var markers = L.markerClusterGroup();
 
-            var overlays = {
-                'Online': Online
-            };
+            for (var x = 0; x < DaftarDesa.length; x++) {
+                var marker = L.marker(DaftarDesa[x].koordinat, {
+                    icon: icon(DaftarDesa[x].logo)
+                });
+                marker.bindPopup(DaftarDesa[x].nama_desa);
+                markers.addLayer(marker);
+            }
 
-            // Desa Offline
-            var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-            var Offline = L.layerGroup(DesaOffline);
-
-            var satellite = L.tileLayer(mbUrl, {
-                id: 'mapbox/satellite-v9',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
-            });
-            layerControl.addBaseLayer(satellite, 'Satellite');
-            layerControl.addOverlay(Offline, 'Offline');
+            map.addLayer(markers);
         }
 
         function icon(url) {

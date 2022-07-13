@@ -158,15 +158,13 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    // public function scopeDesaMap($query)
-    // {
-    //     return $query
-    //         ->select(['*'])
-    //         ->selectRaw("if(versi_lokal is null, `tgl_rekam_hosting`, if(versi_hosting is null, `tgl_rekam_lokal`, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam")
-    //         ->whereRaw("(select if(versi_lokal is null, tgl_rekam_hosting, if(versi_hosting is null, tgl_rekam_lokal, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam) >= date(now()) - interval 7 day")
-    //         ->orderBy("tgl_rekam");
-
-    //     return $query
-    //         ->where('created_at', '>=', now()->subDay(7));
-    // }
+    public function scopePeta($query)
+    {
+        return $query
+            ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw("lat BETWEEN -10 AND 6")
+            ->whereRaw("lng BETWEEN 95 AND 142");
+        // ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
+    }
 }

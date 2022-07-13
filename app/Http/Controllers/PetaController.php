@@ -13,7 +13,7 @@ class PetaController extends Controller
 
     public function desa()
     {
-        $desa = Desa::limit(50)->get();
+        $desa = Desa::peta()->get();
 
         $geoJSONdata = $desa->map(function ($desa) {
             return [
