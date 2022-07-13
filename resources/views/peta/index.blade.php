@@ -87,20 +87,58 @@
         crossorigin=""></script>
     <script>
         $(document).ready(function() {
+
+            var DaftarDesa = [{
+                    'desa': 'bali',
+                    'logo': 'default',
+                    'tipe': 'online',
+                    'koordinat': [-
+                        8.439771599521729,
+                        115.19934061914685
+                    ],
+                },
+                {
+                    'desa': 'mataram',
+                    'logo': 'default',
+                    'tipe': 'online',
+                    'koordinat': [-
+                        8.53539246061938, 116.20129354298115
+                    ],
+                },
+                {
+                    'desa': 'malang',
+                    'logo': 'default',
+                    'tipe': 'online',
+                    'koordinat': [-
+                        8.017891590877028, 112.69006283953787
+                    ],
+                },
+                {
+                    'desa': 'madura',
+                    'logo': 'default',
+                    'tipe': 'online',
+                    'koordinat': [-
+                        7.072546448844008, 113.30969167873265
+                    ],
+                },
+                {
+                    'desa': 'makassar',
+                    'logo': 'default',
+                    'tipe': 'offline',
+                    'koordinat': [-2.644568843057757, 119.61914062500001],
+                },
+                {
+                    'desa': 'ambon',
+                    'logo': 'default',
+                    'tipe': 'offline',
+                    'koordinat': [-3.4169189298481557, 128.2675775885582],
+                },
+            ];
+
             var mapCenter = [
                 {{ config('leaflet.map_center_latitude') }},
                 {{ config('leaflet.map_center_longitude') }}
             ];
-
-            // {{ request('latitude', config('leaflet.map_center_latitude')) }},
-            // {{ request('longitude', config('leaflet.map_center_longitude')) }}
-
-            // var map = L.map('map').setView(mapCenter, {{ config('leaflet.zoom_level') }});
-
-            // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            //     maxZoom: 19,
-            //     attribution: '© OpenStreetMap'
-            // }).addTo(map);
 
             // Icon
             var logo = L.icon({
@@ -108,24 +146,21 @@
                 iconSize: [20, 20],
             });
 
+            var DesaOnline = [];
+            var DesaOffline = [];
+
+            for (var x = 0; x < DaftarDesa.length; x++) {
+                if (DaftarDesa[x].tipe == 'online') {
+                    DesaOnline.push(L.marker(DaftarDesa[x].koordinat).bindPopup(DaftarDesa[x].desa));
+                } else {
+                    DesaOffline.push(L.marker(DaftarDesa[x].koordinat, {
+                        icon: logo
+                    }).bindPopup(DaftarDesa[x].desa));
+                }
+            }
+
             // Desa Online
-            var Online = L.layerGroup();
-            var bali = L.marker([-8.439771599521729, 115.19934061914685], {
-                icon: logo
-            }).bindPopup('<br> asasas<br>').addTo(
-                Online);
-            var mataram = L.marker([-8.53539246061938, 116.20129354298115], {
-                icon: logo
-            }).bindPopup('This is Denver, CO.').addTo(
-                Online);
-            var malang = L.marker([-8.017891590877028, 112.69006283953787], {
-                icon: logo
-            }).bindPopup('This is Aurora, CO.').addTo(
-                Online);
-            var madura = L.marker([-7.072546448844008, 113.30969167873265], {
-                icon: logo
-            }).bindPopup('This is Golden, CO.').addTo(
-                Online);
+            var Online = L.layerGroup(DesaOnline);
 
             var mbAttr =
                 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
@@ -161,14 +196,7 @@
 
             // Desa Offline
             var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-            var makassar = L.marker([-2.644568843057757, 119.61914062500001], {
-                icon: logo
-            }).bindPopup('This is Crown Hill Park.');
-            var ambon = L.marker([-3.4169189298481557, 128.2675775885582], {
-                icon: logo
-            }).bindPopup('This is Ruby Hill Park.');
-
-            var Offline = L.layerGroup([makassar, ambon]);
+            var Offline = L.layerGroup(DesaOffline);
 
             var satellite = L.tileLayer(mbUrl, {
                 id: 'mapbox/satellite-v9',
