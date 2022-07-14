@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
+use Illuminate\Http\Request;
 
 class PetaController extends Controller
 {
@@ -11,11 +12,11 @@ class PetaController extends Controller
         return view('peta.index');
     }
 
-    public function desa()
+    public function desa(Request $request)
     {
         $desa = Desa::peta()->get();
 
-        $geoJSONdata = $desa->map(function ($desa) {
+        $geoJSONdata = $desa->map(function ($desa) use ($request) {
             return [
                 'sebutan_desa' => $desa->sebutan_desa,
                 'desa'         => $desa->nama_desa,
@@ -25,6 +26,10 @@ class PetaController extends Controller
                 'web'          => $desa->url_hosting,
                 'alamat'       => $desa->alamat_kantor,
                 'koordinat'    => [$desa->lat, $desa->lng],
+                'kode_prov'    => $request->get('kode_prov'),
+                'kode_kab'     => $request->get('kode_kab'),
+                'kode_kec'     => $request->get('kode_kec'),
+                'status'       => $request->get('status'),
             ];
         });
 

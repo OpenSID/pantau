@@ -90,18 +90,28 @@
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
     <script>
         $(document).ready(function() {
+            getWilayah(kode_prov, kode_kab, kode_kec, status);
+        });
+
+        function getWilayah(kode_prov = null, kode_kab = null, kode_kec = null, status = null) {
             var url = "{{ url('peta/desa') }}";
 
             $.ajax({
                 type: "GET",
                 url: url,
-                data: "check",
+                data: {
+                    kode_prov: kode_prov,
+                    kode_kab: kode_kab,
+                    kode_kec: kode_kec,
+                    status: status,
+                },
                 success: function(response) {
+                    console.log(response);
                     // // Buat peta
                     return peta(response);
                 }
             });
-        });
+        }
 
         function peta(DaftarDesa) {
             var mapCenter = [
