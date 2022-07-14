@@ -112,12 +112,30 @@
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
     <script>
         $(document).ready(function() {
-            var kode_provinsi = '73'; //'11';
-            var kode_kabupaten = '73.01'; //'11.11';
+            var kode_provinsi = null; //'11';
+            var kode_kabupaten = null; //'11.11';
             var kode_kecamatan = null; //'11.11';
             var status = null; //'11.11.11';
 
             getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
+
+            // $("#filter").click(function(e) {
+            //     alert('click');
+
+            //     // map.invalidateSize();
+            //     var kode_provinsi = '71'; //'11';
+            //     var kode_kabupaten = '71.01'; //'11.11';
+            //     var kode_kecamatan = null; //'11.11';
+            //     var status = null; //'11.11.11';
+
+            //     getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
+
+            //     // location.reload();
+
+            //     // return false;
+            // });
+
+
         });
 
         function getWilayah(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
@@ -135,8 +153,6 @@
                     status: status,
                 },
                 success: function(response) {
-                    console.log(response);
-                    // // Buat peta
                     return peta(response);
                 }
             });
@@ -175,37 +191,12 @@
                 var marker = L.marker(DaftarDesa[x].koordinat, {
                     icon: icon(DaftarDesa[x].logo)
                 });
-                marker.bindPopup(
-                    '<h6 class="text-center"><b style="color:red">' + DaftarDesa[x].sebutan_desa.toUpperCase() + ' ' +
-                    DaftarDesa[x].desa
-                    .toUpperCase() +
-                    '</b></h6>' +
-                    '<b><table width="100%">' +
-                    '<tr>' +
-                    '<td>Desa</td><td> : ' + DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Kecamatan</td><td> : ' + DaftarDesa[x].kecamatan + '</b></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Kab/Kota</td><td> : ' + DaftarDesa[x].kabupaten + '</b></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Provinsi</td><td> : ' + DaftarDesa[x].provinsi + '</b></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Alamat</td><td> : ' + DaftarDesa[x].alamat + '</b></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Website</td><td> : ' + '<a href="' + DaftarDesa[x].web +
-                    '" + " target=\"_blank\">' + DaftarDesa[x].web + '</a>' + '</b></td>' +
-                    '</tr>' +
-                    '</table></b>'
-                );
+                marker.bindPopup(DaftarDesa[x].detail);
                 markers.addLayer(marker);
             }
 
             map.addLayer(markers);
+            // map.invalidateSize();
         }
 
         function icon(url) {

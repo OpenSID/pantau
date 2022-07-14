@@ -23,14 +23,30 @@ class PetaController extends Controller
 
         $desa = Desa::latest()->peta($fillters)->get()->map(function ($desa) {
             return [
-                'sebutan_desa' => $desa->sebutan_desa,
-                'desa'         => $desa->nama_desa,
-                'kecamatan'    => $desa->nama_kecamatan,
-                'kabupaten'    => $desa->nama_kabupaten,
-                'provinsi'     => $desa->nama_provinsi,
-                'web'          => $desa->url_hosting,
-                'alamat'       => $desa->alamat_kantor,
                 'koordinat'    => [$desa->lat, $desa->lng],
+                'logo'         => null,
+                'detail'       => '
+                    <h6 class="text-center"><b style="color:red">' . $desa->sebutan_desa . ' ' . $desa->nama_desa . '</b></h6>
+                    <b><table width="100%">
+                        <tr>
+                            <td>Desa</td><td> : ' . $desa->sebutan_desa . ' ' . $desa->nama_desa . '</b></td>
+                        </tr>
+                        <tr>
+                            <td>Kecamatan</td><td> : ' . $desa->nama_kecamatan . '</b></td>
+                        </tr>
+                        <tr>
+                        <td>Kab/Kota</td><td> : ' . $desa->nama_kabupaten . '</b></td>
+                        </tr>
+                        <tr>
+                            <td>Provinsi</td><td> : ' . $desa->nama_provinsi . '</b></td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td><td> : ' . $desa->alamat_kantor . '</b></td>
+                        </tr>
+                        <tr>
+                            <td>Website</td><td> : <a href="' . $desa->url_hosting . ' target="_blank">' . $desa->url_hosting . '</a></b></td>
+                        </tr>
+                    </table></b>',
             ];
         });
 
