@@ -136,8 +136,14 @@
                     icon: icon(DaftarDesa[x].logo)
                 });
                 marker.bindPopup(
-                    '<h6><b>' + DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></h6>' +
+                    '<h6 class="text-center"><b style="color:red">' + DaftarDesa[x].sebutan_desa.toUpperCase() + ' ' +
+                    DaftarDesa[x].desa
+                    .toUpperCase() +
+                    '</b></h6>' +
                     '<b><table width="100%">' +
+                    '<tr>' +
+                    '<td>Desa</td><td> : ' + DaftarDesa[x].sebutan_desa + ' ' + DaftarDesa[x].desa + '</b></td>' +
+                    '</tr>' +
                     '<tr>' +
                     '<td>Kecamatan</td><td> : ' + DaftarDesa[x].kecamatan + '</b></td>' +
                     '</tr>' +
