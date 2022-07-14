@@ -90,20 +90,26 @@
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
     <script>
         $(document).ready(function() {
-            var url = "{{ url('peta/desa') }}";
+            var kode_provinsi = '73'; //'11';
+            var kode_kabupaten = '73.01'; //'11.11';
+            var kode_kecamatan = null; //'11.11';
+            var status = null; //'11.11.11';
 
-            getWilayah(url, kode_prov, kode_kab, kode_kec, status);
+            getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
         });
 
-        function getWilayah(url = null, kode_prov = null, kode_kab = null, kode_kec = null, status = null) {
+        function getWilayah(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
+
+            console.log(kode_provinsi);
+            var url = "{{ url('peta/desa') }}";
 
             $.ajax({
                 type: "GET",
                 url: url,
                 data: {
-                    kode_prov: kode_prov,
-                    kode_kab: kode_kab,
-                    kode_kec: kode_kec,
+                    kode_provinsi: kode_provinsi,
+                    kode_kabupaten: kode_kabupaten,
+                    kode_kecamatan: kode_kecamatan,
                     status: status,
                 },
                 success: function(response) {
@@ -115,6 +121,7 @@
         }
 
         function peta(DaftarDesa) {
+
             var mapCenter = [
                 {{ config('leaflet.map_center_latitude') }},
                 {{ config('leaflet.map_center_longitude') }}
