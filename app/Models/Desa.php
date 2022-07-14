@@ -72,14 +72,7 @@ class Desa extends Model
      */
     public function scopeDesaBaru($query)
     {
-        // return $query
-        //     ->select(['*'])
-        //     ->selectRaw("if(versi_lokal is null, `tgl_rekam_hosting`, if(versi_hosting is null, `tgl_rekam_lokal`, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam")
-        //     ->whereRaw("(select if(versi_lokal is null, tgl_rekam_hosting, if(versi_hosting is null, tgl_rekam_lokal, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam) >= date(now()) - interval 7 day")
-        //     ->orderBy("tgl_rekam");
-
-        return $query
-            ->where('created_at', '>=', now()->subDay(7));
+        return $query->where('created_at', '>=', now()->subDay(7));
     }
 
     /**
@@ -160,36 +153,24 @@ class Desa extends Model
      */
     public function scopePeta($query, array $fillters)
     {
-        $query->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-            return $query->where('kode_provinsi', $kode_provinsi);
+        return $query->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
+            $query->where('kode_provinsi', $kode_provinsi);
         })
         ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-            return $query->where('kode_kabupaten', $kode_kabupaten);
+            $query->where('kode_kabupaten', $kode_kabupaten);
         })
         ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-            return $query->where('kode_kecamatan', $kode_kecamatan);
-        });
-
-        // $query->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
-
-        // $query->whereRaw("versi_hosting <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
-        $query->whereRaw("versi_lokal <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
-
-
-        // ->when(! empty($fillters['status']) && $fillters['status'] == 1, function ($query) {
-        //     return $query->selectRaw("versi_hosting <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
-        // })
-        // ->when(! empty($fillters['status']) && $fillters['status'] == 2, function ($query) {
-        //     return $query->selectRaw("versi_lokal <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
-        // });
-
-            
-
-        return $query
-            ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw("lat BETWEEN -10 AND 6")
-            ->whereRaw("lng BETWEEN 95 AND 142");
-        //
+            $query->where('kode_kecamatan', $kode_kecamatan);
+        })
+        ->when($fillters['status'] == 1, function ($query) {
+            $query->whereRaw("versi_hosting <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
+        })
+        ->when($fillters['status'] == 2, function ($query) {
+            $query->whereRaw("versi_lokal <> '' and greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day");
+        })
+        ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+        ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+        ->whereRaw("lat BETWEEN -10 AND 6")
+        ->whereRaw("lng BETWEEN 95 AND 142");
     }
 }
