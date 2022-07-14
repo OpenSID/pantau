@@ -90,11 +90,12 @@
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
     <script>
         $(document).ready(function() {
-            getWilayah(kode_prov, kode_kab, kode_kec, status);
+            var url = "{{ url('peta/desa') }}";
+
+            getWilayah(url, kode_prov, kode_kab, kode_kec, status);
         });
 
-        function getWilayah(kode_prov = null, kode_kab = null, kode_kec = null, status = null) {
-            var url = "{{ url('peta/desa') }}";
+        function getWilayah(url = null, kode_prov = null, kode_kab = null, kode_kec = null, status = null) {
 
             $.ajax({
                 type: "GET",
