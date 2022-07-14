@@ -71,6 +71,28 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="btn-group btn-group-sm btn-block">
+                                            <button type="button" id="reset" class="btn btn-secondary"><span
+                                                    class="fas fa-ban"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="btn-group btn-group-sm btn-block">
+                                            <button type="button" id="filter" class="btn btn-primary"><span
+                                                    class="fas fa-search"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr class="mt-0">
                     </div>
                 </div>
