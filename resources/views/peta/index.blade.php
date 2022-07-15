@@ -98,6 +98,7 @@
                 </div>
             </div>
             <div class="row">
+                <input type="button" id="btnMapIt" value="Map Values" class="btn" />
                 <div id="map"></div>
             </div>
         </div>
@@ -113,6 +114,8 @@
     {{-- <script src="https://leafletjs.com/examples/geojson/sample-geojson.js"></script> --}}
     <script>
         $(document).ready(function() {
+            var markersBar;
+            var barLayer;
 
             var map = L.map('map').setView([{{ config('leaflet.map_center_latitude') }},
                 {{ config('leaflet.map_center_longitude') }}
@@ -132,41 +135,58 @@
                 layer.bindPopup(feature.properties.popupContent);
             }
 
-            var kode_provinsi = '71';
+            loadData(71);
 
-            $.ajax({
-                url: "{{ url('peta/desa') }}",
-                contentType: "application/json; charset=utf-8",
-                cache: false,
-                dataType: "json",
-                data: {
-                    kode_provinsi: kode_provinsi,
-                },
-                responseType: "json",
-                success: function(response) {
+            $('#btnMapIt').click(function() {
+                // Kosongkan Map Telebih Dahulu
+                map.removeLayer(markersBar);
 
-                    var markersBar = L.markerClusterGroup();
-
-                    var barLayer = new L.geoJSON(response, {
-
-                        pointToLayer: function(feature, latlng) {
-                            console.log(latlng);
-                            return L.marker(latlng, {
-                                icon: baseballIcon
-                            });
-                        },
-
-                        onEachFeature: onEachFeature
-                    });
-
-                    markersBar.addLayer(barLayer);
-                    console.log(markersBar);
-                    map.addLayer(markersBar);
-                },
-                error: function() {
-                    alert('Gagal mengambil data');
-                },
+                loadData(74);
             });
+
+            function loadData(kode_provinsi) {
+
+                $.ajax({
+                    url: "{{ url('peta/desa') }}",
+                    contentType: "application/json; charset=utf-8",
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        kode_provinsi: kode_provinsi,
+                    },
+                    responseType: "json",
+                    success: function(response) {
+
+                        // Buat Marker Cluster Group 
+                        markersBar = L.markerClusterGroup();
+
+                        // Simpan Data geoJSON
+                        barLayer = new L.geoJSON(response, {
+                            pointToLayer: function(feature, latlng) {
+                                // console.log(latlng);
+                                return L.marker(latlng, {
+                                    icon: baseballIcon
+                                });
+                            },
+
+                            onEachFeature: onEachFeature
+                        });
+
+                        // Tambahkan Marker dan Marker Cluster Group pada Map
+                        markersBar.addLayer(barLayer);
+                        map.addLayer(markersBar);
+                    },
+                    error: function() {
+                        alert('Gagal mengambil data');
+                    },
+                });
+            }
+
+            function markerDelAgain() {
+                for (i = 0; i < marker.length; i++) {
+                    map.removeLayer(marker[i]);
+                }
+            }
         });
     </script>
 @endsection

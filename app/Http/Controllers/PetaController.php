@@ -47,7 +47,7 @@ class PetaController extends Controller
         return [
             'logo'   => null,
             'popupContent' => '
-                <h6 class="text-center"><b style="color:red">' . $desa->sebutan_desa . ' ' . $desa->nama_desa . '</b></h6>
+                <h6 class="text-center"><b style="color:red">' . strtoupper($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></h6>
                 <b><table width="100%">
                     <tr>
                         <td>Desa</td><td> : ' . $desa->sebutan_desa . ' ' . $desa->nama_desa . '</b></td>
