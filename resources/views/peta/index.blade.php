@@ -119,23 +119,21 @@
 
             getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
 
-            // $("#filter").click(function(e) {
-            //     alert('click');
+            $("#filter").click(function(e) {
+                alert('click');
 
-            //     // map.invalidateSize();
-            //     var kode_provinsi = '71'; //'11';
-            //     var kode_kabupaten = '71.01'; //'11.11';
-            //     var kode_kecamatan = null; //'11.11';
-            //     var status = null; //'11.11.11';
+                // map.invalidateSize();
+                var kode_provinsi = '71'; //'11';
+                var kode_kabupaten = '71.01'; //'11.11';
+                var kode_kecamatan = null; //'11.11';
+                var status = null; //'11.11.11';
 
-            //     getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
+                getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
 
-            //     // location.reload();
+                // location.reload();
 
-            //     // return false;
-            // });
-
-
+                // return false;
+            });
         });
 
         function getWilayah(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
@@ -196,7 +194,7 @@
             }
 
             map.addLayer(markers);
-            // map.invalidateSize();
+            // marker.invalidateSize();
         }
 
         function icon(url) {
