@@ -65,8 +65,11 @@
                             <div class="col-sm">
                                 <div class="form-group">
                                     <label>Online</label>
-                                    <select class="select2 form-control-sm" id="Online" name="Online"
-                                        data-placeholder="Pilih Online" style="width: 100%;">
+                                    <select class="select2 form-control-sm" id="status" name="Online"
+                                        data-placeholder="Pilih Status" style="width: 100%;">
+                                        <option value="">Semua</option>
+                                        <option value="1">Online</option>
+                                        <option value="2">Offline</option>
                                     </select>
                                 </div>
                             </div>
@@ -98,7 +101,6 @@
                 </div>
             </div>
             <div class="row">
-                <input type="button" id="btnMapIt" value="Map Values" class="btn" />
                 <div id="map"></div>
             </div>
         </div>
@@ -135,16 +137,16 @@
                 layer.bindPopup(feature.properties.popupContent);
             }
 
-            loadData(71);
+            loadData();
 
-            $('#btnMapIt').click(function() {
+            $('#filter').click(function() {
                 // Kosongkan Map Telebih Dahulu
                 map.removeLayer(markersBar);
-
-                loadData(74);
+                loadData($('#provinsi').val(), $('#kabupaten').val(), $('#kecamatan').val(), $('#status')
+                    .val());
             });
 
-            function loadData(kode_provinsi) {
+            function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
                     url: "{{ url('peta/desa') }}",
@@ -153,6 +155,9 @@
                     dataType: "json",
                     data: {
                         kode_provinsi: kode_provinsi,
+                        kode_kabupaten: kode_kabupaten,
+                        kode_kecamatan: kode_kecamatan,
+                        status: status,
                     },
                     responseType: "json",
                     success: function(response) {
