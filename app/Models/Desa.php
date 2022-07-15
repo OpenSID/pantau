@@ -15,6 +15,9 @@ class Desa extends Model
     protected $table = 'desa';
 
     /** {@inheritdoc} */
+    protected $appends = ['format_created_at'];
+
+    /** {@inheritdoc} */
     protected $casts = [
         'tgl_rekam_lokal' => 'datetime',
         'tgl_rekam_hosting' => 'datetime',
@@ -149,8 +152,8 @@ class Desa extends Model
         return DB::raw("DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2");
     }
 
-    public function getCreatedAtAttribute($date)
+    public function getFormatCreatedAtAttribute()
     {
-        return $this->attributes['created_at'] = Carbon::parse($date)->format('d/m/Y');
+        return $this->created_at->format('d/m/Y');
     }
 }

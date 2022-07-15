@@ -240,7 +240,7 @@
                     orderable: false
                 },
                 {
-                    data: 'created_at'
+                    data: 'format_created_at', name: 'created_at'
                 },
                 {
                     data: 'nama_desa'
