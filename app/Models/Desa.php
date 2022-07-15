@@ -171,6 +171,7 @@ class Desa extends Model
         ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
         ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
         ->whereRaw("lat BETWEEN -10 AND 6")
-        ->whereRaw("lng BETWEEN 95 AND 142");
+        ->whereRaw("lng BETWEEN 95 AND 142")
+        ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY"); //sejak dua bulan yang lalu
     }
 }

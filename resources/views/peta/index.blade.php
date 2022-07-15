@@ -177,6 +177,11 @@
                     .val());
             });
 
+            $('#reset').click(function() {
+                // Kosongkan Map Telebih Dahulu
+                location.reload();
+            });
+
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
@@ -216,8 +221,6 @@
                     },
                 });
             }
-            
-            
         });
     </script>
 @endsection
