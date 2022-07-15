@@ -110,100 +110,63 @@
         integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
         crossorigin=""></script>
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+    {{-- <script src="https://leafletjs.com/examples/geojson/sample-geojson.js"></script> --}}
     <script>
         $(document).ready(function() {
-            var kode_provinsi = null; //'11';
-            var kode_kabupaten = null; //'11.11';
-            var kode_kecamatan = null; //'11.11';
-            var status = null; //'11.11.11';
 
-            getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
-
-            $("#filter").click(function(e) {
-                alert('click');
-
-                // map.invalidateSize();
-                var kode_provinsi = '71'; //'11';
-                var kode_kabupaten = '71.01'; //'11.11';
-                var kode_kecamatan = null; //'11.11';
-                var status = null; //'11.11.11';
-
-                getWilayah(kode_provinsi, kode_kabupaten, kode_kecamatan, status);
-
-                // location.reload();
-
-                // return false;
-            });
-        });
-
-        function getWilayah(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
-
-            console.log(kode_provinsi);
-            var url = "{{ url('peta/desa') }}";
-
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: {
-                    kode_provinsi: kode_provinsi,
-                    kode_kabupaten: kode_kabupaten,
-                    kode_kecamatan: kode_kecamatan,
-                    status: status,
-                },
-                success: function(response) {
-                    return peta(response);
-                }
-            });
-        }
-
-        function peta(DaftarDesa) {
-
-            var mapCenter = [
-                {{ config('leaflet.map_center_latitude') }},
+            var map = L.map('map').setView([{{ config('leaflet.map_center_latitude') }},
                 {{ config('leaflet.map_center_longitude') }}
-            ];
-            var mapZoom = {{ config('leaflet.zoom_level') }}
-
-            var mbAttr =
-                'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-            var mbUrl =
-                'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+            ], {{ config('leaflet.zoom_level') }});
 
             var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                maxZoom: 18,
-                attribution: mbAttr,
-            });
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
 
-            var map = L.map('map', {
-                center: mapCenter,
-                zoom: mapZoom,
-                layers: [tiles]
-            });
-
-            var markers = L.markerClusterGroup();
-
-            for (var x = 0; x < DaftarDesa.length; x++) {
-                var marker = L.marker(DaftarDesa[x].koordinat, {
-                    icon: icon(DaftarDesa[x].logo)
-                });
-                marker.bindPopup(DaftarDesa[x].detail);
-                markers.addLayer(marker);
-            }
-
-            map.addLayer(markers);
-            // marker.invalidateSize();
-        }
-
-        function icon(url) {
-            var icon = "{{ url('assets/img/opensid_logo.png') }}";
-
-            return L.icon({
-                iconUrl: url ?? icon,
+            var baseballIcon = L.icon({
+                iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
                 iconSize: [20, 20],
             });
-        }
+
+            function onEachFeature(feature, layer) {
+                layer.bindPopup(feature.properties.popupContent);
+            }
+
+            var kode_provinsi = '71';
+
+            $.ajax({
+                url: "{{ url('peta/desa') }}",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                dataType: "json",
+                data: {
+                    kode_provinsi: kode_provinsi,
+                },
+                responseType: "json",
+                success: function(response) {
+
+                    var markersBar = L.markerClusterGroup();
+
+                    var barLayer = new L.geoJSON(response, {
+
+                        pointToLayer: function(feature, latlng) {
+                            console.log(latlng);
+                            return L.marker(latlng, {
+                                icon: baseballIcon
+                            });
+                        },
+
+                        onEachFeature: onEachFeature
+                    });
+
+                    markersBar.addLayer(barLayer);
+                    console.log(markersBar);
+                    map.addLayer(markersBar);
+                },
+                error: function() {
+                    alert('Gagal mengambil data');
+                },
+            });
+        });
     </script>
 @endsection
