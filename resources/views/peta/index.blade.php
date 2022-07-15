@@ -123,11 +123,40 @@
                 {{ config('leaflet.map_center_longitude') }}
             ], {{ config('leaflet.zoom_level') }});
 
-            var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            var mbAttr =
+                'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+            var mbUrl =
+                'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+            var streets = L.tileLayer(mbUrl, {
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                attribution: mbAttr
+            });
+
+            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
+            var baseLayers = {
+                'OpenStreetMap': osm,
+                'Streets': streets
+            };
+
+            // Tambahkan jenis map
+            var layerControl = L.control.layers(baseLayers).addTo(map);
+
+            var satellite = L.tileLayer(mbUrl, {
+                id: 'mapbox/satellite-v9',
+                tileSize: 512,
+                zoomOffset: -1,
+                attribution: mbAttr
+            });
+            layerControl.addBaseLayer(satellite, 'Satellite');
+
+            // Ubah icon
             var baseballIcon = L.icon({
                 iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
                 iconSize: [20, 20],
@@ -168,7 +197,6 @@
                         // Simpan Data geoJSON
                         barLayer = new L.geoJSON(response, {
                             pointToLayer: function(feature, latlng) {
-                                // console.log(latlng);
                                 return L.marker(latlng, {
                                     icon: baseballIcon
                                 });
