@@ -128,6 +128,8 @@
             var mbUrl =
                 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
+            var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
             var streets = L.tileLayer(mbUrl, {
                 id: 'mapbox/streets-v11',
                 tileSize: 512,
@@ -135,7 +137,7 @@
                 attribution: mbAttr
             });
 
-            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            var osm = L.tileLayer(osmUrl, {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
@@ -214,12 +216,8 @@
                     },
                 });
             }
-
-            function markerDelAgain() {
-                for (i = 0; i < marker.length; i++) {
-                    map.removeLayer(marker[i]);
-                }
-            }
+            
+            
         });
     </script>
 @endsection
