@@ -36,6 +36,10 @@
         });
 
         $('#provinsi').on('select2:select', function(e) {
+            $('#kabupaten').attr('disabled', false);
+            $('#kecamatan').attr('disabled', true);
+            $('#kabupaten').val('').trigger('change');
+
             $('#kabupaten').select2({
                 ajax: {
                     headers: {
@@ -71,6 +75,8 @@
         });
 
         $('#kabupaten').on('select2:select', function(e) {
+            $('#kecamatan').attr('disabled', false);
+            $('#kecamatan').val('').trigger('change');
             $('#kecamatan').select2({
                 ajax: {
                     headers: {
@@ -139,5 +145,7 @@
                 }
             });
         });
+
+        $('#status').select2();
     </script>
 @endpush()
