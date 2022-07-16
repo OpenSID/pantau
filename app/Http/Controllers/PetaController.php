@@ -64,7 +64,7 @@ class PetaController extends Controller
                         <td>Alamat</td><td> : ' . $desa->alamat_kantor . '</b></td>
                     </tr>
                     <tr>
-                        <td>Website</td><td> : <a href="' . strtolower($desa->url_hosting) . ' target="_blank">' . strtolower($desa->url_hosting) . '</a></b></td>
+                        <td>Website</td><td> : <a href="http://' . strtolower($desa->url_hosting) . '" target="_blank">' . strtolower($desa->url_hosting) . '</a></b></td>
                     </tr>
                 </table></b>',
         ];
