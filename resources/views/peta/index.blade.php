@@ -179,13 +179,14 @@
 
             $('#reset').click(function() {
                 // Kosongkan Map Telebih Dahulu
-                location.reload();
+                map.removeLayer(markersBar);
+                loadData();
             });
 
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
-                    url: "{{ url('peta/desa') }}",
+                    url: "{{ url('peta') }}",
                     contentType: "application/json; charset=utf-8",
                     cache: false,
                     dataType: "json",

@@ -44,7 +44,6 @@ Route::prefix('datatables')->as('datatables:')
 Route::prefix('peta')
     ->group(function () {
         Route::get('/', [PetaController::class, 'index']);
-        Route::get('desa', [PetaController::class, 'desa']);
     });
 
 // laporan

@@ -7,39 +7,38 @@ use Illuminate\Http\Request;
 
 class PetaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('peta.index');
-    }
-
-    public function desa(Request $request)
-    {
-        $fillters = [
-            'kode_provinsi'  => $request->kode_provinsi,
-            'kode_kabupaten' => $request->kode_kabupaten,
-            'kode_kecamatan' => $request->kode_kecamatan,
-            'status'         => $request->status,
-        ];
-
-        $geoJSONdata = Desa::latest()->peta($fillters)->get()->map(function ($desa) {
-            return [
-                'type'       => 'Feature',
-                'geometry'   => [
-                    'type'        => 'Point',
-                    'coordinates' => [
-                        (float) $desa->lng,
-                        (float) $desa->lat
-                    ],
-                ],
-                'properties' => $this->properties($desa),
-                'id' => $desa->id,
+        if ($request->ajax()) {
+            $fillters = [
+                'kode_provinsi'  => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+                'status'         => $request->status,
             ];
-        });
 
-        return response()->json([
-            'type'     => 'FeatureCollection',
-            'features' => $geoJSONdata,
-        ]);
+            $geoJSONdata = Desa::latest()->peta($fillters)->get()->map(function ($desa) {
+                return [
+                    'type'       => 'Feature',
+                    'geometry'   => [
+                        'type'        => 'Point',
+                        'coordinates' => [
+                            (float) $desa->lng,
+                            (float) $desa->lat
+                        ],
+                    ],
+                    'properties' => $this->properties($desa),
+                    'id' => $desa->id,
+                ];
+            });
+
+            return response()->json([
+                'type'     => 'FeatureCollection',
+                'features' => $geoJSONdata,
+            ]);
+        }
+
+        return view('peta.index');
     }
 
     private function properties($desa)
@@ -50,22 +49,22 @@ class PetaController extends Controller
                 <h6 class="text-center"><b style="color:red">' . strtoupper($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></h6>
                 <b><table width="100%">
                     <tr>
-                        <td>Desa</td><td> : ' . $desa->sebutan_desa . ' ' . $desa->nama_desa . '</b></td>
+                        <td>' . ucwords($desa->sebutan_desa) . '</td><td> : ' . ucwords($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></td>
                     </tr>
                     <tr>
-                        <td>Kecamatan</td><td> : ' . $desa->nama_kecamatan . '</b></td>
+                        <td>Kecamatan</td><td> : ' . ucwords($desa->nama_kecamatan) . '</b></td>
                     </tr>
                     <tr>
-                    <td>Kab/Kota</td><td> : ' . $desa->nama_kabupaten . '</b></td>
+                    <td>Kab/Kota</td><td> : ' . ucwords($desa->nama_kabupaten) . '</b></td>
                     </tr>
                     <tr>
-                        <td>Provinsi</td><td> : ' . $desa->nama_provinsi . '</b></td>
+                        <td>Provinsi</td><td> : ' . ucwords($desa->nama_provinsi) . '</b></td>
                     </tr>
                     <tr>
                         <td>Alamat</td><td> : ' . $desa->alamat_kantor . '</b></td>
                     </tr>
                     <tr>
-                        <td>Website</td><td> : <a href="' . $desa->url_hosting . ' target="_blank">' . $desa->url_hosting . '</a></b></td>
+                        <td>Website</td><td> : <a href="' . strtolower($desa->url_hosting) . ' target="_blank">' . strtolower($desa->url_hosting) . '</a></b></td>
                     </tr>
                 </table></b>',
         ];
