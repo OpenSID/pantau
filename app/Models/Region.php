@@ -129,15 +129,17 @@ class Region extends Model
 
     public static function boot()
     {
-        $user_id = Auth::user()->id;
-
         parent::boot();
-        static::creating(function ($model) use ($user_id) {
-            $model->created_by = $user_id;
-            $model->updated_by = $user_id;
-        });
-        static::updating(function ($model) use ($user_id) {
-            $model->updated_by = $user_id;
-        });
+
+        if (Auth::user()) {
+            $user_id = Auth::user()->id;
+            static::creating(function ($model) use ($user_id) {
+                $model->created_by = $user_id;
+                $model->updated_by = $user_id;
+            });
+            static::updating(function ($model) use ($user_id) {
+                $model->updated_by = $user_id;
+            });
+        }
     }
 }

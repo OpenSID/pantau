@@ -26,7 +26,7 @@
                     <div class="float-left">
                         <div class="btn-group">
                             <a href="{{ url('desa') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-circle-left"></i> Kembali Ke Daftar Desa
+                                    class="fas fa-arrow-circle-left"></i>&ensp;Kembali Ke Daftar Desa
                             </a>
                         </div>
                     </div>
@@ -117,11 +117,11 @@
                         <div class="row">
                             <div class="col-6">
                                 <button type="reset" class="btn btn-sm btn-danger btn-block"><i class="fas fa-times"></i>
-                                    Batal</button>
+                                    &ensp;Batal</button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-sm btn-success btn-block float-right"><i class="fas fa-save"></i>
-                                    Simpan</button>
+                                    &ensp;Simpan</button>
                             </div>
                         </div>
                     </div>

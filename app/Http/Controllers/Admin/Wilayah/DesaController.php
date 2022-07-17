@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin\Wilayah;
 
 use App\Models\Region;
 use Illuminate\Http\Request;
+use App\Imports\RegionImport;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegionRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class DesaController extends Controller
 {
@@ -74,6 +77,26 @@ class DesaController extends Controller
         }
 
         return back()->with('error', 'Data gagal diubah');
+    }
+
+    public function import()
+    {
+        return view('admin.wilayah.desa.import');
+    }
+
+    public function prosesImport(Request $request)
+    {
+        try {
+            Excel::import(new RegionImport, $request->file('file')->store('temp'));
+        } catch (\Exception $e) {
+            report($e);
+            return back()->with('error', 'Data gagal diimport');
+        }
+
+        // Hapus folder temp ketika sudah selesai
+        Storage::deleteDirectory('temp');
+
+        return redirect('desa')->with('success', 'Data berhasil diimport');
     }
 
     public function destroy($id)

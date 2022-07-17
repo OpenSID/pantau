@@ -13,7 +13,10 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header with-border">
-                    <a href="{{ url('desa/create') }}" class="btn btn-primary btn-sm mb-3">Tambah Data</a>
+                    <a href="{{ url('desa/create') }}" class="btn btn-success btn-sm mb-3"><i class="fas fa-plus"></i>
+                        &ensp;Tambah</a>
+                    <a href="{{ url('desa/import') }}" class="btn btn-primary btn-sm mb-3"><i class="fas fa-upload"></i>
+                        &ensp;Import</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

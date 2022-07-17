@@ -33,3 +33,33 @@ if (! function_exists('is_local')) {
         }
     }
 }
+
+if (! function_exists('parent_code')) {
+    /**
+     * Parent Code
+     *
+     * @param mixed $region_code
+     * @return string
+     */
+
+    function parent_code($region_code)
+    {
+        $panjang = strlen($region_code);
+
+        if ($panjang > 8) {
+            // Desa => Kecamatan
+
+            return substr($region_code, 0, 8);
+        } elseif ($panjang > 5) {
+            // Kecamatan => Kabupaten
+
+            return substr($region_code, 0, 5);
+        } elseif ($panjang > 2) {
+            // Kabupaten => Provinsi
+
+            return substr($region_code, 0, 2);
+        } else {
+            return 0;
+        }
+    }
+}

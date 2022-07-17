@@ -54,8 +54,8 @@
                         </div>
 
                         <div class="form-group">
-                            <button class="btn btn-danger">Batal</button>
-                            <button class="btn btn-success float-right">Simpan</button>
+                            <button class="btn btn-danger">&ensp;Batal</button>
+                            <button class="btn btn-success float-right">&ensp;Simpan</button>
                         </div>
                     </form>
                 </div>
