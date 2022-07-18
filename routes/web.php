@@ -121,5 +121,5 @@ Route::prefix('kecamatan')
 
 // Wilayah Desa / Keluarahan
 Route::resource('desa', '\App\Http\Controllers\Admin\Wilayah\DesaController', ['except' => ['show']])->middleware('auth');
-Route::get('desa/import', [DesaController::class, 'import'])->middleware('auth');
-Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->middleware('auth');
+Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import')->middleware('auth');
+Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import')->middleware('auth');
