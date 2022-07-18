@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Desa extends Model
 {
@@ -12,6 +13,9 @@ class Desa extends Model
 
     /** {@inheritdoc} */
     protected $table = 'desa';
+
+    /** {@inheritdoc} */
+    protected $appends = ['format_created_at'];
 
     /** {@inheritdoc} */
     protected $casts = [
@@ -72,7 +76,10 @@ class Desa extends Model
      */
     public function scopeDesaBaru($query)
     {
-        return $query->where('created_at', '>=', now()->subDay(7));
+        return $query
+            ->select(['*'])
+            ->selectRaw("(CASE WHEN (tgl_rekam_lokal > tgl_rekam_hosting) THEN versi_lokal else versi_hosting end) as versi")
+            ->where('created_at', '>=', now()->subDay(7));
     }
 
     /**
@@ -173,5 +180,10 @@ class Desa extends Model
         ->whereRaw("lat BETWEEN -10 AND 6")
         ->whereRaw("lng BETWEEN 95 AND 142")
         ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY"); //sejak dua bulan yang lalu
+    }
+
+    public function getFormatCreatedAtAttribute()
+    {
+        return $this->created_at->format('d/m/Y');
     }
 }
