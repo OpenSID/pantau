@@ -34,6 +34,36 @@ if (! function_exists('is_local')) {
     }
 }
 
+if (! function_exists('parent_code')) {
+    /**
+     * Parent Code
+     *
+     * @param mixed $region_code
+     * @return string
+     */
+
+    function parent_code($region_code)
+    {
+        $panjang = strlen($region_code);
+
+        if ($panjang > 8) {
+            // Desa => Kecamatan
+
+            return substr($region_code, 0, 8);
+        } elseif ($panjang > 5) {
+            // Kecamatan => Kabupaten
+
+            return substr($region_code, 0, 5);
+        } elseif ($panjang > 2) {
+            // Kabupaten => Provinsi
+
+            return substr($region_code, 0, 2);
+        } else {
+            return 0;
+        }
+    }
+}
+
 if (! function_exists('fixDomainName')) {
     /**
      * Validasi domain.
@@ -43,13 +73,19 @@ if (! function_exists('fixDomainName')) {
      */
     function fixDomainName($url = '')
     {
-        $strToLower = strtolower(trim($url));
-        $httpPregReplace = preg_replace('/^http:\/\//i', '', $strToLower);
-        $httpsPregReplace = preg_replace('/^https:\/\//i', '', $httpPregReplace);
-        $wwwPregReplace = preg_replace('/^www\./i', '', $httpsPregReplace);
-        $explodeToArray = explode('/', $wwwPregReplace);
-        $finalDomainName = trim($explodeToArray[0]);
+        return parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH);
+    }
+}
 
-        return $finalDomainName;
+if (! function_exists('normalkan_spasi')) {
+    /**
+     * Validasi data string.
+     *
+     * @param  string $str
+     * @return string
+     */
+    function normalkan_spasi($str = '')
+    {
+        return trim(preg_replace('/^desa\s+|^nagari\s+|^kecamatan\s+|^kabupaten\s+|\s+desa\s+|\s+nagari\s+|\s+kecamatan\s+|\s+kabupaten\s+|\s+/i', ' ', $str));
     }
 }

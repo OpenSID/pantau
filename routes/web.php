@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\AksesController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\PetaController;
-use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\PenggunaController;
-use App\Models\Desa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PetaController;
+use App\Http\Controllers\AksesController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\Wilayah\DesaController;
+use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
+use App\Http\Controllers\Admin\Wilayah\KabupatenController;
+use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,3 +93,33 @@ Route::middleware('auth')
         Route::resource('akun-pengguna', PenggunaController::class);
         Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
     });
+
+// Wilayah Provinsi
+Route::prefix('provinsi')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [ProvinsiController::class, 'index']);
+        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
+        ;
+    });
+
+// Wilayah Kabupaten
+Route::prefix('kabupaten')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [KabupatenController::class, 'index']);
+        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
+    });
+
+// Wilayah Kecamatan
+Route::prefix('kecamatan')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/', [KecamatanController::class, 'index']);
+        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
+    });
+
+// Wilayah Desa / Keluarahan
+Route::resource('desa', '\App\Http\Controllers\Admin\Wilayah\DesaController', ['except' => ['show']])->middleware('auth');
+Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import')->middleware('auth');
+Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import')->middleware('auth');

@@ -298,9 +298,39 @@ return [
             'icon'         => 'fas fa-recycle',
         ],
 
+        // Data Wilayah
+        [
+            'header'       => 'wilayah',
+            'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Provinsi',
+            'url'          => 'provinsi',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kabupaten',
+            'url'          => 'kabupaten',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kecamatan',
+            'url'          => 'kecamatan',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Desa',
+            'url'          => 'desa',
+            'icon'         => 'fas fa-users',
+        ],
+
         // Manajemen Pengguna
         [
-            'header'       => 'manajemen_pengguna',
+            'header'       => 'pengguna',
             'can'          => 'is-admin',
         ],
         [
@@ -406,6 +436,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                ],
+            ],
+        ],
+        'InputMask' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/inputmask/jquery.inputmask.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/inputmask/jquery.inputmask.extensions.js',
                 ],
             ],
         ],
