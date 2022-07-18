@@ -25,13 +25,13 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('desa') }}" class="btn btn-sm btn-block btn-secondary"><i
+                            <a href="{{ route('desa.index') }}" class="btn btn-sm btn-block btn-secondary"><i
                                     class="fas fa-arrow-circle-left"></i> Kembali Ke Daftar Desa
                             </a>
                         </div>
                     </div>
                 </div>
-                <form method="post" action="{{ url('desa') }}">
+                <form method="POST" action="{{ route('desa.store') }}">
                     <div class="card-body">
                         @method('POST')
                         @csrf

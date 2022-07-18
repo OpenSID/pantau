@@ -103,7 +103,8 @@
                 <div class="card-header">
                     <h3 class="card-title">Desa baru dalam 7 hari terakhir</h3>
                     <div class="card-tools">
-                        <span data-toggle="tooltip" title="{{ $desaBaru }} Desa Baru" class="badge badge-primary">{{ $desaBaru }}</span>
+                        <span data-toggle="tooltip" title="{{ $desaBaru }} Desa Baru"
+                            class="badge badge-primary">{{ $desaBaru }}</span>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -116,11 +117,13 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Tgl Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
                                     <th>Web</th>
+                                    <th>Versi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -188,7 +191,8 @@
                 <div class="card-header">
                     <h3 class="card-title">Kabupaten yang belum ada desa OpenSID</h3>
                     <div class="card-tools">
-                        <span data-toggle="tooltip" title="{{ $kabupatenKosong }} Kabupaten Belum ada OpenSID" class="badge badge-primary">{{ $kabupatenKosong }}</span>
+                        <span data-toggle="tooltip" title="{{ $kabupatenKosong }} Kabupaten Belum ada OpenSID"
+                            class="badge badge-primary">{{ $kabupatenKosong }}</span>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -236,6 +240,9 @@
                     orderable: false
                 },
                 {
+                    data: 'format_created_at', name: 'created_at'
+                },
+                {
                     data: 'nama_desa'
                 },
                 {
@@ -249,6 +256,9 @@
                 },
                 {
                     data: 'url_hosting'
+                },
+                {
+                    data: 'versi'
                 },
             ]
         })
