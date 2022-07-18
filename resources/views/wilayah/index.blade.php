@@ -40,10 +40,10 @@
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: false,
+            autoWidth: true,
             ordering: true,
             ajax: {
-                url: `{{ url('laporan/desa') }}`,
+                url: `{{ url('wilayah') }}`,
                 method: 'get',
             },
             columns: [{
@@ -59,15 +59,18 @@
                     data: 'nama_desa'
                 },
                 {
-                    data: 'nama_kecamatan'
+                    data: 'nama_kec'
                 },
                 {
-                    data: 'nama_kabupaten'
+                    data: 'nama_kab'
                 },
                 {
-                    data: 'nama_provinsi'
+                    data: 'nama_prov'
                 },
-            ]
+            ],
+            order: [
+                [1, 'asc']
+            ],
         })
     </script>
 @endsection
