@@ -23,7 +23,15 @@ class LaporanController extends Controller
                 ->select(['*'])
                 ->selectRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses");
 
-            return DataTables::of($query)->addIndexColumn()->make(true);
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+
+                    return '<div class="btn btn-group">' . $delete . '</div>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
 
         return view('laporan.desa');
@@ -31,9 +39,11 @@ class LaporanController extends Controller
 
     public function deleteDesa(Desa $desa)
     {
-        $desa->delete();
+        if ($desa->delete()) {
+            return redirect('laporan/desa')->with('success', 'Data berhasil dihapus');
+        }
 
-        return redirect()->back()->with('alert-success', 'Data berhasil dihapus');
+        return redirect('laporan/desa')->with('error', 'Data gagal dihapus');
     }
 
     public function kabupaten(Request $request)

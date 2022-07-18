@@ -8,6 +8,7 @@
 
 @section('content')
     @include('layouts.components.global_delete')
+    @include('layouts.components.notification')
     <div class="row">
         <div class="col-lg-12">
 
@@ -46,7 +47,7 @@
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: false,
+            autoWidth: true,
             ordering: true,
             ajax: {
                 url: `{{ url('laporan/desa') }}`,
@@ -58,22 +59,13 @@
                     searchable: false,
                     orderable: false
                 },
-                @auth
-                    {
-                        searchable: false,
-                        orderable: false,
-                        data: null,
-                        render: function (data) {
-                            return `<td class="text-right py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <button data-href="{{ url('laporan/desa') }}/${data.id}" class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>`
-                        },
-                    },
-                @endauth {
+                {
+                    data: 'action',
+                    name: 'action',
+                    searchable: false,
+                    orderable: false
+                },
+                {
                     data: 'nama_desa'
                 },
                 {
@@ -101,7 +93,10 @@
                     data: 'tgl_akses',
                     searchable: false,
                 },
-            ]
+            ],
+            order: [
+                [9, 'desc']
+            ],
         })
     </script>
 @endsection
