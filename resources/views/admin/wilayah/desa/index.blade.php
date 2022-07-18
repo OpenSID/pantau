@@ -87,7 +87,12 @@
                 ],
                 order: [
                     [2, 'asc']
-                ]
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    if (data.jenis) {
+                        $(row).css("backgroundColor", "orange");
+                    }
+                }
             });
         });
     </script>

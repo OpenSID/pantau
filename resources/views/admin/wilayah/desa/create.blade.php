@@ -39,7 +39,8 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Provinsi <span class="required">*</span></label>
                             <div class="col-4">
-                                <input id="kode_provinsi" class="form-control" placeholder="00" type="text" readonly />
+                                <input id="kode_provinsi" class="form-control" placeholder="00" type="text" readonly
+                                    required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_provinsi" data-placeholder="Pilih Provinsi"
@@ -53,8 +54,8 @@
                         <div class="row">
                             <label class="control-label col-sm-12">Kabupaten <span class="required">*</span></label>
                             <div class="col-4">
-                                <input id="kode_kabupaten" class="form-control" placeholder="00.00" type="text"
-                                    readonly />
+                                <input id="kode_kabupaten" class="form-control" placeholder="00.00" type="text" readonly
+                                    required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_kabupaten" data-placeholder="Pilih Kabupaten"
@@ -69,7 +70,7 @@
                             <label class="control-label col-sm-12">Kecamatan <span class="required">*</span></label>
                             <div class="col-4">
                                 <input id="kode_kecamatan" name="parent_code" class="form-control" placeholder="00.00.00"
-                                    type="text" readonly />
+                                    type="text" readonly required />
                             </div>
                             <div class="col-8">
                                 <select class="form-control" id="list_kecamatan" data-placeholder="Pilih Kecamatan"
@@ -89,6 +90,25 @@
                             <div class="col-8">
                                 <input name="region_name" id="region_name" class="form-control" placeholder="Nama Desa"
                                     maxlength="80" required disabled />
+                            </div>
+                            <div class="col-12 desa_persiapan" style="display: none">
+                                <code>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
+                                    kode kecamatan seperti halnya kode desa biasa. Kemudian awali nomor urut desa dengan dua
+                                    digit '99' (contoh: 62.01.02.9901)</code>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class="row">
+                            <label class="control-label col-sm-12">Desa Persiapan <span class="required">*</span></label>
+                            <div class="col-4">
+                                <select class="form-control" id="jenis" name="jenis" style="width: 100%;" required>
+                                    <option value="1">Ya</option>
+                                    <option value="0" selected>Tidak</option>
+                                </select>
+                            </div>
+                            <div class="col-8 desa_persiapan" style="display: none">
+                                <input name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" />
                             </div>
                         </div>
                     </div>
@@ -115,6 +135,8 @@
         $(function() {
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
             const token = "{{ config('tracksid.sandi.dev_token') }}";
+
+            $('[data-mask]').inputmask();
 
             $('#list_provinsi').select2({
                 ajax: {
@@ -253,6 +275,16 @@
                     }
                 });
             }
+
+            $('#jenis').on('change', function() {
+                if (this.value == 1) {
+                    $('#keterangan').addClass('required');
+                    $('.desa_persiapan').show();
+                } else {
+                    $('#keterangan').removeClass('required');
+                    $('.desa_persiapan').hide();
+                }
+            });
         })
     </script>
 @endpush
