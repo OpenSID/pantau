@@ -14,7 +14,7 @@ class KonversiDomain extends Migration
      */
     public function up()
     {
-        $semuaDesa = Desa::select('id', 'url_lokal', 'url_hosting')->whereNotNUll('url_lokal')->whereNotNUll('url_hosting')->get();
+        $semuaDesa = Desa::select('id', 'url_lokal', 'url_hosting')->whereNotNUll('url_lokal')->orWhereNotNUll('url_hosting')->get();
 
         foreach ($semuaDesa as $desa) {
             Desa::where('id', $desa->id)
