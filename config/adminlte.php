@@ -488,21 +488,6 @@ return [
                     'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
                 ],
             ],
-        ],
-        'leaflet' => [
-            'active' => true,
-            'files' => [
-                [
-                    'type' => 'css',
-                    'asset' => true,
-                    'location' => 'assets/leaflet/leaflet.css',
-                ],
-                [
-                    'type' => 'js',
-                    'asset' => true,
-                    'location' => 'assets/leaflet/leaflet.js',
-                ],
-            ],
         ]
     ],
 
