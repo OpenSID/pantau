@@ -26,7 +26,7 @@ class LaporanController extends Controller
                 'status'         => $request->status,
             ];
 
-            return DataTables::of(Desa::latest()->fillter($fillters)->laporan())
+            return DataTables::of(Desa::latest('updated_at')->fillter($fillters)->laporan())
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';

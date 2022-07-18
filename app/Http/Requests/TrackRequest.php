@@ -69,7 +69,7 @@ class TrackRequest extends FormRequest
             'kode_kabupaten'    => kode_wilayah($this->kode_kabupaten),
             'kode_provinsi'     => kode_wilayah($this->kode_provinsi),
             'opensid_valid'     => preg_replace("/-premium.*|pasca-|-pasca/", '', $this->version),
-            "url_{$type}"       => $this->url,
+            "url_{$type}"       => fixDomainName($this->url),
             "ip_{$type}"        => $this->ip_address,
             "versi_{$type}"     => $this->version,
             "tgl_akses_{$type}" => now(),
@@ -86,7 +86,7 @@ class TrackRequest extends FormRequest
 
     /**
      * Periksa lokal/hosting attribute.
-     * 
+     *
      * @param array $attributes
      * @return string
      */
@@ -99,7 +99,7 @@ class TrackRequest extends FormRequest
 
     /**
      * List abikan domain.
-     * 
+     *
      * @return string
      */
     protected function listAbaikanDomain()
