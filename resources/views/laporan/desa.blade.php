@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_wilayah')
 
 @section('title', 'Desa OpenSID')
 
@@ -8,11 +9,91 @@
 
 @section('content')
     @include('layouts.components.global_delete')
+    @include('layouts.components.notification')
     <div class="row">
         <div class="col-lg-12">
 
             <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Provinsi</label>
+                                            <select class="select2 form-control-sm" id="provinsi" name="provinsi"
+                                                data-placeholder="Semua Provinsi" style="width: 100%;">
+                                                <option value="" selected>Semua Provinsi</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Kabupaten</label>
+                                            <select class="select2 form-control-sm" id="kabupaten" name="kabupaten"
+                                                data-placeholder="Semua Kabupaten" style="width: 100%;" disabled>
+                                                <option value="" selected>Semua Kabupaten</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Kecamatan</label>
+                                            <select class="select2 form-control-sm" id="kecamatan" name="kecamatan"
+                                                data-placeholder="Semua Kecamatan" style="width: 100%;" disabled>
+                                                <option value="" selected>Semua Kecamatan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select class="select2 form-control-sm" id="status" name="Online"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                                <option value="0">Semua Status</option>
+                                                <option value="1" selected>Online</option>
+                                                <option value="2">Offline</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="table-desa">
                             <thead>
@@ -46,11 +127,18 @@
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: false,
+            autoWidth: true,
             ordering: true,
+
             ajax: {
                 url: `{{ url('laporan/desa') }}`,
                 method: 'get',
+                data: function(data) {
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_kecamatan = $('#kecamatan').val();
+                    data.status = $('#status').val();
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -58,22 +146,13 @@
                     searchable: false,
                     orderable: false
                 },
-                @auth
-                    {
-                        searchable: false,
-                        orderable: false,
-                        data: null,
-                        render: function (data) {
-                            return `<td class="text-right py-0 align-middle">
-                                        <div class="btn-group btn-group-sm">
-                                            <button data-href="{{ url('laporan/desa') }}/${data.id}" class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>`
-                        },
-                    },
-                @endauth {
+                {
+                    data: 'action',
+                    name: 'action',
+                    searchable: false,
+                    orderable: false
+                },
+                {
                     data: 'nama_desa'
                 },
                 {
@@ -101,7 +180,14 @@
                     data: 'tgl_akses',
                     searchable: false,
                 },
-            ]
-        })
+            ],
+            order: [
+                [9, 'desc']
+            ],
+        });
+
+        $('#filter').on('click', function(e) {
+            desa.draw();
+        });
     </script>
 @endsection

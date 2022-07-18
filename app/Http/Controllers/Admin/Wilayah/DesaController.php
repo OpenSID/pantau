@@ -31,7 +31,7 @@ class DesaController extends Controller
 
                 //     return $data->nama_desa;
                 // })
-                ->rawColumns(['action', 'nama_desa'])
+                ->rawColumns(['action'])
                 ->make(true);
         }
         
