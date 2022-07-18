@@ -19,6 +19,13 @@ class LaporanController extends Controller
     public function desa(Request $request)
     {
         if ($request->ajax()) {
+            $fillters = [
+                'kode_provinsi'  => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+                'status'         => $request->status,
+            ];
+
             $query = $this->desa->query()
                 ->select(['*'])
                 ->selectRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses");
