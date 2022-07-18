@@ -136,11 +136,11 @@
                             <div class="col-6">
                                 <button type="reset" class="btn btn-sm btn-danger btn-block"><i
                                         class="fas fa-times"></i>
-                                    Batal</button>
+                                    &ensp;Batal</button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-sm btn-success btn-block float-right"><i class="fas fa-save"></i>
-                                    Simpan</button>
+                                    &ensp;Simpan</button>
                             </div>
                         </div>
                     </div>
