@@ -62,7 +62,7 @@
                                             <select class="select2 form-control-sm" id="status" name="Online"
                                                 data-placeholder="Semua Status" style="width: 100%;">
                                                 <option value="0">Semua Status</option>
-                                                <option value="1">Online</option>
+                                                <option value="1" selected>Online</option>
                                                 <option value="2">Offline</option>
                                             </select>
                                         </div>
@@ -129,9 +129,16 @@
             serverSide: true,
             autoWidth: true,
             ordering: true,
+
             ajax: {
                 url: `{{ url('laporan/desa') }}`,
                 method: 'get',
+                data: function(data) {
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_kecamatan = $('#kecamatan').val();
+                    data.status = $('#status').val();
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -177,6 +184,10 @@
             order: [
                 [9, 'desc']
             ],
-        })
+        });
+
+        $('#filter').on('click', function(e) {
+            desa.draw();
+        });
     </script>
 @endsection

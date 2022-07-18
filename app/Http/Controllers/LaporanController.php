@@ -26,11 +26,7 @@ class LaporanController extends Controller
                 'status'         => $request->status,
             ];
 
-            $query = $this->desa->query()
-                ->select(['*'])
-                ->selectRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses");
-
-            return DataTables::of($query)
+            return DataTables::of(Desa::latest()->laporan($fillters))
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
