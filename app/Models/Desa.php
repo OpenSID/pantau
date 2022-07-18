@@ -206,6 +206,10 @@ class Desa extends Model
 
     public function getFormatCreatedAtAttribute()
     {
-        return $this->created_at->format('d/m/Y');
+        if ($this->created_at) {
+            return $this->created_at->format('d/m/Y');
+        }
+
+        return null;
     }
 }
