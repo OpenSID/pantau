@@ -73,19 +73,13 @@ if (! function_exists('fixDomainName')) {
      */
     function fixDomainName($url = '')
     {
-        return parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH);
-    }
-}
+        $strToLower = strtolower(trim($url));
+        $httpPregReplace = preg_replace('/^http:\/\//i', '', $strToLower);
+        $httpsPregReplace = preg_replace('/^https:\/\//i', '', $httpPregReplace);
+        $wwwPregReplace = preg_replace('/^www\./i', '', $httpsPregReplace);
+        $explodeToArray = explode('/', $wwwPregReplace);
+        $finalDomainName = trim($explodeToArray[0]);
 
-if (! function_exists('normalkan_spasi')) {
-    /**
-     * Validasi data string.
-     *
-     * @param  string $str
-     * @return string
-     */
-    function normalkan_spasi($str = '')
-    {
-        return trim(preg_replace('/^desa\s+|^nagari\s+|^kecamatan\s+|^kabupaten\s+|\s+desa\s+|\s+nagari\s+|\s+kecamatan\s+|\s+kabupaten\s+|\s+/i', ' ', $str));
+        return $finalDomainName;
     }
 }
