@@ -25,13 +25,13 @@
                 <div class="card-header">
                     <div class="float-left">
                         <div class="btn-group">
-                            <a href="{{ url('desa') }}" class="btn btn-sm btn-block btn-secondary"><i
-                                    class="fas fa-arrow-circle-left"></i>&ensp;Kembali Ke Daftar Desa
+                            <a href="{{ route('desa.index') }}" class="btn btn-sm btn-block btn-secondary"><i
+                                    class="fas fa-arrow-circle-left"></i> Kembali Ke Daftar Desa
                             </a>
                         </div>
                     </div>
                 </div>
-                <form method="post" action="{{ url('desa') }}">
+                <form method="POST" action="{{ route('desa.store') }}">
                     <div class="card-body">
                         @method('POST')
                         @csrf
@@ -91,7 +91,7 @@
                                 <input name="region_name" id="region_name" class="form-control" placeholder="Nama Desa"
                                     maxlength="80" required disabled />
                             </div>
-                            <div class="col-12" id="desa_persiapan" style="display: none">
+                            <div class="col-12 desa_persiapan" style="display: none">
                                 <code>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
                                     kode kecamatan seperti halnya kode desa biasa. Kemudian awali nomor urut desa dengan dua
                                     digit '99' (contoh: 62.01.02.9901)</code>
@@ -107,7 +107,7 @@
                                     <option value="0" selected>Tidak</option>
                                 </select>
                             </div>
-                            <div class="col-8" style="display: none" id="keterangan">
+                            <div class="col-8 desa_persiapan" style="display: none">
                                 <input name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" />
                             </div>
                         </div>
@@ -278,13 +278,11 @@
 
             $('#jenis').on('change', function() {
                 if (this.value == 1) {
-                    $('#keterangan').show();
                     $('#keterangan').addClass('required');
-                    $('#desa_persiapan').show();
+                    $('.desa_persiapan').show();
                 } else {
-                    $('#keterangan').hide();
                     $('#keterangan').removeClass('required');
-                    $('#desa_persiapan').hide();
+                    $('.desa_persiapan').hide();
                 }
             });
         })
