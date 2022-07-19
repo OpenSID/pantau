@@ -92,7 +92,7 @@
                     [2, 'asc']
                 ],
                 createdRow: function(row, data, dataIndex) {
-                    if (data.jenis) {
+                    if (data.kode_desa.slice(9, 11) == '99') {
                         $(row).css("backgroundColor", "orange");
                     }
                 }

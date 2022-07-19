@@ -18,19 +18,9 @@ class Region extends Model
         'region_code',
         'region_name',
         'new_region_name',
-        'jenis',
         'keterangan',
         'parent_code',
         'desa_id',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'jenis' => 'boolean',
     ];
 
     /**

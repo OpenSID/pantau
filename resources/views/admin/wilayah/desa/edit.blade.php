@@ -108,25 +108,20 @@
                                 </div>
                             @endif
 
-                            <div class="col-12 desa_persiapan" {!! $desa->jenis ? '' : 'style="display: none"' !!}>
-                                <code>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
+                            <div class="col-12">
+                                <code><b>Catatan:</b>
+                                    <br>Kode desa sementara bagi Desa Persiapan diisi dengan kode provinsi, kode kabupaten,
                                     kode kecamatan seperti halnya kode desa biasa. Kemudian awali nomor urut desa dengan dua
-                                    digit '99' (contoh: 62.01.02.9901)</code>
+                                    digit '99' (contoh: 62.01.02.9901)
+                                </code>
                             </div>
                         </div>
                         <hr>
 
-                        <div class="row">
+                        <div class="row desa_persiapan" {!! substr($desa->kode_desa, -4, 2) == '99' ? '' : 'style="display: none"' !!}>
                             <label class="control-label col-sm-12">Desa Persiapan <span class="required">*</span></label>
-                            <div class="col-4">
-                                <select class="form-control" id="jenis" name="jenis" style="width: 100%;" required>
-                                    <option {{ $desa->jenis ? 'selected' : '' }} value="1">Ya</option>
-                                    <option {{ $desa->jenis ? '' : 'selected' }} value="0">Tidak</option>
-                                </select>
-                            </div>
-                            <div class="col-8 desa_persiapan" {!! $desa->jenis ? '' : 'style="display: none"' !!}>
-                                <input name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250"
-                                    value="{{ $desa->keterangan }}" />
+                            <div class="col-12">
+                                <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" rows="5">{{ $desa->keterangan }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -295,11 +290,13 @@
                 });
             }
 
-            $('#jenis').on('change', function() {
-                if (this.value == 1) {
+            $('#region_code').keyup(function(){
+                var akas = this.value.slice(9, 11);
+                if (akas == '99') {
                     $('#keterangan').addClass('required');
                     $('.desa_persiapan').show();
                 } else {
+                    $('#keterangan').val('');
                     $('#keterangan').removeClass('required');
                     $('.desa_persiapan').hide();
                 }
