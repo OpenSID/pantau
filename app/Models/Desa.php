@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Desa extends Model
 {
@@ -12,6 +13,9 @@ class Desa extends Model
 
     /** {@inheritdoc} */
     protected $table = 'desa';
+
+    /** {@inheritdoc} */
+    protected $appends = ['format_created_at'];
 
     /** {@inheritdoc} */
     protected $casts = [
@@ -72,13 +76,9 @@ class Desa extends Model
      */
     public function scopeDesaBaru($query)
     {
-        // return $query
-        //     ->select(['*'])
-        //     ->selectRaw("if(versi_lokal is null, `tgl_rekam_hosting`, if(versi_hosting is null, `tgl_rekam_lokal`, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam")
-        //     ->whereRaw("(select if(versi_lokal is null, tgl_rekam_hosting, if(versi_hosting is null, tgl_rekam_lokal, least(tgl_rekam_lokal, tgl_rekam_hosting))) as tgl_rekam) >= date(now()) - interval 7 day")
-        //     ->orderBy("tgl_rekam");
-
         return $query
+            ->select(['*'])
+            ->selectRaw("(CASE WHEN (tgl_rekam_lokal > tgl_rekam_hosting) THEN versi_lokal else versi_hosting end) as versi")
             ->where('created_at', '>=', now()->subDay(7));
     }
 
@@ -150,5 +150,66 @@ class Desa extends Model
     public static function hapusNonaktifTidakTerdaftar()
     {
         return DB::raw("DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2");
+    }
+
+    /**
+     * Scope a query desa map.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePeta($query)
+    {
+        return $query->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+        ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+        ->whereRaw("lat BETWEEN -10 AND 6")
+        ->whereRaw("lng BETWEEN 95 AND 142")
+        ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 60 DAY"); //sejak dua bulan yang lalu
+    }
+
+    /**
+     * Scope a query laporan desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeLaporan($query)
+    {
+        return $query->select(['*'])->selectRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses");
+    }
+
+    /**
+     * Scope a query laporan desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFillter($query, array $fillters)
+    {
+        return $query->select(['*'])
+        ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
+            $query->where('kode_provinsi', $kode_provinsi);
+        })
+        ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
+            $query->where('kode_kabupaten', $kode_kabupaten);
+        })
+        ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
+            $query->where('kode_kecamatan', $kode_kecamatan);
+        })
+        ->when($fillters['status'] == 1, function ($query) {
+            $query->whereRaw("versi_hosting IS NOT NULL");
+        })
+        ->when($fillters['status'] == 2, function ($query) {
+            $query->whereRaw("versi_lokal IS NOT NULL");
+        });
+    }
+
+    public function getFormatCreatedAtAttribute()
+    {
+        if ($this->created_at) {
+            return $this->created_at->format('d/m/Y');
+        }
+
+        return null;
     }
 }

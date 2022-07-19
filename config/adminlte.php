@@ -303,9 +303,39 @@ return [
             'icon'         => 'fa fa-rss-square',
         ],
 
+        // Data Wilayah
+        [
+            'header'       => 'wilayah',
+            'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Provinsi',
+            'url'          => 'provinsi',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kabupaten',
+            'url'          => 'kabupaten',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Kecamatan',
+            'url'          => 'kecamatan',
+            'icon'         => 'fas fa-users',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'Desa',
+            'url'          => 'desa',
+            'icon'         => 'fas fa-users',
+        ],
+
         // Manajemen Pengguna
         [
-            'header'       => 'manajemen_pengguna',
+            'header'       => 'pengguna',
             'can'          => 'is-admin',
         ],
         [
@@ -414,6 +444,21 @@ return [
                 ],
             ],
         ],
+        'InputMask' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/inputmask/jquery.inputmask.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/inputmask/jquery.inputmask.extensions.js',
+                ],
+            ],
+        ],
         'Sweetalert2' => [
             'active' => false,
             'files' => [
@@ -446,21 +491,6 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
-                ],
-            ],
-        ],
-        'leaflet' => [
-            'active' => true,
-            'files' => [
-                [
-                    'type' => 'css',
-                    'asset' => true,
-                    'location' => 'assets/leaflet/leaflet.css',
-                ],
-                [
-                    'type' => 'js',
-                    'asset' => true,
-                    'location' => 'assets/leaflet/leaflet.js',
                 ],
             ],
         ]

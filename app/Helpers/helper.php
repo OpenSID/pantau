@@ -3,7 +3,7 @@
 if (! function_exists('kode_wilayah')) {
     /**
      * Kode wilayah dengan titik dari 5201142005 --> 52.01.14.2005
-     * 
+     *
      * @param mixed $kode_wilayah
      * @return string
      */
@@ -20,7 +20,7 @@ if (! function_exists('kode_wilayah')) {
 if (! function_exists('is_local')) {
     /**
      * Validasi local ip.
-     * 
+     *
      * @param mixed $url
      * @return bool
      */
@@ -31,5 +31,55 @@ if (! function_exists('is_local')) {
         } else {
             return false;
         }
+    }
+}
+
+if (! function_exists('parent_code')) {
+    /**
+     * Parent Code
+     *
+     * @param mixed $region_code
+     * @return string
+     */
+
+    function parent_code($region_code)
+    {
+        $panjang = strlen($region_code);
+
+        if ($panjang > 8) {
+            // Desa => Kecamatan
+
+            return substr($region_code, 0, 8);
+        } elseif ($panjang > 5) {
+            // Kecamatan => Kabupaten
+
+            return substr($region_code, 0, 5);
+        } elseif ($panjang > 2) {
+            // Kabupaten => Provinsi
+
+            return substr($region_code, 0, 2);
+        } else {
+            return 0;
+        }
+    }
+}
+
+if (! function_exists('fixDomainName')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return string
+     */
+    function fixDomainName($url = '')
+    {
+        $strToLower = strtolower(trim($url));
+        $httpPregReplace = preg_replace('/^http:\/\//i', '', $strToLower);
+        $httpsPregReplace = preg_replace('/^https:\/\//i', '', $httpPregReplace);
+        $wwwPregReplace = preg_replace('/^www\./i', '', $httpsPregReplace);
+        $explodeToArray = explode('/', $wwwPregReplace);
+        $finalDomainName = trim($explodeToArray[0]);
+
+        return $finalDomainName;
     }
 }
