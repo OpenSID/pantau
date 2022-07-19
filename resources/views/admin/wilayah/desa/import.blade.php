@@ -59,8 +59,34 @@
                             </div>
                         </div>
                     </div>
-            </div>
+                </div>
             </form>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Panduan</b></h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="raw">
+                        <div class="form-group">
+                        <ul>
+                            <li>Data yang digunakan diambil dari <a href="https://github.com/cahyadsn/wilayah/tree/master/db" target="_blank">https://github.com/cahyadsn/wilayah/tree/master/db</a></li>
+                            <li>Buka phpMyAdmin atau Lainnya, kemudian jalankan query tsb (import)</li>
+                            <li>Lakukan export dengan format .csv</li>
+                            <li>
+                                Contoh hasil export dari <a href="https://github.com/cahyadsn/wilayah/blob/master/db/wilayah_2022.sql"  target="_blank">https://github.com/cahyadsn/wilayah/blob/master/db/wilayah_2022.sql</a>
+                                <br><a href="{{ url('desa/contoh-import') }}" class="btn btn-sm btn-primary" target="_blank">Data Wilayah 2022</a>
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     </div>

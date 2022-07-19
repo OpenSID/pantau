@@ -120,6 +120,9 @@ Route::prefix('kecamatan')
     });
 
 // Wilayah Desa / Keluarahan
-Route::resource('desa', '\App\Http\Controllers\Admin\Wilayah\DesaController', ['except' => ['show']])->middleware('auth');
-Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import')->middleware('auth');
-Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import')->middleware('auth');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('desa', DesaController::class, ['except' => ['show']]);
+    Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
+    Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import');
+    Route::get('desa/contoh-import', [DesaController::class, 'contohImport'])->name('desa.contoh-import');
+});

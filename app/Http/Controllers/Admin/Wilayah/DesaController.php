@@ -99,6 +99,13 @@ class DesaController extends Controller
         return redirect('desa')->with('success', 'Data berhasil diimport');
     }
 
+    public function contohImport()
+    {
+        $file = public_path('/assets/import/data_wilayah_2022.csv');
+
+        return response()->download($file);
+    }
+
     public function destroy($id)
     {
         if (Region::destroy($id)) {
