@@ -150,6 +150,7 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{ asset('/vendor/inputmask/jquery.inputmask.js') }}"></script>
     <script>
         $(function() {
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
