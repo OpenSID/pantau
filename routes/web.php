@@ -33,8 +33,7 @@ Auth::routes([
 ]);
 
 // index dashboard
-Route::get('/', [DashboardController::class, 'index'])->middleware(['guest']);
-Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index']);
 
 // datatable
 Route::prefix('datatables')->as('datatables:')
@@ -43,86 +42,72 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
     });
 
-// peta
-Route::prefix('peta')
-    ->group(function () {
-        Route::get('/', [PetaController::class, 'index']);
-    });
+// Peta
+Route::get('peta', [PetaController::class, 'index']);
 
-// laporan
+// Laporan
 Route::prefix('laporan')
     ->group(function () {
         Route::get('desa', [LaporanController::class, 'desa']);
-        Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
     });
 
-// wilayah
-Route::prefix('wilayah')
-    ->group(function () {
-        Route::get('/', WilayahController::class);
-    });
+// Wilayah
+Route::get('wilayah', WilayahController::class);
 
-// review
-Route::prefix('review')
-    ->middleware('auth')
-    ->group(function () {
+Route::group(['middleware' => 'auth'], function () {
+
+    // Dashboard
+    // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Laporan Desa -> Delete
+    Route::delete('laporan/desa/{desa}', [LaporanController::class, 'deleteDesa']);
+
+    // Riview
+    Route::prefix('review')->group(function () {
         Route::get('desa-baru', [ReviewController::class, 'desaBaru']);
         Route::get('non-aktif', [ReviewController::class, 'nonAktif']);
     });
 
-// akses
-Route::prefix('akses')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('bersihkan', AksesController::class);
+    // Akses
+    Route::get('akses/bersihkan', AksesController::class);
+
+    // Wilayah Provinsi
+    Route::prefix('provinsi')->group(function () {
+        Route::get('/', [ProvinsiController::class, 'index']);
+        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
     });
 
-Route::prefix('profile')
-    ->middleware('auth')
-    ->group(function () {
+    // Wilayah Kabupaten
+    Route::prefix('kabupaten')->group(function () {
+        Route::get('/', [KabupatenController::class, 'index']);
+        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
+    });
+
+    // Wilayah Kecamatan
+    Route::prefix('kecamatan')->group(function () {
+        Route::get('/', [KecamatanController::class, 'index']);
+        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
+    });
+
+    
+    // Wilayah Desa / Keluarahan
+    Route::resource('desa', DesaController::class, ['except' => ['show']]);
+    Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
+    Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import');
+    Route::get('desa/contoh-import', [DesaController::class, 'contohImport'])->name('desa.contoh-import');
+
+    // Pengguna
+    Route::resource('akun-pengguna', PenggunaController::class);
+    Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
+
+    // Profil
+    Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index']);
         Route::post('update', [ProfileController::class, 'update']);
         Route::get('reset-password', [ProfileController::class, 'resetPassword']);
         Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
     });
 
-Route::middleware('auth')
-    ->group(function () {
-        Route::resource('akun-pengguna', PenggunaController::class);
-        Route::get('akun-pengguna/datatables', [PenggunaController::class, 'show'])->name('akun-pengguna.datatables');
-    });
-
-// Wilayah Provinsi
-Route::prefix('provinsi')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('/', [ProvinsiController::class, 'index']);
-        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
-        ;
-    });
-
-// Wilayah Kabupaten
-Route::prefix('kabupaten')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('/', [KabupatenController::class, 'index']);
-        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
-    });
-
-// Wilayah Kecamatan
-Route::prefix('kecamatan')
-    ->middleware('auth')
-    ->group(function () {
-        Route::get('/', [KecamatanController::class, 'index']);
-        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
-    });
-
-// Wilayah Desa / Keluarahan
-Route::group(['middleware' => 'auth'], function () {
-    Route::resource('desa', DesaController::class, ['except' => ['show']]);
-    Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
-    Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import');
-    Route::get('desa/contoh-import', [DesaController::class, 'contohImport'])->name('desa.contoh-import');
 });
