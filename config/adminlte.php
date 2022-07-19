@@ -300,32 +300,31 @@ return [
 
         // Data Wilayah
         [
-            'header'       => 'wilayah',
             'can'          => 'is-admin',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Provinsi',
-            'url'          => 'provinsi',
-            'icon'         => 'fas fa-users',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Kabupaten',
-            'url'          => 'kabupaten',
-            'icon'         => 'fas fa-users',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Kecamatan',
-            'url'          => 'kecamatan',
-            'icon'         => 'fas fa-users',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Desa',
-            'url'          => 'desa',
-            'icon'         => 'fas fa-users',
+            'text'         => 'Data Wilayah',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'can'          => 'is-admin',
+                    'text'         => 'Provinsi',
+                    'url'          => 'provinsi',
+                ],
+                [
+                    'can'          => 'is-admin',
+                    'text'         => 'Kabupaten',
+                    'url'          => 'kabupaten',
+                ],
+                [
+                    'can'          => 'is-admin',
+                    'text'         => 'Kecamatan',
+                    'url'          => 'kecamatan',
+                ],
+                [
+                    'can'          => 'is-admin',
+                    'text'         => 'Desa',
+                    'url'          => 'desa',
+                ],
+            ],
         ],
 
         // Manajemen Pengguna
