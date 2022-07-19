@@ -7,6 +7,7 @@
         crossorigin="" />
     <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.fullscreen/dist/leaflet.fullscreen.css" />
     <style>
         #map {
             width: 100%;
@@ -116,15 +117,17 @@
         integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
         crossorigin=""></script>
     <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
-    {{-- <script src="https://leafletjs.com/examples/geojson/sample-geojson.js"></script> --}}
+    <script src="https://leaflet.github.io/Leaflet.fullscreen/dist/Leaflet.fullscreen.min.js"></script>
     <script>
         $(document).ready(function() {
             var markersBar;
             var barLayer;
 
-            var map = L.map('map').setView([{{ config('leaflet.map_center_latitude') }},
-                {{ config('leaflet.map_center_longitude') }}
-            ], {{ config('leaflet.zoom_level') }});
+            var map = L.map('map', {
+                fullscreenControl: {
+                    pseudoFullscreen: false
+                }
+            }).setView([{{ config('leaflet.map_center_latitude') }}, {{ config('leaflet.map_center_longitude') }}], {{ config('leaflet.zoom_level') }});
 
             var mbAttr =
                 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
