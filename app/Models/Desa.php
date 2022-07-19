@@ -164,7 +164,13 @@ class Desa extends Model
         ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
         ->whereRaw("lat BETWEEN -10 AND 6")
         ->whereRaw("lng BETWEEN 95 AND 142")
-        ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 60 DAY"); //sejak dua bulan yang lalu
+        ->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 60 DAY") //sejak dua bulan yang lalu
+        ->where(function($query) {
+            $query
+            ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
+            ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
+            // ->where('kode_desa', '!=', config('tracksid.desa_contoh.kode_desa'));
+        });
     }
 
     /**
