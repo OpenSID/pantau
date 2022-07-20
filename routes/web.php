@@ -59,7 +59,7 @@ Route::get('wilayah', WilayahController::class);
 Route::group(['middleware' => 'auth'], function () {
 
     // Dashboard
-    // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Laporan Desa -> Delete
     Route::delete('laporan/desa/{desa}', [LaporanController::class, 'deleteDesa']);
