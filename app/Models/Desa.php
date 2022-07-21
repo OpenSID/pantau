@@ -78,7 +78,7 @@ class Desa extends Model
     {
         return $query
             ->select(['*'])
-            ->selectRaw("(CASE WHEN (tgl_rekam_lokal > tgl_rekam_hosting) THEN versi_lokal else versi_hosting end) as versi")
+            ->selectRaw("(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi")
             ->where('created_at', '>=', now()->subDay(7));
     }
 

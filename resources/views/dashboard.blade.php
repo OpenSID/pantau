@@ -227,7 +227,7 @@
         var desaBaru = $('#table-desa-baru').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: false,
+            autoWidth: true,
             ordering: true,
             ajax: {
                 url: `{{ route('datatables:desa-baru') }}`,
@@ -260,7 +260,10 @@
                 {
                     data: 'versi'
                 },
-            ]
+            ],
+            order: [
+                [1, 'desc']
+            ],
         })
 
         var kabupatenKosong = $('#table-kabupaten-kosong').DataTable({
