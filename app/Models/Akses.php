@@ -32,8 +32,12 @@ class Akses extends Model
 
     public static function bersihkan()
     {
-        $desa_id = self::latest('tgl')->get()->unique('desa_id')->toArray();
+        $daftar_desa = self::latest('tgl')->get(['id', 'desa_id'])->unique('desa_id');
 
-        return self::whereNotIn('id', array_column($desa_id, 'id'))->delete();
+        // self::whereNotIn('id', array_column($daftar_desa, 'id'))->delete();
+
+        foreach ($daftar_desa as $value) {
+            self::where('desa_id', $value->desa_id)->where('id', '!=', $value->id)->delete();
+        }
     }
 }
