@@ -49,6 +49,7 @@ Route::get('peta', [PetaController::class, 'index']);
 Route::prefix('laporan')
     ->group(function () {
         Route::get('desa', [LaporanController::class, 'desa']);
+        Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
     });
@@ -60,9 +61,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Laporan Desa -> Delete
-    Route::delete('laporan/desa/{desa}', [LaporanController::class, 'deleteDesa']);
 
     // Riview
     Route::prefix('review')->group(function () {

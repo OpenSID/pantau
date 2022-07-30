@@ -146,12 +146,14 @@
                     searchable: false,
                     orderable: false
                 },
+                @auth
                 {
                     data: 'action',
                     name: 'action',
                     searchable: false,
                     orderable: false
                 },
+                @endauth
                 {
                     data: 'nama_desa'
                 },
@@ -181,9 +183,15 @@
                     searchable: false,
                 },
             ],
+            @auth
             order: [
                 [9, 'desc']
             ],
+            @else
+            order: [
+                [8, 'desc']
+            ],
+            @endauth
         });
 
         $('#filter').on('click', function(e) {
