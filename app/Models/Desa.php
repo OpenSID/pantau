@@ -116,11 +116,29 @@ class Desa extends Model
      */
     public function scopeKabupatenOpenSID($query)
     {
+        // return $query
+        //     ->select(['nama_kabupaten', 'nama_provinsi'])
+        //     ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_lokal <> '') as offline")
+        //     ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_hosting <> '') as online")
+        //     ->groupBy(['nama_kabupaten', 'nama_provinsi']);
+
         return $query
-            ->select(['nama_kabupaten', 'nama_provinsi'])
-            ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_lokal <> '') as offline")
-            ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_hosting <> '') as online")
-            ->groupBy(['nama_kabupaten', 'nama_provinsi']);
+            ->selectRaw("sub.nama_kabupaten")
+            ->selectRaw("sub.nama_provinsi")
+            ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
+            ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
+            ->fromSub(function ($query) {
+                $query
+                    ->select(
+                        'd.versi_lokal',
+                        'd.versi_hosting',
+                        'desa.nama_kabupaten', 
+                        'desa.nama_provinsi'
+                    )
+                    ->from('desa')
+                    ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa');
+            }, 'sub')
+            ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi']);
     }
 
     /**
