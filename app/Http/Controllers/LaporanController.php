@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Desa;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class LaporanController extends Controller
 {
     /** @var Desa */
     protected $desa;
 
-    public function __construct()
+    public function __construct(Desa $desa)
     {
-        $this->desa = new Desa();
+        $this->desa = $desa;
     }
 
     public function desa(Request $request)
@@ -27,7 +27,7 @@ class LaporanController extends Controller
                 'akses'          => $request->akses,
             ];
 
-            return DataTables::of(Desa::latest('updated_at')->fillter($fillters)->laporan())
+            return DataTables::of($this->desa->latest('updated_at')->fillter($fillters)->laporan())
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';

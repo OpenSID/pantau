@@ -230,19 +230,19 @@ class Desa extends Model
                 switch ($fillters['akses']) {
                     // Sebelum dua bulan yang lalu
                     case '1':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1");
+                        $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1");
                         break;
                     // Sejak dua bulan yang lalu
                     case '2':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1");
+                        $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) <= 1");
                         break;
                     // Sebelum empat bulan yang lalu
                     case '3':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3");
+                        $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 3");
                         break;
                     // Sejak tujuh hari yang lalu
                     case '4':
-                        $query->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
+                        $query->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 DAY");
                         break;
                     default:
                         break;

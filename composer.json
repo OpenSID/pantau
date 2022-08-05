@@ -15,7 +15,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "maatwebsite/excel": "^3.1",
-        "yajra/laravel-datatables-oracle": "^9.18"
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
