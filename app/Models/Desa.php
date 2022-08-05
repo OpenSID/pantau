@@ -226,16 +226,16 @@ class Desa extends Model
                 $query->whereRaw('versi_lokal IS NOT NULL');
             })
             ->when($fillters['akses'] == 1, function ($query) {
-                $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1");
+                $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1');
             })
             ->when($fillters['akses'] == 2, function ($query) {
-                $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) <= 1");
+                $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) <= 1');
             })
             ->when($fillters['akses'] == 3, function ($query) {
-                $query->whereRaw("timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 3");
+                $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 3');
             })
             ->when($fillters['akses'] == 4, function ($query) {
-                $query->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 DAY");
+                $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 DAY');
             });
     }
 
