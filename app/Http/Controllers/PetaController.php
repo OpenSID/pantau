@@ -15,6 +15,7 @@ class PetaController extends Controller
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
                 'status' => $request->status,
+                'akses' => $request->akses,
             ];
 
             $geoJSONdata = Desa::latest('updated_at')->fillter($fillters)->peta()->get()->map(function ($desa) {
