@@ -243,7 +243,6 @@
             $('#status').val('0').change();
             $('#akses').val('0').change();
 
-            params.delete('status');
             desa.ajax.reload();
         });
     </script>
