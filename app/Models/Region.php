@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Region extends Model
 {
@@ -36,7 +36,6 @@ class Region extends Model
                 'tbl_regions.id',
                 'tbl_regions.region_code AS kode_provinsi',
                 'tbl_regions.region_name AS nama_provinsi',
-                'tbl_regions.jenis',
                 'tbl_regions.keterangan',
             )->where('parent_code', 0);
     }
@@ -56,7 +55,6 @@ class Region extends Model
                     'tbl_regions.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
-                    'tbl_regions.jenis',
                     'tbl_regions.keterangan',
                 )
                 ->leftJoin('tbl_regions AS prov', 'tbl_regions.parent_code', '=', 'prov.region_code')
@@ -80,7 +78,6 @@ class Region extends Model
                     'kab.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
-                    'tbl_regions.jenis',
                     'tbl_regions.keterangan',
                 )
                 ->join('tbl_regions AS kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
@@ -108,7 +105,6 @@ class Region extends Model
                     'kab.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
-                    'tbl_regions.jenis',
                     'tbl_regions.keterangan',
                 )
                 ->join('tbl_regions AS kec', 'tbl_regions.parent_code', '=', 'kec.region_code')

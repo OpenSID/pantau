@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PenggunaRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
-use App\Http\Requests\PenggunaRequest;
 
 class PenggunaController extends Controller
 {
     public function show()
     {
         return DataTables::of(User::get())
-            ->addColumn('action', function ($data){
-                $edit = '<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-modal" data-submit="' . url('akun-pengguna/' . $data->id) . '" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-id_grup="'.$data->id_grup.'"><i class="fas fa-pencil-alt"></i></a>';
-                $delete = '<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-submit="' . url('akun-pengguna/' . $data->id) . '" data-name="'.$data->name.'"><i class="fas fa-trash"></i></a>';
-                return '<div class="btn btn-group">' . $edit . $delete . '</div>';
+            ->addColumn('action', function ($data) {
+                $edit = '<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-id_grup="'.$data->id_grup.'"><i class="fas fa-pencil-alt"></i></a>';
+                $delete = '<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-name="'.$data->name.'"><i class="fas fa-trash"></i></a>';
+
+                return '<div class="btn btn-group">'.$edit.$delete.'</div>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -60,8 +60,9 @@ class PenggunaController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
+
         return redirect()->route('akun-pengguna.index')->withAlert('Data pengguna berhasil diperbarui');
     }
 }

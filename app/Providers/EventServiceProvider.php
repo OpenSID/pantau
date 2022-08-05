@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -32,9 +32,9 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
             if (Auth::check() === false) {
                 $event->menu->add([
-                    'text'         => '',
-                    'url'          => 'login',
-                    'icon'         => 'fas fa-sign-in-alt',
+                    'text' => '',
+                    'url' => 'login',
+                    'icon' => 'fas fa-sign-in-alt',
                     'topnav_right' => true,
                 ]);
             }

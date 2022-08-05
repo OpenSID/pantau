@@ -20,19 +20,19 @@ class LaporanController extends Controller
     {
         if ($request->ajax()) {
             $fillters = [
-                'kode_provinsi'  => $request->kode_provinsi,
+                'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
                 'status'         => $request->status,
                 'akses'          => $request->akses,
             ];
 
-            return DataTables::of(Desa::latest('updated_at')->fillter($fillters)->laporan())
+            return DataTables::of(Desa::fillter($fillters)->laporan())
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $delete = '<button data-href="'.url('laporan/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$delete.'</div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);

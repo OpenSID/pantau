@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Desa;
 use App\Models\Akses;
+use App\Models\Desa;
 
 class AksesController extends Controller
 {
