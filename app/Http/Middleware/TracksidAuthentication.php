@@ -19,9 +19,9 @@ class TracksidAuthentication
     {
         if ($this->verifikasiToken($request)) {
             return $next($request);
-        } else if ($this->verifikasiHashLicense($request)) {
+        } elseif ($this->verifikasiHashLicense($request)) {
             return $next($request);
-        } else if ($this->verifikasiHashLicenseLama($request)) {
+        } elseif ($this->verifikasiHashLicenseLama($request)) {
             return $next($request);
         }
 
@@ -30,7 +30,7 @@ class TracksidAuthentication
 
     /**
      * Cek verifikasi token dari dev token.
-     * 
+     *
      * @return bool
      */
     protected function verifikasiToken(Request $request)
@@ -40,7 +40,7 @@ class TracksidAuthentication
 
     /**
      * Cek verifikasi token dari file license opensid.
-     * 
+     *
      * @return bool
      */
     protected function verifikasiHashLicense(Request $request)
@@ -50,7 +50,7 @@ class TracksidAuthentication
 
     /**
      * Cek verifikasi token dari file license opensid denganm cara lama.
-     * 
+     *
      * @return bool
      */
     protected function verifikasiHashLicenseLama(Request $request)
