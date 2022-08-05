@@ -35,7 +35,7 @@ class WilayahController extends Controller
     public function cariDesa(Request $request)
     {
         $desa = $this->wilayah
-            ->select("*")
+            ->select('*')
             ->selectRaw("concat(nama_desa, ' - ', nama_kec, ' - ', nama_kab, ' - ', nama_prov) as text")
             ->when($request->filled('q'), function ($query) use ($request) {
                 $query->orWhere(function ($query) use ($request) {

@@ -24,7 +24,7 @@ class WilayahRequest extends FormRequest
     public function rules()
     {
         return [
-            'per_page' => 'sometimes|integer'
+            'per_page' => 'sometimes|integer',
         ];
     }
 }
