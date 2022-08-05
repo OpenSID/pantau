@@ -45,7 +45,7 @@ class TracksidAuthentication
      */
     protected function verifikasiHashLicense(Request $request)
     {
-        return hash_equals(hash_file('sha256', base_path('LICENSE_OPENSID')), $request->bearerToken() ?? $request->input('token', 'empty'));
+        return hash_equals(hash_file('sha256', base_path('LICENSE_OPENSID')), $request->bearerToken() ?? $request->input('token') ?? '');
     }
 
     /**
@@ -55,6 +55,6 @@ class TracksidAuthentication
      */
     protected function verifikasiHashLicenseLama(Request $request)
     {
-        return hash_equals(sha1(''), $request->bearerToken() ?? $request->input('token', 'empty'));
+        return hash_equals(sha1(''), $request->bearerToken() ?? $request->input('token') ?? '');
     }
 }
