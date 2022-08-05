@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Wilayah;
 
-use App\Models\Region;
-use Illuminate\Http\Request;
-use App\Imports\RegionImport;
-use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegionRequest;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\RegionImport;
+use App\Models\Region;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\DataTables;
 
 class DesaController extends Controller
 {
@@ -19,10 +19,10 @@ class DesaController extends Controller
             return DataTables::of(Region::desa())
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $edit   = '<a href="' . url('desa/' . $data->id . '/edit') . '" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
-                    $delete = '<button data-href="' . url('desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $edit = '<a href="'.url('desa/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
+                    $delete = '<button data-href="'.url('desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $edit . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$edit.$delete.'</div>';
                 })
                 // ->editColumn('nama_desa', function ($data) {
                 //     if ($data->nama_desa_baru) {
@@ -34,7 +34,7 @@ class DesaController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        
+
         return view('admin.wilayah.desa.index');
     }
 
@@ -90,6 +90,7 @@ class DesaController extends Controller
             Excel::import(new RegionImport, $request->file('file')->store('temp'));
         } catch (\Exception $e) {
             report($e);
+
             return back()->with('error', 'Data gagal diimport');
         }
 

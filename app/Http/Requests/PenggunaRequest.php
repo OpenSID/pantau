@@ -27,7 +27,7 @@ class PenggunaRequest extends FormRequest
             'id_grup' => 'required',
             'name' => 'required|max:255',
             'username' => 'required|max:255',
-            'email' => 'required|max:255'
+            'email' => 'required|max:255',
         ];
     }
 }

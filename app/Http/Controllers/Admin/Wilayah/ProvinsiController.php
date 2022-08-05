@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Wilayah;
 
+use App\Http\Controllers\Controller;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Http\Controllers\Controller;
 
 class ProvinsiController extends Controller
 {
