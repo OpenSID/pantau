@@ -24,6 +24,7 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
+                        <a href="{{ url('laporan/desa?akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -37,6 +38,7 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
+                        <a href="{{ url('laporan/desa?status=1&akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -50,6 +52,7 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
+                        <a href="{{ url('laporan/desa?status=2&akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -227,7 +230,7 @@
         var desaBaru = $('#table-desa-baru').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: true,
+            autoWidth: false,
             ordering: true,
             ajax: {
                 url: `{{ route('datatables:desa-baru') }}`,

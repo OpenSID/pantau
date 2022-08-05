@@ -137,6 +137,29 @@
 
 @section('js')
     <script>
+        const params = new URLSearchParams(window.location.search);
+
+        switch (params.get('status')) {
+            case '1':
+                $('#status').val('1').change()
+                break;
+            case '2':
+                $('#status').val('2').change()
+                break;
+        
+            default:
+                break;
+        }
+
+        switch (params.get('akses')) {
+            case '4':
+                $('#akses').val('4').change()
+                break;
+        
+            default:
+                break;
+        }
+
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
@@ -219,6 +242,8 @@
             $('#kecamatan').val('').change();
             $('#status').val('0').change();
             $('#akses').val('0').change();
+
+            params.delete('status');
             desa.ajax.reload();
         });
     </script>
