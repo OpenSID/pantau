@@ -147,5 +147,6 @@
         });
 
         $('#status').select2();
+        $('#akses').select2();
     </script>
 @endpush()

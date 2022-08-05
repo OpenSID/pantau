@@ -211,21 +211,43 @@ class Desa extends Model
     public function scopeFillter($query, array $fillters)
     {
         return $query->select(['*'])
-        ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-            $query->where('kode_provinsi', $kode_provinsi);
-        })
-        ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-            $query->where('kode_kabupaten', $kode_kabupaten);
-        })
-        ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-            $query->where('kode_kecamatan', $kode_kecamatan);
-        })
-        ->when($fillters['status'] == 1, function ($query) {
-            $query->whereRaw("versi_hosting IS NOT NULL");
-        })
-        ->when($fillters['status'] == 2, function ($query) {
-            $query->whereRaw("versi_lokal IS NOT NULL");
-        });
+            ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
+                $query->where('kode_provinsi', $kode_provinsi);
+            })
+            ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
+                $query->where('kode_kabupaten', $kode_kabupaten);
+            })
+            ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
+                $query->where('kode_kecamatan', $kode_kecamatan);
+            })
+            ->when($fillters['status'] == 1, function ($query) {
+                $query->whereRaw("versi_hosting IS NOT NULL");
+            })
+            ->when($fillters['status'] == 2, function ($query) {
+                $query->whereRaw("versi_lokal IS NOT NULL");
+            })
+            ->when($fillters['akses'], function ($query) use ($fillters) {
+                switch ($fillters['akses']) {
+                    // Sebelum dua bulan yang lalu
+                    case '1':
+                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1");
+                        break;
+                    // Sejak dua bulan yang lalu
+                    case '2':
+                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1");
+                        break;
+                    // Sebelum empat bulan yang lalu
+                    case '3':
+                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3");
+                        break;
+                    // Sejak tujuh hari yang lalu
+                    case '4':
+                        $query->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
+                        break;
+                    default:
+                        break;
+                }
+            });
     }
 
     public function getFormatCreatedAtAttribute()

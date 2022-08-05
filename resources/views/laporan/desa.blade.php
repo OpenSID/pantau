@@ -58,12 +58,25 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Status</label>
-                                            <select class="select2 form-control-sm" id="status" name="Online"
+                                            <label>Jenis Server</label>
+                                            <select class="select2 form-control-sm" id="status" name="online"
                                                 data-placeholder="Semua Status" style="width: 100%;">
-                                                <option value="0">Semua Status</option>
-                                                <option value="1" selected>Online</option>
+                                                <option selected value="0">Semua Status</option>
+                                                <option value="1" >Online</option>
                                                 <option value="2">Offline</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Akses Terakhir</label>
+                                            <select class="select2 form-control-sm" id="akses" name="akses"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                                <option selected value="0">Semua Status</option>
+                                                <option value="4">Sejak tujuh hari yang lalu</option>
+                                                <option value="2">Sejak dua bulan yang lalu</option>
+                                                <option value="1">Sebelum dua bulan yang lalu</option>
+                                                <option value="3">Sebelum empat bulan yang lalu</option>
                                             </select>
                                         </div>
                                     </div>
@@ -138,6 +151,7 @@
                     data.kode_kabupaten = $('#kabupaten').val();
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
+                    data.akses = $('#akses').val();
                 }
             },
             columns: [{
@@ -196,6 +210,16 @@
 
         $('#filter').on('click', function(e) {
             desa.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#provinsi').val('').change();
+            $('#kabupaten').val('').change();
+            $('#kecamatan').val('').change();
+            $('#status').val('0').change();
+            $('#akses').val('0').change();
+            desa.ajax.reload();
         });
     </script>
 @endsection

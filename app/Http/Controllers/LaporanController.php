@@ -24,6 +24,7 @@ class LaporanController extends Controller
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
                 'status'         => $request->status,
+                'akses'          => $request->akses,
             ];
 
             return DataTables::of(Desa::latest('updated_at')->fillter($fillters)->laporan())
