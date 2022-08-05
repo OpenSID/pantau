@@ -220,28 +220,28 @@ class Desa extends Model
                 $query->where('kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
-                $query->whereRaw("versi_hosting IS NOT NULL");
+                $query->whereRaw('versi_hosting IS NOT NULL');
             })
             ->when($fillters['status'] == 2, function ($query) {
-                $query->whereRaw("versi_lokal IS NOT NULL");
+                $query->whereRaw('versi_lokal IS NOT NULL');
             })
             ->when($fillters['akses'], function ($query) use ($fillters) {
                 switch ($fillters['akses']) {
                     // Sebelum dua bulan yang lalu
                     case '1':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1");
+                        $query->whereRaw('TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 1');
                         break;
-                    // Sejak dua bulan yang lalu
+                        // Sejak dua bulan yang lalu
                     case '2':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1");
+                        $query->whereRaw('TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) <= 1');
                         break;
-                    // Sebelum empat bulan yang lalu
+                        // Sebelum empat bulan yang lalu
                     case '3':
-                        $query->whereRaw("TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3");
+                        $query->whereRaw('TIMESTAMPDIFF(MONTH, GREATEST(tgl_akses_lokal, tgl_akses_hosting), NOW()) > 3');
                         break;
-                    // Sejak tujuh hari yang lalu
+                        // Sejak tujuh hari yang lalu
                     case '4':
-                        $query->whereRaw("GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY");
+                        $query->whereRaw('GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 7 DAY');
                         break;
                     default:
                         break;

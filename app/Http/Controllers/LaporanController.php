@@ -23,8 +23,8 @@ class LaporanController extends Controller
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
-                'status'         => $request->status,
-                'akses'          => $request->akses,
+                'status' => $request->status,
+                'akses' => $request->akses,
             ];
 
             return DataTables::of(Desa::fillter($fillters)->laporan())
