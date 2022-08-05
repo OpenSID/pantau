@@ -33,7 +33,7 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->desa_online }}</h3>
-                            <p>Desa Online</p>
+                            <p>Desa Aktif Online</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -47,7 +47,7 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->desa_offline }}</h3>
-                            <p>Desa Offline</p>
+                            <p>Desa Aktif Hanya Offline</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
@@ -140,7 +140,7 @@
     </div>
     <div class="card col-lg-12">
         <div class="card-header">
-            <h3 class="card-title">Kabupaten Pengguna</h3>
+            <h3 class="card-title">Kabupaten Pengguna Aktif</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -163,7 +163,7 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->kabupaten_online }}</h3>
-                            <p>Kabupaten Online</p>
+                            <p>Kabupaten Pengguna Premium</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -176,7 +176,7 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->kabupaten_offline }}</h3>
-                            <p>Kabupaten Offline</p>
+                            <p>Kabupaten Pengguna Versi Terbaru</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>

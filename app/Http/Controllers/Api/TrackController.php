@@ -40,7 +40,6 @@ class TrackController extends Controller
             DB::commit();
 
             return response()->json($notifikasi);
-
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();

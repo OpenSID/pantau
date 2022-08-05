@@ -10,8 +10,8 @@ if (! function_exists('kode_wilayah')) {
     function kode_wilayah($kode_wilayah)
     {
         $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
-        $kode_desa = (strlen($kode_wilayah) > 6) ? '.' . substr($kode_wilayah, 6) : '';
-        $kode_standar = implode('.', $kode_prov_kab_kec) . $kode_desa;
+        $kode_desa = (strlen($kode_wilayah) > 6) ? '.'.substr($kode_wilayah, 6) : '';
+        $kode_standar = implode('.', $kode_prov_kab_kec).$kode_desa;
 
         return $kode_standar;
     }
@@ -41,7 +41,6 @@ if (! function_exists('parent_code')) {
      * @param mixed $region_code
      * @return string
      */
-
     function parent_code($region_code)
     {
         $panjang = strlen($region_code);
