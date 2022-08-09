@@ -220,7 +220,6 @@ class Desa extends Model
                 $query->where('kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
-                $query;
             })
             ->when($fillters['status'] == 2, function ($query) {
                 $query->whereRaw('versi_lokal IS NOT NULL');
