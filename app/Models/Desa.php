@@ -148,7 +148,7 @@ class Desa extends Model
      */
     public function scopeVersiOpenSID($query)
     {
-        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x");
+        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x order by lpad(versi, 15, ' ') desc");
     }
 
     /**
@@ -220,7 +220,7 @@ class Desa extends Model
                 $query->where('kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
-                $query->whereRaw('versi_hosting IS NOT NULL');
+                $query;
             })
             ->when($fillters['status'] == 2, function ($query) {
                 $query->whereRaw('versi_lokal IS NOT NULL');
@@ -236,6 +236,12 @@ class Desa extends Model
             })
             ->when($fillters['akses'] == 4, function ($query) {
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 DAY');
+            })
+            ->when($fillters['versi_lokal'], function ($query, $versi) {
+                $query->where('versi_lokal', $versi);
+            })
+            ->when($fillters['versi_hosting'], function ($query, $versi) {
+                $query->where('versi_hosting', $versi);
             });
     }
 
