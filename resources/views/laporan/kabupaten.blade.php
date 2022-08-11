@@ -10,9 +10,60 @@
     @include('layouts.components.global_delete')
     <div class="row">
         <div class="col-lg-12">
-
             <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Jenis Server</label>
+                                            <select class="select2 form-control-sm" id="status" name="online"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                                <option selected value="0">Semua Status</option>
+                                                <option value="1">Online</option>
+                                                <option value="2">Offline</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="table-kabupaten">
                             <thead>
@@ -36,6 +87,22 @@
 
 @section('js')
     <script>
+        $('#status').select2();
+
+        const params = new URLSearchParams(window.location.search);
+
+        switch (params.get('status')) {
+            case '1':
+                $('#status').val('1').change()
+                break;
+            case '2':
+                $('#status').val('2').change()
+                break;
+        
+            default:
+                break;
+        }
+
         var desa = $('#table-kabupaten').DataTable({
             processing: true,
             serverSide: true,
@@ -44,6 +111,9 @@
             ajax: {
                 url: `{{ url('laporan/kabupaten') }}`,
                 method: 'get',
+                data: function(data) {
+                    data.status = $('#status').val();
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -64,6 +134,17 @@
                     data: 'online'
                 },
             ]
-        })
+        });
+
+        $('#filter').on('click', function(e) {
+            desa.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#status').val('0').change();
+
+            desa.ajax.reload();
+        });
     </script>
 @endsection

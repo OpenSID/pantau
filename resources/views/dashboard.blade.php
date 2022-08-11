@@ -155,6 +155,7 @@
                         <div class="icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
+                        <a href="{{ url('laporan/kabupaten') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -168,6 +169,7 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
+                        <a href="{{ url('laporan/kabupaten') }}?status=1" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -181,6 +183,7 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
+                        <a href="{{ url('laporan/kabupaten') }}?status=2" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>

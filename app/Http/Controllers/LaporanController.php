@@ -53,7 +53,13 @@ class LaporanController extends Controller
     public function kabupaten(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of($this->desa->kabupatenOpenSID())->addIndexColumn()->make(true);
+            $fillters = [
+                'status' => $request->status,
+            ];
+
+            return DataTables::of($this->desa->kabupatenOpenSID($fillters))
+                ->addIndexColumn()
+                ->make(true);
         }
 
         return view('laporan.kabupaten');

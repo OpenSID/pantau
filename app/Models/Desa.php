@@ -113,7 +113,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeKabupatenOpenSID($query)
+    public function scopeKabupatenOpenSID($query, $fillters = [])
     {
         // return $query
         //     ->select(['nama_kabupaten', 'nama_provinsi'])
@@ -126,7 +126,7 @@ class Desa extends Model
             ->selectRaw('sub.nama_provinsi')
             ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
             ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
-            ->fromSub(function ($query) {
+            ->fromSub(function ($query) use ($fillters) {
                 $query
                     ->select(
                         'd.versi_lokal',
@@ -135,7 +135,14 @@ class Desa extends Model
                         'desa.nama_provinsi'
                     )
                     ->from('desa')
-                    ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa');
+                    ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa')
+                // filter
+                ->when($fillters['status'] == 1, function ($query) {
+                    $query->whereRaw('d.versi_hosting is not null');
+                })
+                ->when($fillters['status'] == 2, function ($query) {
+                    $query->whereRaw('d.versi_lokal is not null');
+                });
             }, 'sub')
             ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi']);
     }
