@@ -58,10 +58,14 @@
                     data: 'nama_provinsi'
                 },
                 {
-                    data: 'offline'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=2&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.offline}</a>`
+                    }
                 },
                 {
-                    data: 'online'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=1&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
+                    }
                 },
             ]
         })

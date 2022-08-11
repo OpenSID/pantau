@@ -170,8 +170,8 @@
                 url: `{{ url('laporan/desa') }}`,
                 method: 'get',
                 data: function(data) {
-                    data.kode_provinsi = $('#provinsi').val();
-                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
+                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
