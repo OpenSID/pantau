@@ -163,7 +163,7 @@
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: true,
+            autoWidth: false,
             ordering: true,
 
             ajax: {
@@ -175,6 +175,8 @@
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
+                    data.versi_lokal = params.get('versi_lokal');
+                    data.versi_hosting = params.get('versi_hosting');
                 }
             },
             columns: [{
@@ -204,9 +206,18 @@
                     data: 'nama_provinsi'
                 },
                 {
-                    data: 'url_hosting'
-                },
+                    data: function (data) {
+                        if (data.url_hosting) {
+                            return `<a target="_blank" href="https://${data.url_hosting}">https://${data.url_hosting}</a>`
+                        } else if (data.url_lokal) {
+                            return `<a target="_blank" href="http://${data.url_lokal}">http://${data.url_lokal}</a>`
+                        }
 
+                        return '';
+                    },
+                    searchable: false,
+                    orderable: false
+                },
                 {
                     data: 'versi_lokal'
                 },
