@@ -52,7 +52,7 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="{{ url('laporan/desa?status=2&akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('laporan/desa?status=2&akses=5') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
