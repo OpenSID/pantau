@@ -148,7 +148,7 @@ class Desa extends Model
      */
     public function scopeVersiOpenSID($query)
     {
-        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x order by lpad(versi, 15, ' ') desc");
+        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x order by cast(versi as signed) desc, versi desc");
     }
 
     /**
