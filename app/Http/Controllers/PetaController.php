@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PetaController extends Controller
 {
+    public function __construct()
+    {
+        config()->set('adminlte.sidebar_collapse', true);
+        config()->set('adminlte.sidebar_collapse_remember', false);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -16,6 +22,8 @@ class PetaController extends Controller
                 'kode_kecamatan' => $request->kode_kecamatan,
                 'status' => $request->status,
                 'akses' => $request->akses,
+                'versi_lokal' => $request->versi_lokal,
+                'versi_hosting' => $request->versi_hosting,
             ];
 
             $geoJSONdata = Desa::latest('updated_at')->fillter($fillters)->peta()->get()->map(function ($desa) {

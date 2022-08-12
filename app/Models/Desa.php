@@ -122,7 +122,9 @@ class Desa extends Model
         //     ->groupBy(['nama_kabupaten', 'nama_provinsi']);
 
         return $query
+            ->selectRaw('sub.kode_kabupaten')
             ->selectRaw('sub.nama_kabupaten')
+            ->selectRaw('sub.kode_provinsi')
             ->selectRaw('sub.nama_provinsi')
             ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
             ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
@@ -131,7 +133,9 @@ class Desa extends Model
                     ->select(
                         'd.versi_lokal',
                         'd.versi_hosting',
+                        'desa.kode_kabupaten',
                         'desa.nama_kabupaten',
+                        'desa.kode_provinsi',
                         'desa.nama_provinsi'
                     )
                     ->from('desa')
@@ -148,7 +152,7 @@ class Desa extends Model
      */
     public function scopeVersiOpenSID($query)
     {
-        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x");
+        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' ) t group by versi ) as x order by cast(versi as signed) desc, versi desc");
     }
 
     /**
@@ -239,6 +243,12 @@ class Desa extends Model
             })
             ->when($fillters['akses'] == 5, function ($query) {
                 $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
+            })
+            ->when($fillters['versi_lokal'], function ($query, $versi) {
+                $query->where('versi_lokal', $versi);
+            })
+            ->when($fillters['versi_hosting'], function ($query, $versi) {
+                $query->where('versi_hosting', $versi);
             });
     }
 
