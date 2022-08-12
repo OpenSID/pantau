@@ -122,16 +122,26 @@
                     orderable: false
                 },
                 {
-                    data: 'nama_kabupaten'
+                    data: 'nama_kabupaten',
+                    name: 'sub.nama_kabupaten',
                 },
                 {
-                    data: 'nama_provinsi'
+                    data: 'nama_provinsi',
+                    name: 'sub.nama_provinsi',
                 },
                 {
-                    data: 'offline'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=2&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.offline}</a>`
+                    },
+                    searchable: false,
+                    name: 'offline',
                 },
                 {
-                    data: 'online'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=1&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
+                    },
+                    searchable: false,
+                    name: 'online',
                 },
             ]
         });
