@@ -122,7 +122,9 @@ class Desa extends Model
         //     ->groupBy(['nama_kabupaten', 'nama_provinsi']);
 
         return $query
+            ->selectRaw('sub.kode_kabupaten')
             ->selectRaw('sub.nama_kabupaten')
+            ->selectRaw('sub.kode_provinsi')
             ->selectRaw('sub.nama_provinsi')
             ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
             ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
@@ -131,7 +133,9 @@ class Desa extends Model
                     ->select(
                         'd.versi_lokal',
                         'd.versi_hosting',
+                        'desa.kode_kabupaten',
                         'desa.nama_kabupaten',
+                        'desa.kode_provinsi',
                         'desa.nama_provinsi'
                     )
                     ->from('desa')
