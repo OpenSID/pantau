@@ -175,6 +175,8 @@
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
+                    data.versi_lokal = params.get('versi_lokal');
+                    data.versi_hosting = params.get('versi_hosting');
                 }
             },
             columns: [{
