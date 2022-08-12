@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PetaController extends Controller
 {
+    public function __construct()
+    {
+        config()->set('adminlte.sidebar_collapse', true);
+        config()->set('adminlte.sidebar_collapse_remember', false);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
