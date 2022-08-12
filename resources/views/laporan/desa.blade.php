@@ -163,7 +163,7 @@
         var desa = $('#table-desa').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: true,
+            autoWidth: false,
             ordering: true,
 
             ajax: {
