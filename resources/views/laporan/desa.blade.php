@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Desa OpenSID<small class="font-weight-light ml-1 text-md">(Desa yang memasang OpenSID)</small></h1>
+    <h1>Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')

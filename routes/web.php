@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
+use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,19 @@ Route::prefix('datatables')->as('datatables:')
 
 // Peta
 Route::get('peta', [PetaController::class, 'index']);
+
+// Sesi Provinsi
+Route::prefix('sesi')
+    ->group(function () {
+        Route::middleware(WilayahMiddleware::class)->get('provinsi/{provinsi}', function () {
+            return redirect('/');
+        });
+        Route::get('hapus', function () {
+            session()->remove('provinsi');
+        
+            return redirect('/');
+        });
+    });
 
 // Laporan
 Route::prefix('laporan')
