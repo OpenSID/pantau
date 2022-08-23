@@ -17,9 +17,6 @@
                 processResults: function(response, params) {
                     params.page = params.page || 1;
 
-                    // console.log(response.data);
-                    // getWilayah(response.data.kode_prov, kode_kab, kode_kec, status);
-
                     return {
                         results: $.map(response.data, function(item) {
                             return {
