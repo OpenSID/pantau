@@ -3,7 +3,7 @@
 @section('title', 'Profil Versi OpenSID')
 
 @section('content_header')
-    <h1>Profil Versi OpenSID<small class="font-weight-light ml-1 text-md">(Versi yang terpasang di desa OpenSID)</small></h1>
+    <h1>Profil Versi OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang di desa OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')

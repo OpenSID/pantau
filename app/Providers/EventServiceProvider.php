@@ -38,6 +38,13 @@ class EventServiceProvider extends ServiceProvider
                     'topnav_right' => true,
                 ]);
             }
+
+            foreach (config('tracksid.pantau_provinsi') as $key => $val) {
+                $event->menu->addIn('khusus', [
+                    'text' => $val,
+                    'url' => "sesi/provinsi/{$key}",
+                ]);
+            }
         });
     }
 }
