@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Http;
+
 
 class TrackRequest extends FormRequest
 {
@@ -92,9 +94,22 @@ class TrackRequest extends FormRequest
      */
     protected function isLocal(array $attributes)
     {
-        return is_local($attributes['url']) || is_local($attributes['ip_address'])
-            ? 'lokal'
-            : 'hosting';
+        // cek jika menggunakan ip
+        if (is_local($attributes['url'])) {
+           return 'lokal';
+        }
+
+        //cek domain server
+        try {
+            $response = Http::get($attributes['url']);
+            if ($response->status() == 200) {
+                return 'hosting';
+            }else{
+                return 'lokal';
+            }
+        } catch (\Exception  $th) {
+            return 'lokal';
+        }
     }
 
     /**
