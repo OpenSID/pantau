@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
 use App\Models\LogUrlHosting;
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Support\Facades\Http;
 
 class TrackRequest extends FormRequest
 {
@@ -98,15 +97,15 @@ class TrackRequest extends FormRequest
     {
         // cek jika menggunakan ip
         if (is_local($attributes['url'])) {
-           return 'lokal';
+            return 'lokal';
         }
 
         //cek log agar source tidak terlalu berat
         $tanggal = Carbon::now()->addMonth();
         $log = LogUrlHosting::where([
             ['url', '=', $attributes['url']],
-            ['status','=',200],
-            ['updated_at','<=',$tanggal]
+            ['status', '=', 200],
+            ['updated_at', '<=', $tanggal],
         ])->exists();
         if ($log) {
             return 'hosting';
@@ -122,15 +121,14 @@ class TrackRequest extends FormRequest
                 ],
                 [
                     'url' => $url,
-                    'status' => $response->status()
+                    'status' => $response->status(),
                 ]
             );
             if ($response->status() == 200) {
                 return 'hosting';
-            }else{
+            } else {
                 return 'lokal';
             }
-
         } catch (\Exception  $th) {
             LogUrlHosting::updateOrCreate( //update atau buat log
                 [
@@ -140,6 +138,7 @@ class TrackRequest extends FormRequest
                     'url' => $url,
                 ]
             );
+
             return 'lokal';
         }
     }

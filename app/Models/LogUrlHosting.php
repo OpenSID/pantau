@@ -19,5 +19,4 @@ class LogUrlHosting extends Model
         'url',
         'status',
     ];
-
 }

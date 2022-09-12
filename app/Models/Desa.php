@@ -44,7 +44,7 @@ class Desa extends Model
      */
     public function hosting()
     {
-        return $this->hasOne(LogUrlHosting::class,'url_lokal', 'url');
+        return $this->hasOne(LogUrlHosting::class, 'url_lokal', 'url');
     }
 
     /**

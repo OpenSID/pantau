@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use App\Models\Desa;
 use App\Models\LogUrlHosting;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 
 class UpdateDataHosting extends Command
 {
@@ -44,16 +44,15 @@ class UpdateDataHosting extends Command
     public function handle()
     {
         foreach (Desa::whereNull('url_hosting')->get() as $value) { // cek web terdeteksi offline
-
-            if (!is_local($value->url_lokal) && $value->url_lokal != null) {
+            if (! is_local($value->url_lokal) && $value->url_lokal != null) {
                 $url = fixDomainName($value->url_lokal);
-                echo 'cek ' . $url . PHP_EOL;
+                echo 'cek '.$url.PHP_EOL;
 
                 //cek domain server
                 try {
-                    $response = Http::get('https://' . $url);
+                    $response = Http::get('https://'.$url);
                     if ($response->status() == 200) {
-                        echo "true " . $url . PHP_EOL;
+                        echo 'true '.$url.PHP_EOL;
                         Desa::where('id', $value->id)->update(['url_hosting' => $value->url_lokal]);
                         LogUrlHosting::updateOrCreate(
                             [
@@ -61,7 +60,7 @@ class UpdateDataHosting extends Command
                             ],
                             [
                                 'url' => $url,
-                                'status' => 200
+                                'status' => 200,
                             ]
                         );
                     }
@@ -79,7 +78,7 @@ class UpdateDataHosting extends Command
     public function cek_http($url, $id)
     {
         try {
-            $response = Http::get('http://' . $url);
+            $response = Http::get('http://'.$url);
 
             if ($response->status() == 200) {
                 LogUrlHosting::updateOrCreate(
@@ -88,7 +87,7 @@ class UpdateDataHosting extends Command
                     ],
                     [
                         'url' => $url,
-                        'status' => 200
+                        'status' => 200,
                     ]
                 );
             }
