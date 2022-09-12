@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+use App\Models\LogUrlHosting;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Http\FormRequest;
+
 
 class TrackRequest extends FormRequest
 {
@@ -92,9 +96,52 @@ class TrackRequest extends FormRequest
      */
     protected function isLocal(array $attributes)
     {
-        return is_local($attributes['url']) || is_local($attributes['ip_address'])
-            ? 'lokal'
-            : 'hosting';
+        // cek jika menggunakan ip
+        if (is_local($attributes['url'])) {
+           return 'lokal';
+        }
+
+        //cek log agar source tidak terlalu berat
+        $tanggal = Carbon::now()->addMonth();
+        $log = LogUrlHosting::where([
+            ['url', '=', $attributes['url']],
+            ['status','=',200],
+            ['updated_at','<=',$tanggal]
+        ])->exists();
+        if ($log) {
+            return 'hosting';
+        }
+
+        //cek domain server
+        try {
+            $response = Http::get($attributes['url']);
+            $url = fixDomainName($attributes['url']);
+            LogUrlHosting::updateOrCreate( //update atau buat log
+                [
+                    'url' => $url,
+                ],
+                [
+                    'url' => $url,
+                    'status' => $response->status()
+                ]
+            );
+            if ($response->status() == 200) {
+                return 'hosting';
+            }else{
+                return 'lokal';
+            }
+
+        } catch (\Exception  $th) {
+            LogUrlHosting::updateOrCreate( //update atau buat log
+                [
+                    'url' => $url,
+                ],
+                [
+                    'url' => $url,
+                ]
+            );
+            return 'lokal';
+        }
     }
 
     /**
