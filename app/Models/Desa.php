@@ -38,16 +38,6 @@ class Desa extends Model
     }
 
     /**
-     * Define a one-to-many relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
-     */
-    public function hosting()
-    {
-        return $this->hasOne(LogUrlHosting::class,'url_lokal', 'url');
-    }
-
-    /**
      * Define a many-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
