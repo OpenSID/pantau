@@ -146,9 +146,17 @@ class Desa extends Model
                 })
                 ->when($fillters['status'] == 2, function ($query) {
                     $query->whereRaw('d.versi_lokal is not null');
+                })
+                ->when($fillters['status'] == 3, function ($query) {
+                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+                    $version = $versi_opensid->tag_name;
+                    $version = preg_replace('/[^0-9]/', '', $version);
+                    // $version = substr()
+                    $query->where('d.versi_hosting', 'LIKE', '%'.$version.'-premium')
+                    ->orWhere('d.versi_lokal', 'LIKE', '%'.$version.'-premium');
                 });
             }, 'sub')
-            ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi']);
+            ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi'])->dd();
     }
 
     /**
@@ -235,6 +243,9 @@ class Desa extends Model
             })
             ->when($fillters['status'] == 2, function ($query) {
                 $query->whereRaw('versi_lokal IS NOT NULL');
+            })
+            ->when($fillters['status'] == 3, function ($query) {
+
             })
             ->when($fillters['akses'] == 1, function ($query) {
                 $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1');

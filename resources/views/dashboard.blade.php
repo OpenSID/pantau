@@ -178,12 +178,12 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->kabupaten_offline }}</h3>
-                            <p>Kabupaten Pengguna Versi Terbaru</p>
+                            <p>Kabupaten Pengguna Premium Versi Terbaru</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="{{ url('laporan/kabupaten') }}?status=2" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('laporan/kabupaten') }}?status=3" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>

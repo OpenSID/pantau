@@ -34,6 +34,7 @@
                                                 <option selected value="0">Semua Status</option>
                                                 <option value="1">Online</option>
                                                 <option value="2">Offline</option>
+                                                <option value="3">Premium Terbaru</option>
                                             </select>
                                         </div>
                                     </div>
@@ -98,7 +99,10 @@
             case '2':
                 $('#status').val('2').change()
                 break;
-        
+            case '3':
+                $('#status').val('3').change()
+                break;
+
             default:
                 break;
         }
