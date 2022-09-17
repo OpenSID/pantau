@@ -96,7 +96,7 @@ if (! function_exists('lastrelease')) {
     {
         try {
             $response = Http::withHeaders([
-                'Accept' => 'application/vnd.github.v3+json'
+                'Accept' => 'application/vnd.github.v3+json',
             ])->get($url, [
                 'name' => 'Taylor',
                 'cert' => base_path().'cacert.pem',
@@ -106,8 +106,5 @@ if (! function_exists('lastrelease')) {
         } catch (\Throwable $th) {
             return false;
         }
-
-
     }
 }
-
