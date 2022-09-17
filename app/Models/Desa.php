@@ -151,12 +151,13 @@ class Desa extends Model
                     $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
                     $version = $versi_opensid->tag_name;
                     $version = preg_replace('/[^0-9]/', '', $version);
+                    $version = substr($version, 0,2).'.'.substr($version, 2,2);
                     // $version = substr()
-                    $query->where('d.versi_hosting', 'LIKE', '%'.$version.'-premium')
-                    ->orWhere('d.versi_lokal', 'LIKE', '%'.$version.'-premium');
+                    $query->where('d.versi_hosting', 'LIKE', $version.'-premium%')
+                    ->orWhere('d.versi_lokal', 'LIKE', $version.'-premium%');
                 });
             }, 'sub')
-            ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi'])->dd();
+            ->groupBy(['sub.nama_kabupaten', 'sub.nama_provinsi']);
     }
 
     /**
@@ -246,6 +247,14 @@ class Desa extends Model
             })
             ->when($fillters['status'] == 3, function ($query) {
 
+                $query->where( function ($query_versi){
+                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+                    $version = $versi_opensid->tag_name;
+                    $version = preg_replace('/[^0-9]/', '', $version);
+                    $version = substr($version, 0,2).'.'.substr($version, 2,2);
+                    $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
+                    ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
+                });
             })
             ->when($fillters['akses'] == 1, function ($query) {
                 $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1');

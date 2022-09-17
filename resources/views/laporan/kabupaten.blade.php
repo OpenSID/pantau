@@ -135,14 +135,15 @@
                 },
                 {
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=2&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.offline}</a>`
+
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=${$('#status').val() == 3? 3: 2}&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.offline}</a>`
                     },
                     searchable: false,
                     name: 'offline',
                 },
                 {
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=1&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=${$('#status').val() == 3? 3: 2}&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
                     },
                     searchable: false,
                     name: 'online',
