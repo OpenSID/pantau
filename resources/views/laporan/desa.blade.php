@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Desa OpenSID<small class="font-weight-light ml-1 text-md">(Desa yang memasang OpenSID)</small></h1>
+    <h1>Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -74,6 +74,7 @@
                                             <select class="select2 form-control-sm" id="akses" name="akses"
                                                 data-placeholder="Semua Status" style="width: 100%;">
                                                 <option selected value="0">Semua Status</option>
+                                                <option value="5">Desa aktif hanya offline</option>
                                                 <option value="4">Sejak tujuh hari yang lalu</option>
                                                 <option value="2">Sejak dua bulan yang lalu</option>
                                                 <option value="1">Sebelum dua bulan yang lalu</option>
@@ -159,6 +160,9 @@
         switch (params.get('akses')) {
             case '4':
                 $('#akses').val('4').change()
+                break;
+            case '5':
+                $('#akses').val('5').change()
                 break;
 
             default:

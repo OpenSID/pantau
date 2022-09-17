@@ -3,7 +3,7 @@
 @section('title', 'Kabupaten OpenSID')
 
 @section('content_header')
-    <h1>Kabupaten OpenSID<small class="font-weight-light ml-1 text-md">(Kabupaten yang memasang OpenSID)</small></h1>
+    <h1>Kabupaten OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Kabupaten yang memasang OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')

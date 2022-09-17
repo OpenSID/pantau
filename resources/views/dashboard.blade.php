@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard<small class="font-weight-light ml-1 text-md">Status Penggunaan OpenSID</small></h1>
+    <h1>Dashboard<small class="font-weight-light ml-1 text-md font-weight-bold">Status Penggunaan OpenSID @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -52,7 +52,7 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="{{ url('laporan/desa?status=2&akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('laporan/desa?status=2&akses=5') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>

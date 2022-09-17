@@ -11,5 +11,8 @@ return [
         'kode_desa' => '52.01.14.2006',
         'lat' => '-8.483832804795249',
         'lng' => '116.08523368835449',
-    ]
+    ],
+    'pantau_provinsi' => [
+        '52' => 'Nusa Tenggara Barat',
+    ],
 ];
