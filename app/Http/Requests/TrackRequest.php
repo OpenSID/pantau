@@ -154,6 +154,8 @@ class TrackRequest extends FormRequest
             'opensid_valid',
             'email_desa',
             'telepon',
+            'jml_surat_tte',
+            'modul_tte',
         ]);
     }
 }

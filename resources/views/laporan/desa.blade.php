@@ -81,6 +81,17 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Module TTE</label>
+                                            <select class="select2 form-control-sm" id="tte" name="tte"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                                <option selected value="">Semua</option>
+                                                <option value="1">Modul TTE Aktif</option>
+                                                <option value="0">Modul TTE Tidak Aktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -123,6 +134,8 @@
                                     <th>Web</th>
                                     <th>Versi Offline</th>
                                     <th>Versi Online</th>
+                                    <th>Modul TTE</th>
+                                    <th>Surat ter-TTE</th>
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -147,7 +160,7 @@
             case '2':
                 $('#status').val('2').change()
                 break;
-        
+
             default:
                 break;
         }
@@ -159,7 +172,7 @@
             case '5':
                 $('#akses').val('5').change()
                 break;
-        
+
             default:
                 break;
         }
@@ -179,6 +192,7 @@
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
+                    data.tte = $('#tte').val();
                     data.versi_lokal = params.get('versi_lokal');
                     data.versi_hosting = params.get('versi_hosting');
                 }
@@ -229,7 +243,22 @@
                 {
                     data: 'versi_hosting'
                 },
-
+                {
+                    data: function (data) {
+                        if (data.tte == 1) {
+                            return `<span class="badge badge-pill badge-info">Aktif</span>`
+                        } else  {
+                            return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
+                        }
+                    },
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'surat_tte',
+                    searchable: false,
+                    orderable: false
+                },
                 {
                     data: 'tgl_akses',
                     searchable: false,
@@ -257,6 +286,7 @@
             $('#kecamatan').val('').change();
             $('#status').val('0').change();
             $('#akses').val('0').change();
+            $('#tte').val('').change();
 
             desa.ajax.reload();
         });

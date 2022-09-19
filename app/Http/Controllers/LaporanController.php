@@ -27,6 +27,7 @@ class LaporanController extends Controller
                 'akses' => $request->akses,
                 'versi_lokal' => $request->versi_lokal,
                 'versi_hosting' => $request->versi_hosting,
+                'tte' => $request->tte,
             ];
 
             return DataTables::of($this->desa->fillter($fillters)->laporan())
