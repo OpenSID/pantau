@@ -161,12 +161,15 @@ class Desa extends Model
                 })
                 ->when($fillters['status'] == 3, function ($query) {
                     $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-                    $version = $versi_opensid->tag_name;
-                    $version = preg_replace('/[^0-9]/', '', $version);
-                    $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
-                    // $version = substr()
-                    $query->where('d.versi_hosting', 'LIKE', $version.'-premium%')
-                    ->orWhere('d.versi_lokal', 'LIKE', $version.'-premium%');
+
+                    if ($versi_opensid !== false) {
+                        $version = $versi_opensid->tag_name;
+                        $version = preg_replace('/[^0-9]/', '', $version);
+                        $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+
+                        $query->where('d.versi_hosting', 'LIKE', $version.'-premium%')
+                            ->orWhere('d.versi_lokal', 'LIKE', $version.'-premium%');
+                    }
                 });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {

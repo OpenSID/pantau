@@ -97,10 +97,9 @@ if (! function_exists('lastrelease')) {
         try {
             $response = Http::withHeaders([
                 'Accept' => 'application/vnd.github.v3+json',
-            ])->get($url, [
-                'name' => 'Taylor',
-                'cert' => base_path().'cacert.pem',
-            ]);
+            ])
+            ->get($url)
+            ->throw();
 
             return json_decode($response->body());
         } catch (\Throwable $th) {
