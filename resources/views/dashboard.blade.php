@@ -271,7 +271,8 @@
                     orderable: false
                 },
                 {
-                    data: 'versi'
+                    data: 'versi',
+                    searchable: false
                 },
             ],
             order: [
