@@ -43,7 +43,7 @@ class EventServiceProvider extends ServiceProvider
                 $event->menu->addIn('khusus', [
                     'text' => $val,
                     'url' => "sesi/provinsi/{$key}",
-                    'active' => session('provinsi.kode_prov') == $key ? true : false
+                    'active' => session('provinsi.kode_prov') == $key ? true : false,
                 ]);
             }
         });
