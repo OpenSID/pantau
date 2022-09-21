@@ -177,7 +177,7 @@
                     <!-- small card -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $jumlahDesa->kabupaten_offline }}</h3>
+                            <h3>{{ $jumlahDesa->kabupaten_premium }}</h3>
                             <p>Kabupaten Pengguna Premium Versi Terbaru</p>
                         </div>
                         <div class="icon">
