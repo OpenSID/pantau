@@ -68,9 +68,6 @@ class Desa extends Model
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
         }
 
-
-
-
         return $query
             ->selectRaw('count(id) as desa_total')
             ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states}) desa_offline")
