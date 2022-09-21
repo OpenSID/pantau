@@ -271,13 +271,12 @@ return [
         ],
         [
             'key'          => 'khusus',
-            'text'         => 'laporan Provinsi Khusus',
-            'icon'         => 'fas fa-file-alt',
+            'text'         => 'Wilayah',
+            'topnav_right' => true,
             'submenu'      => [
                 [
-                    'text' => 'Hapus Sesi Provinsi',
+                    'text' => 'Semua',
                     'url'  => 'sesi/hapus',
-                    'icon' => 'fa fa-undo',
                 ],
             ],
         ],
