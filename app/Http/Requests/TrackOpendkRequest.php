@@ -78,6 +78,7 @@ class TrackOpendkRequest extends FormRequest
             'jumlah_penduduk',
             'jumlah_keluarga',
             'peta_wilayah',
+            'sebutan_wilayah'
         ]);
     }
 }

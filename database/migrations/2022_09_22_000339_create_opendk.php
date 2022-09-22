@@ -26,6 +26,7 @@ class CreateOpendk extends Migration
             $table->float('jumlah_penduduk', 65,  0);
             $table->float('jumlah_keluarga', 65,  0);
             $table->longText('peta_wilayah');
+            $table->string('sebutan_wilayah');
             $table->timestamps();
         });
     }
