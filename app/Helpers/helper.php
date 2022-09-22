@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
+
 if (! function_exists('kode_wilayah')) {
     /**
      * Kode wilayah dengan titik dari 5201142005 --> 52.01.14.2005
@@ -80,5 +82,28 @@ if (! function_exists('fixDomainName')) {
         $finalDomainName = trim($explodeToArray[0]);
 
         return $finalDomainName;
+    }
+}
+
+if (! function_exists('lastrelease')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease($url)
+    {
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/vnd.github.v3+json',
+            ])
+            ->get($url)
+            ->throw();
+
+            return json_decode($response->body());
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }
