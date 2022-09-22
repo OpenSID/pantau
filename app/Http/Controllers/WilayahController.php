@@ -17,7 +17,7 @@ class WilayahController extends Controller
     public function __invoke(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Wilayah::query())->addIndexColumn()->make(true);
+            return DataTables::of(Wilayah::query()->with('bps'))->addIndexColumn()->make(true);
         }
 
         return view('wilayah.index');
