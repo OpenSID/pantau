@@ -14,6 +14,4 @@ class Opendk extends Model
 
     /** {@inheritdoc} */
     protected $guarded = [];
-
-
 }
