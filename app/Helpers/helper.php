@@ -19,6 +19,22 @@ if (! function_exists('kode_wilayah')) {
     }
 }
 
+if (! function_exists('kode_kecamatan')) {
+    /**
+     * Kode wilayah dengan titik dari 520114 --> 52.01.14
+     *
+     * @param mixed $kode_wilayah
+     * @return string
+     */
+    function kode_kecamatan($kode_wilayah)
+    {
+        $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
+        $kode_standar = implode('.', $kode_prov_kab_kec);
+
+        return $kode_standar;
+    }
+}
+
 if (! function_exists('is_local')) {
     /**
      * Validasi local ip.
