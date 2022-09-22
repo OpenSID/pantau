@@ -123,6 +123,8 @@ class WilayahController extends Controller
             ->where('kode_kec', kode_kecamatan($request->kode))
             ->groupBy('kode_kec')
             ->firstOrFail();
+        $desa->kode_desa = '';
+        $desa->nama_desa = '';
 
         return response()->json($desa);
     }
