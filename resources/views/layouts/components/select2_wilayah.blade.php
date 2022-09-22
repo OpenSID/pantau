@@ -145,5 +145,6 @@
 
         $('#status').select2();
         $('#akses').select2();
+        $('#tte').select2();
     </script>
 @endpush()
