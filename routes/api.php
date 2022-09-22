@@ -29,4 +29,5 @@ Route::prefix('track')
     ->middleware('tracksid')
     ->group(function () {
         Route::post('desa', TrackController::class);
+        Route::post('opendk', TrackOpendkController::class);
     });
