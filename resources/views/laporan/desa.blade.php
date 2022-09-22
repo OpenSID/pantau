@@ -192,7 +192,7 @@
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
-                    data.tte = $('#tte').val();
+                    data.modul_tte = $('#tte').val();
                     data.versi_lokal = params.get('versi_lokal');
                     data.versi_hosting = params.get('versi_hosting');
                 }
@@ -245,7 +245,7 @@
                 },
                 {
                     data: function (data) {
-                        if (data.tte == 1) {
+                        if (data.modul_tte == 1) {
                             return `<span class="badge badge-pill badge-info">Aktif</span>`
                         } else  {
                             return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
@@ -255,7 +255,7 @@
                     orderable: false
                 },
                 {
-                    data: 'surat_tte',
+                    data: 'jml_surat_tte',
                     searchable: false,
                     orderable: false
                 },

@@ -14,8 +14,8 @@ class ModulTte extends Migration
     public function up()
     {
         Schema::table('desa', function (Blueprint $table) {
-            $table->tinyInteger('tte')->after('telepon'); // modul tte
-            $table->float('surat_tte', 8, 0)->after('telepon'); // jumlah surat tte
+            $table->tinyInteger('modul_tte')->after('telepon'); // modul tte
+            $table->float('jml_surat_tte', 8, 0)->after('telepon'); // jumlah surat tte
         });
     }
 
