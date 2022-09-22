@@ -21,7 +21,7 @@ class TrackOpendkController extends Controller
                 $request->requestData()
             );
             DB::commit();
-            return response()->json(['status'=> '-']);
+            return response()->json(['status'=> true]);
         } catch (Exception $e) {
             Log::error($e);
             DB::rollBack();
