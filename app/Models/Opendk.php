@@ -14,4 +14,8 @@ class Opendk extends Model
 
     /** {@inheritdoc} */
     protected $guarded = [];
+
+    /** {@inheritdoc} */
+    protected $primaryKey = 'kode_kecamatan';
+
 }
