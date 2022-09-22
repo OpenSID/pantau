@@ -13,14 +13,14 @@ class Wilayah extends Model
     /** {@inheritdoc} */
     protected $table = 'kode_wilayah';
 
-     /**
+    /**
      * Define a one-to-one relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
     public function bps()
     {
-        return $this->hasOne(TblBpsKemendagri::class, 'kode_desa_kemendagri','kode_desa');
+        return $this->hasOne(TblBpsKemendagri::class, 'kode_desa_kemendagri', 'kode_desa');
     }
 
     /**
