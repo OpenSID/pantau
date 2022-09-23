@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Pool;
-use GuzzleHttp\Client;
-use Illuminate\Support\Str;
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Console\Command;
 use App\Models\TblBpsKemendagri;
-use Illuminate\Support\Collection;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class BPSCommand extends Command
 {
