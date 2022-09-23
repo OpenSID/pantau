@@ -55,7 +55,7 @@ class TrackRequest extends FormRequest
             'jml_surat_tte' => 'sometimes',
             'modul_tte' => [
                 'sometimes',
-                Rule::in(['0', '1'])
+                Rule::in(['0', '1']),
             ],
         ];
     }
