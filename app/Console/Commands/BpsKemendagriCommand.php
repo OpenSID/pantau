@@ -99,7 +99,7 @@ class BpsKemendagriCommand extends Command
         };
 
         $pool = new Pool($client, $requests(), [
-            'concurrency' => 10,
+            'concurrency' => 50,
             'fulfilled' => function (Response $response, $index) use ($level) {
                 $this->{$level}[] = json_decode($response->getBody()->getContents(), true);
                 $this->output->progressAdvance();
