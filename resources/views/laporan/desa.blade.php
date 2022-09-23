@@ -250,7 +250,7 @@
                 },
                 {
                     data: function (data) {
-                        if (data.tte == 1) {
+                        if (data.modul_tte == 1) {
                             return `<span class="badge badge-pill badge-info">Aktif</span>`
                         } else  {
                             return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
@@ -260,7 +260,7 @@
                     orderable: false
                 },
                 {
-                    data: 'surat_tte',
+                    data: 'jml_surat_tte',
                     searchable: false,
                 },
                 {

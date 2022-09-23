@@ -26,6 +26,9 @@ class ModulTte extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('desa', function (Blueprint $table) {
+            $table->dropColumn('modul_tte');
+            $table->dropColumn('jml_surat_tte');
+        });
     }
 }
