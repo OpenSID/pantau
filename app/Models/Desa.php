@@ -317,6 +317,9 @@ class Desa extends Model
             })
             ->when($fillters['versi_hosting'], function ($query, $versi) {
                 $query->where('versi_hosting', $versi);
+            })
+            ->when(in_array($fillters['tte'], ['1', '0']), function ($query) use ($fillters) {
+                $query->where('modul_tte', $fillters['tte']);
             });
     }
 
