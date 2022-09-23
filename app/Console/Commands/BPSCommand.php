@@ -10,6 +10,7 @@ use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BPSCommand extends Command
@@ -63,48 +64,24 @@ class BPSCommand extends Command
         try {
             $this->provinsi = collect(json_decode((new Client())->get("{$this->url}getwilayah")->getBody()->getContents(), true));
 
+            collect($this->provinsi)->map(function ($item) {
+                return [
+                    "kode_provinsi_kemendagri" => $item['kode_dagri'],
+                    "nama_provinsi_kemendagri" => $item['nama_dagri'],
+                    "kode_provinsi_bps" => $item['kode_bps'],
+                    "nama_provinsi_bps" => $item['nama_bps'],
+                ];
+            })
+            ->chunk(10)
+            ->each(function ($chunk) {
+                DB::table("bps_kemendagri_provinsi")->upsert($chunk->all(), "kode_provinsi_bps");
+            });
+
+            DB::table("bps_kemendagri_provinsi")->update(['created_at' => now(), 'updated_at' => now()]);
+
             $this->requests($this->provinsi, 'kabupaten');
             $this->requests($this->kabupaten, 'kecamatan');
             $this->requests($this->kecamatan, 'desa');
-
-            $bar = $this->output->createProgressBar(count($this->desa));
-            $bar->start();
-
-            collect($this->desa)->map(function ($desa) use ($bar) {
-                $prov = collect($this->provinsi)->where('kode_dagri', Str::substrReplace($desa['kode_dagri'], '', -11));
-                $kab = collect($this->kabupaten)->where('kode_dagri', Str::substrReplace($desa['kode_dagri'], '', -8));
-                $kec = collect($this->kecamatan)->where('kode_dagri', Str::substrReplace($desa['kode_dagri'], '', -5));
-
-                $bar->advance();
-
-                return [
-                    'kode_provinsi_kemendagri' => $prov->pluck('kode_dagri')->first(),
-                    'nama_provinsi_kemendagri' => $prov->pluck('nama_dagri')->first(),
-                    'kode_provinsi_bps' => $prov->pluck('kode_bps')->first(),
-                    'nama_provinsi_bps' => $prov->pluck('nama_bps')->first(),
-
-                    'kode_kabupaten_kemendagri' => $kab->pluck('kode_dagri')->first(),
-                    'nama_kabupaten_kemendagri' => $kab->pluck('nama_dagri')->first(),
-                    'kode_kabupaten_bps' => $kab->pluck('kode_bps')->first(),
-                    'nama_kabupaten_bps' => $kab->pluck('nama_bps')->first(),
-
-                    'kode_kecamatan_kemendagri' => $kec->pluck('kode_dagri')->first(),
-                    'nama_kecamatan_kemendagri' => $kec->pluck('nama_dagri')->first(),
-                    'kode_kecamatan_bps' => $kec->pluck('kode_bps')->first(),
-                    'nama_kecamatan_bps' => $kec->pluck('nama_bps')->first(),
-
-                    'kode_desa_kemendagri' => $desa['kode_dagri'],
-                    'nama_desa_kemendagri' => $desa['nama_dagri'],
-                    'kode_desa_bps' => $desa['kode_bps'],
-                    'nama_desa_bps' => $desa['nama_bps'],
-                ];
-            })
-            ->chunk(1000)
-            ->each(function ($chunk) {
-                TblBpsKemendagri::upsert($chunk->all(), 'kode_desa_bps');
-            });
-
-            $bar->finish();
         } catch (ClientException $e) {
             report($e);
         }
@@ -140,6 +117,22 @@ class BPSCommand extends Command
         $promise->wait();
 
         $this->{$level} = collect($this->{$level})->flatten(1)->all();
+
+        collect($this->{$level})->map(function ($item) use ($level) {
+            return [
+                "kode_{$level}_kemendagri" => $item['kode_dagri'],
+                "nama_{$level}_kemendagri" => $item['nama_dagri'],
+                "kode_{$level}_bps" => $item['kode_bps'],
+                "nama_{$level}_bps" => $item['nama_bps'],
+            ];
+        })
+        ->chunk(1000)
+        ->each(function ($chunk) use ($level) {
+            DB::table("bps_kemendagri_{$level}")->upsert($chunk->all(), "kode_{$level}_bps");
+        });
+
+        DB::table("bps_kemendagri_{$level}")->update(['created_at' => now(), 'updated_at' => now()]);
+
         $this->output->progressFinish();
     }
 }

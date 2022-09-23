@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Wilayah;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class WilayahController extends Controller
 {
@@ -17,7 +17,9 @@ class WilayahController extends Controller
     public function __invoke(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Wilayah::query()->with('bps'))->addIndexColumn()->make(true);
+            return DataTables::eloquent(Wilayah::with('bpsKemendagriDesa'))
+                ->addIndexColumn()
+                ->make(true);
         }
 
         return view('wilayah.index');

@@ -18,9 +18,39 @@ class Wilayah extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function bps()
+    public function bpsKemendagriProvinsi()
     {
-        return $this->hasOne(TblBpsKemendagri::class, 'kode_desa_kemendagri', 'kode_desa');
+        return $this->hasOne(BpsKemendagriDesa::class, 'kode_provinsi_kemendagri', 'kode_prov');
+    }
+
+    /**
+     * Define a one-to-one relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function bpsKemendagriKabupaten()
+    {
+        return $this->hasOne(BpsKemendagriDesa::class, 'kode_kabupaten_kemendagri', 'kode_kab');
+    }
+
+    /**
+     * Define a one-to-one relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function bpsKemendagriKecamatan()
+    {
+        return $this->hasOne(BpsKemendagriKecamatan::class, 'kode_kecamatan_kemendagri', 'kode_kec');
+    }
+
+    /**
+     * Define a one-to-one relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function bpsKemendagriDesa()
+    {
+        return $this->hasOne(BpsKemendagriDesa::class, 'kode_desa_kemendagri', 'kode_desa');
     }
 
     /**
