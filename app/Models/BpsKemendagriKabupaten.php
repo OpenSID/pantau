@@ -12,10 +12,20 @@ class BpsKemendagriKabupaten extends Model
     /**
      * {@inheritdoc}
      */
+    protected $primaryKey = 'kode_kabupaten_kemendagri';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $table = 'bps_kemendagri_kabupaten';
 
     /**
      * {@inheritdoc}
      */
     protected $guarded = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 }

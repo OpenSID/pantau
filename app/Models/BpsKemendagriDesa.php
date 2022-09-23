@@ -12,10 +12,20 @@ class BpsKemendagriDesa extends Model
     /**
      * {@inheritdoc}
      */
+    protected $primaryKey = 'kode_desa_kemendagri';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $table = 'bps_kemendagri_desa';
 
     /**
      * {@inheritdoc}
      */
     protected $guarded = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 }

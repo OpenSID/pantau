@@ -2,14 +2,15 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
+use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class BpsKemendagriCommand extends Command
 {
@@ -117,7 +118,22 @@ class BpsKemendagriCommand extends Command
         $this->{$level} = collect($this->{$level})->flatten(1)->all();
 
         collect($this->{$level})->map(function ($item) use ($level) {
+            switch ($level) {
+                case 'kabupaten':
+                    $key = 'kode_provinsi_kemendagri';
+                    $val = Str::substrReplace($item['kode_dagri'], '', 2);
+                    break;
+                case 'kecamatan':
+                    $key = 'kode_kabupaten_kemendagri';
+                    $val = Str::substrReplace($item['kode_dagri'], '', 5);
+                    break;
+                case 'desa':
+                    $key = 'kode_kecamatan_kemendagri';
+                    $val = Str::substrReplace($item['kode_dagri'], '', 8);
+                    break;
+            }
             return [
+                $key => $val,
                 "kode_{$level}_kemendagri" => $item['kode_dagri'],
                 "nama_{$level}_kemendagri" => $item['nama_dagri'],
                 "kode_{$level}_bps" => $item['kode_bps'],
@@ -126,7 +142,15 @@ class BpsKemendagriCommand extends Command
         })
         ->chunk(1000)
         ->each(function ($chunk) use ($level) {
-            DB::table("bps_kemendagri_{$level}")->upsert($chunk->all(), "kode_{$level}_bps");
+            DB::table("bps_kemendagri_{$level}")->upsert(
+                $chunk->all(),
+                "kode_{$level}_bps",
+                [
+                    "kode_{$level}_kemendagri",
+                    "nama_{$level}_kemendagri",
+                    "nama_{$level}_bps"
+                ]
+            );
         });
 
         DB::table("bps_kemendagri_{$level}")->update(['created_at' => now(), 'updated_at' => now()]);

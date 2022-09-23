@@ -12,10 +12,20 @@ class BpsKemendagriKecamatan extends Model
     /**
      * {@inheritdoc}
      */
+    protected $primaryKey = 'kode_kecamatan_kemendagri';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $table = 'bps_kemendagri_kecamatan';
 
     /**
      * {@inheritdoc}
      */
     protected $guarded = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 }
