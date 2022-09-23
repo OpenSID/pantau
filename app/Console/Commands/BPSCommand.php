@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TblBpsKemendagri;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
@@ -11,7 +10,6 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class BPSCommand extends Command
 {
@@ -66,18 +64,18 @@ class BPSCommand extends Command
 
             collect($this->provinsi)->map(function ($item) {
                 return [
-                    "kode_provinsi_kemendagri" => $item['kode_dagri'],
-                    "nama_provinsi_kemendagri" => $item['nama_dagri'],
-                    "kode_provinsi_bps" => $item['kode_bps'],
-                    "nama_provinsi_bps" => $item['nama_bps'],
+                    'kode_provinsi_kemendagri' => $item['kode_dagri'],
+                    'nama_provinsi_kemendagri' => $item['nama_dagri'],
+                    'kode_provinsi_bps' => $item['kode_bps'],
+                    'nama_provinsi_bps' => $item['nama_bps'],
                 ];
             })
             ->chunk(10)
             ->each(function ($chunk) {
-                DB::table("bps_kemendagri_provinsi")->upsert($chunk->all(), "kode_provinsi_bps");
+                DB::table('bps_kemendagri_provinsi')->upsert($chunk->all(), 'kode_provinsi_bps');
             });
 
-            DB::table("bps_kemendagri_provinsi")->update(['created_at' => now(), 'updated_at' => now()]);
+            DB::table('bps_kemendagri_provinsi')->update(['created_at' => now(), 'updated_at' => now()]);
 
             $this->requests($this->provinsi, 'kabupaten');
             $this->requests($this->kabupaten, 'kecamatan');
