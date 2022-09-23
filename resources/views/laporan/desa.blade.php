@@ -83,10 +83,10 @@
                                     </div>
                                     <div class="col-sm">
                                         <div class="form-group">
-                                            <label>Module TTE</label>
+                                            <label>Modul TTE</label>
                                             <select class="select2 form-control-sm" id="tte" name="tte"
                                                 data-placeholder="Semua Status" style="width: 100%;">
-                                                <option selected value="">Semua</option>
+                                                <option selected value="empty">Semua Status</option>
                                                 <option value="1">Modul TTE Aktif</option>
                                                 <option value="0">Modul TTE Tidak Aktif</option>
                                             </select>
@@ -192,7 +192,7 @@
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.status = $('#status').val();
                     data.akses = $('#akses').val();
-                    data.modul_tte = $('#tte').val();
+                    data.tte = $('#tte').val();
                     data.versi_lokal = params.get('versi_lokal');
                     data.versi_hosting = params.get('versi_hosting');
                 }
@@ -245,7 +245,7 @@
                 },
                 {
                     data: function (data) {
-                        if (data.modul_tte == 1) {
+                        if (data.tte == 1) {
                             return `<span class="badge badge-pill badge-info">Aktif</span>`
                         } else  {
                             return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
@@ -255,9 +255,8 @@
                     orderable: false
                 },
                 {
-                    data: 'jml_surat_tte',
+                    data: 'surat_tte',
                     searchable: false,
-                    orderable: false
                 },
                 {
                     data: 'tgl_akses',
@@ -266,11 +265,11 @@
             ],
             @auth
             order: [
-                [9, 'desc']
+                [11, 'desc']
             ],
             @else
             order: [
-                [8, 'desc']
+                [10, 'desc']
             ],
             @endauth
         });
@@ -286,7 +285,7 @@
             $('#kecamatan').val('').change();
             $('#status').val('0').change();
             $('#akses').val('0').change();
-            $('#tte').val('').change();
+            $('#tte').val('empty').change();
 
             desa.ajax.reload();
         });
