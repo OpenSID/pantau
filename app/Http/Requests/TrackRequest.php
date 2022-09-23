@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TrackRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class TrackRequest extends FormRequest
             'nama_desa' => ['required', "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
             'kode_desa' => [
                 'required',
-                'exists:kode_wilayah,kode_desa',
+                "exists:kode_wilayah,kode_desa,kode_kec,{$this->kode_kecamatan},kode_kab,{$this->kode_kabupaten},kode_prov,{$this->kode_provinsi}",
                 "unique:desa,kode_desa,{$this->kode_desa},kode_desa",
             ],
             'kode_pos' => 'required',
@@ -51,6 +52,11 @@ class TrackRequest extends FormRequest
             'ip_address' => 'required',
             'external_ip' => 'sometimes',
             'version' => 'required',
+            'jml_surat_tte' => 'sometimes',
+            'modul_tte' => [
+                'sometimes',
+                Rule::in(['0', '1']),
+            ],
         ];
     }
 
@@ -154,6 +160,8 @@ class TrackRequest extends FormRequest
             'opensid_valid',
             'email_desa',
             'telepon',
+            'jml_surat_tte',
+            'modul_tte',
         ]);
     }
 }
