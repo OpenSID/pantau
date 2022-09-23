@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands;
 
-use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
-use Illuminate\Support\Str;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Str;
 
 class BpsKemendagriCommand extends Command
 {
@@ -132,6 +132,7 @@ class BpsKemendagriCommand extends Command
                     $val = Str::substrReplace($item['kode_dagri'], '', 8);
                     break;
             }
+
             return [
                 $key => $val,
                 "kode_{$level}_kemendagri" => $item['kode_dagri'],
@@ -148,7 +149,7 @@ class BpsKemendagriCommand extends Command
                 [
                     "kode_{$level}_kemendagri",
                     "nama_{$level}_kemendagri",
-                    "nama_{$level}_bps"
+                    "nama_{$level}_bps",
                 ]
             );
         });

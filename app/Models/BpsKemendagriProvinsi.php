@@ -44,7 +44,7 @@ class BpsKemendagriProvinsi extends Model
 
     /**
      * Define a has-many-through relationship.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function kecamatan()
