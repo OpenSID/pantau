@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TrackRequest extends FormRequest
 {
@@ -51,6 +52,11 @@ class TrackRequest extends FormRequest
             'ip_address' => 'required',
             'external_ip' => 'sometimes',
             'version' => 'required',
+            'jml_surat_tte' => 'sometimes',
+            'modul_tte' => [
+                'sometimes',
+                Rule::in(['0', '1'])
+            ],
         ];
     }
 
