@@ -18,6 +18,7 @@ class bpsKemendagri extends Migration
             $table->string('nama_provinsi_kemendagri', 100);
             $table->string('kode_provinsi_bps', 100)->unique();
             $table->string('nama_provinsi_bps', 100);
+            $table->timestamps();
         });
 
         Schema::create('bps_kemendagri_kabupaten', function (Blueprint $table) {
@@ -52,7 +53,6 @@ class bpsKemendagri extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_bps_kemendagri');
         Schema::dropIfExists('bps_kemendagri_provinsi');
         Schema::dropIfExists('bps_kemendagri_kabupaten');
         Schema::dropIfExists('bps_kemendagri_kecamatan');

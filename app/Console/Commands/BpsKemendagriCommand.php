@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class BPSCommand extends Command
+class BpsKemendagriCommand extends Command
 {
     /**
      * @var string
@@ -43,14 +43,14 @@ class BPSCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:sync-bps';
+    protected $signature = 'tracksid:sinkronasi-bps-kemendagri';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Perbarui Kode Relasi BPS dengan Kemendagri';
+    protected $description = 'Sinkronasi Kode Relasi BPS dengan Kemendagri';
 
     /**
      * Execute the console command.
