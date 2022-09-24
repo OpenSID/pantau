@@ -18,17 +18,17 @@ class LaporanController extends Controller
 
     public function desa(Request $request)
     {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
         if ($request->ajax()) {
-            $fillters = [
-                'kode_provinsi' => $request->kode_provinsi,
-                'kode_kabupaten' => $request->kode_kabupaten,
-                'kode_kecamatan' => $request->kode_kecamatan,
-                'status' => $request->status,
-                'akses' => $request->akses,
-                'versi_lokal' => $request->versi_lokal,
-                'versi_hosting' => $request->versi_hosting,
-                'tte' => $request->tte,
-            ];
 
             return DataTables::of($this->desa->fillter($fillters)->laporan())
                 ->addIndexColumn()
@@ -41,7 +41,7 @@ class LaporanController extends Controller
                 ->make(true);
         }
 
-        return view('laporan.desa');
+        return view('laporan.desa', compact('fillters'));
     }
 
     public function deleteDesa(Desa $desa)
