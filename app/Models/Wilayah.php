@@ -14,6 +14,16 @@ class Wilayah extends Model
     protected $table = 'kode_wilayah';
 
     /**
+     * Define a one-to-one relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function bpsKemendagriDesa()
+    {
+        return $this->hasOne(BpsKemendagriDesa::class, 'kode_desa_kemendagri', 'kode_desa');
+    }
+
+    /**
      * Scope query provinsi.
      *
      * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
