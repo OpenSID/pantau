@@ -73,6 +73,7 @@ class WilayahController extends Controller
 
         $desa = $this->wilayah
             ->select(['kode_prov', 'nama_prov', 'kode_kab', 'nama_kab', 'kode_kec', 'nama_kec', 'kode_desa', 'nama_desa'])
+            ->with('bpsKemendagriDesa')
             ->where('kode_desa', kode_wilayah($request->kode))
             ->firstOrFail();
 
@@ -110,5 +111,22 @@ class WilayahController extends Controller
                 'more' => $desa->currentPage() < $desa->lastPage(),
             ],
         ]);
+    }
+
+    public function kodeKecamatan(Request $request)
+    {
+        $this->validate($request, [
+            'kode' => 'required',
+        ]);
+
+        $desa = $this->wilayah
+            ->select(['kode_prov', 'nama_prov', 'kode_kab', 'nama_kab', 'kode_kec', 'nama_kec'])
+            ->where('kode_kec', kode_kecamatan($request->kode))
+            ->groupBy('kode_kec')
+            ->firstOrFail();
+        $desa->kode_desa = '';
+        $desa->nama_desa = '';
+
+        return response()->json($desa);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
+
 if (! function_exists('kode_wilayah')) {
     /**
      * Kode wilayah dengan titik dari 5201142005 --> 52.01.14.2005
@@ -12,6 +14,22 @@ if (! function_exists('kode_wilayah')) {
         $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
         $kode_desa = (strlen($kode_wilayah) > 6) ? '.'.substr($kode_wilayah, 6) : '';
         $kode_standar = implode('.', $kode_prov_kab_kec).$kode_desa;
+
+        return $kode_standar;
+    }
+}
+
+if (! function_exists('kode_kecamatan')) {
+    /**
+     * Kode wilayah dengan titik dari 520114 --> 52.01.14
+     *
+     * @param mixed $kode_wilayah
+     * @return string
+     */
+    function kode_kecamatan($kode_wilayah)
+    {
+        $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
+        $kode_standar = implode('.', $kode_prov_kab_kec);
 
         return $kode_standar;
     }
@@ -80,5 +98,28 @@ if (! function_exists('fixDomainName')) {
         $finalDomainName = trim($explodeToArray[0]);
 
         return $finalDomainName;
+    }
+}
+
+if (! function_exists('lastrelease')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease($url)
+    {
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/vnd.github.v3+json',
+            ])
+            ->get($url)
+            ->throw();
+
+            return json_decode($response->body());
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }

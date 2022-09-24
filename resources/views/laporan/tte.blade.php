@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Wilayah Administratif')
+@section('title', 'Profil Versi OpenSID')
 
 @section('content_header')
-    <h1>Wilayah Administratif<small class="font-weight-light ml-1 text-md">(Permendagri No. 77 Tahun 2019)</small></h1>
+    <h1>Profil Versi OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang di desa OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -14,16 +14,18 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="table-desa">
+                        <table class="table" id="table-versi">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Kode Desa</th>
-                                    <th>Kode Bps Desa</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
+                                    <th>Web</th>
+                                    <th>No</th>
+                                    <th>Versi</th>
+                                    <th>Modul TTE</th>
+                                    <th>Surat Ter-Sertifikasi Electronik</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -38,13 +40,13 @@
 
 @section('js')
     <script>
-        var desa = $('#table-desa').DataTable({
+        var desa = $('#table-versi').DataTable({
             processing: true,
             serverSide: true,
-            autoWidth: true,
+            autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('wilayah') }}`,
+                url: `{{ url('laporan/tte') }}`,
                 method: 'get',
             },
             columns: [{
@@ -54,29 +56,20 @@
                     orderable: false
                 },
                 {
-                    data: 'kode_desa'
+                    data: 'versi',
+                    orderable: false
                 },
                 {
-                    data: 'bps_kemendagri_desa.kode_desa_bps',
-                    name: 'bpsKemendagriDesa.kode_desa_bps'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
+                    }
                 },
                 {
-                    data: 'nama_desa'
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
+                    }
                 },
-                {
-                    data: 'nama_kec'
-                },
-                {
-                    data: 'nama_kab'
-                },
-                {
-                    data: 'nama_prov'
-                },
-
-            ],
-            order: [
-                [1, 'asc']
-            ],
+            ]
         })
     </script>
 @endsection
