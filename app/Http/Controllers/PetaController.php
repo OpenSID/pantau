@@ -24,6 +24,7 @@ class PetaController extends Controller
                 'akses' => $request->akses,
                 'versi_lokal' => $request->versi_lokal,
                 'versi_hosting' => $request->versi_hosting,
+                'tte' => $request->tte,
             ];
 
             $geoJSONdata = Desa::latest('updated_at')->fillter($fillters)->peta()->get()->map(function ($desa) {
