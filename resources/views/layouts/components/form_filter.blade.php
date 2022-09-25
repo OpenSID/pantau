@@ -100,7 +100,7 @@
         @if (array_key_exists('aktif', $fillters))
             <div class="col-sm">
                 <div class="form-group">
-                    <label>Modul TTE</label>
+                    <label>Status OpenSID</label>
                     <select class="select2 form-control-sm" id="aktif" name="aktif"
                         data-placeholder="Semua Status" style="width: 100%;">
                         <option selected value="empty">Semua Status</option>
