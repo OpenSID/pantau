@@ -55,25 +55,29 @@ class LaporanController extends Controller
 
     public function kabupaten(Request $request)
     {
-        if ($request->ajax()) {
-            $fillters = [
-                'status' => $request->status,
-            ];
+        $fillters = [
+            'status' => $request->status,
+        ];
 
+        if ($request->ajax()) {
             return DataTables::of($this->desa->kabupatenOpenSID($fillters))
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view('laporan.kabupaten');
+        return view('laporan.kabupaten', compact('fillters'));
     }
 
     public function versi(Request $request)
     {
+        $fillters = [
+            'aktif' => $request->aktif,
+        ];
+
         if ($request->ajax()) {
-            return DataTables::of($this->desa->versiOpenSID())->addIndexColumn()->make(true);
+            return DataTables::of($this->desa->versiOpenSID($fillters))->addIndexColumn()->make(true);
         }
 
-        return view('laporan.versi');
+        return view('laporan.versi', compact('fillters'));
     }
 }
