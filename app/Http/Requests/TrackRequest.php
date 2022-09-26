@@ -99,7 +99,7 @@ class TrackRequest extends FormRequest
      */
     protected function isLocal(array $attributes)
     {
-        return is_local($attributes['url']) || is_local($attributes['ip_address'])
+        return is_local($attributes['url'])
             ? 'lokal'
             : 'hosting';
     }
