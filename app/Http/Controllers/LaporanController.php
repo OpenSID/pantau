@@ -30,7 +30,6 @@ class LaporanController extends Controller
         ];
 
         if ($request->ajax()) {
-
             return DataTables::of($this->desa->fillter($fillters)->laporan())
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {

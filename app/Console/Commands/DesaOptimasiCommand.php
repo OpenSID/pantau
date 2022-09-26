@@ -44,11 +44,11 @@ class DesaOptimasiCommand extends Command
 
         DB::table('desa')
             ->select([
-                "id",
-                "url_lokal",
-                "ip_lokal",
-                "versi_lokal",
-                "tgl_akses_lokal"
+                'id',
+                'url_lokal',
+                'ip_lokal',
+                'versi_lokal',
+                'tgl_akses_lokal',
             ])
             ->whereRaw("(CASE WHEN ((url_hosting <> '' || url_hosting IS NOT NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 1 ELSE 0 END) = 0")
             ->chunkById(100, function ($desa) {
@@ -56,10 +56,10 @@ class DesaOptimasiCommand extends Command
                     DB::table('desa')
                         ->where('id', $d->id)
                         ->update([
-                            "url_lokal" => null,
-                            "ip_lokal" => null,
-                            "versi_lokal" => null,
-                            "tgl_akses_lokal" => null,
+                            'url_lokal' => null,
+                            'ip_lokal' => null,
+                            'versi_lokal' => null,
+                            'tgl_akses_lokal' => null,
                         ]);
                 }
             });
