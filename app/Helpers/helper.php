@@ -44,7 +44,7 @@ if (! function_exists('is_local')) {
      */
     function is_local($url)
     {
-        if (preg_match('/localhost|192\.168|127\.0\.0\.1|\/10\.|^10\./i', $url)) {
+        if (preg_match('/localhost|192\.168|^127\.|\/10\.|^10\./i', $url)) {
             return true;
         } else {
             return false;
