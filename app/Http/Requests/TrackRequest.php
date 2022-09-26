@@ -133,26 +133,6 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
-        if (isset($this->url_hosting)) {
-            $this->merge([
-                'url_lokal' => null,
-                'ip_lokal' => null,
-                'versi_lokal' => null,
-                'tgl_akses_lokal' => null,
-                'tgl_rekam_lokal' => null,
-            ]);
-        }
-
-        if (isset($this->url_lokal)) {
-            $this->merge([
-                'url_hosting' => null,
-                'ip_hosting' => null,
-                'versi_hosting' => null,
-                'tgl_akses_hosting' => null,
-                'tgl_rekam_hosting' => null,
-            ]);
-        }
-
         return $this->only([
             'kode_pos',
             'nama_desa',
