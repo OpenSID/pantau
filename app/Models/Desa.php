@@ -198,42 +198,39 @@ class Desa extends Model
      */
     public function scopeVersiOpenSID($query, $fillters = [])
     {
-        return $query->fromSub(function ($query) use($fillters)
-        {
+        return $query->fromSub(function ($query) use ($fillters) {
             $query->selectRaw("versi, sum( CASE WHEN jenis = 'offline' THEN 1 ELSE 0 END ) AS offline, sum( CASE WHEN jenis = 'online' THEN 1 ELSE 0 END ) AS online")
-            ->fromSub(function ($query) use($fillters)
-            {
-                $query
-                    ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
-                    ->where('versi_lokal','<>','')
-                    ->when(session('provinsi'), function ($query, $provinsi) {
-                        $query->where('kode_provinsi', $provinsi->kode_prov);
-                    })
-                    ->when($fillters['aktif'] == '1', function ($query) {
-                        $query->whereRaw('coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
-                    })
-                    ->when($fillters['aktif'] == '0', function ($query) {
-                        $query->whereRaw('coalesce(tgl_akses_lokal, 0) <= now() - interval 7 day');
-                    })
-                    ->unionAll(function ($query) use($fillters)
-                    {
-                        $query->selectRaw("versi_hosting AS versi, 'online' AS jenis ")
-                        ->where('versi_hosting','<>','')
+                ->fromSub(function ($query) use ($fillters) {
+                    $query
+                        ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
+                        ->where('versi_lokal','<>','')
                         ->when(session('provinsi'), function ($query, $provinsi) {
                             $query->where('kode_provinsi', $provinsi->kode_prov);
                         })
                         ->when($fillters['aktif'] == '1', function ($query) {
-                        $query->whereRaw('coalesce(tgl_akses_hosting, 0) >= now() - interval 7 day');
+                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
                         })
                         ->when($fillters['aktif'] == '0', function ($query) {
-                            $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
+                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) <= now() - interval 7 day');
+                        })
+                        ->unionAll(function ($query) use ($fillters) {
+                            $query->selectRaw("versi_hosting AS versi, 'online' AS jenis ")
+                                ->where('versi_hosting','<>','')
+                                ->when(session('provinsi'), function ($query, $provinsi) {
+                                    $query->where('kode_provinsi', $provinsi->kode_prov);
+                                })
+                                ->when($fillters['aktif'] == '1', function ($query) {
+                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) >= now() - interval 7 day');
+                                })
+                                ->when($fillters['aktif'] == '0', function ($query) {
+                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
+                                })
+                                ->from('desa');
                         })
                         ->from('desa');
-                    })
-                    ->from('desa');
 
-            }, 't')->groupBy(['versi']);
-        }, 'x')
+                }, 't')->groupBy(['versi']);
+            }, 'x')
         ->orderByRaw('cast( versi AS signed ) DESC')
         ->orderBy('versi', 'DESC');
     }

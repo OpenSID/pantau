@@ -28,6 +28,7 @@ class LaporanController extends Controller
             'versi_hosting' => $request->versi_hosting,
             'tte' => $request->tte,
         ];
+
         if ($request->ajax()) {
 
             return DataTables::of($this->desa->fillter($fillters)->laporan())

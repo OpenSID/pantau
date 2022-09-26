@@ -50,6 +50,8 @@
 
 @section('js')
     <script>
+        $('#aktif').select2();
+
         var desa = $('#table-versi').DataTable({
             processing: true,
             serverSide: true,
