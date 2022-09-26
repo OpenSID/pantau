@@ -43,7 +43,19 @@ class TrackOpendkRequest extends FormRequest
             'jumlah_penduduk' => 'sometimes',
             'jumlah_keluarga' => 'sometimes',
             'peta_wilayah' => 'sometimes',
+            'url' => 'sometimes',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function prepareForValidation()
+    {
+        // Merge request attribute.
+        $this->merge([
+            "url" => fixDomainName($this->url),
+        ]);
     }
 
     /**
