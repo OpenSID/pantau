@@ -54,7 +54,7 @@ class TrackOpendkRequest extends FormRequest
     {
         // Merge request attribute.
         $this->merge([
-            "url" => fixDomainName($this->url),
+            'url' => fixDomainName($this->url),
         ]);
     }
 
