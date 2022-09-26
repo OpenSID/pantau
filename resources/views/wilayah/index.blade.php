@@ -19,6 +19,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Desa</th>
+                                    <th>Kode Bps Desa</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
@@ -56,6 +57,10 @@
                     data: 'kode_desa'
                 },
                 {
+                    data: 'bps_kemendagri_desa.kode_desa_bps',
+                    name: 'bpsKemendagriDesa.kode_desa_bps'
+                },
+                {
                     data: 'nama_desa'
                 },
                 {
@@ -67,6 +72,7 @@
                 {
                     data: 'nama_prov'
                 },
+
             ],
             order: [
                 [1, 'asc']

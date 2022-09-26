@@ -73,6 +73,7 @@ class WilayahController extends Controller
 
         $desa = $this->wilayah
             ->select(['kode_prov', 'nama_prov', 'kode_kab', 'nama_kab', 'kode_kec', 'nama_kec', 'kode_desa', 'nama_desa'])
+            ->with('bpsKemendagriDesa')
             ->where('kode_desa', kode_wilayah($request->kode))
             ->firstOrFail();
 
