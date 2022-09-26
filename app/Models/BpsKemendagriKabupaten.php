@@ -17,6 +17,11 @@ class BpsKemendagriKabupaten extends Model
     /**
      * {@inheritdoc}
      */
+    protected $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $table = 'bps_kemendagri_kabupaten';
 
     /**
@@ -28,4 +33,32 @@ class BpsKemendagriKabupaten extends Model
      * {@inheritdoc}
      */
     public $incrementing = false;
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function kecamatan()
+    {
+        return $this->hasMany(
+            BpsKemendagriKecamatan::class,
+            'kode_kabupaten_kemendagri',
+        );
+    }
+
+    /**
+     * Define a has-many-through relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function desa()
+    {
+        return $this->hasManyThrough(
+            BpsKemendagriDesa::class,
+            BpsKemendagriKecamatan::class,
+            'kode_kabupaten_kemendagri',
+            'kode_kecamatan_kemendagri',
+        );
+    }
 }
