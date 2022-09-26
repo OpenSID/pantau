@@ -17,10 +17,15 @@
                         <table class="table" id="table-versi">
                             <thead>
                                 <tr>
+                                    <th>Desa</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kabupaten</th>
+                                    <th>Provinsi</th>
+                                    <th>Web</th>
                                     <th>No</th>
                                     <th>Versi</th>
-                                    <th>Server Offline</th>
-                                    <th>Server Online</th>
+                                    <th>Modul TTE</th>
+                                    <th>Surat Ter-Sertifikasi Electronik</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -41,7 +46,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('laporan/versi') }}`,
+                url: `{{ url('laporan/tte') }}`,
                 method: 'get',
             },
             columns: [{

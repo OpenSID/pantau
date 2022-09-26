@@ -24,7 +24,45 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            @include('layouts.components.form_filter')
+                            <div id="collapse-filter" class="collapse">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label>Jenis Server</label>
+                                            <select class="select2 form-control-sm" id="status" name="online"
+                                                data-placeholder="Semua Status" style="width: 100%;">
+                                                <option selected value="0">Semua Status</option>
+                                                <option value="1">Online</option>
+                                                <option value="2">Offline</option>
+                                                <option value="3">Premium Terbaru</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="reset" class="btn btn-secondary"><span
+                                                            class="fas fa-ban"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="btn-group btn-group-sm btn-block">
+                                                    <button type="button" id="filter" class="btn btn-primary"><span
+                                                            class="fas fa-search"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive">

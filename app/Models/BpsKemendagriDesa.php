@@ -17,11 +17,6 @@ class BpsKemendagriDesa extends Model
     /**
      * {@inheritdoc}
      */
-    protected $keyType = 'string';
-
-    /**
-     * {@inheritdoc}
-     */
     protected $table = 'bps_kemendagri_desa';
 
     /**
