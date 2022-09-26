@@ -18,17 +18,18 @@ class LaporanController extends Controller
 
     public function desa(Request $request)
     {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
+
         if ($request->ajax()) {
-            $fillters = [
-                'kode_provinsi' => $request->kode_provinsi,
-                'kode_kabupaten' => $request->kode_kabupaten,
-                'kode_kecamatan' => $request->kode_kecamatan,
-                'status' => $request->status,
-                'akses' => $request->akses,
-                'versi_lokal' => $request->versi_lokal,
-                'versi_hosting' => $request->versi_hosting,
-                'tte' => $request->tte,
-            ];
 
             return DataTables::of($this->desa->fillter($fillters)->laporan())
                 ->addIndexColumn()
@@ -41,7 +42,7 @@ class LaporanController extends Controller
                 ->make(true);
         }
 
-        return view('laporan.desa');
+        return view('laporan.desa', compact('fillters'));
     }
 
     public function deleteDesa(Desa $desa)
@@ -55,25 +56,29 @@ class LaporanController extends Controller
 
     public function kabupaten(Request $request)
     {
-        if ($request->ajax()) {
-            $fillters = [
-                'status' => $request->status,
-            ];
+        $fillters = [
+            'status' => $request->status,
+        ];
 
+        if ($request->ajax()) {
             return DataTables::of($this->desa->kabupatenOpenSID($fillters))
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view('laporan.kabupaten');
+        return view('laporan.kabupaten', compact('fillters'));
     }
 
     public function versi(Request $request)
     {
+        $fillters = [
+            'aktif' => $request->aktif,
+        ];
+
         if ($request->ajax()) {
-            return DataTables::of($this->desa->versiOpenSID())->addIndexColumn()->make(true);
+            return DataTables::of($this->desa->versiOpenSID($fillters))->addIndexColumn()->make(true);
         }
 
-        return view('laporan.versi');
+        return view('laporan.versi', compact('fillters'));
     }
 }
