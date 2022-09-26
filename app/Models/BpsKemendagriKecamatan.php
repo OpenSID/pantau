@@ -17,6 +17,11 @@ class BpsKemendagriKecamatan extends Model
     /**
      * {@inheritdoc}
      */
+    protected $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $table = 'bps_kemendagri_kecamatan';
 
     /**
@@ -28,4 +33,17 @@ class BpsKemendagriKecamatan extends Model
      * {@inheritdoc}
      */
     public $incrementing = false;
+
+    /**
+     * Define a one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function desa()
+    {
+        return $this->hasMany(
+            BpsKemendagriDesa::class,
+            'kode_kecamatan_kemendagri',
+        );
+    }
 }
