@@ -142,7 +142,7 @@ class TrackRequest extends FormRequest
                 'tgl_rekam_lokal' => null,
             ]);
         }
-        
+
         if (isset($this->url_lokal)) {
             $this->merge([
                 'url_hosting' => null,
