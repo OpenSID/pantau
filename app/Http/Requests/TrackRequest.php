@@ -79,6 +79,7 @@ class TrackRequest extends FormRequest
             "ip_{$type}" => $this->ip_address,
             "versi_{$type}" => $this->version,
             "tgl_akses_{$type}" => now(),
+            "tgl_rekam_{$type}" => now(),
 
             // Request attribute for table akses.
             'url_referrer' => $this->url,
@@ -132,10 +133,24 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
-        if (isset($this->tgl_akses_lokal)) {
-            $this->merge(['tgl_rekam_lokal' => $this->tgl_akses_lokal]);
-        } else {
-            $this->merge(['tgl_rekam_hosting' => $this->tgl_akses_hosting]);
+        if (isset($this->url_hosting)) {
+            $this->merge([
+                'url_lokal' => null,
+                'ip_lokal' => null,
+                'versi_lokal' => null,
+                'tgl_akses_lokal' => null,
+                'tgl_rekam_lokal' => null,
+            ]);
+        }
+        
+        if (isset($this->url_lokal)) {
+            $this->merge([
+                'url_hosting' => null,
+                'ip_hosting' => null,
+                'versi_hosting' => null,
+                'tgl_akses_hosting' => null,
+                'tgl_rekam_hosting' => null,
+            ]);
         }
 
         return $this->only([
