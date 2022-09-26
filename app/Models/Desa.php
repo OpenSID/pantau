@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-use function Ramsey\Uuid\v1;
-
 class Desa extends Model
 {
     use HasFactory;
@@ -203,7 +201,7 @@ class Desa extends Model
                 ->fromSub(function ($query) use ($fillters) {
                     $query
                         ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
-                        ->where('versi_lokal','<>','')
+                        ->where('versi_lokal', '<>', '')
                         ->when(session('provinsi'), function ($query, $provinsi) {
                             $query->where('kode_provinsi', $provinsi->kode_prov);
                         })
@@ -215,7 +213,7 @@ class Desa extends Model
                         })
                         ->unionAll(function ($query) use ($fillters) {
                             $query->selectRaw("versi_hosting AS versi, 'online' AS jenis ")
-                                ->where('versi_hosting','<>','')
+                                ->where('versi_hosting', '<>', '')
                                 ->when(session('provinsi'), function ($query, $provinsi) {
                                     $query->where('kode_provinsi', $provinsi->kode_prov);
                                 })
@@ -228,9 +226,8 @@ class Desa extends Model
                                 ->from('desa');
                         })
                         ->from('desa');
-
                 }, 't')->groupBy(['versi']);
-            }, 'x')
+        }, 'x')
         ->orderByRaw('cast( versi AS signed ) DESC')
         ->orderBy('versi', 'DESC');
     }
