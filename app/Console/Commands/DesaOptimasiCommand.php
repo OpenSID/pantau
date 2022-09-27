@@ -52,7 +52,6 @@ class DesaOptimasiCommand extends Command
             ])
             ->where('url_hosting', '<>', '')
             ->whereNotNull('url_hosting')
-            ->whereRaw("(CASE WHEN ((url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 1 ELSE 0 END) = 0")
-            ->dd();
+            ->whereRaw("(CASE WHEN ((url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 1 ELSE 0 END) = 0");
     }
 }
