@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TrackOpendkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,5 @@ Route::prefix('track')
     ->middleware('tracksid')
     ->group(function () {
         Route::post('desa', TrackController::class);
+        Route::post('opendk', TrackOpendkController::class);
     });

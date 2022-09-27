@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\V1\WilayahController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TrackOpendkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,5 @@ Route::prefix('track')
     ->middleware(['auth:sanctum', 'ability:pantau-track'])
     ->group(function () {
         Route::post('desa', TrackController::class);
+        Route::post('opendk', TrackOpendkController::class);
     });
