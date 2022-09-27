@@ -13,8 +13,14 @@ class Opendk extends Model
     protected $table = 'opendk';
 
     /** {@inheritdoc} */
+    protected $keyType = 'string';
+
+    /** {@inheritdoc} */
     protected $guarded = [];
 
     /** {@inheritdoc} */
     protected $primaryKey = 'kode_kecamatan';
+
+    /** {@inheritdoc} */
+    public $incrementing = false;
 }
