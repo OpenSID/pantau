@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TrackRequest extends FormRequest
 {
@@ -51,6 +52,11 @@ class TrackRequest extends FormRequest
             'ip_address' => 'required',
             'external_ip' => 'sometimes',
             'version' => 'required',
+            'jml_surat_tte' => 'sometimes',
+            'modul_tte' => [
+                'sometimes',
+                Rule::in(['0', '1']),
+            ],
         ];
     }
 
@@ -73,6 +79,7 @@ class TrackRequest extends FormRequest
             "ip_{$type}" => $this->ip_address,
             "versi_{$type}" => $this->version,
             "tgl_akses_{$type}" => now(),
+            "tgl_rekam_{$type}" => now(),
 
             // Request attribute for table akses.
             'url_referrer' => $this->url,
@@ -92,7 +99,7 @@ class TrackRequest extends FormRequest
      */
     protected function isLocal(array $attributes)
     {
-        return is_local($attributes['url']) || is_local($attributes['ip_address'])
+        return is_local($attributes['url'])
             ? 'lokal'
             : 'hosting';
     }
@@ -126,12 +133,6 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
-        if (isset($this->tgl_akses_lokal)) {
-            $this->merge(['tgl_rekam_lokal' => $this->tgl_akses_lokal]);
-        } else {
-            $this->merge(['tgl_rekam_hosting' => $this->tgl_akses_hosting]);
-        }
-
         return $this->only([
             'kode_pos',
             'nama_desa',
@@ -154,6 +155,8 @@ class TrackRequest extends FormRequest
             'opensid_valid',
             'email_desa',
             'telepon',
+            'jml_surat_tte',
+            'modul_tte',
         ]);
     }
 }

@@ -12,7 +12,7 @@ class DesaOptimasiCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'desa:optimasi';
+    protected $signature = 'tracksid:optimasi-desa';
 
     /**
      * The console command description.
@@ -28,7 +28,7 @@ class DesaOptimasiCommand extends Command
      */
     public function handle()
     {
-        $result = DB::table('desa as d')
+        DB::table('desa as d')
             ->leftJoin('kode_wilayah as k', 'd.kode_desa', 'k.kode_desa')
             ->whereNotNull('d.kode_desa')
             ->update([
@@ -42,6 +42,17 @@ class DesaOptimasiCommand extends Command
                 'd.kode_provinsi' => DB::raw('k.kode_prov'),
             ]);
 
-        $this->info("Jumlah desa yang berhasil di optimasi: {$result}");
+        DB::table('desa')
+            ->select([
+                'id',
+                'url_lokal',
+                'ip_lokal',
+                'versi_lokal',
+                'tgl_akses_lokal',
+            ])
+            ->where('url_hosting', '<>', '')
+            ->whereNotNull('url_hosting')
+            ->whereRaw("(CASE WHEN ((url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 1 ELSE 0 END) = 0")
+            ->dd();
     }
 }

@@ -23,6 +23,7 @@ Route::prefix('wilayah')
         Route::get('caridesa', [WilayahController::class, 'cariDesa']);
         Route::get('ambildesa', [WilayahController::class, 'ambilDesa']);
         Route::get('kodedesa', [WilayahController::class, 'kodeDesa']);
+        Route::get('kodekecamatan', [WilayahController::class, 'kodeKecamatan']);
         Route::get('list_wilayah', [WilayahController::class, 'listWilayah']);
     });
 

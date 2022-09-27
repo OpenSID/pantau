@@ -56,6 +56,13 @@ class Desa extends Model
     public function scopeJumlahDesa($query)
     {
         $states = '';
+        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+
+        if ($versi_opensid !== false) {
+            $version = $versi_opensid->tag_name;
+            $version = preg_replace('/[^0-9]/', '', $version);
+            $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+        }
 
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
@@ -66,6 +73,7 @@ class Desa extends Model
             ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states}) desa_offline")
             ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states}) desa_online")
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting LIKE '{$version}-premium%' Or x.versi_lokal LIKE '{$version}-premium%') {$states} ) as kabupaten_premium")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states}) kabupaten_offline")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states}) kabupaten_online")
             ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states}) bukan_desa")
@@ -127,7 +135,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeKabupatenOpenSID($query)
+    public function scopeKabupatenOpenSID($query, $fillters = [])
     {
         // return $query
         //     ->select(['nama_kabupaten', 'nama_provinsi'])
@@ -142,7 +150,7 @@ class Desa extends Model
             ->selectRaw('sub.nama_provinsi')
             ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
             ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
-            ->fromSub(function ($query) {
+            ->fromSub(function ($query) use ($fillters) {
                 $query
                     ->select(
                         'd.versi_lokal',
@@ -153,7 +161,26 @@ class Desa extends Model
                         'desa.nama_provinsi'
                     )
                     ->from('desa')
-                    ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa');
+                    ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa')
+                // filter
+                ->when($fillters['status'] == 1, function ($query) {
+                    $query->whereRaw('d.versi_hosting is not null');
+                })
+                ->when($fillters['status'] == 2, function ($query) {
+                    $query->whereRaw('d.versi_lokal is not null');
+                })
+                ->when($fillters['status'] == 3, function ($query) {
+                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+
+                    if ($versi_opensid !== false) {
+                        $version = $versi_opensid->tag_name;
+                        $version = preg_replace('/[^0-9]/', '', $version);
+                        $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+
+                        $query->where('d.versi_hosting', 'LIKE', $version.'-premium%')
+                            ->orWhere('d.versi_lokal', 'LIKE', $version.'-premium%');
+                    }
+                });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('sub.kode_provinsi', $provinsi->kode_prov);
@@ -167,15 +194,42 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeVersiOpenSID($query)
+    public function scopeVersiOpenSID($query, $fillters = [])
     {
-        $states = '';
-
-        if ($provinsi = session('provinsi')) {
-            $states = "and kode_provinsi={$provinsi->kode_prov}";
-        }
-
-        return DB::select("select * from (select versi, sum(case when jenis = 'offline' then 1 else 0 end) as offline, sum(case when jenis = 'online' then 1 else 0 end) as online from (select versi_lokal as versi, 'offline' as jenis from desa where versi_lokal <> '' {$states} union all select versi_hosting as versi, 'online' as jenis from desa where versi_hosting <> '' {$states}) t group by versi ) as x order by cast(versi as signed) desc, versi desc");
+        return $query->fromSub(function ($query) use ($fillters) {
+            $query->selectRaw("versi, sum( CASE WHEN jenis = 'offline' THEN 1 ELSE 0 END ) AS offline, sum( CASE WHEN jenis = 'online' THEN 1 ELSE 0 END ) AS online")
+                ->fromSub(function ($query) use ($fillters) {
+                    $query
+                        ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
+                        ->where('versi_lokal', '<>', '')
+                        ->when(session('provinsi'), function ($query, $provinsi) {
+                            $query->where('kode_provinsi', $provinsi->kode_prov);
+                        })
+                        ->when($fillters['aktif'] == '1', function ($query) {
+                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
+                        })
+                        ->when($fillters['aktif'] == '0', function ($query) {
+                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) <= now() - interval 7 day');
+                        })
+                        ->unionAll(function ($query) use ($fillters) {
+                            $query->selectRaw("versi_hosting AS versi, 'online' AS jenis ")
+                                ->where('versi_hosting', '<>', '')
+                                ->when(session('provinsi'), function ($query, $provinsi) {
+                                    $query->where('kode_provinsi', $provinsi->kode_prov);
+                                })
+                                ->when($fillters['aktif'] == '1', function ($query) {
+                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) >= now() - interval 7 day');
+                                })
+                                ->when($fillters['aktif'] == '0', function ($query) {
+                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
+                                })
+                                ->from('desa');
+                        })
+                        ->from('desa');
+                }, 't')->groupBy(['versi']);
+        }, 'x')
+        ->orderByRaw('cast( versi AS signed ) DESC')
+        ->orderBy('versi', 'DESC');
     }
 
     /**
@@ -260,6 +314,16 @@ class Desa extends Model
             ->when($fillters['status'] == 2, function ($query) {
                 $query->whereRaw('versi_lokal IS NOT NULL');
             })
+            ->when($fillters['status'] == 3, function ($query) {
+                $query->where(function ($query_versi) {
+                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+                    $version = $versi_opensid->tag_name;
+                    $version = preg_replace('/[^0-9]/', '', $version);
+                    $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+                    $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
+                    ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
+                });
+            })
             ->when($fillters['akses'] == 1, function ($query) {
                 $query->whereRaw('timestampdiff(month, greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), now()) > 1');
             })
@@ -280,6 +344,9 @@ class Desa extends Model
             })
             ->when($fillters['versi_hosting'], function ($query, $versi) {
                 $query->where('versi_hosting', $versi);
+            })
+            ->when(in_array($fillters['tte'], ['1', '0']), function ($query) use ($fillters) {
+                $query->where('modul_tte', $fillters['tte']);
             });
     }
 
