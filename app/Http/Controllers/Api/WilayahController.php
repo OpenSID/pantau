@@ -129,4 +129,9 @@ class WilayahController extends Controller
 
         return response()->json($desa);
     }
+
+    public function kabupatenDesa(Request $request)
+    {
+        return response($this->wilayah->kabupatenDesa($request)->get());
+    }
 }

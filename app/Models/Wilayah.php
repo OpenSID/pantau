@@ -51,6 +51,34 @@ class Wilayah extends Model
     }
 
     /**
+     * Scope query kabupaten beserta jumlah desa.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+     */
+    public function scopeKabupatenDesa($query, Request $request)
+    {
+        return $query
+            ->select(['wilayah.kode_kab', 'wilayah.nama_kab'])
+            ->selectRaw('count(wilayah.kode_desa) as jumlah_desa')
+            ->fromSub(function ($query) {
+                $query->select(['kode_desa', 'kode_kab', 'nama_kab'])
+                    ->from('kode_wilayah');
+            }, 'wilayah')
+            ->when($request->filled('kode_desa'), function ($query) use ($request) {
+                $query->where('kode_desa', $request->kode_desa);
+            })
+            ->when($request->filled('kode_kab'), function ($query) use ($request) {
+                $query->where('kode_kab', $request->kode_kab);
+            })
+            ->when($request->filled('cari'), function ($query) use ($request) {
+                $query->where('wilayah.nama_kab', 'like', "%{$request->cari}%");
+            })
+            ->groupBy('wilayah.kode_kab');
+    }
+
+    /**
      * Scope query kabupaten.
      *
      * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
