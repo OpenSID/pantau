@@ -58,10 +58,10 @@ class DesaOptimasiCommand extends Command
                     DB::table('desa')
                         ->where('id', $d->id)
                         ->update([
-                            "url_lokal" => null,
-                            "ip_lokal" => null,
-                            "versi_lokal" => null,
-                            "tgl_akses_lokal" => null,
+                            'url_lokal' => null,
+                            'ip_lokal' => null,
+                            'versi_lokal' => null,
+                            'tgl_akses_lokal' => null,
                         ]);
                 }
             });
