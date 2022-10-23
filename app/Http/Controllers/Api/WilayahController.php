@@ -60,7 +60,7 @@ class WilayahController extends Controller
             'id_desa' => 'required|integer',
         ]);
 
-        $desa = $this->wilayah->findOrFail($request->id_desa);
+        $desa = $this->wilayah->with('bpsKemendagriDesa')->findOrFail($request->id_desa);
 
         return response()->json(['KODE_WILAYAH' => [$desa]]);
     }
