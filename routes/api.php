@@ -25,6 +25,7 @@ Route::prefix('wilayah')
         Route::get('kodedesa', [WilayahController::class, 'kodeDesa']);
         Route::get('kodekecamatan', [WilayahController::class, 'kodeKecamatan']);
         Route::get('list_wilayah', [WilayahController::class, 'listWilayah']);
+        Route::get('kabupaten-desa', [WilayahController::class, 'kabupatenDesa']);
     });
 
 Route::prefix('track')
