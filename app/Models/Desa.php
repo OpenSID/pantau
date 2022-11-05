@@ -271,7 +271,8 @@ class Desa extends Model
                 $query
                 ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                 ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
-            });
+            })
+            ->orderBy('kode_desa', 'ASC');
     }
 
     /**
