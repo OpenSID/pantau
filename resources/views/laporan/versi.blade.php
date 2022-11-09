@@ -77,12 +77,14 @@
                 {
                     data: function (data) {
                         return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
-                    }
+                    },
+                    searchable: false,
                 },
                 {
                     data: function (data) {
                         return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
-                    }
+                    },
+                    searchable: false,
                 },
             ]
         })
