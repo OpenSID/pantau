@@ -72,15 +72,18 @@
                 },
                 {
                     data: 'versi',
+                    name: 'versi',
                     orderable: false
                 },
                 {
+                    name: 'offline',
                     data: function (data) {
                         return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
                     },
                     searchable: false,
                 },
                 {
+                    name: 'online',
                     data: function (data) {
                         return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
                     },

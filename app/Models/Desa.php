@@ -228,8 +228,11 @@ class Desa extends Model
                         ->from('desa');
                 }, 't')->groupBy(['versi']);
         }, 'desa')
-        ->orderByRaw('cast( versi AS signed ) DESC')
-        ->orderBy('versi', 'DESC');
+        ->when($fillters['order'] == false, function ($query){
+            $query->orderByRaw('cast( versi AS signed ) DESC')
+            ->orderBy('versi', 'DESC');
+        });
+
     }
 
     /**

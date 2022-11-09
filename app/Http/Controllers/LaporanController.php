@@ -72,6 +72,7 @@ class LaporanController extends Controller
     {
         $fillters = [
             'aktif' => $request->aktif,
+            'order' => $request->order[0]['column'] == '0' ? false : true
         ];
 
         if ($request->ajax()) {
