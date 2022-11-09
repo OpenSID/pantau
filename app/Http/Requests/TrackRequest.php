@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Region;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class TrackRequest extends FormRequest
 {
@@ -133,6 +134,11 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
+        $this->replace([
+            'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name,
+            'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name,
+            'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name,
+        ]);
         return $this->only([
             'kode_pos',
             'nama_desa',
