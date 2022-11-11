@@ -240,7 +240,7 @@ return [
         ],
 
         // Menu
-        ['header'          => 'MENU UTAMA'],
+        ['header'          => 'OPENSID'],
         [
             'text'         => 'Dashboard',
             'url'          => '/',
@@ -280,6 +280,18 @@ return [
                 ],
             ],
         ],
+        ['header'          => 'LAIN-LAIN'],
+        [
+            'text'         => 'OPENDK',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'VERSI OPPENDK',
+                    'url'  => 'opendk/versi',
+                ],
+            ],
+        ],
+        ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Wilayah Administratif',
             'url'          => 'wilayah',

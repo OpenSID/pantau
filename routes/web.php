@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Opendk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
+use App\Http\Controllers\OpendkController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -14,7 +17,6 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
-use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +56,7 @@ Route::prefix('sesi')
         });
         Route::get('hapus', function () {
             session()->remove('provinsi');
-        
+
             return redirect('/');
         });
     });
@@ -68,6 +70,10 @@ Route::prefix('laporan')
         Route::get('versi', [LaporanController::class, 'versi']);
     });
 
+//opendk
+Route::prefix('opendk') ->group(function () {
+    Route::get('versi', [OpendkController::class, 'versi']);
+    });
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 
@@ -103,7 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
     });
 
-    
+
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class, ['except' => ['show']]);
     Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
