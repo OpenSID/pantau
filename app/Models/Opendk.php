@@ -23,4 +23,14 @@ class Opendk extends Model
 
     /** {@inheritdoc} */
     public $incrementing = false;
+
+  /**
+     * Scope a query versi Opendk.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVersi($query, $fillters = []) {
+        return $query->selectRaw('versi, count(versi) as jumlah')->groupBy(['versi']);
+    }
 }

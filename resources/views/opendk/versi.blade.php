@@ -48,3 +48,38 @@
         </div>
     </div>
 @endsection
+
+@section('js')
+<script>
+var kecamatan = $('#table-versi').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            ajax: {
+                url: `{{ url('opendk/versi') }}`,
+                method: 'get',
+                data: function(data) {
+                    data.aktif = $('#aktif').val();
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'versi',
+                    orderable: false
+                },
+                {
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('opendk/kecamatan') }}?versi=${data.versi}">${data.jumlah}</a>`
+                    }
+                },
+
+            ]
+        })
+</script>
+@endsection

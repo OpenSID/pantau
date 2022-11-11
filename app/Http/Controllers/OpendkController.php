@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Opendk;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -13,7 +14,7 @@ class OpendkController extends Controller
             'aktif' => $request->aktif,
         ];
         if ($request->ajax()) {
-            return DataTables::of($this->desa->kabupatenOpenSID())
+            return DataTables::of(Opendk::versi()->get())
                 ->addIndexColumn()
                 ->make(true);
         }
