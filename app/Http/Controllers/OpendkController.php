@@ -21,4 +21,20 @@ class OpendkController extends Controller
 
         return view('opendk.versi' ,compact('fillters'));
     }
+
+    public function kecamatan(Request $request)
+    {
+
+        $fillters = [
+            'versi' => $request->versi
+        ];
+
+        if ($request->ajax()) {
+            return DataTables::of(Opendk::kecamatan($request)->get())
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view('opendk.kecamatan' ,compact('fillters'));
+    }
 }

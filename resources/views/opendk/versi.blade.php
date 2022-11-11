@@ -8,7 +8,6 @@
 @stop
 
 @section('content')
-    @include('layouts.components.global_delete')
     <div class="row">
         <div class="col-lg-12">
 

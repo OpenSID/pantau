@@ -286,8 +286,12 @@ return [
             'icon'         => 'fas fa-file-alt',
             'submenu'      => [
                 [
-                    'text' => 'VERSI OPPENDK',
+                    'text' => 'VERSI OPENDK',
                     'url'  => 'opendk/versi',
+                ],
+                [
+                    'text' => 'Kecamatan Opendk ',
+                    'url'  => 'opendk/kecamatan',
                 ],
             ],
         ],

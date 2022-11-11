@@ -24,6 +24,11 @@ class Opendk extends Model
     /** {@inheritdoc} */
     public $incrementing = false;
 
+    /** {@inheritdoc} */
+    protected $casts = [
+        'updated_at' => 'datetime',
+    ];
+
   /**
      * Scope a query versi Opendk.
      *
@@ -32,5 +37,18 @@ class Opendk extends Model
      */
     public function scopeVersi($query, $fillters = []) {
         return $query->selectRaw('versi, count(versi) as jumlah')->groupBy(['versi']);
+    }
+
+    /**
+     * Scope a query Kecamatan Opendk.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKecamatan($query, $fillters = []) {
+        return $query->select('*')
+        ->when($fillters['versi'] != null, function ($query) use ($fillters) {
+            $query->where('versi', 'like', "%{$fillters['versi']}%");
+        });
     }
 }

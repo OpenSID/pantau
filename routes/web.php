@@ -73,6 +73,7 @@ Route::prefix('laporan')
 //opendk
 Route::prefix('opendk') ->group(function () {
     Route::get('versi', [OpendkController::class, 'versi']);
+    Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
     });
 // Wilayah
 Route::get('wilayah', WilayahController::class);
