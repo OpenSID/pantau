@@ -57,6 +57,7 @@
             serverSide: true,
             autoWidth: false,
             ordering: true,
+            order: [[1, 'desc']],
             ajax: {
                 url: `{{ url('laporan/versi') }}`,
                 method: 'get',
@@ -72,8 +73,7 @@
                 },
                 {
                     data: 'versi',
-                    name: 'versi',
-                    orderable: false
+                    name: 'x.versi',
                 },
                 {
                     name: 'offline',

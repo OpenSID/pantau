@@ -72,11 +72,17 @@ class LaporanController extends Controller
     {
         $fillters = [
             'aktif' => $request->aktif,
-            'order' => $request->order[0]['column'] == '0' ? false : true
         ];
 
         if ($request->ajax()) {
-            return DataTables::of($this->desa->versiOpenSID($fillters))->addIndexColumn()->make(true);
+            return DataTables::of($this->desa->versiOpenSID($fillters))
+                ->orderColumn('x.versi', function ($query, $order) {
+                    $query
+                        ->orderByRaw("cast(versi as signed) {$order}")
+                        ->orderBy('versi', $order);
+                })
+                ->addIndexColumn()
+                ->make(true);
         }
 
         return view('laporan.versi', compact('fillters'));
