@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\Opendk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
-use App\Http\Controllers\OpendkController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -17,6 +14,7 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
+use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +72,7 @@ Route::prefix('laporan')
 Route::prefix('opendk') ->group(function () {
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('peta', [OpendkController::class, 'peta']);
     });
 // Wilayah
 Route::get('wilayah', WilayahController::class);

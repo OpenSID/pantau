@@ -37,4 +37,16 @@ class OpendkController extends Controller
 
         return view('opendk.kecamatan' ,compact('fillters'));
     }
+
+    public function peta(Request $request)
+    {
+        if ($request->ajax()) {
+            $geoJSONdata = Opendk::get();
+
+
+            return response()->json([
+               $geoJSONdata,
+            ]);
+        }
+    }
 }
