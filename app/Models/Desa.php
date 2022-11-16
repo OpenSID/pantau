@@ -227,9 +227,7 @@ class Desa extends Model
                         })
                         ->from('desa');
                 }, 't')->groupBy(['versi']);
-        }, 'x')
-        ->orderByRaw('cast( versi AS signed ) DESC')
-        ->orderBy('versi', 'DESC');
+        }, 'x');
     }
 
     /**
