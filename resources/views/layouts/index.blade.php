@@ -14,5 +14,11 @@
                 });
             }, 5000);
         });
+
+        function filter_open () {
+            if ($('a[href="#collapse-filter"]').attr('aria-expanded') == 'false') {
+                $('a[href="#collapse-filter"]').trigger('click')
+            }
+        }
     </script>
 @endpush
