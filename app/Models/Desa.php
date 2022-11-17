@@ -247,7 +247,7 @@ class Desa extends Model
 
     public static function hapusNonaktifTidakTerdaftar()
     {
-        return DB::raw('DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2');
+        return DB::raw('DELETE FROM desa WHERE GREATEST(COALESCE(tgl_akses_lokal,0), COALESCE(tgl_akses_hosting,0)) < NOW()-INTERVAL 1 MONTH');
     }
 
     /**
