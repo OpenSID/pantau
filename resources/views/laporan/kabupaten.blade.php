@@ -56,13 +56,16 @@
 
         switch (params.get('status')) {
             case '1':
-                $('#status').val('1').change()
+                $('#status').val('1').change();
+                filter_open();
                 break;
             case '2':
-                $('#status').val('2').change()
+                $('#status').val('2').change();
+                filter_open();
                 break;
             case '3':
-                $('#status').val('3').change()
+                $('#status').val('3').change();
+                filter_open();
                 break;
 
             default:

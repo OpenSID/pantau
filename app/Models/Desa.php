@@ -227,9 +227,7 @@ class Desa extends Model
                         })
                         ->from('desa');
                 }, 't')->groupBy(['versi']);
-        }, 'x')
-        ->orderByRaw('cast( versi AS signed ) DESC')
-        ->orderBy('versi', 'DESC');
+        }, 'x');
     }
 
     /**
@@ -271,7 +269,8 @@ class Desa extends Model
                 $query
                 ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                 ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
-            });
+            })
+            ->orderBy('kode_desa', 'ASC');
     }
 
     /**

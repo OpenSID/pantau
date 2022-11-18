@@ -27,7 +27,7 @@ class PetaController extends Controller
                 'tte' => $request->tte,
             ];
 
-            $geoJSONdata = Desa::latest('updated_at')->fillter($fillters)->peta()->get()->map(function ($desa) {
+            $geoJSONdata = Desa::fillter($fillters)->peta()->get()->map(function ($desa) {
                 return [
                     'type' => 'Feature',
                     'geometry' => [
