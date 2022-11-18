@@ -56,13 +56,16 @@
 
         switch (params.get('status')) {
             case '1':
-                $('#status').val('1').change()
+                $('#status').val('1').change();
+                filter_open();
                 break;
             case '2':
-                $('#status').val('2').change()
+                $('#status').val('2').change();
+                filter_open();
                 break;
             case '3':
-                $('#status').val('3').change()
+                $('#status').val('3').change();
+                filter_open();
                 break;
 
             default:
@@ -105,7 +108,7 @@
                 },
                 {
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=${$('#status').val() == 3? 3: 2}&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?status=${$('#status').val() == 3? 3: 1}&kode_kabupaten=${data.kode_kabupaten}&kode_provinsi=${data.kode_provinsi}">${data.online}</a>`
                     },
                     searchable: false,
                     name: 'online',

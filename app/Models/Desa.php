@@ -227,9 +227,7 @@ class Desa extends Model
                         })
                         ->from('desa');
                 }, 't')->groupBy(['versi']);
-        }, 'x')
-        ->orderByRaw('cast( versi AS signed ) DESC')
-        ->orderBy('versi', 'DESC');
+        }, 'x');
     }
 
     /**
@@ -247,7 +245,7 @@ class Desa extends Model
 
     public static function hapusNonaktifTidakTerdaftar()
     {
-        return DB::raw('DELETE FROM desa WHERE GREATEST(tgl_akses_lokal, tgl_akses_hosting) < NOW()-INTERVAL 4 MONTH AND jenis = 2');
+        return DB::raw('DELETE FROM desa WHERE GREATEST(COALESCE(tgl_akses_lokal,0), COALESCE(tgl_akses_hosting,0)) < NOW()-INTERVAL 1 MONTH');
     }
 
     /**
@@ -271,7 +269,8 @@ class Desa extends Model
                 $query
                 ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                 ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
-            });
+            })
+            ->orderBy('kode_desa', 'ASC');
     }
 
     /**
