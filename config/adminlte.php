@@ -214,7 +214,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Menu Items
+    | Menu Utama
     |--------------------------------------------------------------------------
     |
     | Here we can modify the sidebar/top navigation of the admin panel.
@@ -238,64 +238,9 @@ return [
             'type'         => 'sidebar-menu-search',
             'text'         => 'search',
         ],
-
-        // Menu
-        ['header'          => 'OPENSID'],
-        [
-            'text'         => 'Dashboard',
-            'url'          => '/',
-            'icon'         => 'fas fa-tachometer-alt',
+        ['header'          => 'MENU UTAMA',
+         'key'             => 'utama',
         ],
-        [
-            'text'         => 'Peta OpenSID',
-            'url'          => 'peta',
-            'icon'         => 'fas fa-map-marked-alt',
-        ],
-        [
-            'text'         => 'Laporan',
-            'icon'         => 'fas fa-file-alt',
-            'submenu'      => [
-                [
-                    'text' => 'Desa OpenSID',
-                    'url'  => 'laporan/desa',
-                ],
-                [
-                    'text' => 'Kabupaten OpenSID',
-                    'url'  => 'laporan/kabupaten',
-                ],
-                [
-                    'text' => 'Versi OpenSID',
-                    'url'  => 'laporan/versi',
-                ],
-            ],
-        ],
-        [
-            'key'          => 'khusus',
-            'text'         => 'Wilayah',
-            'topnav_right' => true,
-            'submenu'      => [
-                [
-                    'text' => 'Semua',
-                    'url'  => 'sesi/hapus',
-                ],
-            ],
-        ],
-        ['header'          => 'LAIN-LAIN'],
-        [
-            'text'         => 'OPENDK',
-            'icon'         => 'fas fa-file-alt',
-            'submenu'      => [
-                [
-                    'text' => 'VERSI OPENDK',
-                    'url'  => 'opendk/versi',
-                ],
-                [
-                    'text' => 'Kecamatan Opendk ',
-                    'url'  => 'opendk/kecamatan',
-                ],
-            ],
-        ],
-        ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Wilayah Administratif',
             'url'          => 'wilayah',
@@ -382,6 +327,17 @@ return [
             'text'         => 'change_password',
             'url'          => 'profile/reset-password',
             'icon'         => 'fas fa-fw fa-lock',
+        ],
+        [
+            'key'          => 'khusus',
+            'text'         => 'Wilayah',
+            'topnav_right' => true,
+            'submenu'      => [
+                [
+                    'text' => 'Semua',
+                    'url'  => 'sesi/hapus',
+                ],
+            ],
         ],
     ],
 

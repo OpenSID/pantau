@@ -46,6 +46,27 @@ class EventServiceProvider extends ServiceProvider
                     'active' => session('provinsi.kode_prov') == $key ? true : false,
                 ]);
             }
+
+            if (session('pantau') == 'opensid' || session('pantau') == null) {
+                foreach (config('opensid.menu') as $key => $val) {
+                    $event->menu->addBefore('utama',$val);
+                }
+            }
+
+            if (session('pantau') == 'opendk' || session('pantau') == null) {
+                foreach (config('opendk.menu') as $key => $val) {
+                    $event->menu->addBefore('utama',$val);
+                }
+            }
+
         });
+
+        // Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
+        //     // Add some items to the menu...
+
+        //     $event->menu->add('MAIN NAVIGATION');
+        //     // $event->menu->addBefore('MENU UTAMA',config('adminlte.opensid'));
+        //     $event->menu->add(config('adminlte.opensid'));
+        // });
     }
 }
