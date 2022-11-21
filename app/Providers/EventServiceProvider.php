@@ -47,13 +47,22 @@ class EventServiceProvider extends ServiceProvider
                 ]);
             }
 
+            foreach (['OpenSID', 'OpenDk'] as $val) {
+                $event->menu->addIn('pantau', [
+                    'text' => $val,
+                    'url' => "sesi/pantau/{strtolower($val)}",
+                    'active' => session('pantau') == strtolower($val) ? true : false,
+                ]);
+            }
+
+
             if (session('pantau') == 'opensid' || session('pantau') == null) {
                 foreach (config('opensid.menu') as $key => $val) {
                     $event->menu->addBefore('utama',$val);
                 }
             }
 
-            if (session('pantau') == 'opendk' || session('pantau') == null) {
+            if (session('pantau') == 'opendk') {
                 foreach (config('opendk.menu') as $key => $val) {
                     $event->menu->addBefore('utama',$val);
                 }

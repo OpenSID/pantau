@@ -339,6 +339,14 @@ return [
                 ],
             ],
         ],
+        [
+            'key'          => 'pantau',
+            'text'         => 'Aplikasi',
+            'topnav_right' => true,
+            'submenu'      => [
+
+            ],
+        ],
     ],
 
     /*

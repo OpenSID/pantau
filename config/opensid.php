@@ -58,17 +58,5 @@ return [
                 ],
             ],
         ],
-        [
-            'key'          => 'khusus',
-            'text'         => 'Wilayah',
-            'topnav_right' => true,
-            'submenu'      => [
-                [
-                    'text' => 'Semua',
-                    'url'  => 'sesi/hapus',
-                ],
-            ],
-        ],
-
     ],
 ];

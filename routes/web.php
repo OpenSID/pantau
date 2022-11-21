@@ -2,9 +2,14 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
+use App\Http\Middleware\PantauMiddleware;
+use App\Http\Controllers\OpendkController;
+use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -14,7 +19,6 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
-use App\Http\Middleware\WilayahMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +60,16 @@ Route::prefix('sesi')
             session()->remove('provinsi');
 
             return redirect('/');
+        });
+        Route::get('hapus-pantau', function () {
+            session()->remove('pantau');
+
+            return redirect('/');
+        });
+
+        Route::middleware(PantauMiddleware::class)->get('pantau/{pantau}', function (Request $request)
+        {
+            return redirect($request->pantau?? '/');
         });
     });
 

@@ -8,6 +8,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class OpendkController extends Controller
 {
+    public function home()
+    {
+
+    }
+
     public function versi(Request $request)
     {
         $fillters = [
