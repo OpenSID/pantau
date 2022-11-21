@@ -134,10 +134,10 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
-        $this->replace([
-            'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name,
-            'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name,
-            'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name,
+        $this->merge([
+            'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name ?? $this->nama_kabupaten,
+            'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name ?? $this->nama_kecamatan,
+            'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name ?? $this->nama_desa,
         ]);
 
         return $this->only([
