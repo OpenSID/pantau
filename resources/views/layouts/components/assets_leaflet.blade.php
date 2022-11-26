@@ -21,6 +21,12 @@
     <script>
         var layers = {};
         var overlayLayers = {};
+         // Ubah icon
+         var baseballIcon = L.icon({
+                iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
+                iconSize: [20, 20],
+            });
+
 
         function showPolygon(wilayah, layerpeta, warna = '#ffffff') {
             var area_wilayah = JSON.parse(JSON.stringify(wilayah));
@@ -98,6 +104,8 @@
                     }
                 },
                 pointToLayer: function(feature, latlng) {
+                    console.log('point')
+                    console.log(feature)
                     if (feature.properties.style) {
                         return L.marker(latlng, {
                             icon: feature.properties.style
@@ -109,6 +117,71 @@
             });
 
             return wilayah_property;
+        }
+
+        function set_marker(data, judul , contents,color) {
+            marker = new Array();
+            var area = JSON.parse(data);
+            if (area == undefined) {
+                return null;
+            }
+             var jml = area.length;
+            content = $(contents).html();
+            var style_polygon = {
+                stroke: true,
+                color: color.line,
+                opacity: 1,
+                weight: 3,
+                fillColor: color.fill,
+                fillOpacity: 0.8,
+                dashArray: 4,
+            };
+
+            for (var x = 0; x < jml; x++) {
+                for (var i = 0; i < area[x][0].length; i++) {
+                    area[x][0][i].reverse();
+                }
+                area[x][0].push(area[x][0][0]);
+                marker.push(
+                turf.polygon(area[x], { content: contents, style: style_polygon })
+                );
+                var center = turf.centerOfMass(turf.polygon(area[x]));
+
+            }
+
+            console.log(center)
+            return marker;
+        }
+
+        function poly_to_point(data){
+            marker = new Array();
+            var area = JSON.parse(data);
+            if (area == undefined) {
+                return null;
+            }
+
+            var jml = area.length;
+
+            var point_style = {
+                iconSize: [1, 1],
+                iconAnchor: [0.5, 0.5],
+                labelAnchor: [0.3, 0],
+                iconUrl: baseballIcon,
+            };
+
+            for (var x = 0; x < jml; x++) {
+                for (var i = 0; i < area[x][0].length; i++) {
+                    area[x][0][i].reverse();
+                }
+                area[x][0].push(area[x][0][0]);
+                marker=turf.centerOfMass(turf.polygon(area[x]),  {name: 'poly1' , style: L.icon(point_style)})
+                marker.properties.style = baseballIcon;
+
+            }
+            console.log(L.icon(point_style))
+
+            return marker;
+
         }
     </script>
 @endpush()

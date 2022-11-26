@@ -50,7 +50,7 @@ class EventServiceProvider extends ServiceProvider
             foreach (['OpenSID', 'OpenDk'] as $val) {
                 $event->menu->addIn('pantau', [
                     'text' => $val,
-                    'url' => "sesi/pantau/{strtolower($val)}",
+                    'url' => "sesi/pantau/".strtolower($val),
                     'active' => session('pantau') == strtolower($val) ? true : false,
                 ]);
             }

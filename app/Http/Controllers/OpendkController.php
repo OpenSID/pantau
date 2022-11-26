@@ -8,9 +8,22 @@ use Yajra\DataTables\Facades\DataTables;
 
 class OpendkController extends Controller
 {
-    public function home()
+    public function __construct()
     {
+        $this->kecamatan = new Opendk();
+    }
 
+    public function index()
+    {
+        return view('opendk.dashboard', [
+            'total_semua' => $this->kecamatan->wilayahkhusus()->count(),
+            'total_aktif' => $this->kecamatan->wilayahkhusus()->count(),
+            'total_terbaru' => $this->kecamatan->wilayahkhusus()->versiterbaru()->count(),
+            'daftar_baru' => $this->kecamatan->wilayahkhusus()->where('created_at', '>=', now()->subDay(7))->get(),
+            // 'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
+            // 'desaBaru' => $this->desa->desaBaru()->count(),
+            // 'kabupatenKosong' => collect($this->desa->kabupatenKosong())->count(),
+        ]);
     }
 
     public function versi(Request $request)
@@ -49,9 +62,19 @@ class OpendkController extends Controller
             $geoJSONdata = Opendk::get();
 
 
-            return response()->json([
+            return response()->json(
                $geoJSONdata,
-            ]);
+            );
+        }
+        return view('opendk.peta');
+    }
+
+    public function kabupatenKosong(Request $request)
+    {
+        if ($request->ajax()) {
+            return DataTables::of(Opendk::kabupatenKosong()->get())
+                ->addIndexColumn()
+                ->make(true);
         }
     }
 }

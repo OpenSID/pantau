@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'PantauSID',
-    'title_prefix' => 'SID',
+    'title' => 'PantauDK',
+    'title_prefix' => 'DK',
     'title_postfix' => '',
 
     /*
@@ -30,8 +30,16 @@ return [
     |
     */
     'menu' => [
-        // Menu
-        ['header'          => 'OPENDK'],
+        [
+            'text'         => 'Dashboard',
+            'url'          => 'opendk',
+            'icon'         => 'fas fa-tachometer-alt',
+        ],
+        [
+            'text'         => 'Peta OpenSID',
+            'url'          => 'opendk/peta',
+            'icon'         => 'fas fa-map-marked-alt',
+        ],
         [
             'text'         => 'Laporan',
             'icon'         => 'fas fa-file-alt',
