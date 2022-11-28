@@ -19,6 +19,7 @@ class Tambahrecordopendk extends Migration
             $table->json('batas_wilayah')->after('sebutan_wilayah')->nullable(true);
             $table->string('alamat', 100)->after('sebutan_wilayah')->nullable(true);
             $table->smallInteger('jumlahdesa_sinkronisasi')->after('sebutan_wilayah')->nullable(true);
+            $table->integer('jumlah_bantuan')->after('sebutan_wilayah')->nullable(true);
             $table->string('nama_camat', 100)->after('sebutan_wilayah')->nullable(true);
             $table->renameColumn('jml_desa', 'jumlah_desa')->nullable(true);
         });

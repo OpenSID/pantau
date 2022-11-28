@@ -32,6 +32,7 @@
                         <table class="table" id="table-versi">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>No</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
@@ -63,9 +64,17 @@
             method: 'get',
             data: function(data) {
                 data.aktif = $('#aktif').val();
-            }
+            },
         },
-        columns: [{
+        columns: [
+            {
+                 orderable: false,
+                name: 'url',
+                data: function (data) {
+                        return `<a href="#" class="more"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>`
+                    },
+            },
+            {
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex',
                 searchable: false,
@@ -95,11 +104,95 @@
                 orderable: true
             },
             {
-                data: 'updated_at',
+                data: 'tgl_rekam',
                 orderable: true
             },
 
-        ]
+        ],
+        "drawCallback": function(settings) {
+            $('body').find('.more').click(function (e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                var row = kecamatan.row(tr);
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.find('a.more').html('<i class="fa fa-plus-circle" aria-hidden="true"></i>');
+                } else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.find('a.more').html('<i class="fa fa-minus-circle" aria-hidden="true"></i>');
+                }
+            });
+        },
+
+
     })
+
+    function format(d) {
+        console.log(d)
+        // `d` is the original data object for the row
+        return (`
+
+            <table cellpadding="2" cellspacing="0" border="0" style="padding-left:1rem;">
+                <tbody>
+                    <tr>
+                        <td style="border: 0px" rowspan="4">Batas Wilayah</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">Utara - ${(d.batas_wilayah == null)? '' : d.batas_wilayah.bts_wil_utara ?? ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">Barat - ${(d.batas_wilayah == null)? '' : d.batas_wilayah.bts_wil_barat ?? ''}</td>
+                    </tr>
+
+                    <tr>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">Timur - ${(d.batas_wilayah == null)? '' : d.batas_wilayah.bts_wil_timur ?? ''}</td>
+                    </tr>
+
+                    <tr>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">Selatan - ${(d.batas_wilayah == null)? '' : d.batas_wilayah.bts_wil_selatan ?? ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Jumlah Desa</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.jumlah_desa}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Jumlah Desa Tersinkronisasi</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.jumlahdesa_sinkronisasi}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Jumlah Penduduk</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.jumlah_penduduk}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Jumlah KK</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.jumlah_keluarga}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Jumlah Program Bantuan</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.jumlah_bantuan}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px">Alamat Kantor</td>
+                        <td style="border: 0px">:</td>
+                        <td style="border: 0px">${d.alamat}</td>
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+        `);
+    }
+
+
 </script>
 @endsection

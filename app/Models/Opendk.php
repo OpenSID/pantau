@@ -28,6 +28,7 @@ class Opendk extends Model
     protected $casts = [
         'updated_at' => 'datetime',
         'tgl_rekam' => 'datetime',
+        'batas_wilayah' => 'array',
     ];
 
     /**
