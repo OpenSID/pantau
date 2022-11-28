@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Config;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -60,22 +61,18 @@ class EventServiceProvider extends ServiceProvider
                 foreach (config('opensid.menu') as $key => $val) {
                     $event->menu->addBefore('utama',$val);
                 }
+
             }
 
             if (session('pantau') == 'opendk') {
                 foreach (config('opendk.menu') as $key => $val) {
                     $event->menu->addBefore('utama',$val);
                 }
-            }
+                foreach (config('opendk.title') as $key => $val) {
+                    Config::set("adminlte.{$key}", $val );
+                }
+             }
 
         });
-
-        // Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
-        //     // Add some items to the menu...
-
-        //     $event->menu->add('MAIN NAVIGATION');
-        //     // $event->menu->addBefore('MENU UTAMA',config('adminlte.opensid'));
-        //     $event->menu->add(config('adminlte.opensid'));
-        // });
     }
 }

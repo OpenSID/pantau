@@ -250,7 +250,7 @@
                             // console.log(e.peta_wilayah)
                             marker = set_marker(e.peta_wilayah, 'Peta Wilayah Kecamatan', 'Peta Wilayah Kecamatan ' + e.nama_kecamatan, {'line' : '#de2d26', 'fill' : '#fff'});
                             marker_kec =  marker_kec.concat(marker);
-                            point = poly_to_point(e.peta_wilayah);
+                            point = poly_to_point(e.peta_wilayah, e.content);
                             point_kec = point_kec.concat(point);
 
                         });

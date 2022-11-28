@@ -146,14 +146,11 @@
                 turf.polygon(area[x], { content: contents, style: style_polygon })
                 );
                 var center = turf.centerOfMass(turf.polygon(area[x]));
-
             }
-
-            console.log(center)
             return marker;
         }
 
-        function poly_to_point(data){
+        function poly_to_point(data, content = ''){
             marker = new Array();
             var area = JSON.parse(data);
             if (area == undefined) {
@@ -169,6 +166,12 @@
                 iconUrl: baseballIcon,
             };
 
+            var label = L.tooltip({
+                permanent: false,
+                direction: "center",
+                className: "text",
+            }).setContent(content);
+
             for (var x = 0; x < jml; x++) {
                 for (var i = 0; i < area[x][0].length; i++) {
                     area[x][0][i].reverse();
@@ -176,6 +179,7 @@
                 area[x][0].push(area[x][0][0]);
                 marker=turf.centerOfMass(turf.polygon(area[x]),  {name: 'poly1' , style: L.icon(point_style)})
                 marker.properties.style = baseballIcon;
+                marker.properties.content = label;
 
             }
             console.log(L.icon(point_style))
