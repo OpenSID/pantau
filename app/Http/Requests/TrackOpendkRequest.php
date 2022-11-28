@@ -49,7 +49,7 @@ class TrackOpendkRequest extends FormRequest
             'batas_wilayah' => 'sometimes',
             'alamat' => 'sometimes',
             'jumlahdesa_sinkronisasi' => 'sometimes',
-            'nama_camat' => 'sometimes'
+            'nama_camat' => 'sometimes',
         ];
     }
 
@@ -61,7 +61,7 @@ class TrackOpendkRequest extends FormRequest
         // Merge request attribute.
         $this->merge([
             'url' => $this->url,
-            "tgl_rekam" => now(),
+            'tgl_rekam' => now(),
         ]);
     }
 
@@ -110,7 +110,7 @@ class TrackOpendkRequest extends FormRequest
             'batas_wilayah',
             'alamat',
             'jumlahdesa_sinkronisasi',
-            'nama_camat'
+            'nama_camat',
         ]);
     }
 

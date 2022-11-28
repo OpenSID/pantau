@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Config;
-use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -51,28 +51,25 @@ class EventServiceProvider extends ServiceProvider
             foreach (['OpenSID', 'OpenDk'] as $val) {
                 $event->menu->addIn('pantau', [
                     'text' => $val,
-                    'url' => "sesi/pantau/".strtolower($val),
+                    'url' => 'sesi/pantau/'.strtolower($val),
                     'active' => session('pantau') == strtolower($val) ? true : false,
                 ]);
             }
 
-
             if (session('pantau') == 'opensid' || session('pantau') == null) {
                 foreach (config('opensid.menu') as $key => $val) {
-                    $event->menu->addBefore('utama',$val);
+                    $event->menu->addBefore('utama', $val);
                 }
-
             }
 
             if (session('pantau') == 'opendk') {
                 foreach (config('opendk.menu') as $key => $val) {
-                    $event->menu->addBefore('utama',$val);
+                    $event->menu->addBefore('utama', $val);
                 }
                 foreach (config('opendk.title') as $key => $val) {
-                    Config::set("adminlte.{$key}", $val );
+                    Config::set("adminlte.{$key}", $val);
                 }
-             }
-
+            }
         });
     }
 }

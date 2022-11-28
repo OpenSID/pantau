@@ -23,7 +23,8 @@ class PantauMiddleware
         );
 
         // set session provinsi
-        session()->put('pantau',$request->pantau);
+        session()->put('pantau', $request->pantau);
+
         return $next($request);
     }
 }

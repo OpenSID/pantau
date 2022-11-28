@@ -12,7 +12,7 @@ class OpendkController extends Controller
     public function __construct()
     {
         $this->kecamatan = new Opendk();
-        Config::set('title', 'opendk' );
+        Config::set('title', 'opendk');
     }
 
     public function index()
@@ -39,14 +39,13 @@ class OpendkController extends Controller
                 ->make(true);
         }
 
-        return view('opendk.versi' ,compact('fillters'));
+        return view('opendk.versi', compact('fillters'));
     }
 
     public function kecamatan(Request $request)
     {
-
         $fillters = [
-            'versi' => $request->versi
+            'versi' => $request->versi,
         ];
 
         if ($request->ajax()) {
@@ -55,7 +54,7 @@ class OpendkController extends Controller
                 ->make(true);
         }
 
-        return view('opendk.kecamatan' ,compact('fillters'));
+        return view('opendk.kecamatan', compact('fillters'));
     }
 
     public function peta(Request $request)
@@ -90,12 +89,15 @@ class OpendkController extends Controller
                         </tr>
                     </tbody></table></b>
                 ";
+
                 return $kec;
             });
+
             return response()->json(
-               $geoJSONdata,
+                $geoJSONdata,
             );
         }
+
         return view('opendk.peta');
     }
 
