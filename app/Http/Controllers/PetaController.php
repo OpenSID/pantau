@@ -57,6 +57,7 @@ class PetaController extends Controller
         if (auth()->check()) {
             $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($desa->url_hosting).'" target="_blank">'.strtolower($desa->url_hosting).'</a></b></td></tr>';
         }
+
         return [
             'logo' => null,
             'popupContent' => '

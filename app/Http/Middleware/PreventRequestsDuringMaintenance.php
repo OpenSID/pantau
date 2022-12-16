@@ -103,8 +103,8 @@ class PreventRequestsDuringMaintenance
      */
     protected function inExceptArray($request)
     {
-          /** if URL contains API, disable continue, don't keep maintenance */
-          if(in_array('api',$request->segments())){
+        /** if URL contains API, disable continue, don't keep maintenance */
+        if (in_array('api', $request->segments())) {
             return true;
         }
 

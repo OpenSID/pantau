@@ -9,13 +9,12 @@ class PengaturanAplikasi extends Model
 {
     use HasFactory;
 
-     /** {@inheritdoc} */
-     protected $table = 'pengaturan_aplikasi';
+    /** {@inheritdoc} */
+    protected $table = 'pengaturan_aplikasi';
 
-     /** {@inheritdoc} */
-     protected $guarded = [];
+    /** {@inheritdoc} */
+    protected $guarded = [];
 
-
-     /** {@inheritdoc} */
-     public $incrementing = true;
+    /** {@inheritdoc} */
+    public $incrementing = true;
 }

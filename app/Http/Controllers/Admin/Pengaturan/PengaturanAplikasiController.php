@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Pengaturan;
 
-use Illuminate\Http\Request;
-use App\Models\PengaturanAplikasi;
 use App\Http\Controllers\Controller;
-use Galahad\Aire\Support\Facades\Aire;
-use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\PengaturanAplikasiRequest;
+use App\Models\PengaturanAplikasi;
+use Illuminate\Http\Request;
 
 class PengaturanAplikasiController extends Controller
 {
@@ -15,6 +13,7 @@ class PengaturanAplikasiController extends Controller
     {
         $pengaturan = PengaturanAplikasi::where(['kategori' => 'setting'])->get();
         $kategori = ['setting'];
+
         return view('admin.pengaturan.pengaturan_aplikasi.index', compact('pengaturan', 'kategori'));
     }
 
@@ -22,11 +21,12 @@ class PengaturanAplikasiController extends Controller
     {
         try {
             foreach ($request->validated() as $key => $value) {
-                PengaturanAplikasi::where(['key'=>$key])->update(['value'=> $value]);
+                PengaturanAplikasi::where(['key' => $key])->update(['value' => $value]);
             }
         } catch (\Throwable $th) {
             return back()->with('error', 'Data gagal diubah');
         }
+
         return redirect('pengaturan/aplikasi')->with('success', 'Data berhasil diubah');
     }
 }

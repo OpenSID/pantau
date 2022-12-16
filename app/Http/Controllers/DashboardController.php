@@ -29,11 +29,11 @@ class DashboardController extends Controller
     public function datatableDesaBaru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa){
-
+            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa) {
                 if (auth()->check() == false) {
                     unset($desa['url_hosting']);
                 }
+
                 return $desa;
             }))->addIndexColumn()->make(true);
         }
