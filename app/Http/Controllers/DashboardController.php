@@ -18,6 +18,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+        //dd($this->desa->desaBaru()->get());
         return view('dashboard', [
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
             'desaBaru' => $this->desa->desaBaru()->count(),
@@ -28,7 +29,13 @@ class DashboardController extends Controller
     public function datatableDesaBaru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of($this->desa->desaBaru())->addIndexColumn()->make(true);
+            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa){
+
+                if (auth()->check() == false) {
+                    unset($desa['url_hosting']);
+                }
+                return $desa;
+            }))->addIndexColumn()->make(true);
         }
 
         abort(404);

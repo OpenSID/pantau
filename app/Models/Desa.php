@@ -282,8 +282,12 @@ class Desa extends Model
     public function scopeLaporan($query)
     {
         return $query
-            ->select(['*'])
+            // ->select(['*'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
+            ->when(auth()->check() == true, function ($query) {
+                $query->selectRaw('url_lokal, url_hosting');
+            })
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });

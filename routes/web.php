@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
-use App\Http\Middleware\WilayahMiddleware;
+use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +55,7 @@ Route::prefix('sesi')
         });
         Route::get('hapus', function () {
             session()->remove('provinsi');
-        
+
             return redirect('/');
         });
     });
@@ -103,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
     });
 
-    
+
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class, ['except' => ['show']]);
     Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
@@ -120,6 +121,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update', [ProfileController::class, 'update']);
         Route::get('reset-password', [ProfileController::class, 'resetPassword']);
         Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
+    });
+
+    // Profil
+    Route::prefix('pengaturan')->group(function () {
+        Route::get('/', [PengaturanAplikasiController::class, 'index']);
+        Route::get('aplikasi', [PengaturanAplikasiController::class, 'index']);
+        Route::post('aplikasi', [PengaturanAplikasiController::class, 'store'])->name('pengaturan.aplikasi.store');;
     });
 
 });
