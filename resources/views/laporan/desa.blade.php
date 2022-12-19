@@ -154,7 +154,8 @@
                         return '';
                     },
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    visible : {{ auth()->check() == false ?'false' : 'true' }}
                 },
                 {
                     data: 'versi_lokal'
