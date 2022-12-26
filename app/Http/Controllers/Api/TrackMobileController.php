@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\TrackMobile;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackMobileRequest;
+use App\Models\TrackMobile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TrackMobileController extends Controller
 {
@@ -29,6 +28,5 @@ class TrackMobileController extends Controller
 
             return response()->json('Failed', 422);
         }
-
     }
 }

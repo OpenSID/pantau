@@ -24,26 +24,26 @@ class TrackMobileRequest extends FormRequest
     public function rules()
     {
         return [
-           'id' => ['required'],
-           'kode_desa' => [
+            'id' => ['required'],
+            'kode_desa' => [
                 'required',
-                "exists:kode_wilayah,kode_desa",
+                'exists:kode_wilayah,kode_desa',
             ],
         ];
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     protected function prepareForValidation()
     {
         // Merge request attribute.
         $this->merge([
-            "tgl_akses" => now(),
+            'tgl_akses' => now(),
         ]);
     }
 
-     /**
+    /**
      * Request where data attribute.
      *
      * @return array
@@ -51,11 +51,11 @@ class TrackMobileRequest extends FormRequest
     public function requestWhere()
     {
         return $this->only([
-            'kode_desa', 'id'
+            'kode_desa', 'id',
         ]);
     }
 
-     /**
+    /**
      * Request data attribute.
      *
      * @return array
