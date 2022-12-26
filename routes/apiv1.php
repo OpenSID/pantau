@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\V1\WilayahController;
+use App\Http\Controllers\Api\TrackMobileController;
 use App\Http\Controllers\Api\TrackOpendkController;
 
 /*
@@ -31,4 +32,5 @@ Route::prefix('track')
     ->group(function () {
         Route::post('desa', TrackController::class);
         Route::post('opendk', TrackOpendkController::class);
+        Route::get('mobile', TrackMobileController::class);
     });
