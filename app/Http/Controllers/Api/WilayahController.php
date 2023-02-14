@@ -44,6 +44,9 @@ class WilayahController extends Controller
                         ->orWhere('nama_kec', 'like', "%{$request->q}%");
                 });
             })
+            ->when(strlen($request->kode) == 5, function ($query) use ($request) {
+                $query->where('kode_kab', substr($request->kode, 0, 5));
+            })
             ->paginate();
 
         return response()->json([
