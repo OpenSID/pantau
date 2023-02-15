@@ -22,6 +22,7 @@ Route::prefix('wilayah')
     ->group(function () {
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('caridesa', [WilayahController::class, 'cariDesa']);
+        Route::get('carikabupaten', [WilayahController::class, 'cariKabupaten']);
         Route::get('ambildesa', [WilayahController::class, 'ambilDesa']);
         Route::get('kodedesa', [WilayahController::class, 'kodeDesa']);
         Route::get('kodekecamatan', [WilayahController::class, 'kodeKecamatan']);
