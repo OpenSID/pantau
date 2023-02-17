@@ -57,6 +57,29 @@ class WilayahController extends Controller
         ]);
     }
 
+    public function cariKabupaten(Request $request)
+    {
+        $desa = $this->wilayah
+            ->select('*')
+            ->selectRaw("concat(nama_desa, ' - ', nama_kec, ' - ', nama_kab, ' - ', nama_prov) as text")
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $query->orWhere(function ($query) use ($request) {
+                    $query
+                        ->orWhere('nama_kab', 'like', "%{$request->q}%")
+                        ->orWhere('nama_prov', 'like', "%{$request->q}%");
+                });
+            })
+            ->groupBy('kode_kab')
+            ->paginate();
+
+        return response()->json([
+            'results' => $desa->items(),
+            'pagination' => [
+                'more' => $desa->currentPage() < $desa->lastPage(),
+            ],
+        ]);
+    }
+
     public function ambilDesa(Request $request)
     {
         $this->validate($request, [
