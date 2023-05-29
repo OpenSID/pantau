@@ -47,6 +47,9 @@ class WilayahController extends Controller
             ->when(strlen($request->kode) == 5, function ($query) use ($request) {
                 $query->where('kode_kab', substr($request->kode, 0, 5));
             })
+            ->when($request->kode_lewati, function ($query) use ($request) {
+                $query->whereNotIn('kode_desa', explode(',',$request->kode_lewati));
+            })
             ->paginate();
 
         return response()->json([
