@@ -52,7 +52,7 @@ class TrackRequest extends FormRequest
             'url' => ['required', 'url', "not_regex:/{$this->listAbaikanDomain()}/"],
             'ip_address' => 'nullable|ip',
             'external_ip' => 'nullable|ip',
-            'version' => 'nullable',
+            'version' => 'required',
             'jml_surat_tte' => 'nullable',
             'modul_tte' => [
                 'nullable',
