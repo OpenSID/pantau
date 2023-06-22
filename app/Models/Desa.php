@@ -59,9 +59,7 @@ class Desa extends Model
         $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
 
         if ($versi_opensid !== false) {
-            $version = $versi_opensid->tag_name;
-            $version = preg_replace('/[^0-9]/', '', $version);
-            $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+            $version = str_replace('v', '', $versi_opensid->tag_name);
         }
 
         if ($provinsi = session('provinsi')) {
@@ -73,7 +71,7 @@ class Desa extends Model
             ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states}) desa_offline")
             ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states}) desa_online")
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting LIKE '{$version}-premium%' Or x.versi_lokal LIKE '{$version}-premium%') {$states} ) as kabupaten_premium")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} ) as kabupaten_premium")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states}) kabupaten_offline")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states}) kabupaten_online")
             ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states}) bukan_desa")
@@ -173,12 +171,10 @@ class Desa extends Model
                     $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
 
                     if ($versi_opensid !== false) {
-                        $version = $versi_opensid->tag_name;
-                        $version = preg_replace('/[^0-9]/', '', $version);
-                        $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+                        $version = str_replace('v', '', $versi_opensid->tag_name);
 
-                        $query->where('d.versi_hosting', 'LIKE', $version.'-premium%')
-                            ->orWhere('d.versi_lokal', 'LIKE', $version.'-premium%');
+                        $query->where('d.versi_hosting', 'like', "{$version}-premium%")
+                            ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
                     }
                 });
             }, 'sub')
