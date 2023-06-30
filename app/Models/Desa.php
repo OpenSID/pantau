@@ -160,23 +160,24 @@ class Desa extends Model
                     )
                     ->from('desa')
                     ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa')
-                // filter
-                ->when($fillters['status'] == 1, function ($query) {
-                    $query->whereRaw('d.versi_hosting is not null');
-                })
-                ->when($fillters['status'] == 2, function ($query) {
-                    $query->whereRaw('d.versi_lokal is not null');
-                })
-                ->when($fillters['status'] == 3, function ($query) {
-                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+                    ->whereRaw("desa.kode_kabupaten <> ''")
+                    // filter
+                    ->when($fillters['status'] == 1, function ($query) {
+                        $query->whereRaw('d.versi_hosting is not null');
+                    })
+                    ->when($fillters['status'] == 2, function ($query) {
+                        $query->whereRaw('d.versi_lokal is not null');
+                    })
+                    ->when($fillters['status'] == 3, function ($query) {
+                        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
 
-                    if ($versi_opensid !== false) {
-                        $version = str_replace('v', '', $versi_opensid->tag_name);
+                        if ($versi_opensid !== false) {
+                            $version = str_replace('v', '', $versi_opensid->tag_name);
 
-                        $query->where('d.versi_hosting', 'like', "{$version}-premium%")
-                            ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
-                    }
-                });
+                            $query->where('d.versi_hosting', 'like', "{$version}-premium%")
+                                ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
+                        }
+                    });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('sub.kode_provinsi', $provinsi->kode_prov);
