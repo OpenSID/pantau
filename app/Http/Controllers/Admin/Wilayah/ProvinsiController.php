@@ -22,6 +22,7 @@ class ProvinsiController extends Controller
             $requestAll['columns'][2]['name'] = 'region_name';
 
             $request->merge($requestAll);
+
             return DataTables::of(Region::provinsi())
                 ->addIndexColumn()
                 ->make(true);
