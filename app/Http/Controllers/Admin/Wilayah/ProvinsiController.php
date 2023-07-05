@@ -17,11 +17,6 @@ class ProvinsiController extends Controller
     public function datatables(Request $request)
     {
         if ($request->ajax()) {
-            $requestAll = $request->all();
-            $requestAll['columns'][1]['name'] = 'region_code';
-            $requestAll['columns'][2]['name'] = 'region_name';
-
-            $request->merge($requestAll);
             return DataTables::of(Region::provinsi())
                 ->addIndexColumn()
                 ->make(true);
