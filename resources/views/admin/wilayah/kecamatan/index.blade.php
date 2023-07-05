@@ -46,19 +46,19 @@
                     },
                     {
                         data: 'kode_kecamatan',
-                        name: 'kode_kecamatan'
+                        name: 'tbl_regions.region_code'
                     },
                     {
                         data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        name: 'prov.region_name'
                     },
                     {
                         data: 'nama_kabupaten',
-                        name: 'nama_kabupaten'
+                        name: 'kab.region_name'
                     },
                     {
                         data: 'nama_kecamatan',
-                        name: 'nama_kecamatan'
+                        name: 'tbl_regions.region_name'
                     },
                 ],
                 order: [
