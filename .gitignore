@@ -3,6 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/tools
 .env
 .env.backup
 .php-cs-fixer.cache

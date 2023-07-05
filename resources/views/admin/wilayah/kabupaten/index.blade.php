@@ -45,15 +45,15 @@
                     },
                     {
                         data: 'kode_kabupaten',
-                        name: 'kode_kabupaten'
+                        name: 'tbl_regions.region_code'
                     },
                     {
                         data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        name: 'prov.region_name'
                     },
                     {
                         data: 'nama_kabupaten',
-                        name: 'nama_kabupaten'
+                        name: 'tbl_regions.region_name'
                     },
                 ],
                 order: [
