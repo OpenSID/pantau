@@ -234,10 +234,10 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-        [
-            'type'         => 'sidebar-menu-search',
-            'text'         => 'search',
-        ],
+        // [
+        //     'type'         => 'sidebar-menu-search',
+        //     'text'         => 'search',
+        // ],
 
         // Menu
         ['header'          => 'MENU UTAMA'],
