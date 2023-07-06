@@ -47,6 +47,16 @@
                                     <th>Versi Online</th>
                                     <th>Modul TTE</th>
                                     <th>Surat ter-TTE</th>
+                                    <th>Penduduk</th>
+                                    <th>Artikel</th>
+                                    <th>Surat Keluar</th>
+                                    <th>Peserta Bantuan</th>
+                                    <th>Pengguna Mandiri</th>
+                                    <th>Pengguna</th>
+                                    <th>Unsur Peta</th>
+                                    <th>Persil</th>
+                                    <th>Dokumen</th>
+                                    <th>Keluarga</th>
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -180,17 +190,57 @@
                     searchable: false,
                 },
                 {
+                    data: 'jml_penduduk',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_artikel',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_surat_keluar',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_peserta_bantuan',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_mandiri',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_pengguna',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_unsur_peta',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_persil',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_dokumen',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_keluarga',
+                    searchable: false,
+                },
+                {
                     data: 'tgl_akses',
                     searchable: false,
                 },
             ],
             @auth
             order: [
-                [11, 'desc']
+                [21, 'desc']
             ],
             @else
             order: [
-                [10, 'desc']
+                [20, 'desc']
             ],
             @endauth
         });
