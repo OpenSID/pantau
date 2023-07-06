@@ -7,6 +7,8 @@
 @stop
 
 @section('content')
+    @include('layouts.components.notification')
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
@@ -16,6 +18,7 @@
                             <thead>
                                 <tr>
                                     <th width="5%" nowrap>NO</th>
+                                    <th width="5%" nowrap>AKSI</th>
                                     <th width="10%" nowrap>KODE WILAYAH</th>
                                     <th>NAMA PROVINSI</th>
                                     <th>NAMA KABUPATEN</th>
@@ -28,6 +31,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.components.global_delete')
 @endsection
 @section('js')
     <script>
@@ -37,10 +42,16 @@
                 serverSide: true,
                 searchable: true,
                 orderable: true,
-                ajax: "{{ route('kecamatan.datatables') }}",
+                ajax: "{{ url('kecamatan') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
                         searchable: false,
                         orderable: false
                     },
@@ -58,11 +69,11 @@
                     },
                     {
                         data: 'nama_kecamatan',
-                        name: 'tbl_regions.region_name'
+                        name: 'tbl_regions.region_name',
                     },
                 ],
                 order: [
-                    [1, 'asc']
+                    [2, 'asc']
                 ]
             });
         });

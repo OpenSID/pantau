@@ -73,13 +73,13 @@ class Region extends Model
                 ->select(
                     'tbl_regions.id',
                     'tbl_regions.region_code AS kode_kecamatan',
-                    'tbl_regions.region_name AS nama_kecamatan',
+                    'tbl_regions.new_region_name AS nama_kecamatan_baru',
                     'kab.region_code AS kode_kabupaten',
                     'kab.region_name AS nama_kabupaten',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
                     'tbl_regions.keterangan',
-                )
+                )->selectRaw('coalesce(tbl_regions.new_region_name, tbl_regions.region_name) AS nama_kecamatan')
                 ->join('tbl_regions AS kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
                 ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
                 ->whereRaw('LENGTH(tbl_regions.parent_code) = 5');
@@ -111,6 +111,16 @@ class Region extends Model
                 ->join('tbl_regions AS kab', 'kec.parent_code', '=', 'kab.region_code')
                 ->join('tbl_regions AS prov', 'kab.parent_code', '=', 'prov.region_code')
                 ->whereRaw('LENGTH(tbl_regions.parent_code) = 8');
+    }
+
+    /**
+     * Get all of thn child for the Region
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function child()
+    {
+        return $this->hasMany(Region::class, 'parent_code', 'region_code');
     }
 
     public static function boot()
