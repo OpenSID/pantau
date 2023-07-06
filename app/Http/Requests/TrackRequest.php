@@ -173,7 +173,7 @@ class TrackRequest extends FormRequest
             'jml_unsur_peta',
             'jml_persil',
             'jml_dokumen',
-            'jml_keluarga'
+            'jml_keluarga',
         ]);
     }
 }
