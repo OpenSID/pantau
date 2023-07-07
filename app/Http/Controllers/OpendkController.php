@@ -40,12 +40,12 @@ class OpendkController extends Controller
         $kecamatanWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kecamatan'), 'titleWidget' => 'Total Kecamatan', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKecamatan, 'iconWidget' => 'fa-shopping-cart'],
             'aktif' => ['urlWidget' => url($this->baseRoute.'/kecamatan?akses_opendk=1'), 'titleWidget' => 'Kecamatan pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKecamatan, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi_opendk='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
+            'baru' => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi_opendk='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
         ];
         $kabupatenWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kabupaten'), 'titleWidget' => 'Total Kabupaten', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKabupaten, 'iconWidget' => 'fa-shopping-cart'],
             'aktif' => ['urlWidget' => url($this->baseRoute.'/kabupaten?akses_opendk=1'), 'titleWidget' => 'Kabupaten pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKabupaten, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi_opendk='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
+            'baru' => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi_opendk='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
         ];
 
         return view($this->baseView.'.dashboard', [
@@ -92,7 +92,6 @@ class OpendkController extends Controller
 
     public function kabupaten(Request $request)
     {
-
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -101,9 +100,12 @@ class OpendkController extends Controller
         ];
         $listVersi = $this->getListVersion();
         if ($request->ajax()) {
-            return DataTables::of(Opendk::wilayahkhusus()->with(['childKecamatan' => function ($r) { $r->select('kode_kabupaten', 'kode_kecamatan'); }])->kabupaten($request)->get())
+            return DataTables::of(Opendk::wilayahkhusus()->with(['childKecamatan' => function ($r) {
+            $r->select('kode_kabupaten', 'kode_kecamatan');
+            }])->kabupaten($request)->get())
                 ->addColumn('jumlah', function ($data) {
                     \Log::error($data->toJson());
+
                     return $data->childKecamatan->count();
                 })
                 ->make(true);
@@ -160,7 +162,7 @@ class OpendkController extends Controller
     {
         if ($request->ajax()) {
             return DataTables::of(Region::doesntHave('opendk')->with(['child' => function ($r) {
-            $r->select('id', 'parent_code');
+                $r->select('id', 'parent_code');
             }])->kabupaten()->selectRaw('tbl_regions.region_code as region_code')->get())
                 ->addIndexColumn()
                 ->addColumn('jumlah', function ($data) {
@@ -170,8 +172,9 @@ class OpendkController extends Controller
         }
     }
 
-    private function getListVersion(){
-        return Opendk::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi')->get()->sortByDesc('versi')->map(function($item){
+    private function getListVersion()
+    {
+        return Opendk::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi')->get()->sortByDesc('versi')->map(function ($item) {
             return $item->versi;
         })->values()->all();
     }
