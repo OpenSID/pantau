@@ -113,7 +113,7 @@ class Region extends Model
                 ->whereRaw('LENGTH(tbl_regions.parent_code) = 8');
     }
 
-      /**
+    /**
      * Get all of thn child for the Region
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

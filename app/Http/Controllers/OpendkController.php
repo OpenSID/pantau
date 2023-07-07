@@ -11,8 +11,11 @@ use Yajra\DataTables\Facades\DataTables;
 class OpendkController extends Controller
 {
     private $opendk;
+
     protected $baseRoute = 'opendk';
+
     protected $baseView = 'opendk';
+
     public function __construct()
     {
         $this->opendk = new Opendk();
@@ -21,7 +24,7 @@ class OpendkController extends Controller
 
     public function index()
     {
-        $version = NULL;
+        $version = null;
         $versiOpensid = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
 
         if ($versiOpensid !== false) {
@@ -44,6 +47,7 @@ class OpendkController extends Controller
             'aktif' => ['urlWidget' => url($this->baseRoute.'/kabupaten?akses_opendk=1'), 'titleWidget' => 'Kabupaten pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKabupaten, 'iconWidget' => 'fa-shopping-cart'],
             'baru'  => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi_opendk='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
         ];
+
         return view($this->baseView.'.dashboard', [
             'baseRoute' => $this->baseRoute,
             'baseView' => $this->baseView,
@@ -70,7 +74,6 @@ class OpendkController extends Controller
 
     public function kecamatan(Request $request)
     {
-
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -156,12 +159,13 @@ class OpendkController extends Controller
     public function kabupatenKosong(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::doesntHave('opendk')->with(['child' => function ($r) { $r->select('id', 'parent_code'); }])->kabupaten()->selectRaw('tbl_regions.region_code as region_code')->get())
+            return DataTables::of(Region::doesntHave('opendk')->with(['child' => function ($r) {
+            $r->select('id', 'parent_code');
+            }])->kabupaten()->selectRaw('tbl_regions.region_code as region_code')->get())
                 ->addIndexColumn()
                 ->addColumn('jumlah', function ($data) {
-
-                        return $data->child->count();
-                    })
+                    return $data->child->count();
+                })
                 ->make(true);
         }
     }

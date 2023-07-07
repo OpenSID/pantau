@@ -10,6 +10,7 @@ class Opendk extends Model
     use HasFactory;
 
     const ACTIVE_DAYS = 7;
+
     /** {@inheritdoc} */
     protected $table = 'opendk';
 
