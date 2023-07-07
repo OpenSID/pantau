@@ -165,7 +165,6 @@
             }
 
             loadData();
-            loadOpendk();
 
             $('#filter').click(function() {
                 // Kosongkan Map Telebih Dahulu
@@ -222,26 +221,6 @@
                     error: function() {
                         alert('Gagal mengambil data');
                     },
-                });
-            }
-
-            function loadOpendk(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null){
-                $.ajax({
-
-                    url: "{{ url('opendk/peta') }}",
-                    contentType: "application/json; charset=utf-8",
-                    cache: false,
-                    dataType: "json",
-                    responseType: "json",
-                    data: {
-                        kode_provinsi: kode_provinsi,
-                        kode_kabupaten: kode_kabupaten,
-                        kode_kecamatan: kode_kecamatan,
-                        status: status,
-                    },
-                    success: function (response) {
-                        console.log(response)
-                    }
                 });
             }
         });

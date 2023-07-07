@@ -164,8 +164,7 @@
                 layer.bindPopup(feature.properties.popupContent);
             }
 
-            // loadData();
-            loadOpendk();
+            loadData();
 
             $('#filter').click(function() {
                 // Kosongkan Map Telebih Dahulu
@@ -188,7 +187,7 @@
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
-                    url: "{{ url('peta') }}",
+                    url: "{{ url('opendk/peta') }}",
                     contentType: "application/json; charset=utf-8",
                     cache: false,
                     dataType: "json",
@@ -211,6 +210,7 @@
                                     icon: baseballIcon
                                 });
                             },
+
                             onEachFeature: onEachFeature
                         });
 
@@ -221,57 +221,6 @@
                     error: function() {
                         alert('Gagal mengambil data');
                     },
-                });
-            }
-
-            function loadOpendk(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null){
-                $.ajax({
-
-                    url: "{{ url('opendk/peta') }}",
-                    contentType: "application/json; charset=utf-8",
-                    cache: false,
-                    dataType: "json",
-                    responseType: "json",
-                    data: {
-                        kode_provinsi: kode_provinsi,
-                        kode_kabupaten: kode_kabupaten,
-                        kode_kecamatan: kode_kecamatan,
-                        status: status,
-                    },
-                    success: function (response) {
-                        var marker;
-                        var marker_kec = new Array();
-                        var point;
-                        var point_kec = new Array();
-                        var peta  = response.filter(function (element) {
-                            if (element.peta_wilayah != '[[[[]]]]'){ return element}
-                        });
-                        peta.forEach(e => {
-                            // console.log(e.peta_wilayah)
-                            marker = set_marker(e.peta_wilayah, 'Peta Wilayah Kecamatan', 'Peta Wilayah Kecamatan ' + e.nama_kecamatan, {'line' : '#de2d26', 'fill' : '#fff'});
-                            marker_kec =  marker_kec.concat(marker);
-                            point = poly_to_point(e.peta_wilayah, e.content);
-                            point_kec = point_kec.concat(point);
-
-                        });
-                        markersBar = L.markerClusterGroup();
-                        barLayer = new L.geoJSON(point, {
-                            pointToLayer: function(feature, latlng) {
-                                return L.marker(latlng, {
-                                    icon: baseballIcon
-                                });
-                            },
-
-                            onEachFeature: onEachFeature
-                        });
-                        kecamatan = wilayah_property(point_kec, true)
-                        markersBar.addLayer(kecamatan);
-                        map.addLayer(markersBar);
-                        var wilayah =  wilayah_property(peta)
-                         // Buat Marker Cluster Group
-                        map.addLayer(wilayah);
-                        layerControl.addOverlay(wilayah_property(marker_kec, false), 'wilayah' );
-                    }
                 });
             }
         });

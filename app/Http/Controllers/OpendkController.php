@@ -115,45 +115,62 @@ class OpendkController extends Controller
     public function peta(Request $request)
     {
         if ($request->ajax()) {
-            $geoJSONdata = Opendk::wilayahkhusus()->get()->map(function ($kec) {
-                $kec->content = "
-                    <h6 class='text-center'><b style='color:red'>{$kec->sebutan_wilayah} {$kec->nama_kecamatan}</b></h6>
-                    <b><table width='100%'>
-                        <tbody><tr>
-                            <td>{$kec->sebutan_wilayah}</td><td> : {$kec->sebutan_wilayah} Batu Berapit</td>
-                        </tr>
+            $fillters = [
+                'kode_provinsi' => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+                'akses_opendk' => $request->akses,
+                'versi_opendk' => $request->versi_lokal,
+            ];
 
-                        <tr>
-                        <td>Kab/Kota</td><td> : {$kec->nama_kabupaten}</td>
-                        </tr>
-                        <tr>
-                            <td>Provinsi</td><td> : {$kec->nama_provinsi}</td>
-                        </tr>
-                        <tr>
-                            <td>Jumlah Desa</td><td> : {$kec->jumlah_desa}</td>
-                        </tr>
-
-                        <tr>
-                            <td>Batas Wilayah</td><td> : {$kec->batas_wilayah}</td>
-                        </tr>
-                        <tr>
-                            <td>Alamat</td><td> : {$kec->alamat}</td>
-                        </tr>
-                        <tr>
-                            <td>Website</td><td> : <a href='http://{$kec->url}' target='_blank'>{$kec->url}</a></td>
-                        </tr>
-                    </tbody></table></b>
-                ";
-
-                return $kec;
+            $geoJSONdata = Opendk::wilayahkhusus()->filterDatatable($fillters)->get()->map(function ($kec) {
+                return [
+                    'type' => 'Feature',
+                    'geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [
+                            (float) $kec->lng,
+                            (float) $kec->lat,
+                        ],
+                    ],
+                    'properties' => $this->properties($kec),
+                    'id' => $kec->id,
+                ];
             });
 
-            return response()->json(
-                $geoJSONdata,
-            );
+            return response()->json([
+                'type' => 'FeatureCollection',
+                'features' => $geoJSONdata,
+            ]);
         }
 
         return view($this->baseView.'.peta');
+    }
+
+    private function properties($kec)
+    {
+        $link = '';
+        if (auth()->check()) {
+            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($kec->url).'" target="_blank">'.strtolower($kec->url_hosting).'</a></b></td></tr>';
+        }
+
+        return [
+            'logo' => null,
+            'popupContent' => '
+                <h6 class="text-center"><b style="color:red">'.strtoupper($kec->sebutan_wilayah.' '.$kec->nama_kecamatan).'</b></h6>
+                <b><table width="100%">
+                    <tr>
+                    <td>Kab/Kota</td><td> : '.ucwords($kec->nama_kabupaten).'</b></td>
+                    </tr>
+                    <tr>
+                        <td>Provinsi</td><td> : '.ucwords($kec->nama_provinsi).'</b></td>
+                    </tr>
+                    <tr>
+                        <td>Alamat</td><td> : '.($kec->alamat_kantor ?? '').'</b></td>
+                    </tr>
+                    '.$link.'
+                </table></b>',
+        ];
     }
 
     public function kabupatenKosong(Request $request)

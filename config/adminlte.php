@@ -277,10 +277,10 @@ return [
                     'text' => 'Dashboard',
                     'url'  => 'opendk',
                 ],
-                [
-                    'text' => 'Peta',
-                    'url'  => 'opendk/peta',
-                ],
+                // [
+                //     'text' => 'Peta',
+                //     'url'  => 'opendk/peta',
+                // ],
                 [
                     'text' => 'Kecamatan',
                     'url'  => 'opendk/kecamatan',
