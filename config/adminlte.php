@@ -234,12 +234,77 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        // [
+        //     'type'         => 'sidebar-menu-search',
+        //     'text'         => 'search',
+        // ],
+
+        // Menu
+        ['header'          => 'MENU UTAMA'],
         [
-            'type'         => 'sidebar-menu-search',
-            'text'         => 'search',
+            'text'         => 'Dashboard',
+            'url'          => '/',
+            'icon'         => 'fas fa-tachometer-alt',
         ],
-        ['header'          => 'MENU UTAMA',
-         'key'             => 'utama',
+        [
+            'text'         => 'Peta OpenSID',
+            'url'          => 'peta',
+            'icon'         => 'fas fa-map-marked-alt',
+        ],
+        [
+            'text'         => 'Laporan',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Desa OpenSID',
+                    'url'  => 'laporan/desa',
+                ],
+                [
+                    'text' => 'Kabupaten OpenSID',
+                    'url'  => 'laporan/kabupaten',
+                ],
+                [
+                    'text' => 'Versi OpenSID',
+                    'url'  => 'laporan/versi',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'OpenDK',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Dashboard',
+                    'url'  => 'opendk',
+                ],
+                [
+                    'text' => 'Peta',
+                    'url'  => 'opendk/peta',
+                ],
+                [
+                    'text' => 'Kecamatan',
+                    'url'  => 'opendk/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'opendk/kabupaten-kosong',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'opendk/versi',
+                ],
+            ],
+        ],
+        [
+            'key'          => 'khusus',
+            'text'         => 'Wilayah',
+            'topnav_right' => true,
+            'submenu'      => [
+                [
+                    'text' => 'Semua',
+                    'url'  => 'sesi/hapus',
+                ],
+            ],
         ],
         [
             'text'         => 'Wilayah Administratif',

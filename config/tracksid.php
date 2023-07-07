@@ -6,7 +6,7 @@ return [
         'mapbox_token' => env('TRACKSID_MAPBOX_TOKEN', 'pk.eyJ1IjoiZWRkaWVyaWR3YW4iLCJhIjoiY2tjd3dyN2VyMDNyZTJybzVvNjF1bzI1MyJ9.XaReLv4etu3mwj7f8A1y2Q'),
         'sanctum_token' => env('TRACKSID_SANCTUM_TOKEN', '1|wWOWzaYeEbrOgz35G1rSIDweeGjDuN5wYL1iSECF')
     ],
-    'abaikan' => env('TRACKSID_ABAIKAN', 'demosid.opendesa.id|beta.opendesa.id|berputar.opendesa.id|demo.opensid.my.id|demo.opensid.or.id|opensid.id|beta.opensid.my.id|berputar.opensid.my.id|beta.opensid.or.id|berputar.opensid.or.id|opensid.my.id|sistemdesa.sunshinecommunity.id'),
+    'abaikan' => env('TRACKSID_ABAIKAN', 'devpremium.opendesa.id|devumum.opendesa.id|dev.opendesa.id|demosid.opendesa.id|beta.opendesa.id|berputar.opendesa.id|demo.opensid.my.id|demo.opensid.or.id|opensid.id|beta.opensid.my.id|berputar.opensid.my.id|beta.opensid.or.id|berputar.opensid.or.id|opensid.my.id|sistemdesa.sunshinecommunity.id'),
     'abaikan_opendk' => env('TRACKSID_ABAIKAN_OPENDK', 'demodk.opendesa.id'),
     'desa_contoh' => [
         'kode_desa' => '52.01.14.2006',

@@ -28,7 +28,7 @@ class TrackRequest extends FormRequest
                 "exists:kode_wilayah,kode_desa,kode_kec,{$this->kode_kecamatan},kode_kab,{$this->kode_kabupaten},kode_prov,{$this->kode_provinsi}",
                 "unique:desa,kode_desa,{$this->kode_desa},kode_desa",
             ],
-            'kode_pos' => 'required',
+            'kode_pos' => 'nullable',
             'nama_kecamatan' => ['required', "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
             'kode_kecamatan' => [
                 'required',
@@ -44,8 +44,8 @@ class TrackRequest extends FormRequest
                 'required',
                 'exists:kode_wilayah,kode_prov',
             ],
-            'lat' => 'required',
-            'lng' => 'required',
+            'lat' => 'nullable',
+            'lng' => 'nullable',
             'alamat_kantor' => 'required',
             'email_desa' => 'sometimes',
             'telepon' => 'sometimes',
@@ -134,10 +134,10 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
-        $this->replace([
-            'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name,
-            'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name,
-            'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name,
+        $this->merge([
+            'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name ?? $this->nama_kabupaten,
+            'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name ?? $this->nama_kecamatan,
+            'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name ?? $this->nama_desa,
         ]);
 
         return $this->only([

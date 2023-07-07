@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
+use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update', [ProfileController::class, 'update']);
         Route::get('reset-password', [ProfileController::class, 'resetPassword']);
         Route::post('reset-password', [ProfileController::class, 'resetPasswordUpdate']);
+    });
+
+    // Profil
+    Route::prefix('pengaturan')->group(function () {
+        Route::get('/', [PengaturanAplikasiController::class, 'index']);
+        Route::get('aplikasi', [PengaturanAplikasiController::class, 'index']);
+        Route::post('aplikasi', [PengaturanAplikasiController::class, 'store'])->name('pengaturan.aplikasi.store');;
     });
 
 });

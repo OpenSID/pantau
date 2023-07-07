@@ -44,6 +44,32 @@ class WilayahController extends Controller
                         ->orWhere('nama_kec', 'like', "%{$request->q}%");
                 });
             })
+            ->when(strlen($request->kode) == 5, function ($query) use ($request) {
+                $query->where('kode_kab', substr($request->kode, 0, 5));
+            })
+            ->paginate();
+
+        return response()->json([
+            'results' => $desa->items(),
+            'pagination' => [
+                'more' => $desa->currentPage() < $desa->lastPage(),
+            ],
+        ]);
+    }
+
+    public function cariKabupaten(Request $request)
+    {
+        $desa = $this->wilayah
+            ->select('*')
+            ->selectRaw("concat(nama_desa, ' - ', nama_kec, ' - ', nama_kab, ' - ', nama_prov) as text")
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $query->orWhere(function ($query) use ($request) {
+                    $query
+                        ->orWhere('nama_kab', 'like', "%{$request->q}%")
+                        ->orWhere('nama_prov', 'like', "%{$request->q}%");
+                });
+            })
+            ->groupBy('kode_kab')
             ->paginate();
 
         return response()->json([

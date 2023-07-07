@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\TrackMobileController;
 use App\Http\Controllers\Api\TrackOpendkController;
 
 /*
@@ -21,6 +22,7 @@ Route::prefix('wilayah')
     ->group(function () {
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('caridesa', [WilayahController::class, 'cariDesa']);
+        Route::get('carikabupaten', [WilayahController::class, 'cariKabupaten']);
         Route::get('ambildesa', [WilayahController::class, 'ambilDesa']);
         Route::get('kodedesa', [WilayahController::class, 'kodeDesa']);
         Route::get('kodekecamatan', [WilayahController::class, 'kodeKecamatan']);
@@ -33,4 +35,5 @@ Route::prefix('track')
     ->group(function () {
         Route::post('desa', TrackController::class);
         Route::post('opendk', TrackOpendkController::class);
+        Route::post('mobile', TrackMobileController::class);
     });

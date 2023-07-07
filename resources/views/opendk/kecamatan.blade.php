@@ -63,8 +63,11 @@
             url: `{{ url('opendk/kecamatan') }}`,
             method: 'get',
             data: function(data) {
-                data.aktif = $('#aktif').val();
-            },
+                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
+                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
+                    data.kode_kecamatan = $('#kecamatan').val();
+                    data.akses = $('#akses').val();
+                }
         },
         columns: [
             {
@@ -104,7 +107,7 @@
                 orderable: true
             },
             {
-                data: 'tgl_rekam',
+                data: 'format_updated_at',
                 orderable: true
             },
 
@@ -158,7 +161,7 @@
                     <tr>
                         <td style="border: 0px">Jumlah Desa</td>
                         <td style="border: 0px">:</td>
-                        <td style="border: 0px">${d.jumlah_desa}</td>
+                        <td style="border: 0px">${d.jml_desa}</td>
                     </tr>
                     <tr>
                         <td style="border: 0px">Jumlah Desa Tersinkronisasi</td>
@@ -193,6 +196,9 @@
         `);
     }
 
+    $('#filter').on('click', function(e) {
+        kecamatan.draw();
+    });
 
 </script>
 @endsection
