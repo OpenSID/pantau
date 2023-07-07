@@ -287,7 +287,7 @@ return [
                 ],
                 [
                     'text' => 'Kabupaten',
-                    'url'  => 'opendk/kabupaten-kosong',
+                    'url'  => 'opendk/kabupaten',
                 ],
                 [
                     'text' => 'Versi',
@@ -392,25 +392,6 @@ return [
             'text'         => 'change_password',
             'url'          => 'profile/reset-password',
             'icon'         => 'fas fa-fw fa-lock',
-        ],
-        [
-            'key'          => 'khusus',
-            'text'         => 'Wilayah',
-            'topnav_right' => true,
-            'submenu'      => [
-                [
-                    'text' => 'Semua',
-                    'url'  => 'sesi/hapus',
-                ],
-            ],
-        ],
-        [
-            'key'          => 'pantau',
-            'text'         => 'Aplikasi',
-            'topnav_right' => true,
-            'submenu'      => [
-
-            ],
         ],
     ],
 

@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Profil Versi OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang ) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Kabupaten OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">(Kabupaten yang memasang OpenDK ) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -32,10 +32,10 @@
                         <table class="table" id="table-versi">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Versi</th>
-                                    <th>Url</th>
-
+                                    <th>Kode Kabupaten</th>
+                                    <th>Kabupaten</th>
+                                    <th>Provinsi</th>
+                                    <th>Jumlah</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -50,52 +50,73 @@
 
 @section('js')
 <script>
+    const params = new URLSearchParams(window.location.search);
     const listVersi = {!! json_encode($listVersi) !!}
 
     for(var i in listVersi) {
         $('#versi_opendk').append('<option>'+listVersi[i]+'</option>')
     }
 
-    var kecamatan = $('#table-versi').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: true,
-            ajax: {
-                url: `{{ url('opendk/versi') }}`,
-                method: 'get',
-                data: function(data) {
+    if (params.get('akses_opendk') || params.get('versi_opendk')) {
+        if (params.get('versi_opendk')) {
+            $('#versi_opendk').val(params.get('versi_opendk')).change();
+        }
+        if (params.get('akses_opendk')) {
+            $('#akses_opendk').val(params.get('akses_opendk')).change();
+        }
+
+        filter_open();
+    }
+
+    var kabupaten = $('#table-versi').DataTable({
+        processing: true,
+        serverSide: true,
+        autoWidth: false,
+        ordering: true,
+        ajax: {
+            url: `{{ url('opendk/kabupaten') }}`,
+            method: 'get',
+            data: function(data) {
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.akses_opendk = $('#akses_opendk').val();
                     data.versi_opendk = $('#versi_opendk').val();
                 }
+        },
+        columns: [
+            {
+                data: 'kode_kabupaten',
+                orderable: false
             },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    data: 'versi',
-                    orderable: false
-                },
-                {
-                    data: function (data) {
-                        return `<a target="_blank" href="{{ url('opendk/kecamatan') }}?versi_opendk=${data.versi_clean}">${data.jumlah}</a>`
-                    }
-                },
+            {
+                data: 'nama_kabupaten',
+                orderable: false
+            },
+            {
+                data: 'nama_provinsi',
+                orderable: false
+            },
+            {
+                data: 'jumlah',
+                orderable: false
+            },
 
-            ]
-        })
+        ],
+    })
 
     $('#filter').on('click', function(e) {
-        kecamatan.draw();
+        kabupaten.draw();
     });
 
     $(document).on('click', '#reset', function(e) {
         e.preventDefault();
+        $('#provinsi').val('').change();
+        $('#kabupaten').val('').change();
         $('#versi_opendk').val('0').change();
+        $('#akses_opendk').val('0').change();
 
-        kecamatan.ajax.reload();
+        kabupaten.ajax.reload();
     });
+
 </script>
 @endsection

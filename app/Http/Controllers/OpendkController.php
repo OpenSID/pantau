@@ -25,9 +25,7 @@ class OpendkController extends Controller
         $versiOpensid = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
 
         if ($versiOpensid !== false) {
-            $version = $versiOpensid->tag_name;
-            $version = preg_replace('/[^0-9]/', '', $version);
-            $version = substr($version, 0, 4);
+            $version = cleanVersi($versiOpensid->tag_name);
         }
 
         $totalKecamatan = $this->opendk->wilayahkhusus()->count();
@@ -38,13 +36,13 @@ class OpendkController extends Controller
         $totalVersiTerbaruKabupaten = $version ? $this->opendk->wilayahkhusus()->versiTerbaru($version)->distinct('kode_kabupaten')->count() : 0;
         $kecamatanWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kecamatan'), 'titleWidget' => 'Total Kecamatan', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKecamatan, 'iconWidget' => 'fa-shopping-cart'],
-            'aktif' => ['urlWidget' => url($this->baseRoute.'/kecamatan?status=1'), 'titleWidget' => 'Kecamatan pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKecamatan, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => url($this->baseRoute.'/kecamatan?akses_opendk=1'), 'titleWidget' => 'Kecamatan pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKecamatan, 'iconWidget' => 'fa-shopping-cart'],
+            'baru'  => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi_opendk='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
         ];
         $kabupatenWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kabupaten'), 'titleWidget' => 'Total Kabupaten', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKabupaten, 'iconWidget' => 'fa-shopping-cart'],
-            'aktif' => ['urlWidget' => url($this->baseRoute.'/kabupaten?status=1'), 'titleWidget' => 'Kabupaten pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKabupaten, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => url($this->baseRoute.'/kabupaten?akses_opendk=1'), 'titleWidget' => 'Kabupaten pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKabupaten, 'iconWidget' => 'fa-shopping-cart'],
+            'baru'  => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi_opendk='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
         ];
         return view($this->baseView.'.dashboard', [
             'baseRoute' => $this->baseRoute,
@@ -58,15 +56,16 @@ class OpendkController extends Controller
     public function versi(Request $request)
     {
         $fillters = [
-            'aktif' => $request->aktif,
+            'versi_opendk' => $request->versi_opendk,
         ];
+        $listVersi = $this->getListVersion();
         if ($request->ajax()) {
-            return DataTables::of(Opendk::versi()->get())
+            return DataTables::of(Opendk::wilayahkhusus()->versi($request)->get())
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view($this->baseView.'.versi', compact('fillters'));
+        return view($this->baseView.'.versi', compact('fillters', 'listVersi'));
     }
 
     public function kecamatan(Request $request)
@@ -75,22 +74,45 @@ class OpendkController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
-            'akses' => $request->akses,
+            'akses_opendk' => $request->akses_opendk,
+            'versi_opendk' => $request->versi_opendk,
         ];
-
+        $listVersi = $this->getListVersion();
         if ($request->ajax()) {
             return DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get())
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view($this->baseView.'.kecamatan', compact('fillters'));
+        return view($this->baseView.'.kecamatan', compact('fillters', 'listVersi'));
+    }
+
+    public function kabupaten(Request $request)
+    {
+
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'akses_opendk' => $request->akses_opendk,
+            'versi_opendk' => $request->versi_opendk,
+        ];
+        $listVersi = $this->getListVersion();
+        if ($request->ajax()) {
+            return DataTables::of(Opendk::wilayahkhusus()->with(['childKecamatan' => function ($r) { $r->select('kode_kabupaten', 'kode_kecamatan'); }])->kabupaten($request)->get())
+                ->addColumn('jumlah', function ($data) {
+                    \Log::error($data->toJson());
+                    return $data->childKecamatan->count();
+                })
+                ->make(true);
+        }
+
+        return view($this->baseView.'.kabupaten', compact('fillters', 'listVersi'));
     }
 
     public function peta(Request $request)
     {
         if ($request->ajax()) {
-            $geoJSONdata = Opendk::get()->map(function ($kec) {
+            $geoJSONdata = Opendk::wilayahkhusus()->get()->map(function ($kec) {
                 $kec->content = "
                     <h6 class='text-center'><b style='color:red'>{$kec->sebutan_wilayah} {$kec->nama_kecamatan}</b></h6>
                     <b><table width='100%'>
@@ -142,5 +164,11 @@ class OpendkController extends Controller
                     })
                 ->make(true);
         }
+    }
+
+    private function getListVersion(){
+        return Opendk::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi')->get()->sortByDesc('versi')->map(function($item){
+            return $item->versi;
+        })->values()->all();
     }
 }

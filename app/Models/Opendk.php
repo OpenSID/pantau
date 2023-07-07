@@ -40,7 +40,7 @@ class Opendk extends Model
      */
     public function scopeVersi($query, $fillters = [])
     {
-        return $query->selectRaw('versi, count(versi) as jumlah')->groupBy(['versi']);
+        return $query->filterDatatable($fillters)->selectRaw('versi, count(versi) as jumlah, right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi_clean')->groupBy(['versi']);
     }
 
     /**
@@ -51,9 +51,44 @@ class Opendk extends Model
      */
     public function scopeKecamatan($query, $fillters = [])
     {
-        return $query->select('*')
-        ->when($fillters['versi'] != null, function ($query) use ($fillters) {
-            $query->where('versi', 'like', "%{$fillters['versi']}%");
+        return $query->filterDatatable($fillters)->select('*');
+    }
+
+    public function scopeKabupaten($query, $fillters = [])
+    {
+        return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi']);
+    }
+
+    public function childKecamatan()
+    {
+        return $this->hasMany(Opendk::class, 'kode_kabupaten', 'kode_kabupaten');
+    }
+
+    protected function scopeFilterDatatable($query, $fillters){
+        return $query->when(! empty($fillters['versi_opendk']), function ($query) use ($fillters) {
+            return $query->whereRaw("right((LEFT(replace(versi, '.',''),5)),4) = '".$fillters['versi_opendk']."'");
+        })->when(! empty($fillters['akses_opendk']), function ($query) use ($fillters) {
+            $interval = 'interval '.self::ACTIVE_DAYS.' day';
+            $sign = '>=';
+            switch($fillters['akses_opendk']) {
+                case '1':
+                    $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                    break;
+                case '2':
+                    $interval = 'interval 2 month';
+                    break;
+                case '3':
+                    $interval = 'interval 2 month';
+                    $sign = '<=';
+                    break;
+            }
+            return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
+        })->when(!(empty($fillters['kode_provinsi'])), function ($query) use ($fillters) {
+            return $query->whereKodeProvinsi($fillters['kode_provinsi']);
+        })->when(!(empty($fillters['kode_kabupaten'])), function ($query) use ($fillters) {
+            return $query->whereKodeKabupaten($fillters['kode_kabupaten']);
+        })->when(!(empty($fillters['kode_kecamatan'])), function ($query) use ($fillters) {
+            return $query->whereKodeKecamatan($fillters['kode_kecamatan']);
         });
     }
 

@@ -54,6 +54,24 @@
 
 @section('js')
 <script>
+    const params = new URLSearchParams(window.location.search);
+    const listVersi = {!! json_encode($listVersi) !!}
+
+    for(var i in listVersi) {
+        $('#versi_opendk').append('<option>'+listVersi[i]+'</option>')
+    }
+
+    if (params.get('akses_opendk') || params.get('versi_opendk')) {
+        if (params.get('versi_opendk')) {
+            $('#versi_opendk').val(params.get('versi_opendk')).change();
+        }
+        if (params.get('akses_opendk')) {
+            $('#akses_opendk').val(params.get('akses_opendk')).change();
+        }
+
+        filter_open();
+    }
+
     var kecamatan = $('#table-versi').DataTable({
         processing: true,
         serverSide: true,
@@ -63,10 +81,11 @@
             url: `{{ url('opendk/kecamatan') }}`,
             method: 'get',
             data: function(data) {
-                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
-                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
                     data.kode_kecamatan = $('#kecamatan').val();
-                    data.akses = $('#akses').val();
+                    data.akses_opendk = $('#akses_opendk').val();
+                    data.versi_opendk = $('#versi_opendk').val();
                 }
         },
         columns: [
@@ -198,6 +217,17 @@
 
     $('#filter').on('click', function(e) {
         kecamatan.draw();
+    });
+
+    $(document).on('click', '#reset', function(e) {
+        e.preventDefault();
+        $('#provinsi').val('').change();
+        $('#kabupaten').val('').change();
+        $('#kecamatan').val('').change();
+        $('#versi_opendk').val('0').change();
+        $('#akses_opendk').val('0').change();
+
+        kecamatan.ajax.reload();
     });
 
 </script>
