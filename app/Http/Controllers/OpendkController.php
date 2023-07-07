@@ -104,7 +104,6 @@ class OpendkController extends Controller
                 $r->select('kode_kabupaten', 'kode_kecamatan');
             }])->kabupaten($request)->get())
                 ->addColumn('jumlah', function ($data) {
-
                     return $data->childKecamatan->count();
                 })
                 ->make(true);
