@@ -97,8 +97,10 @@
                 orderable: false
             },
             {
-                data: 'jumlah',
-                orderable: false
+                orderable: false,
+                data: function (data) {
+                        return `<a target="_blank" href="{{ url('opendk/kecamatan') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}">${data.jumlah}</a>`
+                    },
             },
 
         ],

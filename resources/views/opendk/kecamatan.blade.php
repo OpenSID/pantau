@@ -81,8 +81,8 @@
             url: `{{ url('opendk/kecamatan') }}`,
             method: 'get',
             data: function(data) {
-                    data.kode_provinsi = $('#provinsi').val();
-                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
+                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
                     data.kode_kecamatan = $('#kecamatan').val();
                     data.akses_opendk = $('#akses_opendk').val();
                     data.versi_opendk = $('#versi_opendk').val();

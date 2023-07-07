@@ -57,7 +57,7 @@ class Opendk extends Model
 
     public function scopeKabupaten($query, $fillters = [])
     {
-        return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi']);
+        return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi, kode_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi', 'kode_provinsi']);
     }
 
     public function childKecamatan()
