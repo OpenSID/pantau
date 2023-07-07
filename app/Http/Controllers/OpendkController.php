@@ -11,8 +11,11 @@ use Yajra\DataTables\Facades\DataTables;
 class OpendkController extends Controller
 {
     private $opendk;
+
     protected $baseRoute = 'opendk';
+
     protected $baseView = 'opendk';
+
     public function __construct()
     {
         $this->opendk = new Opendk();
@@ -21,7 +24,7 @@ class OpendkController extends Controller
 
     public function index()
     {
-        $version = NULL;
+        $version = null;
         $versiOpensid = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
 
         if ($versiOpensid !== false) {
@@ -39,13 +42,14 @@ class OpendkController extends Controller
         $kecamatanWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kecamatan'), 'titleWidget' => 'Total Kecamatan', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKecamatan, 'iconWidget' => 'fa-shopping-cart'],
             'aktif' => ['urlWidget' => url($this->baseRoute.'/kecamatan?status=1'), 'titleWidget' => 'Kecamatan pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKecamatan, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
+            'baru' => ['urlWidget' => url($this->baseRoute.'/kecamatan?versi='.$version), 'titleWidget' => 'Kecamatan Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKecamatan, 'iconWidget' => 'fa-user'],
         ];
         $kabupatenWidgets = [
             'semua' => ['urlWidget' => url($this->baseRoute.'/kabupaten'), 'titleWidget' => 'Total Kabupaten', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalKabupaten, 'iconWidget' => 'fa-shopping-cart'],
             'aktif' => ['urlWidget' => url($this->baseRoute.'/kabupaten?status=1'), 'titleWidget' => 'Kabupaten pengguna Aktif', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalAktifKabupaten, 'iconWidget' => 'fa-shopping-cart'],
-            'baru'  => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
+            'baru' => ['urlWidget' => url($this->baseRoute.'/kabupaten?versi='.$version), 'titleWidget' => 'Kabupaten Pengguna OpenDK Versi Terbaru ', 'classWidget' => 'col-lg-4', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalVersiTerbaruKabupaten, 'iconWidget' => 'fa-user'],
         ];
+
         return view($this->baseView.'.dashboard', [
             'baseRoute' => $this->baseRoute,
             'baseView' => $this->baseView,
@@ -71,7 +75,6 @@ class OpendkController extends Controller
 
     public function kecamatan(Request $request)
     {
-
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -134,12 +137,13 @@ class OpendkController extends Controller
     public function kabupatenKosong(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Region::doesntHave('opendk')->with(['child' => function ($r) { $r->select('id', 'parent_code'); }])->kabupaten()->selectRaw('tbl_regions.region_code as region_code')->get())
+            return DataTables::of(Region::doesntHave('opendk')->with(['child' => function ($r) {
+            $r->select('id', 'parent_code');
+            }])->kabupaten()->selectRaw('tbl_regions.region_code as region_code')->get())
                 ->addIndexColumn()
                 ->addColumn('jumlah', function ($data) {
-
-                        return $data->child->count();
-                    })
+                    return $data->child->count();
+                })
                 ->make(true);
         }
     }
