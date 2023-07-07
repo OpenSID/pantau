@@ -134,6 +134,7 @@ if (! function_exists('cleanVersi')) {
     function cleanVersi($version)
     {
         $version = preg_replace('/[^0-9]/', '', $version);
+
         return substr($version, 0, 4);
     }
 }

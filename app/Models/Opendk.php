@@ -65,7 +65,8 @@ class Opendk extends Model
         return $this->hasMany(Opendk::class, 'kode_kabupaten', 'kode_kabupaten');
     }
 
-    protected function scopeFilterDatatable($query, $fillters){
+    protected function scopeFilterDatatable($query, $fillters)
+    {
         return $query->when(! empty($fillters['versi_opendk']), function ($query) use ($fillters) {
             return $query->whereRaw("right((LEFT(replace(versi, '.',''),5)),4) = '".$fillters['versi_opendk']."'");
         })->when(! empty($fillters['akses_opendk']), function ($query) use ($fillters) {
@@ -83,12 +84,13 @@ class Opendk extends Model
                     $sign = '<=';
                     break;
             }
+
             return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
-        })->when(!(empty($fillters['kode_provinsi'])), function ($query) use ($fillters) {
+        })->when(! (empty($fillters['kode_provinsi'])), function ($query) use ($fillters) {
             return $query->whereKodeProvinsi($fillters['kode_provinsi']);
-        })->when(!(empty($fillters['kode_kabupaten'])), function ($query) use ($fillters) {
+        })->when(! (empty($fillters['kode_kabupaten'])), function ($query) use ($fillters) {
             return $query->whereKodeKabupaten($fillters['kode_kabupaten']);
-        })->when(!(empty($fillters['kode_kecamatan'])), function ($query) use ($fillters) {
+        })->when(! (empty($fillters['kode_kecamatan'])), function ($query) use ($fillters) {
             return $query->whereKodeKecamatan($fillters['kode_kecamatan']);
         });
     }
