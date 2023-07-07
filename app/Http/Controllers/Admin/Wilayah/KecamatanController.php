@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Wilayah;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegionRequest;
+use App\Http\Requests\RegionKecamatanRequest;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -30,6 +30,22 @@ class KecamatanController extends Controller
         return view('admin.wilayah.kecamatan.index');
     }
 
+    public function create()
+    {
+        return view('admin.wilayah.kecamatan.create');
+    }
+
+    public function store(RegionKecamatanRequest $request)
+    {
+        $input = $request->all();
+
+        if (Region::create($input)) {
+            return redirect('kecamatan')->with('success', 'Data berhasil disimpan');
+        }
+
+        return back()->with('error', 'Data gagal disimpan');
+    }
+
     public function edit($id)
     {
         return view('admin.wilayah.kecamatan.edit', [
@@ -37,7 +53,7 @@ class KecamatanController extends Controller
         ]);
     }
 
-    public function update(RegionRequest $request, $id)
+    public function update(RegionKecamatanRequest $request, $id)
     {
         $input = $request->all();
         $kecamatan = Region::kecamatan()->find($id);
