@@ -101,7 +101,7 @@ class OpendkController extends Controller
         $listVersi = $this->getListVersion();
         if ($request->ajax()) {
             return DataTables::of(Opendk::wilayahkhusus()->with(['childKecamatan' => function ($r) {
-            $r->select('kode_kabupaten', 'kode_kecamatan');
+                $r->select('kode_kabupaten', 'kode_kecamatan');
             }])->kabupaten($request)->get())
                 ->addColumn('jumlah', function ($data) {
 
