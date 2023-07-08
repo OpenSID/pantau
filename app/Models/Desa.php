@@ -63,7 +63,6 @@ class Desa extends Model
         if ($versi_opensid !== false) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
             Cache::forever('opensid_premium_version', $version);
-            \Log::error('$version update '.$version);
         }
 
         if ($provinsi = session('provinsi')) {
