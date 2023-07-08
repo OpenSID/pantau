@@ -100,7 +100,7 @@ class TrackOpendkRequest extends FormRequest
             'alamat',
             'jumlah_bantuan',
             'lat',
-            'lng'
+            'lng',
         ]);
     }
 
