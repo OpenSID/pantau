@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Desa extends Model
@@ -57,9 +58,12 @@ class Desa extends Model
     {
         $states = '';
         $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-
+        $version = Cache::get('opensid_premium_version', '2307.0.0');
+        \Log::error('$version '.$version);
         if ($versi_opensid !== false) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
+            Cache::forever('opensid_premium_version', $version);
+            \Log::error('$version update '.$version);
         }
 
         if ($provinsi = session('provinsi')) {
@@ -170,13 +174,13 @@ class Desa extends Model
                     })
                     ->when($fillters['status'] == 3, function ($query) {
                         $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-
+                        $version = Cache::get('opensid_premium_version', '2307.0.1');
                         if ($versi_opensid !== false) {
                             $version = str_replace('v', '', $versi_opensid->tag_name);
-
-                            $query->where('d.versi_hosting', 'like', "{$version}-premium%")
-                                ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
+                            Cache::forever('opensid_premium_version', $version);
                         }
+                        $query->where('d.versi_hosting', 'like', "{$version}-premium%")
+                                ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
                     });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {
@@ -317,9 +321,12 @@ class Desa extends Model
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
                     $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-                    $version = $versi_opensid->tag_name;
-                    $version = preg_replace('/[^0-9]/', '', $version);
-                    $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+                    $version = Cache::get('opensid_premium_version', '2307.0.1');
+                    if ($versi_opensid !== false) {
+                        $version = str_replace('v', '', $versi_opensid->tag_name);
+                        Cache::forever('opensid_premium_version', $version);
+                    }
+
                     $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
                     ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
                 });
