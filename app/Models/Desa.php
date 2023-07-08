@@ -58,7 +58,7 @@ class Desa extends Model
     {
         $states = '';
         $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-        $version = Cache::get('opensid_premium_version', '2307.0.0');
+        $version = Cache::get('opensid_premium_version', '2307.0.1');
 
         if ($versi_opensid !== false) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
