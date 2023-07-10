@@ -141,6 +141,7 @@ if (! function_exists('lastrelease_opensid')) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
             Cache::forever('opensid_premium_version', $version);
         }
+
         return $version;
     }
 }
