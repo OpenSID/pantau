@@ -57,13 +57,7 @@ class Desa extends Model
     public function scopeJumlahDesa($query)
     {
         $states = '';
-        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-        $version = Cache::get('opensid_premium_version', '2307.0.1');
-
-        if ($versi_opensid !== false) {
-            $version = str_replace('v', '', $versi_opensid->tag_name);
-            Cache::forever('opensid_premium_version', $version);
-        }
+        $version = lastrelease_opensid();
 
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
@@ -172,12 +166,7 @@ class Desa extends Model
                         $query->whereRaw('d.versi_lokal is not null');
                     })
                     ->when($fillters['status'] == 3, function ($query) {
-                        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-                        $version = Cache::get('opensid_premium_version', '2307.0.1');
-                        if ($versi_opensid !== false) {
-                            $version = str_replace('v', '', $versi_opensid->tag_name);
-                            Cache::forever('opensid_premium_version', $version);
-                        }
+                        $version = lastrelease_opensid();
                         $query->where('d.versi_hosting', 'like', "{$version}-premium%")
                                 ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
                     });
@@ -319,13 +308,7 @@ class Desa extends Model
             })
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
-                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-                    $version = Cache::get('opensid_premium_version', '2307.0.1');
-                    if ($versi_opensid !== false) {
-                        $version = str_replace('v', '', $versi_opensid->tag_name);
-                        Cache::forever('opensid_premium_version', $version);
-                    }
-
+                    $version = lastrelease_opensid();
                     $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
                     ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
                 });
