@@ -357,6 +357,12 @@ return [
         ],
         [
             'can'          => 'is-admin',
+            'text'         => 'aplikasi',
+            'url'          => 'pengaturan/aplikasi',
+            'icon'         => 'fas fa-fw fa-newspaper',
+        ],
+        [
+            'can'          => 'is-admin',
             'text'         => 'profile',
             'url'          => 'profile',
             'icon'         => 'fas fa-fw fa-user',

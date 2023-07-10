@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('kode_wilayah')) {
@@ -120,6 +121,25 @@ if (! function_exists('lastrelease')) {
             return json_decode($response->body());
         } catch (\Throwable $th) {
             return false;
+        }
+    }
+}
+
+if (! function_exists('abaikan_domain')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function abaikan_domain($aplikasi)
+    {
+        switch($aplikasi){
+            case 'opendk':
+                return Cache::get('abaikan_domain_opendk', '');
+                break;
+            default:
+                return Cache::get('abaikan_domain_opensid', '');
         }
     }
 }
