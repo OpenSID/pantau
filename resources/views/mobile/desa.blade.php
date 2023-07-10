@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Kabupaten OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">(Kabupaten yang memasang OpenDK ) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Desa Pengguna Aplikasi Mobile<small class="font-weight-light ml-1 text-md font-weight-bold"> @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -101,7 +101,7 @@
             {
                 orderable: false,
                 data: function (data) {
-                        return `<a target="_blank" href="{{ url('mobile/kecamatan') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}">${data.jumlah}</a>`
+                        return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.jumlah}</a>`
                     },
             },
 

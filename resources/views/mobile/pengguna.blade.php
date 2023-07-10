@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Kabupaten OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">(Kabupaten yang memasang OpenDK ) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Pengguna Aplikasi Mobile<small class="font-weight-light ml-1 text-md font-weight-bold">@if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -74,7 +74,8 @@
             data: function(data) {
                     data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
                     data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
-                    data.kode_kecamatan = $('#kecamatan').val();
+                    data.kode_kecamatan = $('#kecamatan').val()? $('#kecamatan').val() : params.get('kode_kecamatan');
+                    data.kode_desa = $('#desa').val()? $('#desa').val() : params.get('kode_desa');
                     data.akses_mobile = $('#akses_mobile').val();
                 }
         },
@@ -116,6 +117,7 @@
         $('#provinsi').val('').change();
         $('#kabupaten').val('').change();
         $('#kecamatan').val('').change();
+        $('#desa').val('').change();
         $('#akses_mobile').val('0').change();
 
         pengguna.ajax.reload();
