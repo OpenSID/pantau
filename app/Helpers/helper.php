@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('kode_wilayah')) {
@@ -121,5 +122,18 @@ if (! function_exists('lastrelease')) {
         } catch (\Throwable $th) {
             return false;
         }
+    }
+}
+
+if (! function_exists('pantau_wilayah_khusus')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function pantau_wilayah_khusus()
+    {
+        return Cache::get('pantau_wilayah_khusus', []);
     }
 }

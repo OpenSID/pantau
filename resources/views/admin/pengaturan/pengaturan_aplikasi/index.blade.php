@@ -33,7 +33,23 @@
                                     <label class="col-sm-12 col-md-6 col-lg-6">{{ $value->keterangan }}</label>
                                 </div>
                             @break
-
+                            @case('select-multiple')
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-3 col-lg-2" for="{{ $value->key }}">{{ $value->judul }}</label>
+                                    <div class="col-sm-12 col-md-3  col-lg-4">
+                                        <select class="form-control input-sm select2-multiple required"  multiple id="{{ $value->key }}"
+                                            @php
+                                                $selected = collect(json_decode($value->value))->pluck('key')->toArray();
+                                            @endphp
+                                            name="{{ $value->key }}[]">
+                                            @foreach (json_decode($value->option) as $objOption)
+                                                <option value="{{ json_encode($objOption) }}" {{ in_array($objOption->key, $selected) ? 'selected' : '' }} >{{ $objOption->value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-12 col-md-6 col-lg-6">{{ $value->keterangan }}</label>
+                                </div>
+                            @break
                             @default
                                 <div class="form-group row">
                                     <label class="col-sm-12 col-md-3 col-lg-2" for="{{ $value->key }}">{{ $value->judul }}</label>
@@ -64,5 +80,18 @@
     </div>
 @endsection
 @section('js')
-
+    <script type="text/javascript">
+        $(function(){
+            $('.select2-multiple').select2();
+        })
+    </script>
 @endsection
+@section('css')
+    <style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #3498db;
+    }
+    </style>
+@endsection
+
+
