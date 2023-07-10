@@ -358,4 +358,22 @@ class Desa extends Model
 
         return null;
     }
+
+    /**
+     * Get all of the mobile for the Desa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mobile()
+    {
+        return $this->hasMany(TrackMobile::class, 'kode_desa', 'kode_desa');
+    }
+
+    public function scopeWilayahKhusus($query)
+    {
+        $provinsi = session('provinsi');
+        $query->when($provinsi, function($r) use ($provinsi) {
+            $r->where('kode_provinsi', $provinsi);
+        });
+    }
 }

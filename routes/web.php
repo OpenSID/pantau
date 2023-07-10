@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\MobileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,13 @@ Route::prefix('laporan')
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
+    });
+
+Route::prefix('mobile')
+    ->group(function () {
+        Route::get('/', [MobileController::class, 'index']);
+        Route::get('pengguna', [MobileController::class, 'pengguna']);
+        Route::get('desa', [MobileController::class, 'desa']);
     });
 
 // Wilayah
