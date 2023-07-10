@@ -372,7 +372,7 @@ class Desa extends Model
     public function scopeWilayahKhusus($query)
     {
         $provinsi = session('provinsi');
-        $query->when($provinsi, function($r) use ($provinsi) {
+        $query->when($provinsi, function ($r) use ($provinsi) {
             $r->where('kode_provinsi', $provinsi);
         });
     }

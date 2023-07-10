@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
-use App\Models\Region;
 use App\Models\TrackMobile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -15,6 +14,7 @@ class MobileController extends Controller
     private $mobile;
 
     protected $baseRoute = 'mobile';
+
     protected $baseView = 'mobile';
 
     public function __construct()
@@ -25,7 +25,6 @@ class MobileController extends Controller
 
     public function index()
     {
-
         $totalPengguna = $this->mobile->wilayahKhusus()->count();
         $totalDesaPengguna = $this->mobile->wilayahKhusus()->desa()->count();
         $totalDesaPenggunaAktif = $this->mobile->wilayahKhusus()->desa()->active()->count();
@@ -71,18 +70,18 @@ class MobileController extends Controller
             'akses_mobile' => $request->akses_mobile,
         ];
         if ($request->ajax()) {
-            return DataTables::of(Desa::whereHas('mobile', function (Builder  $query) use($request){
-                $query->when($request['kode_provinsi'], function($q) use ($request){
+            return DataTables::of(Desa::whereHas('mobile', function (Builder $query) use ($request) {
+                $query->when($request['kode_provinsi'], function ($q) use ($request) {
                     $q->whereRaw('left(kode_desa, 2) = '.$request['kode_provinsi']);
                 });
-                $query->when($request['kode_kabupaten'], function($q) use ($request){
+                $query->when($request['kode_kabupaten'], function ($q) use ($request) {
                     $q->whereRaw('left(kode_desa, 5) = '.$request['kode_kabupaten']);
                 });
-                $query->when($request['kode_kecamatan'], function($q) use ($request){
+                $query->when($request['kode_kecamatan'], function ($q) use ($request) {
                     $q->whereRaw('left(kode_desa, 8) = '.$request['kode_kecamatan']);
                 });
                 $query->when(! empty($request['akses_mobile']), function ($query) use ($request) {
-                    $interval = 'interval '. TrackMobile::ACTIVE_DAYS.' day';
+                    $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
                     $sign = '>=';
                     switch($request['akses_mobile']) {
                         case '1':

@@ -10,6 +10,7 @@ class TrackMobile extends Model
     use HasFactory;
 
     const ACTIVE_DAYS = 7;
+
     /** {@inheritdoc} */
     protected $table = 'track_mobile';
 
@@ -28,8 +29,8 @@ class TrackMobile extends Model
     public function scopeWilayahKhusus($query)
     {
         $provinsi = session('provinsi');
-        $query->when($provinsi, function($r) use ($provinsi) {
-            $r->whereIn('kode_desa', function($s) use ($provinsi) {
+        $query->when($provinsi, function ($r) use ($provinsi) {
+            $r->whereIn('kode_desa', function ($s) use ($provinsi) {
                 $s->select('kode_desa')->from('kode_wilayah')->where('kode_prov', $provinsi->kode_prov);
             });
         });
@@ -47,32 +48,32 @@ class TrackMobile extends Model
 
     protected function scopeFilter($query, $request)
     {
-        if (isset($request['kode_provinsi']) ){
-            $query->when($request['kode_provinsi'], function($q) use ($request){
+        if (isset($request['kode_provinsi'])) {
+            $query->when($request['kode_provinsi'], function ($q) use ($request) {
                 $q->whereRaw('left(kode_desa, 2) = \''.$request['kode_provinsi'].'\'');
             });
         }
-        if (isset($request['kode_kabupaten']) ){
-            $query->when($request['kode_kabupaten'], function($q) use ($request){
+        if (isset($request['kode_kabupaten'])) {
+            $query->when($request['kode_kabupaten'], function ($q) use ($request) {
                 $q->whereRaw('left(kode_desa, 5) = \''.$request['kode_kabupaten'].'\'');
             });
         }
 
-        if (isset($request['kode_kecamatan']) ){
-            $query->when($request['kode_kecamatan'], function($q) use ($request){
+        if (isset($request['kode_kecamatan'])) {
+            $query->when($request['kode_kecamatan'], function ($q) use ($request) {
                 $q->whereRaw('left(kode_desa, 8) = \''.$request['kode_kecamatan'].'\'');
             });
         }
 
-        if (isset($request['kode_desa']) ){
-            $query->when($request['kode_desa'], function($q) use ($request){
-                $q->whereRaw('kode_desa = \''. $request['kode_desa'].'\'');
+        if (isset($request['kode_desa'])) {
+            $query->when($request['kode_desa'], function ($q) use ($request) {
+                $q->whereRaw('kode_desa = \''.$request['kode_desa'].'\'');
             });
         }
 
-        if (isset($request['kode_kecamatan']) ){
+        if (isset($request['kode_kecamatan'])) {
             $query->when(! empty($request['akses_mobile']), function ($query) use ($request) {
-                $interval = 'interval '. self::ACTIVE_DAYS.' day';
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';
                 switch($request['akses_mobile']) {
                     case '1':
