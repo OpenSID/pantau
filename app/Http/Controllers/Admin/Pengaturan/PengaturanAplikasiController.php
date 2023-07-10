@@ -25,8 +25,8 @@ class PengaturanAplikasiController extends Controller
                 $request->merge(['wilayah_khusus' => '[]']);
             }
             foreach ($request->all() as $key => $value) {
-                if ( is_array($value)) {
-                    $value = collect($value)->map(function($item){
+                if (is_array($value)) {
+                    $value = collect($value)->map(function ($item) {
                         return json_decode($item);
                     })->toJson();
                 }
@@ -34,8 +34,8 @@ class PengaturanAplikasiController extends Controller
             }
             $wilayahKhusus = [];
             $tmp = PengaturanAplikasi::where(['key' => 'wilayah_khusus', 'kategori' => 'setting'])->select(['value'])->first();
-            if (!empty ($tmp->value)){
-                foreach(json_decode($tmp->value) as $key => $val) {
+            if (! empty($tmp->value)) {
+                foreach (json_decode($tmp->value) as $key => $val) {
                     $wilayahKhusus[$val->key] = $val->value;
                 }
             }
