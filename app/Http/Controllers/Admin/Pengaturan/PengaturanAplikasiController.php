@@ -14,6 +14,7 @@ class PengaturanAplikasiController extends Controller
     {
         $pengaturan = PengaturanAplikasi::where(['kategori' => 'setting'])->get();
         $kategori = ['setting'];
+
         return view('admin.pengaturan.pengaturan_aplikasi.index', compact('pengaturan', 'kategori'));
     }
 
