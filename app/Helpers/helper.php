@@ -134,7 +134,7 @@ if (! function_exists('abaikan_domain')) {
      */
     function abaikan_domain($aplikasi)
     {
-        switch($aplikasi){
+        switch($aplikasi) {
             case 'opendk':
                 return Cache::get('abaikan_domain_opendk', '');
                 break;

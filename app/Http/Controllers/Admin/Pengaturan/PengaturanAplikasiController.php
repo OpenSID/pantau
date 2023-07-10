@@ -14,8 +14,9 @@ class PengaturanAplikasiController extends Controller
     {
         $pengaturan = PengaturanAplikasi::where(['kategori' => 'setting'])->get();
         $kategori = ['setting'];
-        \Log::error('opensid '. abaikan_domain('opensid'));
-        \Log::error('opendk '. abaikan_domain('opendk'));
+        \Log::error('opensid '.abaikan_domain('opensid'));
+        \Log::error('opendk '.abaikan_domain('opendk'));
+
         return view('admin.pengaturan.pengaturan_aplikasi.index', compact('pengaturan', 'kategori'));
     }
 
@@ -34,7 +35,6 @@ class PengaturanAplikasiController extends Controller
                         break;
                 }
             }
-
         } catch (\Throwable $th) {
             return back()->with('error', 'Data gagal diubah');
         }
