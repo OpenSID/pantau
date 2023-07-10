@@ -32,7 +32,6 @@ class PengaturanAplikasiController extends Controller
                         break;
                 }
             }
-
         } catch (\Throwable $th) {
             return back()->with('error', 'Data gagal diubah');
         }
