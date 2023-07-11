@@ -145,3 +145,16 @@ if (! function_exists('lastrelease_opensid')) {
         return $version;
     }
 }
+
+if (! function_exists('pantau_wilayah_khusus')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function pantau_wilayah_khusus()
+    {
+        return Cache::get('pantau_wilayah_khusus', []);
+    }
+}
