@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Region extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /** {@inheritdoc} */
     protected $table = 'tbl_regions';

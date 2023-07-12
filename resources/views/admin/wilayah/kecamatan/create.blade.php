@@ -76,21 +76,6 @@
                                 <input name="region_name" id="region_name" class="form-control" placeholder="Nama Kecamatan"
                                     maxlength="80" required disabled />
                             </div>
-                            <div class="col-12">
-                                <code><b>Catatan:</b>
-                                    <br>Kode kecamatan sementara bagi Kecamatan Persiapan diisi dengan kode provinsi, kode kabupaten
-                                    seperti halnya kode kecamatan biasa. Kemudian awali nomor urut kecamatan dengan dua
-                                    digit '99' (contoh: 62.01.99)
-                                </code>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="row kecamatan_persiapan" style="display: none">
-                            <label class="control-label col-sm-12">Kecamatan Persiapan <span class="required">*</span></label>
-                            <div class="col-12">
-                                <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" rows="5"></textarea>
-                            </div>
                         </div>
                     </div>
 
@@ -205,18 +190,6 @@
                     }
                 });
             }
-
-            $('#region_code').keyup(function(){
-                var akas = this.value.slice(7, 9);
-                if (akas == '99') {
-                    $('#keterangan').addClass('required');
-                    $('.kecamatan_persiapan').show();
-                } else {
-                    $('#keterangan').val('');
-                    $('#keterangan').removeClass('required');
-                    $('.kecamatan_persiapan').hide();
-                }
-            });
         })
     </script>
 @endpush

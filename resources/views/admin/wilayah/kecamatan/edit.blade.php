@@ -89,22 +89,6 @@
                                     <p><code>Permendagri No. 77 Tahun 2019 : {{ $kecamatan->nama_kecamatan }}</code></p>
                                 </div>
                             @endif
-
-                            <div class="col-12">
-                                <code><b>Catatan:</b>
-                                    <br>Kode Kecamatan sementara bagi Kecamatan Persiapan diisi dengan kode provinsi, kode kabupaten,
-                                    kode kecamatan seperti halnya kode Kecamatan biasa. Kemudian awali nomor urut Kecamatan dengan dua
-                                    digit '99' (contoh: 62.01.02.9901)
-                                </code>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="row kecamatan_persiapan" {!! substr($kecamatan->kode_kecamatan, -4, 2) == '99' ? '' : 'style="display: none"' !!}>
-                            <label class="control-label col-sm-12">Kecamatan Persiapan <span class="required">*</span></label>
-                            <div class="col-12">
-                                <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan" maxlength="250" rows="5">{{ $kecamatan->keterangan }}</textarea>
-                            </div>
                         </div>
                     </div>
 
@@ -134,18 +118,6 @@
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
             $('[data-mask]').inputmask();
-
-            $('#region_code').keyup(function(){
-                var akas = this.value.slice(9, 11);
-                if (akas == '99') {
-                    $('#keterangan').addClass('required');
-                    $('.Kecamatan_persiapan').show();
-                } else {
-                    $('#keterangan').val('');
-                    $('#keterangan').removeClass('required');
-                    $('.Kecamatan_persiapan').hide();
-                }
-            });
         })
     </script>
 @endpush
