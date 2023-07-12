@@ -14,6 +14,7 @@ class PengaturanAplikasiController extends Controller
     {
         $pengaturan = PengaturanAplikasi::where(['kategori' => 'setting'])->get();
         $kategori = ['setting', 'wilayah_khusus'];
+
         return view('admin.pengaturan.pengaturan_aplikasi.index', compact('pengaturan', 'kategori'));
     }
 
@@ -41,7 +42,6 @@ class PengaturanAplikasiController extends Controller
                                 return json_decode($item);
                             })->toJson();
                     }
-
                 }
                 PengaturanAplikasi::where(['key' => $key])->update(['value' => $value]);
 
