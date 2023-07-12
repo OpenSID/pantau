@@ -47,16 +47,18 @@
                                     <th>Versi Online</th>
                                     <th>Modul TTE</th>
                                     <th>Surat ter-TTE</th>
-                                    <th>Penduduk</th>
-                                    <th>Artikel</th>
-                                    <th>Surat Keluar</th>
-                                    <th>Peserta Bantuan</th>
-                                    <th>Pengguna Mandiri</th>
-                                    <th>Pengguna</th>
-                                    <th>Unsur Peta</th>
-                                    <th>Persil</th>
-                                    <th>Dokumen</th>
-                                    <th>Keluarga</th>
+                                    @auth
+                                        <th>Penduduk</th>
+                                        <th>Artikel</th>
+                                        <th>Surat Keluar</th>
+                                        <th>Peserta Bantuan</th>
+                                        <th>Pengguna Mandiri</th>
+                                        <th>Pengguna</th>
+                                        <th>Unsur Peta</th>
+                                        <th>Persil</th>
+                                        <th>Dokumen</th>
+                                        <th>Keluarga</th>
+                                    @endauth
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -189,6 +191,7 @@
                     data: 'jml_surat_tte',
                     searchable: false,
                 },
+                @auth
                 {
                     data: 'jml_penduduk',
                     searchable: false,
@@ -229,6 +232,7 @@
                     data: 'jml_keluarga',
                     searchable: false,
                 },
+                @endauth
                 {
                     data: 'tgl_akses',
                     searchable: false,
@@ -240,7 +244,7 @@
             ],
             @else
             order: [
-                [20, 'desc']
+                [10, 'desc']
             ],
             @endauth
         });
