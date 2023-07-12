@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('kode_wilayah')) {
@@ -120,6 +121,59 @@ if (! function_exists('lastrelease')) {
             return json_decode($response->body());
         } catch (\Throwable $th) {
             return false;
+        }
+    }
+}
+
+if (! function_exists('lastrelease_opensid')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_opensid()
+    {
+        $version = Cache::get('opensid_premium_version', '2307.0.1');
+        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
+
+        if ($versi_opensid !== false) {
+            $version = str_replace('v', '', $versi_opensid->tag_name);
+            Cache::forever('opensid_premium_version', $version);
+        }
+
+        return $version;
+    }
+}
+
+if (! function_exists('pantau_wilayah_khusus')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function pantau_wilayah_khusus()
+    {
+        return Cache::get('pantau_wilayah_khusus', []);
+    }
+}
+
+if (! function_exists('abaikan_domain')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function abaikan_domain($aplikasi)
+    {
+        switch($aplikasi) {
+            case 'opendk':
+                return Cache::get('abaikan_domain_opendk', '');
+                break;
+            default:
+                return Cache::get('abaikan_domain_opensid', '');
         }
     }
 }
