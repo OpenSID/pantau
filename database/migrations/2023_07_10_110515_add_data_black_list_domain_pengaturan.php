@@ -21,7 +21,7 @@ class AddDataBlackListDomainPengaturan extends Migration
             'key' => 'abaikan_domain_opensid',
             'value' => 'devpremium.opendesa.id|devumum.opendesa.id|dev.opendesa.id|demosid.opendesa.id|beta.opendesa.id|berputar.opendesa.id|demo.opensid.my.id|demo.opensid.or.id|opensid.id|beta.opensid.my.id|berputar.opensid.my.id|beta.opensid.or.id|berputar.opensid.or.id|opensid.my.id|sistemdesa.sunshinecommunity.id',
             'keterangan' => 'Daftar domain yang diabaikan',
-            'jenis' => 'input',
+            'jenis' => 'select-tag',
             'option' => '',
             'kategori' => 'setting'
         ]);
@@ -31,7 +31,7 @@ class AddDataBlackListDomainPengaturan extends Migration
             'key' => 'abaikan_domain_opendk',
             'value' => 'demodk.opendesa.id',
             'keterangan' => 'Daftar domain yang diabaikan',
-            'jenis' => 'input',
+            'jenis' => 'select-tag',
             'option' => '',
             'kategori' => 'setting'
         ]);
