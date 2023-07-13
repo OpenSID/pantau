@@ -24,13 +24,35 @@ class PengaturanAplikasiController extends Controller
             if (! $request->get('wilayah_khusus')) {
                 $request->merge(['wilayah_khusus' => '[]']);
             }
+            if (! $request->get('abaikan_domain_opendk')) {
+                $request->merge(['abaikan_domain_opendk' => null]);
+            }
+            if (! $request->get('abaikan_domain_opensid')) {
+                $request->merge(['abaikan_domain_opensid' => null]);
+            }
             foreach ($request->all() as $key => $value) {
                 if (is_array($value)) {
-                    $value = collect($value)->map(function ($item) {
-                        return json_decode($item);
-                    })->toJson();
+                    switch ($key) {
+                        case 'abaikan_domain_opendk':
+                        case 'abaikan_domain_opensid':
+                            $value = $value ? implode('|', $value) : null;
+                            break;
+                        default:
+                            $value = collect($value)->map(function ($item) {
+                                return json_decode($item);
+                            })->toJson();
+                    }
                 }
                 PengaturanAplikasi::where(['key' => $key])->update(['value' => $value]);
+
+                switch($key) {
+                    case 'abaikan_domain_opendk':
+                        Cache::forever('abaikan_domain_opendk', $value);
+                        break;
+                    case 'abaikan_domain_opensid':
+                        Cache::forever('abaikan_domain_opensid', $value);
+                        break;
+                }
             }
             $wilayahKhusus = [];
             $tmp = PengaturanAplikasi::where(['key' => 'wilayah_khusus', 'kategori' => 'setting'])->select(['value'])->first();
