@@ -31,10 +31,10 @@ class AlterViewKodeWilayah extends Migration
         d.region_name AS nama_desa,
         d.desa_id AS desa_id
     from
-        tracksid.tbl_regions d
-    left join tracksid.tbl_regions kec on d.parent_code = kec.region_code
-    left join tracksid.tbl_regions kab on kec.parent_code = kab.region_code
-    left join tracksid.tbl_regions p on kab.parent_code = p.region_code
+        tbl_regions d
+    left join tbl_regions kec on d.parent_code = kec.region_code
+    left join tbl_regions kab on kec.parent_code = kab.region_code
+    left join tbl_regions p on kab.parent_code = p.region_code
     where
         char_length(d.region_code) = 13
     union all
@@ -48,10 +48,10 @@ class AlterViewKodeWilayah extends Migration
         d.new_region_name AS nama_desa,
         d.desa_id AS desa_id
     from
-        tracksid.tbl_regions d
-    join tracksid.tbl_regions kec on d.parent_code = kec.region_code
-    join tracksid.tbl_regions kab on kec.parent_code = kab.region_code
-    join tracksid.tbl_regions p on kab.parent_code = p.region_code
+        tbl_regions d
+    join tbl_regions kec on d.parent_code = kec.region_code
+    join tbl_regions kab on kec.parent_code = kab.region_code
+    join tbl_regions p on kab.parent_code = p.region_code
     where char_length(d.region_code) = 13 and d.new_region_name is not null
 SQL;
 DB::statement($sql);
