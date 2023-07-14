@@ -20,62 +20,39 @@ class AlterViewKodeWilayah extends Migration
     public function up()
     {
         $sql = <<<SQL
-    CREATE OR REPLACE VIEW `kode_wilayah` AS
+    CREATE OR REPLACE VIEW kode_wilayah AS
     select
-        `d`.`id` AS `id`,
-        `p`.`region_code` AS `kode_prov`,
-        if(`p`.`new_region_name` is null,
-        `p`.`region_name`,
-        `p`.`new_region_name`) AS `nama_prov`,
-        `kab`.`region_code` AS `kode_kab`,
-        if(`kab`.`new_region_name` is null,
-        `kab`.`region_name`,
-        `kab`.`new_region_name`) AS `nama_kab`,
-        `kec`.`region_code` AS `kode_kec`,
-        if(`kec`.`new_region_name` is null,
-        `kec`.`region_name`,
-        `kec`.`new_region_name`) AS `nama_kec`,
-        `d`.`region_code` AS `kode_desa`,
-        `d`.`region_name` AS `nama_desa`,
-        `d`.`desa_id` AS `desa_id`
+        d.id AS id,
+        p.region_code AS kode_prov,
+        COALESCE(p.new_region_name, p.region_name) AS nama_prov,
+        COALESCE(kab.new_region_name, kab.region_name) AS nama_kab,
+        COALESCE(kec.new_region_name, kec.region_name) as nama_kec,
+        d.region_code AS kode_desa,
+        d.region_name AS nama_desa,
+        d.desa_id AS desa_id
     from
-        (((`tracksid`.`tbl_regions` `d`
-    left join `tracksid`.`tbl_regions` `kec` on
-        (`d`.`parent_code` = `kec`.`region_code`))
-    left join `tracksid`.`tbl_regions` `kab` on
-        (`kec`.`parent_code` = `kab`.`region_code`))
-    left join `tracksid`.`tbl_regions` `p` on
-        (`kab`.`parent_code` = `p`.`region_code`))
+        tracksid.tbl_regions d
+    left join tracksid.tbl_regions kec on d.parent_code = kec.region_code
+    left join tracksid.tbl_regions kab on kec.parent_code = kab.region_code
+    left join tracksid.tbl_regions p on kab.parent_code = p.region_code
     where
-        char_length(`d`.`region_code`) = 13
+        char_length(d.region_code) = 13
     union all
     select
-        `d`.`id` AS `id`,
-        `p`.`region_code` AS `kode_prov`,
-        if(`p`.`new_region_name` is null,
-        `p`.`region_name`,
-        `p`.`new_region_name`) AS `nama_prov`,
-        `kab`.`region_code` AS `kode_kab`,
-        if(`kab`.`new_region_name` is null,
-        `kab`.`region_name`,
-        `kab`.`new_region_name`) AS `nama_kab`,
-        `kec`.`region_code` AS `kode_kec`,
-        if(`kec`.`new_region_name` is null,
-        `kec`.`region_name`,
-        `kec`.`new_region_name`) AS `nama_kec`,
-        `d`.`region_code` AS `kode_desa`,
-        `d`.`new_region_name` AS `nama_desa`,
-        `d`.`desa_id` AS `desa_id`
+        d.id AS id,
+        p.region_code AS kode_prov,
+        COALESCE(p.new_region_name, p.region_name) AS nama_prov,
+        COALESCE(kab.new_region_name, kab.region_name) AS nama_kab,
+        COALESCE(kec.new_region_name, kec.region_name) as nama_kec,
+        d.region_code AS kode_desa,
+        d.new_region_name AS nama_desa,
+        d.desa_id AS desa_id
     from
-        (((`tracksid`.`tbl_regions` `d`
-    join `tracksid`.`tbl_regions` `kec` on
-        (`d`.`parent_code` = `kec`.`region_code`))
-    join `tracksid`.`tbl_regions` `kab` on
-        (`kec`.`parent_code` = `kab`.`region_code`))
-    join `tracksid`.`tbl_regions` `p` on
-        (`kab`.`parent_code` = `p`.`region_code`))
-    where
-        char_length(`d`.`region_code`) = 13 and d.new_region_name is not null
+        tracksid.tbl_regions d
+    join tracksid.tbl_regions kec on d.parent_code = kec.region_code
+    join tracksid.tbl_regions kab on kec.parent_code = kab.region_code
+    join tracksid.tbl_regions p on kab.parent_code = p.region_code
+    where char_length(d.region_code) = 13 and d.new_region_name is not null
 SQL;
 DB::statement($sql);
     }
