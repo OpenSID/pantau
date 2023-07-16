@@ -20,7 +20,6 @@ class AddUniqueConstraintKodedesa extends Migration
                 ->having(DB::raw('count(kode_desa)'), '>', 1)
                 ->pluck('kode_desa');
         if ($kembar) {
-            $awal = [];
             $hapus = Desa::select(['id', 'kode_desa', 'updated_at'])->whereIn('kode_desa', $kembar->toArray())->orderBy('updated_at', 'desc')->get()->groupBy('kode_desa')->map(function($item) {
                 $item->shift();
                 return $item->pluck('id');
@@ -40,8 +39,8 @@ class AddUniqueConstraintKodedesa extends Migration
      */
     public function down()
     {
-        // Schema::table('desa', function(Blueprint $table){
-        //     $table->dropUnique('uq_desa_kode_desa');
-        // });
+        Schema::table('desa', function(Blueprint $table){
+            $table->dropUnique('uq_desa_kode_desa');
+        });
     }
 }
