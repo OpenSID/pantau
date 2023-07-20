@@ -111,6 +111,6 @@ class TrackOpendkRequest extends FormRequest
      */
     protected function listAbaikanDomain()
     {
-        return config('tracksid.abaikan_opendk');
+        return abaikan_domain('opendk');
     }
 }
