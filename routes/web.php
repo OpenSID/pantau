@@ -107,10 +107,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Wilayah Kecamatan
-    Route::prefix('kecamatan')->group(function () {
-        Route::get('/', [KecamatanController::class, 'index']);
-        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
-    });
+    Route::resource('kecamatan', KecamatanController::class, ['except' => ['show']]);
+    // Route::prefix('kecamatan')->group(function () {
+
+    //     Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
+    // });
 
 
     // Wilayah Desa / Keluarahan
