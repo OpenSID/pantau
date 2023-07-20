@@ -40,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
                 ]);
             }
 
-            foreach (config('tracksid.pantau_provinsi') as $key => $val) {
+            foreach (pantau_wilayah_khusus() as $key => $val) {
                 $event->menu->addIn('khusus', [
                     'text' => $val,
                     'url' => "sesi/provinsi/{$key}",

@@ -24,12 +24,8 @@ class OpendkController extends Controller
 
     public function index()
     {
-        $version = null;
-        $versiOpensid = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
-
-        if ($versiOpensid !== false) {
-            $version = cleanVersi($versiOpensid->tag_name);
-        }
+        $versiOpensid = lastrelease_opendk();
+        $version = cleanVersi($versiOpensid);
 
         $totalKecamatan = $this->opendk->wilayahkhusus()->count();
         $totalAktifKecamatan = $this->opendk->wilayahkhusus()->active()->count();
