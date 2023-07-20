@@ -55,6 +55,24 @@
                                         <label class="col-sm-12 col-md-3 col-lg-3">{{ $value->keterangan }}</label>
                                     </div>
                                 @break
+                                @case('select-tag')
+                                    <div class="form-group row">
+                                        <label class="col-sm-12 col-md-3 col-lg-3"
+                                            for="{{ $value->key }}">{{ $value->judul }}</label>
+                                        <div class="col-sm-12 col-md-6  col-lg-6">
+                                            <select class="form-control input-sm select2-tag required" multiple
+                                                id="{{ $value->key }}"
+                                                name="{{ $value->key }}[]">
+                                                @if (! empty($value->value))
+                                                    @foreach (explode('|',$value->value) as $objOption)
+                                                        <option value="{{ $objOption }}" selected >{{ $objOption }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-12 col-md-3 col-lg-3">{{ $value->keterangan }}</label>
+                                    </div>
+                                @break
 
                                 @default
                                     <div class="form-group row">
@@ -85,6 +103,10 @@
     <script type="text/javascript">
         $(function() {
             $('.select2-multiple').select2();
+            $('.select2-tag').select2({
+                tags: true,
+                tokenSeparators: [',', '|', ' ']
+            });
         })
     </script>
 @endsection

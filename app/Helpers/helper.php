@@ -158,3 +158,22 @@ if (! function_exists('pantau_wilayah_khusus')) {
         return Cache::get('pantau_wilayah_khusus', []);
     }
 }
+
+if (! function_exists('abaikan_domain')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function abaikan_domain($aplikasi)
+    {
+        switch($aplikasi) {
+            case 'opendk':
+                return Cache::get('abaikan_domain_opendk', '');
+                break;
+            default:
+                return Cache::get('abaikan_domain_opensid', '');
+        }
+    }
+}

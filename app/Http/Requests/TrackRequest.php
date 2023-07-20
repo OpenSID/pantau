@@ -112,7 +112,7 @@ class TrackRequest extends FormRequest
      */
     protected function listAbaikanDomain()
     {
-        return config('tracksid.abaikan');
+        return abaikan_domain('opensid');
     }
 
     /**
