@@ -282,6 +282,7 @@ return [
                     'url'  => 'mobile/desa',
                 ],
                 [
+                    'can'  => 'is-admin',
                     'text' => 'Pengguna',
                     'url'  => 'mobile/pengguna',
                 ],

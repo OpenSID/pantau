@@ -6,6 +6,7 @@ use App\Models\Desa;
 use App\Models\TrackMobile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -31,17 +32,19 @@ class MobileController extends Controller
         $totalPenggunaAktif = $this->mobile->wilayahKhusus()->count();
 
         $desaWidgets = [
-            'semua' => ['urlWidget' => url($this->baseRoute.'/pengguna'), 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPengguna, 'iconWidget' => 'fa-user'],
-            'aktif' => ['urlWidget' => url($this->baseRoute.'/pengguna?akses_mobile=1'), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
+            'semua' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna') : '#') , 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPengguna, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna?akses_mobile=1') : '#'), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
             'desa' => ['urlWidget' => url($this->baseRoute.'/desa'), 'titleWidget' => 'Total Desa', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-primary', 'totalWidget' => $totalDesaPengguna, 'iconWidget' => 'fa-user'],
             'desa_aktif' => ['urlWidget' => url($this->baseRoute.'/desa?akses_mobile=1'), 'titleWidget' => 'Desa pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalDesaPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
         ];
-
+        $penggunaBaru = $this->mobile->wilayahKhusus()->selectRaw('kode_desa, count(kode_desa) as jumlah')->with(['desa'])
+                ->groupBy('kode_desa')
+                ->where('created_at', '>=', now()->subDay(7))->get();
         return view($this->baseView.'.dashboard', [
             'baseRoute' => $this->baseRoute,
             'baseView' => $this->baseView,
             'desaWidgets' => $desaWidgets,
-            'daftar_baru' => $this->mobile->wilayahKhusus()->with(['desa'])->where('created_at', '>=', now()->subDay(7))->get(),
+            'daftar_baru' => $penggunaBaru,
         ]);
     }
 

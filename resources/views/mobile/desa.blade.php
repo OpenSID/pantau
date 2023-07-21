@@ -101,7 +101,12 @@
             {
                 orderable: false,
                 data: function (data) {
-                        return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.jumlah}</a>`
+                        @auth
+                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.jumlah}</a>`
+                        @else
+                            return data.jumlah
+                        @endauth
+
                     },
             },
 

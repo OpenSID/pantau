@@ -28,24 +28,22 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Id</th>
-                                <th>Tgl Terpantau</th>
+                                <th>Kode Desa</th>
                                 <th>Desa</th>
                                 <th>Kecamatan</th>
                                 <th>Kabupaten</th>
-                                <th>Provinsi</th>
+                                <th>Jumlah Pengguna</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($daftar_baru as $key => $item)
                                 <tr>
-                                    <td>{{ $key +1 }}</td>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $item->kode_desa }}</td>
                                     <td>{{ $item->desa->nama_desa }}</td>
                                     <td>{{ $item->desa->nama_kecamatan }}</td>
                                     <td>{{ $item->desa->nama_kabupaten }}</td>
-                                    <td>{{ $item->desa->nama_provinsi }}</td>
+                                    <td>{{ $item->jumlah }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
