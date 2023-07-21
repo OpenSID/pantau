@@ -205,7 +205,7 @@
                     searchable: false,
                 },
                 {
-                    data: 'jml_peserta_bantuan',
+                    data: 'jml_bantuan',
                     searchable: false,
                 },
                 {

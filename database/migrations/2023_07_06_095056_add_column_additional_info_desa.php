@@ -17,7 +17,7 @@ class AddColumnAdditionalInfoDesa extends Migration
             $table->integer('jml_penduduk', false, true)->nullable()->default(0)->after('modul_tte');
             $table->integer('jml_artikel', false, true)->nullable()->default(0)->after('modul_tte');
             $table->integer('jml_surat_keluar', false, true)->nullable()->default(0)->after('modul_tte');
-            $table->integer('jml_peserta_bantuan', false, true)->nullable()->default(0)->after('modul_tte');
+            $table->integer('jml_bantuan', false, true)->nullable()->default(0)->after('modul_tte');
             $table->integer('jml_mandiri', false, true)->nullable()->default(0)->after('modul_tte');
             $table->integer('jml_pengguna', false, true)->nullable()->default(0)->after('modul_tte');
             $table->integer('jml_unsur_peta', false, true)->nullable()->default(0)->after('modul_tte');
@@ -38,7 +38,7 @@ class AddColumnAdditionalInfoDesa extends Migration
             $table->dropColumn('jml_penduduk');
             $table->dropColumn('jml_artikel');
             $table->dropColumn('jml_surat_keluar');
-            $table->dropColumn('jml_peserta_bantuan');
+            $table->dropColumn('jml_bantuan');
             $table->dropColumn('jml_mandiri');
             $table->dropColumn('jml_pengguna');
             $table->dropColumn('jml_unsur_peta');
