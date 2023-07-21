@@ -167,7 +167,7 @@ class TrackRequest extends FormRequest
             'jml_penduduk',
             'jml_artikel',
             'jml_surat_keluar',
-            'jml_peserta_bantuan',
+            'jml_bantuan',
             'jml_mandiri',
             'jml_pengguna',
             'jml_unsur_peta',
