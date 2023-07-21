@@ -56,11 +56,7 @@ class Desa extends Model
     public function scopeJumlahDesa($query)
     {
         $states = '';
-        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-
-        if ($versi_opensid !== false) {
-            $version = str_replace('v', '', $versi_opensid->tag_name);
-        }
+        $version = lastrelease_opensid();
 
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
@@ -169,14 +165,9 @@ class Desa extends Model
                         $query->whereRaw('d.versi_lokal is not null');
                     })
                     ->when($fillters['status'] == 3, function ($query) {
-                        $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-
-                        if ($versi_opensid !== false) {
-                            $version = str_replace('v', '', $versi_opensid->tag_name);
-
-                            $query->where('d.versi_hosting', 'like', "{$version}-premium%")
+                        $version = lastrelease_opensid();
+                        $query->where('d.versi_hosting', 'like', "{$version}-premium%")
                                 ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
-                        }
                     });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {
@@ -280,7 +271,7 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
             ->when(auth()->check() == true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
@@ -316,10 +307,7 @@ class Desa extends Model
             })
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
-                    $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/rilis-premium/releases/latest');
-                    $version = $versi_opensid->tag_name;
-                    $version = preg_replace('/[^0-9]/', '', $version);
-                    $version = substr($version, 0, 2).'.'.substr($version, 2, 2);
+                    $version = lastrelease_opensid();
                     $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
                     ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
                 });

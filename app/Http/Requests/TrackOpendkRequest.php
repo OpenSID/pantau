@@ -89,11 +89,18 @@ class TrackOpendkRequest extends FormRequest
             'nama_provinsi',
             'url',
             'versi',
+            'desa',
             'jml_desa',
             'jumlah_penduduk',
             'jumlah_keluarga',
             'peta_wilayah',
             'sebutan_wilayah',
+            'batas_wilayah',
+            'jumlahdesa_sinkronisasi',
+            'alamat',
+            'jumlah_bantuan',
+            'lat',
+            'lng',
         ]);
     }
 
@@ -104,6 +111,6 @@ class TrackOpendkRequest extends FormRequest
      */
     protected function listAbaikanDomain()
     {
-        return config('tracksid.abaikan_opendk');
+        return abaikan_domain('opendk');
     }
 }

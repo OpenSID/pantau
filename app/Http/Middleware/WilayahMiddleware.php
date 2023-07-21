@@ -19,7 +19,7 @@ class WilayahMiddleware
     {
         // abort jika provinsi tidak ada di list config.
         abort_unless(
-            array_key_exists($provinsi = $request->route('provinsi'), config('tracksid.pantau_provinsi')),
+            array_key_exists($provinsi = $request->route('provinsi'), pantau_wilayah_khusus()),
             404
         );
 

@@ -112,7 +112,7 @@ class TrackRequest extends FormRequest
      */
     protected function listAbaikanDomain()
     {
-        return config('tracksid.abaikan');
+        return abaikan_domain('opensid');
     }
 
     /**
@@ -164,6 +164,16 @@ class TrackRequest extends FormRequest
             'telepon',
             'jml_surat_tte',
             'modul_tte',
+            'jml_penduduk',
+            'jml_artikel',
+            'jml_surat_keluar',
+            'jml_bantuan',
+            'jml_mandiri',
+            'jml_pengguna',
+            'jml_unsur_peta',
+            'jml_persil',
+            'jml_dokumen',
+            'jml_keluarga',
         ]);
     }
 }
