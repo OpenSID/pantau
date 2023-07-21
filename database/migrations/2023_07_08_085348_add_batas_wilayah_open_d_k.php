@@ -20,6 +20,7 @@ class AddBatasWilayahOpenDK extends Migration
             $table->string('lng', 20)->nullable()->after('sebutan_wilayah');
             $table->smallInteger('jumlah_bantuan',false, true)->nullable()->default(0)->after('sebutan_wilayah');
             $table->smallInteger('jumlahdesa_sinkronisasi',false, true)->nullable()->default(0)->after('sebutan_wilayah');
+            $table->string('alamat', 255)->nullable()->after('sebutan_wilayah');
         });
     }
 
@@ -37,6 +38,7 @@ class AddBatasWilayahOpenDK extends Migration
             $table->dropColumn('lng');
             $table->dropColumn('jumlah_bantuan');
             $table->dropColumn('jumlahdesa_sinkronisasi');
+            $table->dropColumn('alamat');
         });
     }
 }
