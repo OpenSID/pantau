@@ -4,7 +4,11 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID) @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>
+        Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID) @if ($provinsi = session('provinsi'))
+                {{ "| {$provinsi->nama_prov}" }}
+            @endif
+        </small></h1>
 @stop
 
 @section('content')
@@ -47,6 +51,18 @@
                                     <th>Versi Online</th>
                                     <th>Modul TTE</th>
                                     <th>Surat ter-TTE</th>
+                                    @auth
+                                        <th>Penduduk</th>
+                                        <th>Artikel</th>
+                                        <th>Surat Keluar</th>
+                                        <th>Program Bantuan</th>
+                                        <th>Pengguna Mandiri</th>
+                                        <th>Pengguna</th>
+                                        <th>Unsur Peta</th>
+                                        <th>Persil</th>
+                                        <th>Dokumen</th>
+                                        <th>Keluarga</th>
+                                    @endauth
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -98,40 +114,40 @@
         }
 
         var desa = $('#table-desa').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: true,
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                ordering: true,
 
-            ajax: {
-                url: `{{ url('laporan/desa') }}`,
-                method: 'get',
-                data: function(data) {
-                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
-                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
-                    data.kode_kecamatan = $('#kecamatan').val();
-                    data.status = $('#status').val();
-                    data.akses = $('#akses').val();
-                    data.tte = $('#tte').val();
-                    data.versi_lokal = params.get('versi_lokal');
-                    data.versi_hosting = params.get('versi_hosting');
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    searchable: false,
-                    orderable: false
+                ajax: {
+                    url: `{{ url('laporan/desa') }}`,
+                    method: 'get',
+                    data: function(data) {
+                        data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get(
+                            'kode_provinsi');
+                        data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get(
+                            'kode_kabupaten');
+                        data.kode_kecamatan = $('#kecamatan').val();
+                        data.status = $('#status').val();
+                        data.akses = $('#akses').val();
+                        data.tte = $('#tte').val();
+                        data.versi_lokal = params.get('versi_lokal');
+                        data.versi_hosting = params.get('versi_hosting');
+                    }
                 },
-                @auth
-                {
-                    data: 'action',
-                    name: 'action',
-                    searchable: false,
-                    orderable: false
-                },
-                @endauth
-                {
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        searchable: false,
+                        orderable: false
+                    },
+                    @auth {
+                        data: 'action',
+                        name: 'action',
+                        searchable: false,
+                        orderable: false
+                    },
+                @endauth {
                     data: 'nama_desa'
                 },
                 {
@@ -144,7 +160,7 @@
                     data: 'nama_provinsi'
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         if (data.url_hosting) {
                             return `<a target="_blank" href="https://${data.url_hosting}">https://${data.url_hosting}</a>`
                         } else if (data.url_lokal) {
@@ -155,7 +171,7 @@
                     },
                     searchable: false,
                     orderable: false,
-                    visible : {{ auth()->check() == false ?'false' : 'true' }}
+                    visible: {{ auth()->check() == false ? 'false' : 'true' }}
                 },
                 {
                     data: 'versi_lokal'
@@ -165,10 +181,10 @@
                     data: 'versi_hosting'
                 },
                 {
-                    data: function (data) {
+                    data: function(data) {
                         if (data.modul_tte == 1) {
                             return `<span class="badge badge-pill badge-info">Aktif</span>`
-                        } else  {
+                        } else {
                             return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
                         }
                     },
@@ -179,20 +195,59 @@
                     data: 'jml_surat_tte',
                     searchable: false,
                 },
-                {
-                    data: 'tgl_akses',
+                @auth {
+                    data: 'jml_penduduk',
                     searchable: false,
                 },
-            ],
+                {
+                    data: 'jml_artikel',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_surat_keluar',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_bantuan',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_mandiri',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_pengguna',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_unsur_peta',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_persil',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_dokumen',
+                    searchable: false,
+                },
+                {
+                    data: 'jml_keluarga',
+                    searchable: false,
+                },
+            @endauth {
+                data: 'tgl_akses',
+                searchable: false,
+            }, ],
             @auth
-            order: [
-                [11, 'desc']
+        order: [
+                [21, 'desc']
             ],
-            @else
+        @else
             order: [
                 [10, 'desc']
             ],
-            @endauth
+        @endauth
         });
 
         $('#filter').on('click', function(e) {
