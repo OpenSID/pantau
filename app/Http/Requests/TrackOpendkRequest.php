@@ -106,11 +106,6 @@ class TrackOpendkRequest extends FormRequest
             'alamat',
             'jumlahdesa_sinkronisasi',
             'nama_camat',
-            'desa',
-            'batas_wilayah',
-            'alamat',
-            'jumlahdesa_sinkronisasi',
-            'nama_camat',
         ]);
     }
 
