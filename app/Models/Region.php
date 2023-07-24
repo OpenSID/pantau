@@ -125,6 +125,21 @@ class Region extends Model
         return $this->hasMany(Region::class, 'parent_code', 'region_code');
     }
 
+    public function scopeLevelKecamatan($query)
+    {
+        return $query->whereRaw('LENGTH(tbl_regions.parent_code) = 5');
+    }
+
+    /**
+     * Get all of the opendk for the Region
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function opendk()
+    {
+        return $this->hasMany(Opendk::class, 'kode_kecamatan', 'region_code')->whereRaw('LENGTH(tbl_regions.parent_code) = 5');
+    }
+
     public static function boot()
     {
         parent::boot();
