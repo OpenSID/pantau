@@ -177,3 +177,39 @@ if (! function_exists('abaikan_domain')) {
         }
     }
 }
+
+if (! function_exists('cleanVersi')) {
+    /**
+     * Convert versi agar sama
+     *  22.06 menjadi 2206, versi terbaru menggunakan YYmm bukan YY.mm
+     * @param  string $url
+     * @return object
+     */
+    function cleanVersi($version)
+    {
+        $version = preg_replace('/[^0-9]/', '', $version);
+
+        return substr($version, 0, 4);
+    }
+}
+
+if (! function_exists('lastrelease_opendk')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_opendk()
+    {
+        $version = Cache::get('opendk_version', '2307.0.0');
+        $versi_opendk = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
+
+        if ($versi_opendk !== false) {
+            $version = str_replace('v', '', $versi_opendk->tag_name);
+            Cache::forever('opendk_version', $version);
+        }
+
+        return $version;
+    }
+}

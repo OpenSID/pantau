@@ -214,7 +214,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Menu Items
+    | Menu Utama
     |--------------------------------------------------------------------------
     |
     | Here we can modify the sidebar/top navigation of the admin panel.
@@ -266,6 +266,32 @@ return [
                 [
                     'text' => 'Versi OpenSID',
                     'url'  => 'laporan/versi',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'OpenDK',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Dashboard',
+                    'url'  => 'opendk',
+                ],
+                // [
+                //     'text' => 'Peta',
+                //     'url'  => 'opendk/peta',
+                // ],
+                [
+                    'text' => 'Kecamatan',
+                    'url'  => 'opendk/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'opendk/kabupaten',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'opendk/versi',
                 ],
             ],
         ],

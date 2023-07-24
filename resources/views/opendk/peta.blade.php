@@ -13,7 +13,7 @@
 @section('title', 'Online Pengguna OpenSID')
 
 @section('content_header')
-    <h1>Online Pengguna OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">Pengguna aktif dalam 7 hari terakhir @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small>
+    <h1>Online Pengguna OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">Pengguna aktif dalam 7 hari terakhir @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small>
     </h1>
 @stop
 
@@ -187,7 +187,7 @@
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
-                    url: "{{ url('peta') }}",
+                    url: "{{ url('opendk/peta') }}",
                     contentType: "application/json; charset=utf-8",
                     cache: false,
                     dataType: "json",

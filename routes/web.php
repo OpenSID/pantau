@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
+use App\Http\Middleware\PantauMiddleware;
+use App\Http\Controllers\OpendkController;
+use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
@@ -59,6 +63,16 @@ Route::prefix('sesi')
 
             return redirect('/');
         });
+        Route::get('hapus-pantau', function () {
+            session()->remove('pantau');
+
+            return redirect('/');
+        });
+
+        Route::middleware(PantauMiddleware::class)->get('pantau/{pantau}', function (Request $request)
+        {
+            return redirect($request->pantau?? '/');
+        });
     });
 
 // Laporan
@@ -77,6 +91,15 @@ Route::prefix('mobile')
         Route::get('desa', [MobileController::class, 'desa']);
     });
 
+//opendk
+Route::prefix('opendk') ->group(function () {
+    Route::get('/', [OpendkController::class, 'index']);
+    Route::get('versi', [OpendkController::class, 'versi']);
+    Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
+    Route::get('peta', [OpendkController::class, 'peta']);
+    Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');;
+});
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 
