@@ -58,7 +58,7 @@ class MobileController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(TrackMobile::wilayahKhusus()->filter($request)->with(['desa'])->get())
+            return DataTables::of(TrackMobile::wilayahKhusus()->filter($request)->with(['desa']))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -104,7 +104,7 @@ class MobileController extends Controller
                 });
             })->wilayahKhusus()->with(['mobile' => function ($r) {
                 $r->select('kode_desa');
-            }])->get())
+            }]))
                 ->addColumn('jumlah', function ($data) {
                     return $data->mobile->count();
                 })
