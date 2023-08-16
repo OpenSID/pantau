@@ -47,7 +47,7 @@ class Wilayah extends Model
             ->when($request->filled('cari'), function ($query) use ($request) {
                 $query->where('nama_prov', 'like', "%{$request->cari}%");
             })
-            ->orderBy('kode_prov', 'asc');
+            ->orderBy('nama_prov', 'asc');
     }
 
     /**
