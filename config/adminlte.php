@@ -296,6 +296,25 @@ return [
             ],
         ],
         [
+            'text'         => 'Mobile',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Dashboard',
+                    'url'  => 'mobile',
+                ],
+                [
+                    'text' => 'Desa',
+                    'url'  => 'mobile/desa',
+                ],
+                [
+                    'can'  => 'is-admin',
+                    'text' => 'Pengguna',
+                    'url'  => 'mobile/pengguna',
+                ],
+            ],
+        ],
+        [
             'key'          => 'khusus',
             'text'         => 'Wilayah',
             'topnav_right' => true,

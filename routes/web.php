@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\MobileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,13 @@ Route::prefix('laporan')
         Route::get('versi', [LaporanController::class, 'versi']);
     });
 
+Route::prefix('mobile')
+    ->group(function () {
+        Route::get('/', [MobileController::class, 'index']);
+        Route::get('pengguna', [MobileController::class, 'pengguna']);
+        Route::get('desa', [MobileController::class, 'desa']);
+    });
+
 //opendk
 Route::prefix('opendk') ->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
@@ -91,7 +99,7 @@ Route::prefix('opendk') ->group(function () {
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
     Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');;
-    });
+});
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 

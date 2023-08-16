@@ -111,6 +111,22 @@
             </div>
         @endif
 
+        @if (array_key_exists('akses_mobile', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Akses Terakhir</label>
+                    <select class="select2 form-control-sm" id="akses_mobile" name="akses_mobile"
+                        data-placeholder="Semua Status" style="width: 100%;">
+                        <option selected value="0">Semua Status</option>
+                        <option value="1">Sejak tujuh hari yang lalu</option>
+                        <option value="2">Sejak dua bulan yang lalu</option>
+                        <option value="3">Sebelum dua bulan yang lalu</option>
+                        <option value="4">Sebelum empat bulan yang lalu</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
         @if (array_key_exists('akses_opendk', $fillters))
             <div class="col-sm">
                 <div class="form-group">
