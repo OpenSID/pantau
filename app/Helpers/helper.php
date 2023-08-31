@@ -3,6 +3,16 @@
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
+if (! function_exists('pantau_versi')) {
+    /**
+     * OpenKab database gabungan versi.
+     */
+    function pantau_versi()
+    {
+        return 'v2309.0.0';
+    }
+}
+
 if (! function_exists('kode_wilayah')) {
     /**
      * Kode wilayah dengan titik dari 5201142005 --> 52.01.14.2005
