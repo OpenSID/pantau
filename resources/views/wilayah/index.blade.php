@@ -58,7 +58,8 @@
                 },
                 {
                     data: 'bps_kemendagri_desa.kode_desa_bps',
-                    name: 'bpsKemendagriDesa.kode_desa_bps'
+                    name: 'bpsKemendagriDesa.kode_desa_bps',
+                    defaultContent: ''
                 },
                 {
                     data: 'nama_desa'

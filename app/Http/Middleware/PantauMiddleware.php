@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Wilayah;
 use Closure;
 use Illuminate\Http\Request;
 
-class WilayahMiddleware
+class PantauMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,19 +16,14 @@ class WilayahMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // abort jika provinsi tidak ada di list config.
+        // abort jika aplikasi pantau tidak ada di list.
         abort_unless(
-            array_key_exists($provinsi = $request->route('provinsi'), pantau_wilayah_khusus()),
+            in_array($request->route('pantau'), ['opensid', 'opendk']),
             404
         );
 
         // set session provinsi
-        session()->put(
-            'provinsi',
-            Wilayah::provinsi()
-                ->where('kode_prov', $provinsi)
-                ->first()
-        );
+        session()->put('pantau', $request->pantau);
 
         return $next($request);
     }

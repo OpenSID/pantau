@@ -40,11 +40,16 @@ class TrackOpendkRequest extends FormRequest
                 'required',
                 'exists:kode_wilayah,kode_prov',
             ],
-            'jml_desa' => 'sometimes',
+            'jumlah_desa' => 'sometimes',
             'jumlah_penduduk' => 'sometimes',
             'jumlah_keluarga' => 'sometimes',
             'peta_wilayah' => 'sometimes',
             'url' => ['required', 'url', "not_regex:/{$this->listAbaikanDomain()}/"],
+            'desa' => 'sometimes',
+            'batas_wilayah' => 'sometimes',
+            'alamat' => 'sometimes',
+            'jumlahdesa_sinkronisasi' => 'sometimes',
+            'nama_camat' => 'sometimes',
         ];
     }
 
@@ -56,6 +61,7 @@ class TrackOpendkRequest extends FormRequest
         // Merge request attribute.
         $this->merge([
             'url' => $this->url,
+            'tgl_rekam' => now(),
         ]);
     }
 
@@ -89,11 +95,17 @@ class TrackOpendkRequest extends FormRequest
             'nama_provinsi',
             'url',
             'versi',
-            'jml_desa',
+            'jumlah_desa',
             'jumlah_penduduk',
             'jumlah_keluarga',
             'peta_wilayah',
             'sebutan_wilayah',
+            'tgl_rekam',
+            'desa',
+            'batas_wilayah',
+            'alamat',
+            'jumlahdesa_sinkronisasi',
+            'nama_camat',
         ]);
     }
 
@@ -104,6 +116,6 @@ class TrackOpendkRequest extends FormRequest
      */
     protected function listAbaikanDomain()
     {
-        return config('tracksid.abaikan_opendk');
+        return abaikan_domain('opendk');
     }
 }

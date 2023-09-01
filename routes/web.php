@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
+use App\Http\Middleware\PantauMiddleware;
+use App\Http\Controllers\OpendkController;
+use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
@@ -16,6 +20,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\MobileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +63,16 @@ Route::prefix('sesi')
 
             return redirect('/');
         });
+        Route::get('hapus-pantau', function () {
+            session()->remove('pantau');
+
+            return redirect('/');
+        });
+
+        Route::middleware(PantauMiddleware::class)->get('pantau/{pantau}', function (Request $request)
+        {
+            return redirect($request->pantau?? '/');
+        });
     });
 
 // Laporan
@@ -69,6 +84,22 @@ Route::prefix('laporan')
         Route::get('versi', [LaporanController::class, 'versi']);
     });
 
+Route::prefix('mobile')
+    ->group(function () {
+        Route::get('/', [MobileController::class, 'index']);
+        Route::get('pengguna', [MobileController::class, 'pengguna']);
+        Route::get('desa', [MobileController::class, 'desa']);
+    });
+
+//opendk
+Route::prefix('opendk') ->group(function () {
+    Route::get('/', [OpendkController::class, 'index']);
+    Route::get('versi', [OpendkController::class, 'versi']);
+    Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
+    Route::get('peta', [OpendkController::class, 'peta']);
+    Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');;
+});
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 
@@ -99,10 +130,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Wilayah Kecamatan
-    Route::prefix('kecamatan')->group(function () {
-        Route::get('/', [KecamatanController::class, 'index']);
-        Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
-    });
+    Route::resource('kecamatan', KecamatanController::class, ['except' => ['show']]);
+    // Route::prefix('kecamatan')->group(function () {
+
+    //     Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
+    // });
 
 
     // Wilayah Desa / Keluarahan

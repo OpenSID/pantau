@@ -43,11 +43,11 @@
                         orderable: false
                     }, {
                         data: 'kode_provinsi',
-                        name: 'kode_provinsi'
+                        name: 'region_code'
                     },
                     {
                         data: 'nama_provinsi',
-                        name: 'nama_provinsi'
+                        name: 'region_name'
                     },
                 ],
                 order: [

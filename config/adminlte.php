@@ -214,7 +214,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Menu Items
+    | Menu Utama
     |--------------------------------------------------------------------------
     |
     | Here we can modify the sidebar/top navigation of the admin panel.
@@ -234,10 +234,10 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-        [
-            'type'         => 'sidebar-menu-search',
-            'text'         => 'search',
-        ],
+        // [
+        //     'type'         => 'sidebar-menu-search',
+        //     'text'         => 'search',
+        // ],
 
         // Menu
         ['header'          => 'MENU UTAMA'],
@@ -266,6 +266,51 @@ return [
                 [
                     'text' => 'Versi OpenSID',
                     'url'  => 'laporan/versi',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'OpenDK',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Dashboard',
+                    'url'  => 'opendk',
+                ],
+                // [
+                //     'text' => 'Peta',
+                //     'url'  => 'opendk/peta',
+                // ],
+                [
+                    'text' => 'Kecamatan',
+                    'url'  => 'opendk/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'opendk/kabupaten',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'opendk/versi',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'Mobile',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Dashboard',
+                    'url'  => 'mobile',
+                ],
+                [
+                    'text' => 'Desa',
+                    'url'  => 'mobile/desa',
+                ],
+                [
+                    'can'  => 'is-admin',
+                    'text' => 'Pengguna',
+                    'url'  => 'mobile/pengguna',
                 ],
             ],
         ],
@@ -354,6 +399,12 @@ return [
         [
             'header'       => 'pengaturan',
             'can'          => 'is-admin',
+        ],
+        [
+            'can'          => 'is-admin',
+            'text'         => 'aplikasi',
+            'url'          => 'pengaturan/aplikasi',
+            'icon'         => 'fas fa-fw fa-newspaper',
         ],
         [
             'can'          => 'is-admin',
