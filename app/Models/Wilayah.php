@@ -105,7 +105,7 @@ class Wilayah extends Model
                     ->orWhere('kode_prov', $provinsi);
             })
             ->when($request->filled('cari'), function ($query) use ($request) {
-                $query->where('nama_kec', 'like', "%{$request->cari}%");
+                $query->where('nama_kab', 'like', "%{$request->cari}%");
             })
             ->groupBy('kode_kab')
             ->orderBy('nama_kab', 'asc');
