@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
+use App\Models\Region;
 use App\Models\Wilayah;
 use Illuminate\Http\Request;
 
@@ -159,5 +160,12 @@ class WilayahController extends Controller
     public function kabupatenDesa(Request $request)
     {
         return response()->json($this->wilayah->kabupatenDesa($request)->get());
+    }
+
+    public function regionData(Request $request)
+    {
+        $last_sync = $request->input('last_sync');
+        $regions = Region::withTrashed()->where('updated_at', '>', $last_sync)->get();
+        return response()->json($regions);
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\TrackOpendkController;
 Route::prefix('wilayah')
     ->middleware('tracksid')
     ->group(function () {
+        Route::post('region', [WilayahController::class, 'regionData']);
         Route::get('desa', [WilayahController::class, 'desa']);
         Route::get('caridesa', [WilayahController::class, 'cariDesa']);
         Route::get('carikabupaten', [WilayahController::class, 'cariKabupaten']);
