@@ -171,7 +171,6 @@ class WilayahController extends Controller
             })
             ->get();
 
-
         return response()->json($regions);
     }
 }
