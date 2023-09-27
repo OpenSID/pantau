@@ -164,8 +164,13 @@ class WilayahController extends Controller
 
     public function regionData(Request $request)
     {
-        $last_sync = $request->input('last_sync');
-        $regions = Region::withTrashed()->where('updated_at', '>', $last_sync)->get();
+        $lastSync = $request->input('last_sync');
+        $regions = Region::withTrashed()
+            ->when($request->has('last_sync'), function ($query) use ($lastSync) {
+                return $query->where('updated_at', '>', $lastSync);
+            })
+            ->get();
+
 
         return response()->json($regions);
     }
