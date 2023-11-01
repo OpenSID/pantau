@@ -95,7 +95,7 @@ class TrackOpendkRequest extends FormRequest
             'nama_provinsi',
             'url',
             'versi',
-            'jml_desa',
+            'jumlah_desa',
             'jumlah_penduduk',
             'jumlah_keluarga',
             'peta_wilayah',
