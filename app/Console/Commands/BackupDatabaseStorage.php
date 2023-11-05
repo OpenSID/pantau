@@ -23,6 +23,7 @@ class BackupDatabaseStorage extends Command
     protected $description = 'Melakukan Backup Database dan folder storage (dapat dilakukan melaluo cronjob)';
 
     private $folder_database;
+
     private $database_name = 'db_pantau.sql';
 
     /**
@@ -55,20 +56,21 @@ class BackupDatabaseStorage extends Command
                 ->setUserName(env('DB_USERNAME'))
                 ->setPassword(env('DB_PASSWORD'));
 
-            $backup->dumpToFile($this->folder_database . '/' . $this->database_name);
+            $backup->dumpToFile($this->folder_database.'/'.$this->database_name);
         } catch (Exception $ex) {
-            var_dump("Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!");
-            return exec('rm ' . $this->folder_database . '/' . $this->database_name);
+            var_dump('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
+
+            return exec('rm '.$this->folder_database.'/'.$this->database_name);
         }
     }
 
     private function backupStorage()
     {
         $folderdesa_from = 'storage';
-        $folderdesa_to = folder_backup() . DIRECTORY_SEPARATOR . 'storage';
+        $folderdesa_to = folder_backup().DIRECTORY_SEPARATOR.'storage';
 
         if (file_exists($folderdesa_from)) {
-            exec('cp -R ' . $folderdesa_from . ' ' . $folderdesa_to);
+            exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
         }
     }
 }
