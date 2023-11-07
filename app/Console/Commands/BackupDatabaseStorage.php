@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\Helpers\CommandController;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\DbDumper\Databases\MySql;
@@ -22,6 +23,7 @@ class BackupDatabaseStorage extends Command
      */
     protected $description = 'Melakukan Backup Database dan folder storage (dapat dilakukan melaluo cronjob)';
 
+    private $command;
     private $folder_database;
 
     private $database_name = 'db_pantau.sql';
@@ -34,6 +36,7 @@ class BackupDatabaseStorage extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->command = new CommandController();
     }
 
     /**
@@ -58,7 +61,7 @@ class BackupDatabaseStorage extends Command
 
             $backup->dumpToFile($this->folder_database.'/'.$this->database_name);
         } catch (Exception $ex) {
-            var_dump('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
+            $this->command->notifMessage('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
 
             return exec('rm '.$this->folder_database.'/'.$this->database_name);
         }
