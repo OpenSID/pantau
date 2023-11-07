@@ -250,7 +250,7 @@ if (! function_exists('lastrelease_opendk')) {
     }
 
     /** aktifkan backup menggunakan rclone syncs to cloud storage */
-    if (!function_exists('rclone_syncs_storage')) {
+    if (! function_exists('rclone_syncs_storage')) {
         function rclone_syncs_storage()
         {
             return file_exists('/usr/bin/rclone') ? true : false;

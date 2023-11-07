@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 class RemoteController extends Controller
 {
     private $command;
+
     private $host;
 
     /**
@@ -21,22 +22,23 @@ class RemoteController extends Controller
     }
 
     /** proses remote rclone syncs to cloud storage */
-    public function backupToCloudStorage($storage_type, $remote_name, $root){
+    public function backupToCloudStorage($storage_type, $remote_name, $root)
+    {
         if (folder_backup() && rclone_syncs_storage() == true) {
             // nama app_url & tanggal backup
-            $directory_backup = $root . $this->host . '/' . date('Y-m-d');
+            $directory_backup = $root.$this->host.'/'.date('Y-m-d');
 
             // membuat folder di storage_type
-            exec('rclone mkdir ' . $remote_name . ':/' . $directory_backup);
+            exec('rclone mkdir '.$remote_name.':/'.$directory_backup);
 
             // proses backup ke storage_type
-            exec('rclone -v sync ' . folder_backup() . ' ' . $remote_name . ':' . $directory_backup);
+            exec('rclone -v sync '.folder_backup().' '.$remote_name.':'.$directory_backup);
 
             // notif berhasil
-            $this->command->notifMessage('Berhasil backup menggunakan tipe ' . $storage_type. ' tanggal '. date('Y-m-d'));
+            $this->command->notifMessage('Berhasil backup menggunakan tipe '.$storage_type.' tanggal '.date('Y-m-d'));
         } else {
             // notif gagal
-            $this->command->notifMessage('Gagal backup menggunakan tipe ' . $storage_type);
+            $this->command->notifMessage('Gagal backup menggunakan tipe '.$storage_type);
         }
     }
 }

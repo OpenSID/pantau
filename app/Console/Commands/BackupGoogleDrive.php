@@ -48,7 +48,7 @@ class BackupGoogleDrive extends Command
         // nama remote yang dibuat melalui rclone config
         $remote_name = 'backup-drive';
 
-        if(PengaturanAplikasi::get_pengaturan()['cloud_storage'] == $storage_type){
+        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == $storage_type) {
             // proses backup
             $this->remote->backupToCloudStorage($storage_type, $remote_name, null);
         }
