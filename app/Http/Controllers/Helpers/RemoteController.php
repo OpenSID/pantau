@@ -22,7 +22,8 @@ class RemoteController extends Controller
     }
 
     /** proses remote rclone syncs to cloud storage */
-    public function backupToCloudStorage($storage_type, $remote_name, $root){
+    public function backupToCloudStorage($storage_type, $remote_name, $root)
+    {
         if (file_exists(folder_backup()) && rclone_syncs_storage() == true) {
             // nama app_url & tanggal backup
             $directory_backup = $root.$this->host.'/'.date('Y-m-d');
