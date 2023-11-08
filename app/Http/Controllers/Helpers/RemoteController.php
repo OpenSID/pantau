@@ -41,4 +41,42 @@ class RemoteController extends Controller
             $this->command->notifMessage('Gagal backup menggunakan tipe '.$storage_type);
         }
     }
+
+    public function removeBackupCloudStorage($remote_name, $pelanggans, $root){
+        if($this->countDirectoryCloudStorage($remote_name, $root) == max_backup_dir()){
+            $this->removeBackup(max_backup_dir(), $remote_name, $pelanggans, $root);
+        }
+    }
+
+    public function countDirectoryCloudStorage($remote_name, $root){
+        $count_dir = exec('rclone lsd ' . $remote_name .':' . $root . $this->host . '/ | wc -l');
+        $this->command->notifMessage('Jumlah Folder ' . $count_dir);
+
+        return $count_dir;
+    }
+
+    public function removeBackup($directory, $remote_name, $pelanggans, $root){
+        // folder yang paling lama
+        $old_dir = exec("sudo rclone lsf " . $remote_name . ":" . $root . $this->host . "/ | sort -r | tail -n +" . $directory);
+        $old_dir = rtrim($old_dir , "/");
+
+        // nama app_url & tanggal backup
+        $directory_backup = $root . $this->host . '/' . $old_dir;
+
+        if (rclone_syncs_storage() == true && cek_tgl_akhir_backup($pelanggans) == 0) {
+            // hapus folder backup terlama
+            exec('sudo rclone purge ' . $remote_name . ':/' . $directory_backup);
+            /**
+             * rclone rmdir = hapus directory
+            * rclone rmdirs = hapus directory dengan beberapa directory di dalamnya
+            * rclone purge = hapus semua directory dan file yang ada di directory yang akan dihapus
+            * */
+
+            // notif berhasil
+            $this->command->notifMessage('Berhasil telah menghapus folder ' . $old_dir);
+        } else{
+            // notif gagal
+            $this->command->notifMessage('Gagal hapus folder ' . $old_dir . ' tidak ada.');
+        }
+    }
 }
