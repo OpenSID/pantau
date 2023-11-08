@@ -222,4 +222,30 @@ if (! function_exists('lastrelease_opendk')) {
 
         return $version;
     }
+
+    if (! function_exists('folder_backup')) {
+        function folder_backup()
+        {
+            $folder_backup = 'backup';
+
+            if (! file_exists($folder_backup)) {
+                exec('mkdir '.$folder_backup);
+            }
+
+            return $folder_backup;
+        }
+    }
+
+    if (! function_exists('folderBackupDatabase')) {
+        function folderBackupDatabase()
+        {
+            $folder_database = folder_backup().DIRECTORY_SEPARATOR.'database';
+
+            if (! file_exists($folder_database)) {
+                exec('mkdir '.$folder_database);
+            }
+
+            return $folder_database;
+        }
+    }
 }
