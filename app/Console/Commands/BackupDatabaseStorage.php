@@ -24,6 +24,7 @@ class BackupDatabaseStorage extends Command
     protected $description = 'Melakukan Backup Database dan folder storage (dapat dilakukan melaluo cronjob)';
 
     private $command;
+
     private $folder_database;
 
     private $database_name = 'db_pantau.sql';
