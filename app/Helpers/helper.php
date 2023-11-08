@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\PengaturanAplikasi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -254,6 +255,28 @@ if (! function_exists('lastrelease_opendk')) {
         function rclone_syncs_storage()
         {
             return file_exists('/usr/bin/rclone') ? true : false;
+        }
+    }
+
+    /** jumlah directory maksimal backup ke gdrive */
+    if (! function_exists('max_backup_dir')) {
+        function max_backup_dir()
+        {
+            return PengaturanAplikasi::get_pengaturan()['maksimal_backup'];
+        }
+    }
+
+    /** pengecekan tanggal akhir backup database dan folder desa */
+    if (! function_exists('cek_tgl_akhir_backup')) {
+        function cek_tgl_akhir_backup($pelanggans)
+        {
+            // if($pelanggans->first()){
+            //     $tglbackup = $pelanggans->where('status_langganan_opensid', 1)->first()->tgl_akhir_backup;
+            //     $hariini = date('Y-m-d');
+            //     $selisih = (strtotime($hariini) - strtotime($tglbackup)) / 60 / 60 / 24;
+
+            //     return $selisih;
+            // }
         }
     }
 }
