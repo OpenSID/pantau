@@ -48,15 +48,18 @@ class BackupGoogleDrive extends Command
         // nama remote yang dibuat melalui rclone config
         $remote_name = 'backup-drive';
 
-        // data pelanggan
-        $pelanggans = ''; //Pelanggan::get(); dicek kembali sesuai issue tanggal terakhir backup
+        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 1) {
+            // update tanggal terakhir backup
+            $this->remote->tanggalAkhirBackup();
 
-        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == $storage_type) {
+            // data pelanggan
+            $akhir_backup = PengaturanAplikasi::get_pengaturan()['akhir_backup'];
+
             // hapus data yang paling lama dengan batas maksimal yang ditentukan
-            $this->remote->removeBackupCloudStorage($remote_name, $pelanggans, null);
+            $this->remote->removeBackupCloudStorage($remote_name, $akhir_backup, null);
 
             // proses backup
-            $this->remote->backupToCloudStorage($storage_type, $remote_name, null);
+            $this->remote->backupToCloudStorage($storage_type, $remote_name, $akhir_backup, null);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Helpers;
 
 use App\Http\Controllers\Controller;
+use App\Models\PengaturanAplikasi;
 
 class RemoteController extends Controller
 {
@@ -22,9 +23,9 @@ class RemoteController extends Controller
     }
 
     /** proses remote rclone syncs to cloud storage */
-    public function backupToCloudStorage($storage_type, $remote_name, $root)
+    public function backupToCloudStorage($storage_type, $remote_name, $akhir_backup, $root)
     {
-        if (file_exists(folder_backup()) && rclone_syncs_storage() == true) {
+        if (file_exists(folder_backup()) && rclone_syncs_storage() == true && cek_tgl_akhir_backup($akhir_backup) == 0) {
             // nama app_url & tanggal backup
             $directory_backup = $root.$this->host.'/'.date('Y-m-d');
 
@@ -42,10 +43,10 @@ class RemoteController extends Controller
         }
     }
 
-    public function removeBackupCloudStorage($remote_name, $pelanggans, $root)
+    public function removeBackupCloudStorage($remote_name, $akhir_backup, $root)
     {
         if ($this->countDirectoryCloudStorage($remote_name, $root) == max_backup_dir()) {
-            $this->removeBackup(max_backup_dir(), $remote_name, $pelanggans, $root);
+            $this->removeBackup(max_backup_dir(), $remote_name, $akhir_backup, $root);
         }
     }
 
@@ -57,7 +58,7 @@ class RemoteController extends Controller
         return $count_dir;
     }
 
-    public function removeBackup($directory, $remote_name, $pelanggans, $root)
+    public function removeBackup($directory, $remote_name, $akhir_backup, $root)
     {
         // folder yang paling lama
         $old_dir = exec('sudo rclone lsf '.$remote_name.':'.$root.$this->host.'/ | sort -r | tail -n +'.$directory);
@@ -66,7 +67,7 @@ class RemoteController extends Controller
         // nama app_url & tanggal backup
         $directory_backup = $root.$this->host.'/'.$old_dir;
 
-        if (rclone_syncs_storage() == true && cek_tgl_akhir_backup($pelanggans) == 0) {
+        if (rclone_syncs_storage() == true && cek_tgl_akhir_backup($akhir_backup) == 0) {
             // hapus folder backup terlama
             exec('sudo rclone purge '.$remote_name.':/'.$directory_backup);
             /**
@@ -81,5 +82,11 @@ class RemoteController extends Controller
             // notif gagal
             $this->command->notifMessage('Gagal hapus folder '.$old_dir.' tidak ada.');
         }
+    }
+
+    public function tanggalAkhirBackup(){
+        $tanggal = PengaturanAplikasi::where('key', 'akhir_backup')->first();
+        $tanggal->value = date('Y-m-d');
+        $tanggal->save();
     }
 }

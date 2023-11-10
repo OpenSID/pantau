@@ -25,6 +25,7 @@ class PengaturanAplikasi extends Model
         $data['cloud_storage'] = $aplikasi->where('key', 'cloud_storage')->first()->value ?? '';
         $data['waktu_backup'] = $aplikasi->where('key', 'waktu_backup')->first()->value ?? '';
         $data['maksimal_backup'] = $aplikasi->where('key', 'maksimal_backup')->first()->value ?? '';
+        $data['akhir_backup'] = $aplikasi->where('key', 'akhir_backup')->first()->value ?? '';
 
         return $data;
     }
