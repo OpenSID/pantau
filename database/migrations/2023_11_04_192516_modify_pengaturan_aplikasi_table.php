@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\PengaturanAplikasi;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class ModifyPengaturanAplikasiTable extends Migration
@@ -14,12 +12,6 @@ class ModifyPengaturanAplikasiTable extends Migration
      */
     public function up()
     {
-        Schema::table('pengaturan_aplikasi', function (Blueprint $table) {
-            $table->after('id', function ($table) {
-                $table->foreignId('parent_id')->nullable();
-            });
-        });
-
         $pengaturan_aplikasi = array(
             [
                 'id' => 5,
@@ -65,8 +57,6 @@ class ModifyPengaturanAplikasiTable extends Migration
      */
     public function down()
     {
-        Schema::table('pengaturan_aplikasi', function (Blueprint $table) {
-            $table->dropColumn(['parent_id']);
-        });
+        //
     }
 }
