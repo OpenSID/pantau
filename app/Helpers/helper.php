@@ -270,7 +270,7 @@ if (! function_exists('lastrelease_opendk')) {
     if (! function_exists('cek_tgl_akhir_backup')) {
         function cek_tgl_akhir_backup($akhir_backup)
         {
-            if($akhir_backup){
+            if ($akhir_backup) {
                 $hariini = date('Y-m-d');
                 $selisih = (strtotime($hariini) - strtotime($akhir_backup)) / 60 / 60 / 24;
 
