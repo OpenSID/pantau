@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\Helpers\RemoteController;
-use App\Models\PengaturanAplikasi;
 use Illuminate\Console\Command;
 
 class BackupVps extends Command
@@ -51,18 +50,15 @@ class BackupVps extends Command
          // root untuk storage backup
          $root = env('ROOT_BACKUP') . 'storage' . DIRECTORY_SEPARATOR;
 
-         if(PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 2){
+         if(cloud_storage() == 2 && cek_tgl_akhir_backup(tanggal_backup()) >= waktu_backup() && rclone_syncs_storage() == true){
             // update tanggal terakhir backup
             $this->remote->tanggalAkhirBackup();
 
-            // data pelanggan
-            $akhir_backup = PengaturanAplikasi::get_pengaturan()['akhir_backup'];
-
             // hapus data yang paling lama dengan batas maksimal yang ditentukan
-            $this->remote->removeBackupCloudStorage($remote_name, $akhir_backup, $root);
+            $this->remote->removeBackupCloudStorage($remote_name, tanggal_backup(), $root);
 
             // proses backup
-            $this->remote->backupToCloudStorage($storage_type, $remote_name, $akhir_backup, $root);
+            $this->remote->backupToCloudStorage($storage_type, $remote_name, tanggal_backup(), $root);
         }
     }
 }
