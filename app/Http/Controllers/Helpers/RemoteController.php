@@ -84,7 +84,8 @@ class RemoteController extends Controller
         }
     }
 
-    public function tanggalAkhirBackup(){
+    public function tanggalAkhirBackup()
+    {
         $tanggal = PengaturanAplikasi::where('key', 'akhir_backup')->first();
         $tanggal->value = date('Y-m-d');
         $tanggal->save();
