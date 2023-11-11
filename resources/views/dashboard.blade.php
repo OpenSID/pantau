@@ -7,6 +7,13 @@
 @stop
 
 @section('content')
+    @if(Auth::user() && $info_backup['cloud_storage'] > 0 && cek_tgl_akhir_backup($info_backup['akhir_backup']) > $info_backup['waktu_backup'])
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> {{ $info_backup['info'] }}</h5>
+            {{ $info_backup['isi'] }}
+        </div>
+    @endif
     <div class="card card-outline card-info col-lg-12">
         <div class="card-header">
             <h3 class="card-title">Desa Pengguna</h3>
