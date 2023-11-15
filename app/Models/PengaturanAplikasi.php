@@ -17,4 +17,15 @@ class PengaturanAplikasi extends Model
 
     /** {@inheritdoc} */
     public $incrementing = true;
+
+    public static function get_pengaturan()
+    {
+        $aplikasi = self::get();
+
+        $data['cloud_storage'] = $aplikasi->where('key', 'cloud_storage')->first()->value ?? '';
+        $data['waktu_backup'] = $aplikasi->where('key', 'waktu_backup')->first()->value ?? '';
+        $data['maksimal_backup'] = $aplikasi->where('key', 'maksimal_backup')->first()->value ?? '';
+
+        return $data;
+    }
 }
