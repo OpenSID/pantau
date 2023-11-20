@@ -6,21 +6,21 @@ use App\Http\Controllers\Helpers\RemoteController;
 use App\Models\PengaturanAplikasi;
 use Illuminate\Console\Command;
 
-class BackupGoogleDrive extends Command
+class BackupVps extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tracksid:backup-google-drive';
+    protected $signature = 'tracksid:backup-vps-sftp';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Melakukan backup database dan folder storage ke google drive';
+    protected $description = 'Melakukan backup database dan folder storage ke VPS / SFTP';
 
     private $remote;
 
@@ -43,12 +43,15 @@ class BackupGoogleDrive extends Command
     public function handle()
     {
         // tipe pencadangan, misalkan: drive, sftp, dll
-        $storage_type = 'drive';
+        $storage_type = 'sftp';
 
         // nama remote yang dibuat melalui rclone config
-        $remote_name = 'backup-drive';
+        $remote_name = 'backup-sftp';
 
-        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 1) {
+        // root untuk storage backup
+        $root = env('ROOT_BACKUP').'storage'.DIRECTORY_SEPARATOR;
+
+        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 2) {
             // update tanggal terakhir backup
             $this->remote->tanggalAkhirBackup();
 
@@ -56,10 +59,10 @@ class BackupGoogleDrive extends Command
             $akhir_backup = PengaturanAplikasi::get_pengaturan()['akhir_backup'];
 
             // hapus data yang paling lama dengan batas maksimal yang ditentukan
-            $this->remote->removeBackupCloudStorage($remote_name, $akhir_backup, null);
+            $this->remote->removeBackupCloudStorage($remote_name, $akhir_backup, $root);
 
             // proses backup
-            $this->remote->backupToCloudStorage($storage_type, $remote_name, $akhir_backup, null);
+            $this->remote->backupToCloudStorage($storage_type, $remote_name, $akhir_backup, $root);
         }
     }
 }

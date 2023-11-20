@@ -118,13 +118,17 @@
             if (value == 0) {
                 $('#form_waktu_backup').hide();
                 $('#form_maksimal_backup').hide();
+                $('#form_akhir_backup').hide();
                 $('#waktu_backup').removeClass('required');
                 $('#maksimal_backup').removeClass('required');
+                $('#akhir_backup').removeClass('required');
             } else {
                 $('#form_waktu_backup').show();
                 $('#form_maksimal_backup').show();
+                $('#form_akhir_backup').show();
                 $('#waktu_backup').addClass('required');
                 $('#maksimal_backup').addClass('required');
+                $('#akhir_backup').addClass('required');
             }
         }
     </script>
