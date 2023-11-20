@@ -48,10 +48,10 @@ class BackupVps extends Command
         // nama remote yang dibuat melalui rclone config
         $remote_name = 'backup-sftp';
 
-         // root untuk storage backup
-         $root = env('ROOT_BACKUP') . 'storage' . DIRECTORY_SEPARATOR;
+        // root untuk storage backup
+        $root = env('ROOT_BACKUP').'storage'.DIRECTORY_SEPARATOR;
 
-         if(PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 2){
+        if (PengaturanAplikasi::get_pengaturan()['cloud_storage'] == 2) {
             // update tanggal terakhir backup
             $this->remote->tanggalAkhirBackup();
 
