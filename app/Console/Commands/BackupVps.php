@@ -50,7 +50,7 @@ class BackupVps extends Command
         // root untuk storage backup
         $root = env('ROOT_BACKUP').'storage'.DIRECTORY_SEPARATOR;
 
-         if(cloud_storage() == 2 && cek_tgl_akhir_backup(tanggal_backup()) >= waktu_backup() && rclone_syncs_storage() == true){
+        if (cloud_storage() == 2 && cek_tgl_akhir_backup(tanggal_backup()) >= waktu_backup() && rclone_syncs_storage() == true) {
             // update tanggal terakhir backup
             $this->remote->tanggalAkhirBackup();
 

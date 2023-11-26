@@ -47,7 +47,7 @@ class BackupDatabaseStorage extends Command
      */
     public function handle()
     {
-        if(cek_tgl_akhir_backup(tanggal_backup()) >= waktu_backup()){
+        if (cek_tgl_akhir_backup(tanggal_backup()) >= waktu_backup()) {
             $this->folder_database = folderBackupDatabase();
             $this->backupDatabase();
             $this->backupStorage();
