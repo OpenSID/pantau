@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
+use App\Models\PengaturanAplikasi;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -22,6 +23,13 @@ class DashboardController extends Controller
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
             'desaBaru' => $this->desa->desaBaru()->count(),
             'kabupatenKosong' => collect($this->desa->kabupatenKosong())->count(),
+            'info_backup' => [
+                'cloud_storage' => PengaturanAplikasi::get_pengaturan()['cloud_storage'],
+                'akhir_backup' => PengaturanAplikasi::get_pengaturan()['akhir_backup'],
+                'waktu_backup' => PengaturanAplikasi::get_pengaturan()['waktu_backup'],
+                'info' => 'Peringatan !!!',
+                'isi' => 'Gagal Backup Otomatis ke Cloud Storage.',
+            ],
         ]);
     }
 
