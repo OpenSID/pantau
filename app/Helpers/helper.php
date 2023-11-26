@@ -258,11 +258,35 @@ if (! function_exists('lastrelease_opendk')) {
         }
     }
 
-    /** jumlah directory maksimal backup ke gdrive */
+    /** cloud storage */
+    if (! function_exists('cloud_storage')) {
+        function cloud_storage()
+        {
+            return PengaturanAplikasi::get_pengaturan()['cloud_storage'];
+        }
+    }
+
+    /** waktu backup */
+    if (! function_exists('waktu_backup')) {
+        function waktu_backup()
+        {
+            return PengaturanAplikasi::get_pengaturan()['waktu_backup'];
+        }
+    }
+
+    /** jumlah directory maksimal backup ke storage */
     if (! function_exists('max_backup_dir')) {
         function max_backup_dir()
         {
             return PengaturanAplikasi::get_pengaturan()['maksimal_backup'];
+        }
+    }
+
+    /** tanggal backup */
+    if (! function_exists('tanggal_backup')) {
+        function tanggal_backup()
+        {
+            return PengaturanAplikasi::get_pengaturan()['akhir_backup'];
         }
     }
 

@@ -16,9 +16,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tracksid:optimasi-desa')->weekly(); // setiap minggu at 00:00
-        $schedule->command('tracksid:backup-database-storage')->weekly()->sundays()->timezone('Asia/Jakarta')->at('01:00'); // setiap minggu at 01:00
-        $schedule->command('tracksid:backup-google-drive')->weekly()->sundays()->timezone('Asia/Jakarta')->at('03:00'); // setiap minggu at 03:00
-        $schedule->command('tracksid:backup-vps-sftp')->weekly()->sundays()->timezone('Asia/Jakarta')->at('03:30'); // setiap minggu at 03:00
+        $schedule->command('tracksid:backup-database-storage')->timezone('Asia/Jakarta')->at('01:00'); // setiap hari at 01:00
+        $schedule->command('tracksid:backup-google-drive')->timezone('Asia/Jakarta')->at('03:00'); // setiap hari at 03:00
+        $schedule->command('tracksid:backup-vps-sftp')->timezone('Asia/Jakarta')->at('03:30'); // setiap hari at 03:00
     }
 
     /**
