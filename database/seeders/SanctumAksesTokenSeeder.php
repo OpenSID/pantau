@@ -27,7 +27,14 @@ class SanctumAksesTokenSeeder extends Seeder
                 "updated_at" => "2021-12-24 03:20:06",
             ),
         );
+        foreach ($personal_access_tokens as $token) {
+            // Check if a token with the same ID already exists
+            $existingToken = DB::table('personal_access_tokens')->find($token['id']);
 
-        DB::table('personal_access_tokens')->insert($personal_access_tokens);
+            // If the token doesn't exist, insert it
+            if (!$existingToken) {
+                DB::table('personal_access_tokens')->insert($personal_access_tokens);
+            }
+        }
     }
 }
