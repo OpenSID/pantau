@@ -20,7 +20,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('tracksid:backup-database-storage')->timezone('Asia/Jakarta')->at('01:00'); // setiap hari at 01:00
         $schedule->command('tracksid:backup-google-drive')->timezone('Asia/Jakarta')->at('03:00'); // setiap hari at 03:00
         $schedule->command('tracksid:backup-vps-sftp')->timezone('Asia/Jakarta')->at('03:30'); // setiap hari at 03:00
-
     }
 
     /**
