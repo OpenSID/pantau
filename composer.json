@@ -18,7 +18,8 @@
         "maatwebsite/excel": "^3.1",
         "spatie/db-dumper": "^2.21",
         "spatie/laravel-backup": "^6.16",
-        "yajra/laravel-datatables-oracle": "^9.18"
+        "yajra/laravel-datatables-oracle": "^9.18",
+        "laravel/helpers": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -36,7 +37,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/helper.php"
+            "app/Helpers/helper.php",
+            "helpers/general_helper.php"
         ]
     },
     "autoload-dev": {
