@@ -23,17 +23,14 @@ class GrupSeeder extends Seeder
         ];
 
         foreach ($userGrups as $userGrup) {
-            // Check if a record with the same ID exists
-            $existingRecord = UserGrup::find($userGrup['id']);
-
-            // If the record doesn't exist, insert it
-            if (!$existingRecord) {
-                UserGrup::create([
-                    'id' => $userGrup['id'],
+            // Use updateOrCreate to insert or update the record
+            UserGrup::updateOrCreate(
+                ['id' => $userGrup['id']], // Search condition
+                [
                     'nama' => $userGrup['nama'],
                     'created_at' => now(),
-                ]);
-            }
+                ]
+            );
         }
     }
 }
