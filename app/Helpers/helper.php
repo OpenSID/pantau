@@ -1,15 +1,16 @@
 <?php
 
+use App\Models\PengaturanAplikasi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('pantau_versi')) {
-    /**
+    /**c:\xampp\htdocs\OpenDesa\dashboard-saas\catatan_rilis.md
      * OpenKab database gabungan versi.
      */
     function pantau_versi()
     {
-        return 'v2311.0.0';
+        return 'v2312.0.0';
     }
 }
 
@@ -221,5 +222,84 @@ if (! function_exists('lastrelease_opendk')) {
         }
 
         return $version;
+    }
+
+    if (! function_exists('folder_backup')) {
+        function folder_backup()
+        {
+            $folder_backup = 'backup';
+
+            if (! file_exists($folder_backup)) {
+                exec('mkdir '.$folder_backup);
+            }
+
+            return $folder_backup;
+        }
+    }
+
+    if (! function_exists('folderBackupDatabase')) {
+        function folderBackupDatabase()
+        {
+            $folder_database = folder_backup().DIRECTORY_SEPARATOR.'database';
+
+            if (! file_exists($folder_database)) {
+                exec('mkdir '.$folder_database);
+            }
+
+            return $folder_database;
+        }
+    }
+
+    /** aktifkan backup menggunakan rclone syncs to cloud storage */
+    if (! function_exists('rclone_syncs_storage')) {
+        function rclone_syncs_storage()
+        {
+            return file_exists('/usr/bin/rclone') ? true : false;
+        }
+    }
+
+    /** cloud storage */
+    if (! function_exists('cloud_storage')) {
+        function cloud_storage()
+        {
+            return PengaturanAplikasi::get_pengaturan()['cloud_storage'];
+        }
+    }
+
+    /** waktu backup */
+    if (! function_exists('waktu_backup')) {
+        function waktu_backup()
+        {
+            return PengaturanAplikasi::get_pengaturan()['waktu_backup'];
+        }
+    }
+
+    /** jumlah directory maksimal backup ke storage */
+    if (! function_exists('max_backup_dir')) {
+        function max_backup_dir()
+        {
+            return PengaturanAplikasi::get_pengaturan()['maksimal_backup'];
+        }
+    }
+
+    /** tanggal backup */
+    if (! function_exists('tanggal_backup')) {
+        function tanggal_backup()
+        {
+            return PengaturanAplikasi::get_pengaturan()['akhir_backup'];
+        }
+    }
+
+    /** pengecekan tanggal akhir backup database dan folder desa */
+    if (! function_exists('cek_tgl_akhir_backup')) {
+        function cek_tgl_akhir_backup($akhir_backup)
+        {
+            if ($akhir_backup) {
+                $hariini = date('Y-m-d');
+                $selisih = (strtotime($hariini) - strtotime($akhir_backup)) / 60 / 60 / 24;
+
+                return $selisih;
+            }
+        }
     }
 }

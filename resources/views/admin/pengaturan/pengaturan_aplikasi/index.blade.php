@@ -73,14 +73,13 @@
                                         <label class="col-sm-12 col-md-3 col-lg-3">{{ $value->keterangan }}</label>
                                     </div>
                                 @break
-
                                 @default
-                                    <div class="form-group row">
+                                    <div class="form-group row" id="form_{{ $value->key }}">
                                         <label class="col-sm-12 col-md-3 col-lg-3"
                                             for="{{ $value->key }}">{{ $value->judul }}</label>
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <input class="form-control input-sm" id="{{ $value->key }}"
-                                                name="{{ $value->key }}" type="text" value="{{ $value->value }}">
+                                                name="{{ $value->key }}" type="{{ $value->jenis }}" value="{{ $value->value }}">
                                         </div>
                                         <label class="col-sm-12 col-md-3 col-lg-3" for="nama">{{ $value->keterangan }}
                                         </label>
@@ -108,6 +107,30 @@
                 tokenSeparators: [',', '|', ' ']
             });
         })
+
+        showStorage($('#cloud_storage').val());
+
+        $('#cloud_storage').on('change', function (e) {
+            showStorage($('#cloud_storage').val());
+        });
+
+        function showStorage(value) {
+            if (value == 0) {
+                $('#form_waktu_backup').hide();
+                $('#form_maksimal_backup').hide();
+                $('#form_akhir_backup').hide();
+                $('#waktu_backup').removeClass('required');
+                $('#maksimal_backup').removeClass('required');
+                $('#akhir_backup').removeClass('required');
+            } else {
+                $('#form_waktu_backup').show();
+                $('#form_maksimal_backup').show();
+                $('#form_akhir_backup').show();
+                $('#waktu_backup').addClass('required');
+                $('#maksimal_backup').addClass('required');
+                $('#akhir_backup').addClass('required');
+            }
+        }
     </script>
 @endsection
 @section('css')
