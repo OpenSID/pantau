@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\UserGrup;
 
 class GrupSeeder extends Seeder
 {
@@ -14,34 +14,23 @@ class GrupSeeder extends Seeder
      */
     public function run()
     {
-        $user_grup = array(
-            array(
-                "id" => 1,
-                "nama" => "Administrator",
-                "created_at" => now(),
-            ),
-            array(
-                "id" => 2,
-                "nama" => "Operator",
-                "created_at" => now(),
-            ),
-            array(
-                "id" => 3,
-                "nama" => "Redaksi",
-                "created_at" => now(),
-            ),
-            array(
-                "id" => 4,
-                "nama" => "Kontributor",
-                "created_at" => now(),
-            ),
-            array(
-                "id" => 5,
-                "nama" => "Satgas Covid-19",
-                "created_at" => now(),
-            ),
-        );
+        $userGrups = [
+            ['id' => 1, 'nama' => 'Administrator'],
+            ['id' => 2, 'nama' => 'Operator'],
+            ['id' => 3, 'nama' => 'Redaksi'],
+            ['id' => 4, 'nama' => 'Kontributor'],
+            ['id' => 5, 'nama' => 'Satgas Covid-19'],
+        ];
 
-        DB::table('user_grup')->insert($user_grup);
+        foreach ($userGrups as $userGrup) {
+            // Use updateOrCreate to insert or update the record
+            UserGrup::updateOrCreate(
+                ['id' => $userGrup['id']], // Search condition
+                [
+                    'nama' => $userGrup['nama'],
+                    'created_at' => now(),
+                ]
+            );
+        }
     }
 }
