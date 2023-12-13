@@ -14,6 +14,13 @@ class RegionSeeder extends Seeder
      */
     public function run()
     {
-        DB::unprepared(file_get_contents(base_path('database/factories/region.sql')));
+        $sql = file_get_contents(base_path('database/factories/region.sql'));
+        $queries = explode(';', $sql);
+
+        foreach ($queries as $query) {
+            if (!empty(trim($query))) {
+                DB::unprepared($query);
+            }
+        }
     }
 }
