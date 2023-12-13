@@ -4,7 +4,7 @@
     }
 </style>
 <!-- Add this modal to your HTML -->
-<div class="modal fade" id="catatanrilisModal" tabindex="-1" role="dialog" aria-labelledby="catatanrilisModalLabel" aria-hidden="true" style="margin-top:3%">
+<div class="modal fade" id="catatanrilisModal" tabindex="-1" role="dialog" aria-labelledby="catatanrilisModalLabel" aria-hidden="true" style="margin-top:3%;display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">

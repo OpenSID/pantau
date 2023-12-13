@@ -326,7 +326,7 @@ return [
             ],
         ],
         [
-            'text'         => 'Catatan Rilis',
+            'text'         => '',
             'url'          => '#',
             'icon'         => 'fas fa-info-circle',
             'topnav_right' => true,
