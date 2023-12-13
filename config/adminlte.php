@@ -326,6 +326,13 @@ return [
             ],
         ],
         [
+            'text'         => '',
+            'url'          => '#',
+            'icon'         => 'fas fa-info-circle',
+            'topnav_right' => true,
+            'id'           => 'releaseNotesButton',
+        ],
+        [
             'text'         => 'Wilayah Administratif',
             'url'          => 'wilayah',
             'icon'         => 'fas fa-map',
