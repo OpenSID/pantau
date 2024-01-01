@@ -8,6 +8,8 @@
     </div>
 @endsection
 
+@include('layouts.components.catatan_rilis')
+
 @push('js')
     <script type="application/javascript">
         $(document).ready(function() {
@@ -23,5 +25,4 @@
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
-    </script>
 @endpush

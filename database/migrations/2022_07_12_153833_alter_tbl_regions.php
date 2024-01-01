@@ -27,8 +27,10 @@ class AlterTblRegions extends Migration
         // Tambahkan data awal
         DB::table('tbl_regions')->whereNull('created_at')->update(['created_at' => now(), 'updated_at' => now()]);
 
-        $user = User::first()->id;
-        DB::table('tbl_regions')->whereNull('created_by')->update(['created_by' => $user, 'updated_by' => $user]);
+        if($user = User::first()){
+            $user = $user->id;
+            DB::table('tbl_regions')->whereNull('created_by')->update(['created_by' => $user, 'updated_by' => $user]);
+        }
     }
 
     /**
