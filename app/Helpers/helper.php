@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('pantau_versi')) {
-    /**
+    /**c:\xampp\htdocs\OpenDesa\dashboard-saas\catatan_rilis.md
      * OpenKab database gabungan versi.
      */
     function pantau_versi()
