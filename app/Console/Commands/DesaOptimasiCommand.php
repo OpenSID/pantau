@@ -12,7 +12,7 @@ class DesaOptimasiCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:optimasi-desa';
+    protected $signature = 'pantau:optimasi-desa';
 
     /**
      * The console command description.
