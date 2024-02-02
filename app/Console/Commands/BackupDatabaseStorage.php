@@ -72,8 +72,12 @@ class BackupDatabaseStorage extends Command
 
     private function backupStorage()
     {
-        $folderdesa_from = 'storage';
+        $folderdesa_from = 'storage'.DIRECTORY_SEPARATOR.'app';
         $folderdesa_to = folder_backup().DIRECTORY_SEPARATOR.'storage';
+
+        if(!file_exists($folderdesa_to)){
+            mkdir($folderdesa_to, 0755, true);
+        }
 
         if (file_exists($folderdesa_from)) {
             exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
