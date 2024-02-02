@@ -20,6 +20,7 @@ class DashboardController extends Controller
     public function index()
     {
         $pengaturanAplikasi = PengaturanAplikasi::get_pengaturan();
+
         return view('dashboard', [
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
             'desaBaru' => $this->desa->desaBaru()->count(),
@@ -27,7 +28,7 @@ class DashboardController extends Controller
             'info_backup' => [
                 'cloud_storage' => $pengaturanAplikasi['cloud_storage'],
                 'akhir_backup' => $pengaturanAplikasi['akhir_backup'],
-                'waktu_backup' => $pengaturanAplikasi['waktu_backup'],                
+                'waktu_backup' => $pengaturanAplikasi['waktu_backup'],
                 'info' => 'Peringatan !!!',
                 'isi' => 'Gagal Backup Otomatis ke Cloud Storage pada tanggal '.\Carbon\Carbon::createFromFormat('Y-m-d', $pengaturanAplikasi['akhir_backup'])->addDays($pengaturanAplikasi['waktu_backup'])->format('Y-m-d'),
             ],
