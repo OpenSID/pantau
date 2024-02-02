@@ -59,6 +59,8 @@ class BackupDatabaseStorage extends Command
         try {
             $backup = MySql::create()
                 ->setDbName(env('DB_DATABASE'))
+                ->setHost(env('DB_HOST', '127.0.0.1'))
+                ->setPort(env('DB_PORT', 3306))
                 ->setUserName(env('DB_USERNAME'))
                 ->setPassword(env('DB_PASSWORD'));
 
