@@ -14,7 +14,7 @@ class BackupDatabaseStorage extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:backup-database-storage';
+    protected $signature = 'pantau:backup-database-storage';
 
     /**
      * The console command description.
