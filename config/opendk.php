@@ -15,7 +15,7 @@ return [
 
     'menu' => [
         [
-            'text'         => 'Dashboard',
+            'text'         => 'Dasbor',
             'url'          => 'opendk',
             'icon'         => 'fas fa-tachometer-alt',
         ],
