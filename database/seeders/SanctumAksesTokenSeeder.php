@@ -17,7 +17,7 @@ class SanctumAksesTokenSeeder extends Seeder
         $personal_access_tokens = [
             [
                 "id" => 1,
-                "tokenable_type" => "App\\Models\\User",
+                "tokenable_type" => \App\Models\User::class,
                 "tokenable_id" => 6,
                 "name" => "pantau-sid",
                 "token" => "009652573bc23cec5e761bce432722c472936376432065703d1fa5f2aea26201",
