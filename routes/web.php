@@ -103,7 +103,7 @@ Route::prefix('opendk') ->group(function () {
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Wilayah Kecamatan
-    Route::resource('kecamatan', KecamatanController::class, ['except' => ['show']]);
+    Route::resource('kecamatan', KecamatanController::class)->except('show');
     // Route::prefix('kecamatan')->group(function () {
 
     //     Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // Wilayah Desa / Keluarahan
-    Route::resource('desa', DesaController::class, ['except' => ['show']]);
+    Route::resource('desa', DesaController::class)->except('show');
     Route::get('desa/import', [DesaController::class, 'import'])->name('desa.import');
     Route::post('desa/proses-import', [DesaController::class, 'prosesImport'])->name('desa.proses-import');
     Route::get('desa/contoh-import', [DesaController::class, 'contohImport'])->name('desa.contoh-import');
