@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateKodeWilayahView extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class CreateKodeWilayahView extends Migration
     {
         DB::statement("DROP VIEW IF EXISTS kode_wilayah");
     }
-}
+};

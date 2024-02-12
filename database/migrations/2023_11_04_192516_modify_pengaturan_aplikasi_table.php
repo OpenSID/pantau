@@ -3,7 +3,7 @@
 use App\Models\PengaturanAplikasi;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyPengaturanAplikasiTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -59,4 +59,4 @@ class ModifyPengaturanAplikasiTable extends Migration
     {
         //
     }
-}
+};
