@@ -12,7 +12,7 @@ class ModifyPengaturanAplikasiTanggalBackup extends Migration
      */
     public function up()
     {
-        $pengaturan_aplikasi = array(
+        $pengaturan_aplikasi = [
             [
                 'id' => 8,
                 'judul' => 'Akhir Backup',
@@ -23,7 +23,7 @@ class ModifyPengaturanAplikasiTanggalBackup extends Migration
                 'option' => '',
                 'kategori' => 'setting'
             ],
-        );
+        ];
 
         foreach($pengaturan_aplikasi as $item){
             PengaturanAplikasi::create($item);
