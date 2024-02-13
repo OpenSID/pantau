@@ -11,7 +11,7 @@ class AppVersion extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:app-version';
+    protected $signature = 'pantau:app-version';
 
     /**
      * The console command description.

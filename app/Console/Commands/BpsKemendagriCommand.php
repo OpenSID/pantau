@@ -44,7 +44,7 @@ class BpsKemendagriCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:sinkronasi-bps-kemendagri';
+    protected $signature = 'pantau:sinkronasi-bps-kemendagri';
 
     /**
      * The console command description.
