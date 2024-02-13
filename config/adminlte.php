@@ -242,7 +242,7 @@ return [
         // Menu
         ['header'          => 'MENU UTAMA'],
         [
-            'text'         => 'Dashboard',
+            'text'         => 'Dasbor',
             'url'          => '/',
             'icon'         => 'fas fa-tachometer-alt',
         ],
@@ -274,7 +274,7 @@ return [
             'icon'         => 'fas fa-file-alt',
             'submenu'      => [
                 [
-                    'text' => 'Dashboard',
+                    'text' => 'Dasbor',
                     'url'  => 'opendk',
                 ],
                 // [
@@ -296,11 +296,11 @@ return [
             ],
         ],
         [
-            'text'         => 'Mobile',
+            'text'         => 'LayananDesa',
             'icon'         => 'fas fa-file-alt',
             'submenu'      => [
                 [
-                    'text' => 'Dashboard',
+                    'text' => 'Dasbor',
                     'url'  => 'mobile',
                 ],
                 [

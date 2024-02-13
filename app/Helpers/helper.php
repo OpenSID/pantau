@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('pantau_versi')) {
-    /**
+    /**c:\xampp\htdocs\OpenDesa\dashboard-saas\catatan_rilis.md
      * OpenKab database gabungan versi.
      */
     function pantau_versi()
     {
-        return 'v2311.0.0';
+        return 'v2401.0.0';
     }
 }
 
@@ -130,7 +130,7 @@ if (! function_exists('lastrelease')) {
             ->throw();
 
             return json_decode($response->body());
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return false;
         }
     }
