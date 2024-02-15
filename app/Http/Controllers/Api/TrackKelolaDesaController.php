@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TrackKelolaDesaRequest;
-use Exception;
 use App\Models\TrackKeloladesa;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,10 +29,12 @@ class TrackKelolaDesaController extends Controller
             );
 
             DB::commit();
-            return response()->json(['status' => "success"]);
+
+            return response()->json(['status' => 'success']);
         } catch (Exception $e) {
             Log::error($e);
             DB::rollBack();
+
             return response()->json($e->getMessage(), 422);
         }
     }
