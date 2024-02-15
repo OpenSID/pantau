@@ -51,7 +51,7 @@ class TrackKelolaDesaRequest extends FormRequest
     public function requestWhere()
     {
         return $this->only([
-            'kode_desa', 'id_device',
+           'id_device',
         ]);
     }
 
