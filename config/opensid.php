@@ -31,7 +31,7 @@ return [
     */
     'menu' => [
         [
-            'text'         => 'Dashboard',
+            'text'         => 'Dasbor',
             'url'          => '/',
             'icon'         => 'fas fa-tachometer-alt',
         ],

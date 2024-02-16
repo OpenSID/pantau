@@ -14,7 +14,7 @@ class BackupDatabaseStorage extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:backup-database-storage';
+    protected $signature = 'pantau:backup-database-storage';
 
     /**
      * The console command description.
@@ -59,6 +59,8 @@ class BackupDatabaseStorage extends Command
         try {
             $backup = MySql::create()
                 ->setDbName(env('DB_DATABASE'))
+                ->setHost(env('DB_HOST', '127.0.0.1'))
+                ->setPort(env('DB_PORT', 3306))
                 ->setUserName(env('DB_USERNAME'))
                 ->setPassword(env('DB_PASSWORD'));
 
@@ -72,8 +74,12 @@ class BackupDatabaseStorage extends Command
 
     private function backupStorage()
     {
-        $folderdesa_from = 'storage';
+        $folderdesa_from = 'storage'.DIRECTORY_SEPARATOR.'app';
         $folderdesa_to = folder_backup().DIRECTORY_SEPARATOR.'storage';
+
+        if (! file_exists($folderdesa_to)) {
+            mkdir($folderdesa_to, 0755, true);
+        }
 
         if (file_exists($folderdesa_from)) {
             exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
