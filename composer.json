@@ -13,16 +13,15 @@
         "guzzlehttp/guzzle": "^7.2",
         "jeroennoten/laravel-adminlte": "^3.7",
         "laravel/framework": "^9.52",
+        "laravel/helpers": "^1.5",
         "laravel/sanctum": "^3.0",
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
-        "spatie/db-dumper": "^2.21",
-        "spatie/laravel-backup": "^8.0",
-        "yajra/laravel-datatables-oracle": "^9.19",
-        "laravel/helpers": "^1.5",
-        "league/flysystem-aws-s3-v3": "^3.0"
+        "spatie/laravel-backup": "^8.6",
+        "yajra/laravel-datatables-oracle": "^9.19"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

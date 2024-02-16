@@ -12,7 +12,7 @@ class BackupVps extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:backup-vps-sftp';
+    protected $signature = 'pantau:backup-vps-sftp';
 
     /**
      * The console command description.

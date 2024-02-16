@@ -1,16 +1,8 @@
-
-Terima kasih pada [nama] yang terus berkontribusi.
-
-
-#### Penambahan Fitur
-
+Di rilis v2401.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Perbaikan Bug
-
-1. [#222](https://github.com/OpenSID/tracksid/issues/222) Perbaikan instalasi awal.
-
+1. [#254](https://github.com/OpenSID/pantau/issues/254) Gagal backup otomatis berulang terjadi.
 
 #### Penyesuaian Teknis
-
-1. [#241](https://github.com/OpenSID/tracksid/issues/241) Penambahan catatan rilis pada dasbor.
-2. [#246](https://github.com/OpenSID/tracksid/issues/246) Memutakhirkan data wilayah administratif.
+1. [#260](https://github.com/OpenSID/pantau/issues/260) Sesuaikan tulisan "Dashboard" menjadi "Dasbor" & text ingris lainnya pada semua tampilan dan laporan.
+2. [#257](https://github.com/OpenSID/pantau/issues/257) Ubah semua perintah pada console cronjob tracksid menjadi pantau.
