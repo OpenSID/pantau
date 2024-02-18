@@ -1,5 +1,9 @@
 Di rilis v2401.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
+#### Penambahan Fitur
+
+1. [#252](https://github.com/OpenSID/pantau/issues/252) Penambahan API pantau untuk jumlah penggunaan aplikasi KelolaDesa.
+
 #### Perbaikan Bug
 1. [#254](https://github.com/OpenSID/pantau/issues/254) Gagal backup otomatis berulang terjadi.
 
