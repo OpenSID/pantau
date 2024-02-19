@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 
-class AddDataBlackListDomainPengaturan extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -49,4 +49,4 @@ class AddDataBlackListDomainPengaturan extends Migration
     {
         PengaturanAplikasi::where(['kategori' => 'setting'])->whereIn('key', ['abaikan_domain_opensid', 'abaikan_domain_opendk'])->delete();
     }
-}
+};

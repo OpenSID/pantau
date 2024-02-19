@@ -3,7 +3,7 @@
 use App\Models\PengaturanAplikasi;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyPengaturanAplikasiTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class ModifyPengaturanAplikasiTable extends Migration
      */
     public function up()
     {
-        $pengaturan_aplikasi = array(
+        $pengaturan_aplikasi = [
             [
                 'id' => 5,
                 'judul' => 'Cloud Storage',
@@ -43,7 +43,7 @@ class ModifyPengaturanAplikasiTable extends Migration
                 'option' => '',
                 'kategori' => 'setting'
             ]
-        );
+        ];
 
         foreach($pengaturan_aplikasi as $item){
             PengaturanAplikasi::create($item);
@@ -59,4 +59,4 @@ class ModifyPengaturanAplikasiTable extends Migration
     {
         //
     }
-}
+};

@@ -3,7 +3,7 @@
 use App\Models\PengaturanAplikasi;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyPengaturanAplikasiTanggalBackup extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class ModifyPengaturanAplikasiTanggalBackup extends Migration
      */
     public function up()
     {
-        $pengaturan_aplikasi = array(
+        $pengaturan_aplikasi = [
             [
                 'id' => 8,
                 'judul' => 'Akhir Backup',
@@ -23,7 +23,7 @@ class ModifyPengaturanAplikasiTanggalBackup extends Migration
                 'option' => '',
                 'kategori' => 'setting'
             ],
-        );
+        ];
 
         foreach($pengaturan_aplikasi as $item){
             PengaturanAplikasi::create($item);
@@ -39,4 +39,4 @@ class ModifyPengaturanAplikasiTanggalBackup extends Migration
     {
         //
     }
-}
+};

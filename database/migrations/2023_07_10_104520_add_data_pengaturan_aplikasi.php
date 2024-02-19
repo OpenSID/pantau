@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
-class AddDataPengaturanAplikasi extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -37,4 +37,4 @@ class AddDataPengaturanAplikasi extends Migration
     {
         PengaturanAplikasi::where(['kategori' => 'setting', 'key' => 'wilayah_khusus'])->delete();
     }
-}
+};

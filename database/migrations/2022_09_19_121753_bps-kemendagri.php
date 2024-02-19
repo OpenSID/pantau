@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class bpsKemendagri extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -61,4 +61,4 @@ class bpsKemendagri extends Migration
         Schema::dropIfExists('bps_kemendagri_kecamatan');
         Schema::dropIfExists('bps_kemendagri_desa');
     }
-}
+};

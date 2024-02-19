@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTblRegions extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class AlterTblRegions extends Migration
             $table->dropColumn(['new_region_name', 'jenis', 'keterangan', 'created_by', 'updated_by', 'created_at', 'updated_at']);
         });
     }
-}
+};
