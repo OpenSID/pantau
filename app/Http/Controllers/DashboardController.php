@@ -21,7 +21,8 @@ class DashboardController extends Controller
     public function index()
     {
         $pengaturanAplikasi = PengaturanAplikasi::get_pengaturan();
-        $pengaturanAplikasi['akhir_backup'] = !empty($pengaturanAplikasi['akhir_backup']) ? $pengaturanAplikasi['akhir_backup'] : Carbon::now()->startOfMonth()->format('Y-m-d');
+        $pengaturanAplikasi['akhir_backup'] = ! empty($pengaturanAplikasi['akhir_backup']) ? $pengaturanAplikasi['akhir_backup'] : Carbon::now()->startOfMonth()->format('Y-m-d');
+
         return view('dashboard', [
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
             'desaBaru' => $this->desa->desaBaru()->count(),
