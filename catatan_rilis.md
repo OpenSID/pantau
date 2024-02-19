@@ -10,3 +10,4 @@ Di rilis v2401.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Penyesuaian Teknis
 1. [#260](https://github.com/OpenSID/pantau/issues/260) Sesuaikan tulisan "Dashboard" menjadi "Dasbor" & text ingris lainnya pada semua tampilan dan laporan.
 2. [#257](https://github.com/OpenSID/pantau/issues/257) Ubah semua perintah pada console cronjob tracksid menjadi pantau.
+3. [#256](https://github.com/OpenSID/pantau/issues/256) Pembaharuan versi laravel ke laravel 9.
