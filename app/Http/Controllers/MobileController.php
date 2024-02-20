@@ -102,9 +102,8 @@ class MobileController extends Controller
                 ->make(true);
         }
 
-        return view($this->baseView . '.penggunakeloladesa', compact('fillters'));
+        return view($this->baseView.'.penggunakeloladesa', compact('fillters'));
     }
-
 
     public function desa(Request $request)
     {
