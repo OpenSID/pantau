@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
+use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Yajra\DataTables\Facades\DataTables;
 class MobileController extends Controller
 {
     private $mobile;
+    private $kelolaDesa;
 
     protected $baseRoute = 'mobile';
 
@@ -21,31 +23,51 @@ class MobileController extends Controller
     public function __construct()
     {
         $this->mobile = new TrackMobile();
-        Config::set('title', $this->baseView.'');
+        $this->kelolaDesa = new TrackKeloladesa();
+        Config::set('title', $this->baseView . '');
     }
 
     public function index()
     {
-        $totalPengguna = $this->mobile->wilayahKhusus()->count();
-        $totalDesaPengguna = $this->mobile->wilayahKhusus()->desa()->count();
-        $totalDesaPenggunaAktif = $this->mobile->wilayahKhusus()->desa()->active()->count();
-        $totalPenggunaAktif = $this->mobile->wilayahKhusus()->count();
+        $totalPengguna = $this->kelolaDesa->wilayahKhusus()->count();
+        $totalDesaPengguna = $this->kelolaDesa->wilayahKhusus()->desa()->count();
+        $totalDesaPenggunaAktif = $this->kelolaDesa->wilayahKhusus()->desa()->active()->count();
+        $totalPenggunaAktif = $this->kelolaDesa->wilayahKhusus()->count();
+
+        $totalPenggunaKelolaDesa = $this->kelolaDesa->wilayahKhusus()->count();
+        $totalDesaPenggunaKelolaDesa = $this->kelolaDesa->wilayahKhusus()->desa()->count();
+        $totalDesaPenggunaAktifKelolaDesa = $this->kelolaDesa->wilayahKhusus()->desa()->active()->count();
+        $totalPenggunaAktifKelolaDesa = $this->kelolaDesa->wilayahKhusus()->count();
 
         $desaWidgets = [
-            'semua' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna') : ''), 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPengguna, 'iconWidget' => 'fa-user'],
-            'aktif' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna?akses_mobile=1') : ''), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
-            'desa' => ['urlWidget' => url($this->baseRoute.'/desa'), 'titleWidget' => 'Total Desa', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-primary', 'totalWidget' => $totalDesaPengguna, 'iconWidget' => 'fa-user'],
-            'desa_aktif' => ['urlWidget' => url($this->baseRoute.'/desa?akses_mobile=1'), 'titleWidget' => 'Desa pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalDesaPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
+            'semua' => ['urlWidget' => (Auth::check() ? url($this->baseRoute . '/pengguna') : ''), 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPengguna, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => (Auth::check() ? url($this->baseRoute . '/pengguna?akses_mobile=1') : ''), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
+            'desa' => ['urlWidget' => url($this->baseRoute . '/desa'), 'titleWidget' => 'Total Desa', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-primary', 'totalWidget' => $totalDesaPengguna, 'iconWidget' => 'fa-user'],
+            'desa_aktif' => ['urlWidget' => url($this->baseRoute . '/desa?akses_mobile=1'), 'titleWidget' => 'Desa pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalDesaPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
         ];
-        $penggunaBaru = $this->mobile->wilayahKhusus()->selectRaw('kode_desa, count(kode_desa) as jumlah')->with(['desa'])
-                ->groupBy('kode_desa')
-                ->where('created_at', '>=', now()->subDay(7))->get();
 
-        return view($this->baseView.'.dashboard', [
+        $desaWidgetsKelolaDesa = [
+            'semua' => ['urlWidget' => (Auth::check() ? url($this->baseRoute . '/pengguna') : ''), 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPenggunaKelolaDesa, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => (Auth::check() ? url($this->baseRoute . '/pengguna?akses_mobile=1') : ''), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktifKelolaDesa, 'iconWidget' => 'fa-shopping-cart'],
+            'desa' => ['urlWidget' => url($this->baseRoute . '/desa'), 'titleWidget' => 'Total Desa', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-primary', 'totalWidget' => $totalDesaPenggunaKelolaDesa, 'iconWidget' => 'fa-user'],
+            'desa_aktif' => ['urlWidget' => url($this->baseRoute . '/desa?akses_mobile=1'), 'titleWidget' => 'Desa pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalDesaPenggunaAktifKelolaDesa, 'iconWidget' => 'fa-shopping-cart'],
+        ];
+
+        $penggunaBaru = $this->mobile->wilayahKhusus()->selectRaw('kode_desa, count(kode_desa) as jumlah')->with(['desa'])
+            ->groupBy('kode_desa')
+            ->where('created_at', '>=', now()->subDay(7))->get();
+
+        $penggunaBaruKelolaDesa = $this->kelolaDesa->wilayahKhusus()->selectRaw('kode_desa, count(kode_desa) as jumlah')->with(['desa'])
+            ->groupBy('kode_desa')
+            ->where('created_at', '>=', now()->subDay(7))->get();
+
+        return view($this->baseView . '.dashboard', [
             'baseRoute' => $this->baseRoute,
             'baseView' => $this->baseView,
             'desaWidgets' => $desaWidgets,
             'daftar_baru' => $penggunaBaru,
+            'desaWidgetsKelolaDesa' => $desaWidgetsKelolaDesa,
+            'daftar_baruKelolaDesa' => $penggunaBaruKelolaDesa,
         ]);
     }
 
@@ -63,7 +85,7 @@ class MobileController extends Controller
                 ->make(true);
         }
 
-        return view($this->baseView.'.pengguna', compact('fillters'));
+        return view($this->baseView . '.pengguna', compact('fillters'));
     }
 
     public function desa(Request $request)
@@ -76,20 +98,20 @@ class MobileController extends Controller
         if ($request->ajax()) {
             return DataTables::of(Desa::whereHas('mobile', function (Builder $query) use ($request) {
                 $query->when($request['kode_provinsi'], function ($q) use ($request) {
-                    $q->whereRaw('left(kode_desa, 2) = '.$request['kode_provinsi']);
+                    $q->whereRaw('left(kode_desa, 2) = ' . $request['kode_provinsi']);
                 });
                 $query->when($request['kode_kabupaten'], function ($q) use ($request) {
-                    $q->whereRaw('left(kode_desa, 5) = '.$request['kode_kabupaten']);
+                    $q->whereRaw('left(kode_desa, 5) = ' . $request['kode_kabupaten']);
                 });
                 $query->when($request['kode_kecamatan'], function ($q) use ($request) {
-                    $q->whereRaw('left(kode_desa, 8) = '.$request['kode_kecamatan']);
+                    $q->whereRaw('left(kode_desa, 8) = ' . $request['kode_kecamatan']);
                 });
-                $query->when(! empty($request['akses_mobile']), function ($query) use ($request) {
-                    $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
+                $query->when(!empty($request['akses_mobile']), function ($query) use ($request) {
+                    $interval = 'interval ' . TrackMobile::ACTIVE_DAYS . ' day';
                     $sign = '>=';
-                    switch($request['akses_mobile']) {
+                    switch ($request['akses_mobile']) {
                         case '1':
-                            $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
+                            $interval = 'interval ' . TrackMobile::ACTIVE_DAYS . ' day';
                             break;
                         case '2':
                             $interval = 'interval 2 month';
@@ -100,7 +122,7 @@ class MobileController extends Controller
                             break;
                     }
 
-                    return $query->whereRaw('tgl_akses '.$sign.' now() - '.$interval);
+                    return $query->whereRaw('tgl_akses ' . $sign . ' now() - ' . $interval);
                 });
             })->wilayahKhusus()->with(['mobile' => function ($r) {
                 $r->select('kode_desa');
@@ -111,6 +133,6 @@ class MobileController extends Controller
                 ->make(true);
         }
 
-        return view($this->baseView.'.desa', compact('fillters'));
+        return view($this->baseView . '.desa', compact('fillters'));
     }
 }
