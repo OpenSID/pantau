@@ -88,6 +88,7 @@ class MobileController extends Controller
         return view($this->baseView . '.pengguna', compact('fillters'));
     }
 
+
     public function desa(Request $request)
     {
         $fillters = [
@@ -96,17 +97,21 @@ class MobileController extends Controller
             'akses_mobile' => $request->akses_mobile,
         ];
         if ($request->ajax()) {
-            return DataTables::of(Desa::whereHas('mobile', function (Builder $query) use ($request) {
-                $query->when($request['kode_provinsi'], function ($q) use ($request) {
-                    $q->whereRaw('left(kode_desa, 2) = ' . $request['kode_provinsi']);
-                });
-                $query->when($request['kode_kabupaten'], function ($q) use ($request) {
+            return DataTables::of(Desa::leftJoin('track_mobile', 'desa.kode_desa', '=', 'track_mobile.kode_desa')
+                ->leftJoin('track_keloladesa', 'desa.kode_desa', '=', 'track_keloladesa.kode_desa')
+                ->groupBy('desa.kode_desa', 'desa.nama_kecamatan', 'desa.nama_kabupaten', 'desa.nama_provinsi','desa.nama_desa')
+                ->havingRaw('COUNT(track_mobile.id) > 0 OR COUNT(track_keloladesa.id_device) > 0')
+                ->selectRaw('COUNT(track_mobile.id) as count_track_mobile, COUNT(track_keloladesa.id_device) as count_track_keloladesa, desa.kode_desa, desa.nama_kecamatan, desa.nama_kabupaten, desa.nama_provinsi, desa.nama_desa')
+                ->when($request['kode_provinsi'], function ($q) use ($request) {
+                    $q->whereRaw('left(desa.kode_desa, 2) = ' . $request['kode_provinsi']);
+                })
+                ->when($request['kode_kabupaten'], function ($q) use ($request) {
                     $q->whereRaw('left(kode_desa, 5) = ' . $request['kode_kabupaten']);
-                });
-                $query->when($request['kode_kecamatan'], function ($q) use ($request) {
+                })
+                ->when($request['kode_kecamatan'], function ($q) use ($request) {
                     $q->whereRaw('left(kode_desa, 8) = ' . $request['kode_kecamatan']);
-                });
-                $query->when(!empty($request['akses_mobile']), function ($query) use ($request) {
+                })
+                ->when(!empty($request['akses_mobile']), function ($query) use ($request) {
                     $interval = 'interval ' . TrackMobile::ACTIVE_DAYS . ' day';
                     $sign = '>=';
                     switch ($request['akses_mobile']) {
@@ -123,13 +128,9 @@ class MobileController extends Controller
                     }
 
                     return $query->whereRaw('tgl_akses ' . $sign . ' now() - ' . $interval);
-                });
-            })->wilayahKhusus()->with(['mobile' => function ($r) {
-                $r->select('kode_desa');
-            }]))
-                ->addColumn('jumlah', function ($data) {
-                    return $data->mobile->count();
                 })
+                ->wilayahKhusus())
+                
                 ->make(true);
         }
 
