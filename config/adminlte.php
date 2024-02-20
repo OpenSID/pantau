@@ -312,6 +312,11 @@ return [
                     'text' => 'Pengguna',
                     'url'  => 'mobile/pengguna',
                 ],
+                [
+                    'can'  => 'is-admin',
+                    'text' => 'Pengguna Kelola Desa',
+                    'url'  => 'mobile/pengguna_kelola_desa',
+                ],
             ],
         ],
         [

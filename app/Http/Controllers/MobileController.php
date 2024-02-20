@@ -88,6 +88,23 @@ class MobileController extends Controller
         return view($this->baseView . '.pengguna', compact('fillters'));
     }
 
+    public function penggunaKelolaDesa(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'akses_mobile' => $request->akses_mobile,
+        ];
+
+        if ($request->ajax()) {
+            return DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($request)->with(['desa']))
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view($this->baseView . '.penggunakeloladesa', compact('fillters'));
+    }
+
 
     public function desa(Request $request)
     {
