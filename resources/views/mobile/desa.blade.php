@@ -37,7 +37,8 @@
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
-                                    <th>Jumlah</th>
+                                    <th>LayananDesa</th>
+                                    <th>KelolaDesa</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -102,9 +103,20 @@
                 orderable: false,
                 data: function (data) {
                         @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.jumlah}</a>`
+                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_mobile}</a>`
                         @else
-                            return data.jumlah
+                            return data.count_track_mobile
+                        @endauth
+
+                    },
+            },
+            {
+                orderable: false,
+                data: function (data) {
+                        @auth
+                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_keloladesa}</a>`
+                        @else
+                            return data.count_track_keloladesa
                         @endauth
 
                     },
