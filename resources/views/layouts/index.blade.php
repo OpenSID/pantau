@@ -25,4 +25,5 @@
                 $('a[href="#collapse-filter"]').trigger('click')
             }
         }
+    </script>
 @endpush

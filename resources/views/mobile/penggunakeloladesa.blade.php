@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Desa Pengguna Aplikasi LayananDesa<small class="font-weight-light ml-1 text-md font-weight-bold"> @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Pengguna Aplikasi LayananDesa<small class="font-weight-light ml-1 text-md font-weight-bold">@if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -29,19 +29,19 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table" id="table-versi">
+                        <table class="table" id="table-pengguna">
                             <thead>
                                 <tr>
-                                    <th>Kode Desa</th>
+                                    <th>Id</th>
+                                    <th>Tgl Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
-                                    <th>LayananDesa</th>
-                                    <th>KelolaDesa</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            </tbody>
                         </table>
                     </div>
                     <!-- /.table-responsive -->
@@ -63,79 +63,64 @@
         filter_open();
     }
 
-    var desa = $('#table-versi').DataTable({
+    var pengguna = $('#table-pengguna').DataTable({
         processing: true,
         serverSide: true,
         autoWidth: false,
         ordering: true,
         ajax: {
-            url: `{{ url('mobile/desa') }}`,
+            url: `{{ url('mobile/pengguna_kelola_desa') }}`,
             method: 'get',
             data: function(data) {
-                    data.kode_provinsi = $('#provinsi').val();
-                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
+                    data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get('kode_kabupaten');
+                    data.kode_kecamatan = $('#kecamatan').val()? $('#kecamatan').val() : params.get('kode_kecamatan');
+                    data.kode_desa = $('#desa').val()? $('#desa').val() : params.get('kode_desa');
                     data.akses_mobile = $('#akses_mobile').val();
-                    data.versi_mobile = $('#versi_mobile').val();
                 }
         },
         columns: [
             {
-                data: 'kode_desa',
+                data: 'id_device',
                 orderable: false
             },
             {
-                data: 'nama_desa',
+                data: 'tgl_akses',
+                orderable: true
+            },
+            {
+                data: 'desa.nama_desa',
                 orderable: false
             },
             {
-                data: 'nama_kecamatan',
+                data: 'desa.nama_kecamatan',
                 orderable: false
             },
             {
-                data: 'nama_kabupaten',
+                data: 'desa.nama_kabupaten',
                 orderable: false
             },
             {
-                data: 'nama_provinsi',
+                data: 'desa.nama_provinsi',
                 orderable: false
             },
-            {
-                orderable: false,
-                data: function (data) {
-                        @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_mobile}</a>`
-                        @else
-                            return data.count_track_mobile
-                        @endauth
-
-                    },
-            },
-            {
-                orderable: false,
-                data: function (data) {
-                        @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna_kelola_desa') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_keloladesa}</a>`
-                        @else
-                            return data.count_track_keloladesa
-                        @endauth
-
-                    },
-            },
-
         ],
+        orders: [2, 'desc']
     })
 
     $('#filter').on('click', function(e) {
-        desa.draw();
+        pengguna.draw();
     });
 
     $(document).on('click', '#reset', function(e) {
         e.preventDefault();
         $('#provinsi').val('').change();
         $('#kabupaten').val('').change();
+        $('#kecamatan').val('').change();
+        $('#desa').val('').change();
         $('#akses_mobile').val('0').change();
 
-        kabupaten.ajax.reload();
+        pengguna.ajax.reload();
     });
 
 </script>

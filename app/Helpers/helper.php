@@ -10,7 +10,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2401.0.0';
+        return 'v2403.0.0';
     }
 }
 
@@ -130,7 +130,7 @@ if (! function_exists('lastrelease')) {
             ->throw();
 
             return json_decode($response->body());
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return false;
         }
     }

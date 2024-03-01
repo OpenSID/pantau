@@ -10,16 +10,16 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('tracksid:optimasi-desa')->weekly(); // setiap minggu at 00:00
-        $schedule->command('tracksid:sinkronasi-bps-kemendagri')->weekly(); // setiap minggu at 00:00
-        $schedule->command('tracksid:backup-database-storage')->timezone('Asia/Jakarta')->at('01:00'); // setiap hari at 01:00
-        $schedule->command('tracksid:backup-google-drive')->timezone('Asia/Jakarta')->at('03:00'); // setiap hari at 03:00
-        $schedule->command('tracksid:backup-vps-sftp')->timezone('Asia/Jakarta')->at('03:30'); // setiap hari at 03:00
+        $schedule->command('pantau:optimasi-desa')->weekly(); // setiap minggu at 00:00
+        $schedule->command('pantau:sinkronasi-bps-kemendagri')->weekly(); // setiap minggu at 00:00
+        $schedule->command('pantau:backup-database-storage')->timezone('Asia/Jakarta')->at('01:00'); // setiap hari at 01:00
+        $schedule->command('pantau:backup-google-drive')->timezone('Asia/Jakarta')->at('03:00'); // setiap hari at 03:00
+        $schedule->command('pantau:backup-vps-sftp')->timezone('Asia/Jakarta')->at('03:30'); // setiap hari at 03:00
     }
 
     /**

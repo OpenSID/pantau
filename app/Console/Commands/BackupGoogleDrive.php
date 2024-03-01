@@ -12,7 +12,7 @@ class BackupGoogleDrive extends Command
      *
      * @var string
      */
-    protected $signature = 'tracksid:backup-google-drive';
+    protected $signature = 'pantau:backup-google-drive';
 
     /**
      * The console command description.

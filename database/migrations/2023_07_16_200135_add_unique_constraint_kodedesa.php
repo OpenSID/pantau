@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-class AddUniqueConstraintKodedesa extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -43,4 +43,4 @@ class AddUniqueConstraintKodedesa extends Migration
             $table->dropUnique('uq_desa_kode_desa');
         });
     }
-}
+};

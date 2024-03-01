@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePantauKeloladesa extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_grup', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama', 20);
+        Schema::create('track_keloladesa', function (Blueprint $table) {
+            $table->string('id_device', 25)->unique();
+            $table->string('kode_desa', 25)->index();
+            $table->date('tgl_akses');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_grup');
+        Schema::dropIfExists('pantau_keloladesa');
     }
-};
+}

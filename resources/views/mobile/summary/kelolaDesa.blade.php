@@ -1,11 +1,11 @@
 <div class="card card-outline card-info col-lg-12">
     <div class="card-header">
-        <h3 class="card-title">Pengguna Aplikasi LayananDesa</h3>
+        <h3 class="card-title">Pengguna Aplikasi KelolaDesa</h3>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
         <div class="row">
-            @foreach ($desaWidgets as $widget)
+            @foreach ($desaWidgetsKelolaDesa as $widget)
                 @include('widget.card', $widget)
             @endforeach
         </div>
@@ -14,8 +14,8 @@
             <div class="card-header">
                 <h3 class="card-title">Pengguna baru dalam 7 hari terakhir</h3>
                 <div class="card-tools">
-                    <span data-toggle="tooltip" title="{{ count($daftar_baru) }} Desa Baru"
-                        class="badge badge-primary">{{ count($daftar_baru) }}</span>
+                    <span data-toggle="tooltip" title="{{ count($daftar_baruKelolaDesa) }} Desa Baru"
+                        class="badge badge-primary">{{ count($daftar_baruKelolaDesa) }}</span>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -24,7 +24,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table" id="table-mobile-baru">
+                    <table class="table" id="table-mobile-baru-kelola-desa">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($daftar_baru as $key => $item)
+                            @foreach ($daftar_baruKelolaDesa as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->kode_desa }}</td>
@@ -59,7 +59,6 @@
 
 @section('js')
     <script>
-        $('#table-mobile-baru').DataTable();
-
+        $('#table-mobile-baru-kelola-desa').DataTable();
     </script>
 @stop
