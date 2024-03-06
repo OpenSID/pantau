@@ -40,6 +40,12 @@ class KecamatanController extends Controller
         $input = $request->all();
 
         if (Region::create($input)) {
+            $inputchild = [
+                'region_code' => $input['region_code'].'.0000',
+                'parent_code' => $input['region_code'],
+                'deleted_at' => date("Y-m-d H:i:s"),
+            ];
+            Region::create($inputchild);
             return redirect('kecamatan')->with('success', 'Data berhasil disimpan');
         }
 
