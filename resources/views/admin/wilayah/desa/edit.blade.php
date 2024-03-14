@@ -260,10 +260,16 @@
             }
 
             function list_kecamatan() {
+                var getkab = $('#list_kabupaten').val();
+                var getkodekab = '{!!$desa->kode_kabupaten!!}';
+                var getnamakab = '{!!$desa->nama_kabupaten!!}';
+                if(getkab == getnamakab){
+                    var getkab = getkodekab;
+                }
+                
                 $('#list_kecamatan').select2({
                     ajax: {
-                        url: host + '?token=' + token + '&kode=' + $('#list_kabupaten')
-                            .val(),
+                        url: host + '?token=' + token + '&kode=' + getkab,
                         dataType: 'json',
                         delay: 400,
                         data: function(params) {
