@@ -11,7 +11,7 @@ class Wilayah extends Model
     use HasFactory;
 
     /** {@inheritdoc} */
-    protected $table = 'kode_wilayahd';
+    protected $table = 'kode_wilayah';
 
     /**
      * Define a one-to-one relationship.
