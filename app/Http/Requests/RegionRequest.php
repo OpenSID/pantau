@@ -29,7 +29,7 @@ class RegionRequest extends FormRequest
                 'string',
                 'min:2',
                 'max:15',
-                "unique:tbl_regions,region_code,{$this->route('desa')}"
+                "unique:tbl_regions,region_code,{$this->route('desa')}",
             ],
             'region_name' => 'required|string|min:1|max:80',
             'parent_code' => 'required|string|min:2|max:15',
