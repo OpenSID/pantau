@@ -40,7 +40,7 @@ Auth::routes([
 ]);
 
 // index dashboard
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->middleware('dashboard');
 
 // datatable
 Route::prefix('datatables')->as('datatables:')
