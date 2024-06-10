@@ -126,12 +126,12 @@ return [
     'classes_brand_text' => '',
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
-    'classes_content' => '',
+    'classes_content' => 'col-12 p-3',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-white navbar-light p-0',
     'classes_topnav_nav' => 'navbar-expand',
-    'classes_topnav_container' => 'container col-lg-12',
+    'classes_topnav_container' => 'container col-lg-12 pl-4',
 
     /*
     |--------------------------------------------------------------------------
@@ -170,8 +170,8 @@ return [
     'right_sidebar' => false,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
-    'right_sidebar_slide' => true,
-    'right_sidebar_push' => true,
+    'right_sidebar_slide' => false,
+    'right_sidebar_push' => false,
     'right_sidebar_scrollbar_theme' => 'os-theme-light',
     'right_sidebar_scrollbar_auto_hide' => 'l',
 
@@ -256,93 +256,7 @@ return [
             'text'         => 'KelolaDesa',
             'url'          => '/',
             'icon'         => 'fas fa-tachometer-alt',
-        ],
-        [
-            'key'          => 'khusus',
-            'text'         => 'Wilayah',
-            'topnav_right' => true,
-            'submenu'      => [
-                [
-                    'text' => 'Semua',
-                    'url'  => 'sesi/hapus',
-                ],
-            ],
         ],        
-        [            
-            'url'          => '#',
-            'text'         => 'timer',
-            'topnav_right' => true,
-        ],        
-        [
-            'text'         => 'Wilayah Administratif',
-            'url'          => 'wilayah',
-            'icon'         => 'fas fa-map',
-        ],        
-
-        // Data Wilayah
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Data Wilayah',
-            'icon'         => 'fas fa-file-alt',
-            'submenu'      => [
-                [
-                    'can'          => 'is-admin',
-                    'text'         => 'Provinsi',
-                    'url'          => 'provinsi',
-                ],
-                [
-                    'can'          => 'is-admin',
-                    'text'         => 'Kabupaten',
-                    'url'          => 'kabupaten',
-                ],
-                [
-                    'can'          => 'is-admin',
-                    'text'         => 'Kecamatan',
-                    'url'          => 'kecamatan',
-                ],
-                [
-                    'can'          => 'is-admin',
-                    'text'         => 'Desa',
-                    'url'          => 'desa',
-                ],
-            ],
-        ],
-
-        // Manajemen Pengguna
-        [
-            'header'       => 'pengguna',
-            'can'          => 'is-admin',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'Pengguna',
-            'url'          => 'akun-pengguna',
-            'icon'         => 'fas fa-users',
-        ],
-
-        // Settings
-        [
-            'header'       => 'pengaturan',
-            'can'          => 'is-admin',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'aplikasi',
-            'url'          => 'pengaturan/aplikasi',
-            'icon'         => 'fas fa-fw fa-newspaper',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'profile',
-            'url'          => 'profile',
-            'icon'         => 'fas fa-fw fa-user',
-        ],
-        [
-            'can'          => 'is-admin',
-            'text'         => 'change_password',
-            'url'          => 'profile/reset-password',
-            'icon'         => 'fas fa-fw fa-lock',
-        ],
     ],
 
     /*

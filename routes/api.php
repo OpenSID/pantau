@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
-use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\Api\TrackKelolaDesaController;
 use App\Http\Controllers\Api\TrackMobileController;
 use App\Http\Controllers\Api\TrackOpendkController;
-use App\Http\Controllers\Api\TrackKelolaDesaController;
+use App\Http\Controllers\Api\WilayahController;
+use App\Http\Controllers\WebsiteDashboardController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,9 @@ Route::prefix('track')
         Route::post('opendk', TrackOpendkController::class);
         Route::post('mobile', TrackMobileController::class);
         Route::post('keloladesa', [TrackKelolaDesaController::class, 'store']);
+    });
+
+Route::prefix('web')
+    ->group(function () {
+        Route::get('chart-usage', [WebsiteDashboardController::class, 'chartUsage']);
     });

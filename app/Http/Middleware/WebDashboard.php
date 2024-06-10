@@ -5,8 +5,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 
-class Dashboard
+class WebDashboard
 {
     /**
      * Handle an incoming request.
@@ -17,8 +18,14 @@ class Dashboard
      */
     public function handle(Request $request, Closure $next)
     {
+        $route = Route::current();        
+        if (!auth()->check() && $route->uri !== 'web') {
+            return redirect('web');
+        }
         // Change the config values here        
-        Config::set('adminlte', Config::get('weblte')); // example
+        if($route->uri === 'web') {
+            Config::set('adminlte', Config::get('weblte')); // example
+        }        
         return $next($request);
     }    
 }

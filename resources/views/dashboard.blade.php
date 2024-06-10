@@ -1,4 +1,4 @@
-@extends('layouts.web')
+@extends('layouts.index')
 
 @section('title', 'Dasbor')
 
@@ -6,8 +6,233 @@
     <h1>Dasbor<small class="font-weight-light ml-1 text-md font-weight-bold">Status Penggunaan OpenSID @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
-@section('content')    
-    
+@section('content')
+    @if(Auth::user() && $info_backup['cloud_storage'] > 0 && cek_tgl_akhir_backup($info_backup['akhir_backup']) > $info_backup['waktu_backup'])
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> {{ $info_backup['info'] }}</h5>
+            {{ $info_backup['isi'] }}
+        </div>
+    @endif
+    <div class="card card-outline card-info col-lg-12">
+        <div class="card-header">
+            <h3 class="card-title">Desa Pengguna</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->aktif }}</h3>
+                            <p>Desa Aktif</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <a href="{{ url('laporan/desa?akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->desa_online }}</h3>
+                            <p>Desa Aktif Online</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="{{ url('laporan/desa?status=1&akses=4') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->desa_offline }}</h3>
+                            <p>Desa Aktif Hanya Offline</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <a href="{{ url('laporan/desa?status=2&akses=5') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Total Desa</span>
+                            <span class="info-box-number">{{ $jumlahDesa->desa_total }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-lg-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Tidak aktif 4 bulan</span>
+                            <span class="info-box-number">{{ $jumlahDesa->tidak_aktif }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-lg-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Bukan desa terdaftar</span>
+                            <span class="info-box-number">{{ $jumlahDesa->bukan_desa }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Desa baru dalam 7 hari terakhir</h3>
+                    <div class="card-tools">
+                        <span data-toggle="tooltip" title="{{ $desaBaru }} Desa Baru"
+                            class="badge badge-primary">{{ $desaBaru }}</span>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="table-desa-baru">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tgl Terpantau</th>
+                                    <th>Desa</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kabupaten</th>
+                                    <th>Provinsi</th>
+                                    <th>Web</th>
+                                    <th>Versi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+    <div class="card col-lg-12">
+        <div class="card-header">
+            <h3 class="card-title">Kabupaten Pengguna Aktif</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->kabupaten_total }}</h3>
+                            <p>Total Kabupaten</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <a href="{{ url('laporan/kabupaten') }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->kabupaten_online }}</h3>
+                            <p>Kabupaten Pengguna Premium</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="{{ url('laporan/kabupaten') }}?status=1" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4">
+                    <!-- small card -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $jumlahDesa->kabupaten_premium }}</h3>
+                            <p>Kabupaten Pengguna Premium Versi Terbaru</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <a href="{{ url('laporan/kabupaten') }}?status=3" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Kabupaten yang belum ada desa OpenSID</h3>
+                    <div class="card-tools">
+                        <span data-toggle="tooltip" title="{{ $kabupatenKosong }} Kabupaten Belum ada OpenSID"
+                            class="badge badge-primary">{{ $kabupatenKosong }}</span>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="table-kabupaten-kosong">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode Kabupaten</th>
+                                    <th>Nama Kabupaten</th>
+                                    <th>Nama Provinsi</th>
+                                    <th>Jumlah Desa</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('js')
