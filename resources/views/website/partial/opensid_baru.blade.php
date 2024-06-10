@@ -20,7 +20,7 @@
     <div class="col-md">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
-                <h4>OpenKab</h4>
+                <h4>OpenDK</h4>
             </div>
             <div class="card-body">
                 <div class="pl-4">#. Nama Wilayah</div>
@@ -38,7 +38,7 @@
     <div class="col-md">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
-                <h4>OpenKab</h4>
+                <h4>OpenSID</h4>
             </div>
             <div class="card-body">
                 <div class="pl-4">#. Nama Wilayah</div>
@@ -56,7 +56,7 @@
     <div class="col-md">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
-                <h4>OpenKab</h4>
+                <h4>Layanan Desa</h4>
             </div>
             <div class="card-body">
                 <div class="pl-4">#. Nama Wilayah</div>
@@ -74,7 +74,7 @@
     <div class="col-md">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
-                <h4>OpenKab</h4>
+                <h4>Kelola Desa</h4>
             </div>
             <div class="card-body">
                 <div class="pl-4">#. Nama Wilayah</div>
