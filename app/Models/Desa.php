@@ -367,13 +367,14 @@ class Desa extends Model
     }
 
     public function scopeOnline($query)
-    {        
+    {
         return $query->where('versi_hosting', '!=', '');
     }
 
     public function scopeAktif($query, $batasTgl)
     {
         $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+
         return $query->whereRaw(DB::raw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= '{$maksimalTanggal}'"));
     }
 

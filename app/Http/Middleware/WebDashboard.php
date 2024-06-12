@@ -12,20 +12,21 @@ class WebDashboard
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        $route = Route::current();        
-        if (!auth()->check() && $route->uri !== 'web') {
+        $route = Route::current();
+        if (! auth()->check() && $route->uri !== 'web') {
             return redirect('web');
         }
-        // Change the config values here        
-        if($route->uri === 'web') {
+        // Change the config values here
+        if ($route->uri === 'web') {
             Config::set('adminlte', Config::get('weblte')); // example
-        }        
+        }
+
         return $next($request);
-    }    
+    }
 }
