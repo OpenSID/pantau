@@ -69,6 +69,63 @@
     $('.datepicker').each(function () {
         const _options = $(this).data('option')
         $(this).daterangepicker(_options)
-    })    
+    })
+    
+    function updateData(){
+        const params = {period : $('input[name=periods]').val(), provinsi : $('select[name=provinsi]').val(), kabupaten : $('select[name=kabupaten]').val(), kecamatan : $('select[name=kecamatan]').val()}
+        $.ajax({
+            url: 'api/web/chart-usage',
+            data: params,
+            type: "GET",
+            success: function(data) {
+                myChart.data = data;
+                myChart.update();
+            }
+        }, 'json')
+
+        $.ajax({
+            url: 'api/web/summary',
+            data: params,
+            type: "GET",
+            success: function(data) {
+                const total = data.total
+                const detail = data.detail
+                $('#box-provinsi>.total').text(total.provinsi.total)
+                $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                                    class="fa ${total.provinsi.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                ${total.provinsi.pertumbuhan}</span></a>`)
+                $('#box-kabupaten>.total').text(total.kabupaten.total)
+                $('#box-kabupaten span.pertumbuhan').html(`<a href="#" class="${total.kabupaten.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                                    class="fa ${total.kabupaten.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                ${total.kabupaten.pertumbuhan}</span></a>`)
+                $('#box-kecamatan>.total').text(total.kecamatan.total)
+                $('#box-kecamatan span.pertumbuhan').html(`<a href="#" class="${total.kecamatan.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                                    class="fa ${total.kecamatan.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                ${total.kecamatan.pertumbuhan}</span></a>`)
+                $('#box-desa>.total').text(total.desa.total)
+                $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                                    class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                ${total.desa.pertumbuhan}</span></a>`)
+                
+                $('#desa_aktif>.total').text(total.desa_aktif.total)
+                $('#desa_aktif_online>.total').text(total.desa_aktif_online.total)
+
+            }
+        }, 'json')
+    }
+
+    $(document).ready(function() {
+        $('#filter').click(function(){
+            updateData()
+        })
+        $('input[name=periods]').change(function(){
+            updateData()
+        })
+        $('#reset').click(function(){
+            $('#collapse-filter select').val('')
+        })
+
+        updateData()
+    })
 </script>
 @endpush

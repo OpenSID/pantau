@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function bootLogQuery()
     {
-        if ($this->app->environment('local')) {
+        //if ($this->app->environment('local')) {
             Event::listen(QueryExecuted::class, function ($query) {
                 $bindings = collect($query->bindings)->map(function ($param) {
                     if (is_numeric($param)) {
@@ -43,6 +43,6 @@ class AppServiceProvider extends ServiceProvider
 
                 $this->app->log->debug(Str::replaceArray('?', $bindings->toArray(), $query->sql));
             });
-        }
+        //}
     }
 }

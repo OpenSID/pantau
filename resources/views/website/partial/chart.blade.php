@@ -12,23 +12,11 @@
 </div>
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    $(document).ready(function() {
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {}
-        });
-
-        $.ajax({
-            url: 'api/web/chart-usage',
-            data: {period : $('input[name=periods]').val()},
-            type: "GET",
-            success: function(data) {
-                myChart.data = data;
-                myChart.update();
-            }
-        }, 'json')
-    })
+<script>    
+    const ctx = document.getElementById('myChart');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {}
+    });    
 </script>
 @endpush

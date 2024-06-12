@@ -45,4 +45,5 @@ Route::prefix('track')
 Route::prefix('web')
     ->group(function () {
         Route::get('chart-usage', [WebsiteDashboardController::class, 'chartUsage']);
+        Route::get('summary', [WebsiteDashboardController::class, 'summary']);        
     });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -363,5 +364,21 @@ class Desa extends Model
         $query->when($provinsi, function ($r) use ($provinsi) {
             $r->where('kode_provinsi', $provinsi);
         });
+    }
+
+    public function scopeOnline($query)
+    {        
+        return $query->where('versi_hosting', '!=', '');
+    }
+
+    public function scopeAktif($query, $batasTgl)
+    {
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+        return $query->whereRaw(DB::raw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= '{$maksimalTanggal}'"));
+    }
+
+    public function scopeAktifOnline($query, $batasTgl)
+    {
+        return $query->online()->aktif($batasTgl);
     }
 }
