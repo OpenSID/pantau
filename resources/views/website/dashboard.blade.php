@@ -72,21 +72,18 @@
     })
     
     function updateData(){
-        const params = {period : $('input[name=periods]').val(), provinsi : $('select[name=provinsi]').val(), kabupaten : $('select[name=kabupaten]').val(), kecamatan : $('select[name=kecamatan]').val()}
-        $.ajax({
-            url: 'api/web/chart-usage',
-            data: params,
-            type: "GET",
-            success: function(data) {
-                myChart.data = data;
-                myChart.update();
-            }
-        }, 'json')
+        const params = {period : $('input[name=periods]').val(), provinsi : $('select[name=provinsi]').val(), kabupaten : $('select[name=kabupaten]').val(), kecamatan : $('select[name=kecamatan]').val()}        
 
         $.ajax({
             url: 'api/web/summary',
             data: params,
             type: "GET",
+            beforeSend: function(){
+                $('#box-provinsi>.total').text('..')
+                $('#box-kabupaten>.total').text('..')
+                $('#box-kecamatan>.total').text('..')
+                $('#box-desa>.total').text('..')
+            },
             success: function(data) {
                 const total = data.total
                 const detail = data.detail
@@ -110,6 +107,15 @@
                 $('#desa_aktif>.total').text(total.desa_aktif.total)
                 $('#desa_aktif_online>.total').text(total.desa_aktif_online.total)
 
+                $.ajax({
+                    url: 'api/web/chart-usage',
+                    data: params,
+                    type: "GET",            
+                    success: function(data) {
+                        myChart.data = data;
+                        myChart.update();
+                    }
+                }, 'json')
             }
         }, 'json')
     }

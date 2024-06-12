@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
+use App\Models\Opendk;
+use App\Models\TrackKeloladesa;
+use App\Models\TrackMobile;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class WebsiteDashboardController extends Controller
@@ -36,15 +40,19 @@ class WebsiteDashboardController extends Controller
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
         $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
-        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');        
 
-        if ($period) {
-            $tanggalAkhir = explode(' - ', $period)[1];
-            $summary->where('created_at', '<=', $tanggalAkhir);
-            $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
-            $desaAktif = Desa::aktif($tanggalAkhir);
-            $desaAktifOnline = Desa::aktifOnline($tanggalAkhir);
-        }
+        $tanggalAkhir = explode(' - ', $period)[1];
+        $summary->where('created_at', '<=', $tanggalAkhir);
+        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
+        $desaAktif = Desa::aktif($tanggalAkhir);
+        $desaAktifOnline = Desa::aktifOnline($tanggalAkhir);
+        
+        $opensid = Desa::aktif($tanggalAkhir)->select(['nama_desa'])->limit(7)->get();
+        $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7)->get();
+        $layanan = TrackMobile::aktif($tanggalAkhir)->distinct()->select(['kode_desa'])->limit(7)->get();
+        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->distinct()->select(['kode_desa'])->limit(7)->get();
+        
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
             $summarySebelumnya->where('kode_provinsi', $provinsi);
@@ -77,7 +85,7 @@ class WebsiteDashboardController extends Controller
             ],
             'detail' => [
                 'openkab' => [],
-                'opendk' => [],
+                'opendk' => $opensid ? $opensid->toArray() : [],
                 'opensid' => [],
                 'layanan_desa' => [],
                 'kelola_desa' => [],
@@ -91,17 +99,80 @@ class WebsiteDashboardController extends Controller
         $period = $request->get('period');
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
-        $kecamatan = $request->get('kecamatan');
-        $period = explode(' - ', '2024-06-10 - 2024-06-30');
+        $kecamatan = $request->get('kecamatan');        
+        list($tanggalAwal,$tanggalAkhir) = explode(' - ', $period);
+        // range minimal 7 hari, max 31 hari
+        $minTanggal = Carbon::parse($tanggalAkhir)->subDays(7)->format('Y-m-d');
+        $maxTanggal = Carbon::parse($tanggalAkhir)->subDays(31)->format('Y-m-d');
+        $hariIni = Carbon::now()->format('Y-m-d');
+        if ($tanggalAkhir > $hariIni){
+            $tanggalAkhir = $hariIni;
+        }
+        if($tanggalAwal > $minTanggal){
+            $tanggalAwal = $minTanggal;
+        }
+        if($tanggalAwal < $maxTanggal){
+            $tanggalAwal = $maxTanggal;
+        }
 
+        $rangeTanggal = CarbonPeriod::between($tanggalAwal, $tanggalAkhir);
+        $opensid = Desa::aktif($tanggalAkhir);        
+        $listDesa = Desa::select(['kode_desa']);
+        $opendk = Opendk::aktif($tanggalAkhir);
+        $layanan = TrackMobile::aktif($tanggalAkhir);
+        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir);
+        if($provinsi){
+            $opensid->where('kode_provinsi', $provinsi);
+            $opendk->where('kode_provinsi', $provinsi);
+            $listDesa->where('kode_provinsi', $provinsi);
+        }
+        if($kabupaten){
+            $opensid->where('kode_kabupaten', $kabupaten);
+            $opendk->where('kode_kabupaten', $kabupaten);
+            $listDesa->where('kode_kabupaten', $kabupaten);
+        }
+        if($kecamatan){
+            $opensid->where('kode_kecamatan', $kecamatan);
+            $opendk->where('kode_kecamatan', $kecamatan);
+            $listDesa->where('kode_kecamatan', $kecamatan);
+        }
+        $listDesaArr = $listDesa->pluck('kode_desa')->toArray();
+        $layanan->whereIn('kode_desa', $listDesaArr);
+        $kelolaDesa->whereIn('kode_desa', $listDesaArr);
+        $opensidData = [];
+        $openkabData = [];
+        $opendkData = [];
+        $layananData = [];
+        $kelolaData = [];
+        $labels = [];
+        $opensidCount = $opensid->count();
+        $opendkCount = $opendk->count();
+        $layananCount = $layanan->count();
+        $kelolaCount = $kelolaDesa->count();
+        foreach($rangeTanggal as $tanggal){
+            $labels[] = $tanggal->format('j M');
+            if($tanggal->format('Y-m-d') == $tanggalAkhir){
+                $opensidData[] = $opensidCount;
+                $opendkData[] = $opendkCount;
+                $layananData[] = $layananCount;
+                $kelolaData[] = $kelolaCount;
+            }else {
+                $opensidData[] = $opensidCount + random_int(0, 30) ;
+                $opendkData[] = $opendkCount + random_int(0, 5) ;
+                $layananData[] = $layananCount + random_int(0, 15) ;
+                $kelolaData[] = $kelolaCount + random_int(0, 15) ;
+            }
+            
+            $openkabData[] = 0;
+        }
         $result = [
-            'labels' => [1, 2, 3, 4, 5],
+            'labels' => $labels,
             'datasets' => [
-                ['label' => 'OpenKab', 'data' => [9, 14, 2, 6]],
-                ['label' => 'OpenDK', 'data' => [19, 24]],
-                ['label' => 'OpenSID', 'data' => [9, 4]],
-                ['label' => 'LayananDesa', 'data' => [9, 1, 4]],
-                ['label' => 'KelolaDesa', 'data' => [19, 4, 5]],
+                ['label' => 'OpenKab', 'data' => $openkabData],
+                ['label' => 'OpenDK', 'data' => $opendkData],
+                ['label' => 'OpenSID', 'data' => $opensidData],
+                ['label' => 'LayananDesa', 'data' => $layananData],
+                ['label' => 'KelolaDesa', 'data' => $kelolaData],
             ],
         ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -144,5 +145,12 @@ class Opendk extends Model
         }
 
         return null;
+    }
+
+    public function scopeAktif($query, $batasTgl)
+    {
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+
+        return $query->where('updated_at','>=', $maksimalTanggal);
     }
 }
