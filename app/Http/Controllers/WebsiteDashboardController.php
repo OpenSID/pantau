@@ -50,8 +50,8 @@ class WebsiteDashboardController extends Controller
         
         $opensid = Desa::aktif($tanggalAkhir)->select(['nama_desa'])->limit(7)->get();
         $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7)->get();
-        $layanan = TrackMobile::aktif($tanggalAkhir)->distinct()->select(['kode_desa'])->limit(7)->get();
-        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->distinct()->select(['kode_desa'])->limit(7)->get();
+        $layanan = TrackMobile::aktif($tanggalAkhir)->with(['desa' => static fn($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
+        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->with(['desa' => static fn($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
         
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
@@ -85,10 +85,10 @@ class WebsiteDashboardController extends Controller
             ],
             'detail' => [
                 'openkab' => [],
-                'opendk' => $opensid ? $opensid->toArray() : [],
-                'opensid' => [],
-                'layanan_desa' => [],
-                'kelola_desa' => [],
+                'opendk' => $opendk ? $opendk->map( static fn($q) => $q->nama_kecamatan )->toArray() : [],
+                'opensid' => $opensid ? $opensid->map( static fn($q) => $q->nama_desa )->toArray() : [],
+                'layanandesa' => $layanan ? $layanan->map( static fn($q) => $q->desa->nama_desa )->toArray() : [],
+                'keloladesa' => $kelolaDesa ? $kelolaDesa->map( static fn($q) => $q->desa->nama_desa )->toArray() : [],
             ],
         ]
         );
@@ -116,29 +116,37 @@ class WebsiteDashboardController extends Controller
         }
 
         $rangeTanggal = CarbonPeriod::between($tanggalAwal, $tanggalAkhir);
-        $opensid = Desa::aktif($tanggalAkhir);        
-        $listDesa = Desa::select(['kode_desa']);
+        $opensid = Desa::aktif($tanggalAkhir);                
         $opendk = Opendk::aktif($tanggalAkhir);
         $layanan = TrackMobile::aktif($tanggalAkhir);
         $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir);
         if($provinsi){
             $opensid->where('kode_provinsi', $provinsi);
-            $opendk->where('kode_provinsi', $provinsi);
-            $listDesa->where('kode_provinsi', $provinsi);
+            $opendk->where('kode_provinsi', $provinsi);            
         }
         if($kabupaten){
             $opensid->where('kode_kabupaten', $kabupaten);
-            $opendk->where('kode_kabupaten', $kabupaten);
-            $listDesa->where('kode_kabupaten', $kabupaten);
+            $opendk->where('kode_kabupaten', $kabupaten);            
         }
         if($kecamatan){
             $opensid->where('kode_kecamatan', $kecamatan);
-            $opendk->where('kode_kecamatan', $kecamatan);
-            $listDesa->where('kode_kecamatan', $kecamatan);
+            $opendk->where('kode_kecamatan', $kecamatan);            
         }
-        $listDesaArr = $listDesa->pluck('kode_desa')->toArray();
-        $layanan->whereIn('kode_desa', $listDesaArr);
-        $kelolaDesa->whereIn('kode_desa', $listDesaArr);
+        
+        $layanan->whereIn('kode_desa', function($q) use($provinsi, $kabupaten, $kecamatan) {
+            $q->select('kode_desa')->from('desa')
+                ->whereNotNull('kode_desa')
+                ->when($provinsi, static fn($r) => $r->where('kode_provinsi', $provinsi))
+                ->when($kabupaten, static fn($r) => $r->where('kode_kabupaten', $kabupaten))
+                ->when($kecamatan, static fn($r) => $r->where('kode_kecamatan', $kecamatan));
+        });
+        $kelolaDesa->whereIn('kode_desa', function($q) use($provinsi, $kabupaten, $kecamatan) {
+            $q->select('kode_desa')->from('desa')
+                ->whereNotNull('kode_desa')
+                ->when($provinsi, static fn($r) => $r->where('kode_provinsi', $provinsi))
+                ->when($kabupaten, static fn($r) => $r->where('kode_kabupaten', $kabupaten))
+                ->when($kecamatan, static fn($r) => $r->where('kode_kecamatan', $kecamatan));
+        });
         $opensidData = [];
         $openkabData = [];
         $opendkData = [];
@@ -160,7 +168,7 @@ class WebsiteDashboardController extends Controller
                 $opensidData[] = $opensidCount + random_int(0, 30) ;
                 $opendkData[] = $opendkCount + random_int(0, 5) ;
                 $layananData[] = $layananCount + random_int(0, 15) ;
-                $kelolaData[] = $kelolaCount + random_int(0, 15) ;
+                $kelolaData[] = $kelolaCount + random_int(0, 15) ;                
             }
             
             $openkabData[] = 0;

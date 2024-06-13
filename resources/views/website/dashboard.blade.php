@@ -106,6 +106,16 @@
                 
                 $('#desa_aktif>.total').text(total.desa_aktif.total)
                 $('#desa_aktif_online>.total').text(total.desa_aktif_online.total)
+                
+                let _listElm;
+                for(let i in detail){
+                    _listElm = $(`#${i}-baru`).find('ol')
+                    _listElm.empty()
+                    for(let j in detail[i]){
+                        _listElm.append(`<li>${detail[i][j]}</li>`)
+                    }
+                }
+
 
                 $.ajax({
                     url: 'api/web/chart-usage',
