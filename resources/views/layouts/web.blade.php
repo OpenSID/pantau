@@ -1,5 +1,7 @@
 @extends('adminlte::page')
-
+@push('css')
+<link rel="stylesheet" href="{{ asset('vendor/weblte/custom.css') }}">
+@endpush
 @section('footer')
     <strong>Hak cipta © <?= date('Y') ?> <a href="https://opendesa.id">OpenDesa</a>.</strong>
     Seluruh hak cipta dilindungi.

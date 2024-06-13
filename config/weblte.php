@@ -235,27 +235,27 @@ return [
         [
             'text'         => 'OpenKab',
             'url'          => '/',
-            'icon'         => 'fas fa-tachometer-alt',
+            'icon'         => 'fas pantau-icon fa-openkab',
         ],
         [
             'text'         => 'OpenDK',
             'url'          => '/',
-            'icon'         => 'fas fa-tachometer-alt',
+            'icon'         => 'fas pantau-icon fa-opendk',
         ],
         [
             'text'         => 'OpenSID',
             'url'          => 'peta',
-            'icon'         => 'fas fa-map-marked-alt',
+            'icon'         => 'fas pantau-icon fa-opensid',
         ],   
         [
             'text'         => 'LayananDesa',
             'url'          => '/',
-            'icon'         => 'fas fa-tachometer-alt',
+            'icon'         => 'fas pantau-icon fa-layanandesa',
         ],
         [
             'text'         => 'KelolaDesa',
             'url'          => '/',
-            'icon'         => 'fas fa-tachometer-alt',
+            'icon'         => 'fas pantau-icon fa-keloladesa',
         ],        
     ],
 

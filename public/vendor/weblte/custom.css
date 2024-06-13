@@ -1,0 +1,23 @@
+.pantau-icon{
+    background-size: 24px 24px; /* adjust the size to your needs */
+    width: 24px;
+    height: 24px;
+    
+}
+.fa-openkab {    
+    background-image: url('../../assets/icon/openkab.png');    
+}
+.fa-opendk {    
+    background-image: url('../../assets/icon/opendk.png');    
+}
+.fa-opensid {    
+    background-image: url('../../assets/icon/opensid.png');    
+}
+.fa-layanandesa {    
+    background-image: url('../../assets/icon/layanandesa.png');    
+}
+.fa-keloladesa {    
+    background-image: url('../../assets/icon/keloladesa.png');    
+}
+
+  
