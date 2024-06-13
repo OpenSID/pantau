@@ -20,4 +20,9 @@
     background-image: url('../../assets/icon/keloladesa.png');    
 }
 
-  
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+  }
