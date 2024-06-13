@@ -25,4 +25,9 @@
     justify-content: center;
     align-items: center;
     height: 20px;
+    font-size: larger;
   }
+
+#navbarCollapse{
+    padding-left:100px
+}
