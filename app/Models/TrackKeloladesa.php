@@ -110,6 +110,6 @@ class TrackKeloladesa extends Model
     {
         $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->format('Y-m-d');
 
-        return $query->where('tgl_akses','>=', $maksimalTanggal);
+        return $query->where('tgl_akses', '>=', $maksimalTanggal);
     }
 }

@@ -151,6 +151,6 @@ class Opendk extends Model
     {
         $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
 
-        return $query->where('updated_at','>=', $maksimalTanggal);
+        return $query->where('updated_at', '>=', $maksimalTanggal);
     }
 }
