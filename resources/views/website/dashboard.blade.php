@@ -103,9 +103,7 @@
                 $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 ${total.desa.pertumbuhan}</span></a>`)
-                
-                $('#desa_aktif>.total').text(total.desa_aktif.total)
-                $('#desa_aktif_online>.total').text(total.desa_aktif_online.total)
+                                
                 
                 let _listElm;
                 for(let i in detail){
