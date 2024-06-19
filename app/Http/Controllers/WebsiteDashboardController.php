@@ -44,7 +44,7 @@ class WebsiteDashboardController extends Controller
 
         $tanggalAkhir = explode(' - ', $period)[1];
         $summary->where('created_at', '<=', $tanggalAkhir);
-        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));        
+        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
 
         $opensid = Desa::aktif($tanggalAkhir)->select(['nama_desa'])->limit(7)->get();
         $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7)->get();
@@ -53,15 +53,15 @@ class WebsiteDashboardController extends Controller
 
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
-            $summarySebelumnya->where('kode_provinsi', $provinsi);            
+            $summarySebelumnya->where('kode_provinsi', $provinsi);
         }
         if ($kabupaten) {
             $summary->where('kode_kabupaten', $kabupaten);
-            $summarySebelumnya->where('kode_kabupaten', $kabupaten);            
+            $summarySebelumnya->where('kode_kabupaten', $kabupaten);
         }
         if ($kecamatan) {
             $summary->where('kode_kecamatan', $kecamatan);
-            $summarySebelumnya->where('kode_kecamatan', $kecamatan);            
+            $summarySebelumnya->where('kode_kecamatan', $kecamatan);
         }
         $summareResult = $summary->first();
         $summarySebelumnyaResult = $summarySebelumnya->first();
@@ -71,7 +71,7 @@ class WebsiteDashboardController extends Controller
                 'provinsi' => ['total' => $summareResult->provinsi, 'pertumbuhan' => $summareResult->provinsi - $summarySebelumnyaResult->provinsi],
                 'kabupaten' => ['total' => $summareResult->kabupaten, 'pertumbuhan' => $summareResult->kabupaten - $summarySebelumnyaResult->kabupaten],
                 'kecamatan' => ['total' => $summareResult->kecamatan, 'pertumbuhan' => $summareResult->kecamatan - $summarySebelumnyaResult->kecamatan],
-                'desa' => ['total' => $summareResult->desa, 'pertumbuhan' => $summareResult->desa - $summarySebelumnyaResult->desa],                
+                'desa' => ['total' => $summareResult->desa, 'pertumbuhan' => $summareResult->desa - $summarySebelumnyaResult->desa],
             ],
             'detail' => [
                 'openkab' => [],
