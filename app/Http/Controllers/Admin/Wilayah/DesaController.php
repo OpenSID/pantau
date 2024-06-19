@@ -66,14 +66,14 @@ class DesaController extends Controller
         $input = $request->all();
         $desa = Region::desa()->find($id);
 
-        if($desa->nama_desa_baru){
+        if ($desa->nama_desa_baru) {
             $input['new_region_name'] = $input['region_name'];
-        }else {
+        } else {
             if ($desa->nama_desa != $input['region_name']) {
-                $input['new_region_name'] = $input['region_name'];                    
+                $input['new_region_name'] = $input['region_name'];
             }
         }
-        unset($input['region_name']);        
+        unset($input['region_name']);
 
         if ($desa->update($input)) {
             return redirect('desa')->with('success', 'Data berhasil diubah');
