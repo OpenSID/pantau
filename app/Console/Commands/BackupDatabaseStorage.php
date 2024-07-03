@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\Helpers\CommandController;
+use App\Models\LogBackup;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\DbDumper\Databases\MySql;
@@ -64,25 +65,29 @@ class BackupDatabaseStorage extends Command
                 ->setUserName(env('DB_USERNAME'))
                 ->setPassword(env('DB_PASSWORD'));
 
-            $backup->dumpToFile($this->folder_database.'/'.$this->database_name);
+            $backup->dumpToFile($this->folder_database . '/' . $this->database_name);
         } catch (Exception $ex) {
             $this->command->notifMessage('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
+            LogBackup::create([
+                'status' => 0,
+                'log' =>'pantau:backup-database-storage :' . $ex->getMessage()
+            ]);
 
-            return exec('rm '.$this->folder_database.'/'.$this->database_name);
+            return exec('rm ' . $this->folder_database . '/' . $this->database_name);
         }
     }
 
     private function backupStorage()
     {
-        $folderdesa_from = 'storage'.DIRECTORY_SEPARATOR.'app';
-        $folderdesa_to = folder_backup().DIRECTORY_SEPARATOR.'storage';
+        $folderdesa_from = 'storage' . DIRECTORY_SEPARATOR . 'app';
+        $folderdesa_to = folder_backup() . DIRECTORY_SEPARATOR . 'storage';
 
-        if (! file_exists($folderdesa_to)) {
+        if (!file_exists($folderdesa_to)) {
             mkdir($folderdesa_to, 0755, true);
         }
 
         if (file_exists($folderdesa_from)) {
-            exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
+            exec('cp -R ' . $folderdesa_from . ' ' . $folderdesa_to);
         }
     }
 }
