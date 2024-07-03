@@ -40,6 +40,10 @@ class RemoteController extends Controller
 
                 // notif berhasil
                 $this->command->notifMessage('Berhasil backup menggunakan tipe ' . $storage_type . ' tanggal ' . date('Y-m-d'));
+                LogBackup::create([
+                    'status' => 1,
+                    'log' => 'Gagal backup menggunakan tipe ' . $storage_type
+                ]);
             } else {
                 // notif gagal
                 $this->command->notifMessage('Gagal backup menggunakan tipe ' . $storage_type);

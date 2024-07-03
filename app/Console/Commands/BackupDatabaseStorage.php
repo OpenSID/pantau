@@ -66,6 +66,11 @@ class BackupDatabaseStorage extends Command
                 ->setPassword(env('DB_PASSWORD'));
 
             $backup->dumpToFile($this->folder_database . '/' . $this->database_name);
+
+            LogBackup::create([
+                'status' => 1,
+                'log' => 'Success backup pantau:backup-database-storage'
+            ]);
         } catch (Exception $ex) {
             $this->command->notifMessage('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
             LogBackup::create([
