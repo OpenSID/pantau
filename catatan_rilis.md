@@ -4,8 +4,7 @@ Di rilis v2401.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Perbaikan Bug
 
-1. [#301](https://github.com/OpenSID/pantau/issues/301) Cek tarik gagal tarik data.
+1. [#254](https://github.com/OpenSID/pantau/issues/254) Perbaiki gagal backup otomatis berulang terjadi.
 
 #### Penyesuaian Teknis
 
-1. [#290](https://github.com/OpenSID/pantau/issues/290) Perbaikan gagal nambah desa baru pada pantau.
