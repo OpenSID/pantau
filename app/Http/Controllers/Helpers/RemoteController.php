@@ -39,10 +39,10 @@ class RemoteController extends Controller
                 exec('rclone -v sync '.folder_backup().' '.$remote_name.':'.$directory_backup);
 
                 // notif berhasil
-                $this->command->notifMessage('Berhasil backup menggunakan tipe ' . $storage_type . ' tanggal ' . date('Y-m-d'));
+                $this->command->notifMessage('Berhasil backup menggunakan tipe '.$storage_type.' tanggal '.date('Y-m-d'));
                 LogBackup::create([
                     'status' => 1,
-                    'log' => 'Gagal backup menggunakan tipe ' . $storage_type
+                    'log' => 'Gagal backup menggunakan tipe '.$storage_type,
                 ]);
             } else {
                 // notif gagal
