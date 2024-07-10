@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('log_backup', function (Blueprint $table) {
-            $table->int('status')->nullable();
+            $table->integer('status')->nullable();
             $table->text('log', 255)->nullable();
             $table->timestamps();
         });
