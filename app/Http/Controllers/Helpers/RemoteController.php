@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Helpers;
 
-use Exception;
+use App\Http\Controllers\Controller;
 use App\Models\LogBackup;
 use App\Models\PengaturanAplikasi;
-use App\Http\Controllers\Controller;
+use Exception;
 
 class RemoteController extends Controller
 {
@@ -30,13 +30,13 @@ class RemoteController extends Controller
         try {
             if (file_exists(folder_backup()) && rclone_syncs_storage() == true && cek_tgl_akhir_backup($akhir_backup) == 0) {
                 // nama app_url & tanggal backup
-                $directory_backup = $root . $this->host . '/backupserverdukungan/' . date('Y-m-d');
+                $directory_backup = $root.$this->host.'/backupserverdukungan/'.date('Y-m-d');
 
                 // membuat folder di storage_type
-                exec('rclone mkdir ' . $remote_name . ':/' . $directory_backup);
+                exec('rclone mkdir '.$remote_name.':/'.$directory_backup);
 
                 // proses backup ke storage_type
-                exec('rclone -v sync ' . folder_backup() . ' ' . $remote_name . ':' . $directory_backup);
+                exec('rclone -v sync '.folder_backup().' '.$remote_name.':'.$directory_backup);
 
                 // notif berhasil
                 $this->command->notifMessage('Berhasil backup menggunakan tipe ' . $storage_type . ' tanggal ' . date('Y-m-d'));
@@ -46,16 +46,16 @@ class RemoteController extends Controller
                 ]);
             } else {
                 // notif gagal
-                $this->command->notifMessage('Gagal backup menggunakan tipe ' . $storage_type);
+                $this->command->notifMessage('Gagal backup menggunakan tipe '.$storage_type);
                 LogBackup::create([
                     'status' => 0,
-                    'log' => 'Gagal backup menggunakan tipe ' . $storage_type
+                    'log' => 'Gagal backup menggunakan tipe '.$storage_type,
                 ]);
             }
         } catch (Exception $e) {
             LogBackup::create([
                 'status' => 0,
-                'log' => 'Gagal backup menggunakan tipe ' . $storage_type . '. Pesan error: '  . $e->getMessage()
+                'log' => 'Gagal backup menggunakan tipe '.$storage_type.'. Pesan error: '.$e->getMessage(),
             ]);
         }
     }
@@ -69,8 +69,8 @@ class RemoteController extends Controller
 
     public function countDirectoryCloudStorage($remote_name, $root)
     {
-        $count_dir = exec('rclone lsd ' . $remote_name . ':' . $root . $this->host . '/ | wc -l');
-        $this->command->notifMessage('Jumlah Folder ' . $count_dir);
+        $count_dir = exec('rclone lsd '.$remote_name.':'.$root.$this->host.'/ | wc -l');
+        $this->command->notifMessage('Jumlah Folder '.$count_dir);
 
         return $count_dir;
     }
@@ -78,15 +78,15 @@ class RemoteController extends Controller
     public function removeBackup($directory, $remote_name, $akhir_backup, $root)
     {
         // folder yang paling lama
-        $old_dir = exec('sudo rclone lsf ' . $remote_name . ':' . $root . $this->host . '/ | sort -r | tail -n +' . $directory);
+        $old_dir = exec('sudo rclone lsf '.$remote_name.':'.$root.$this->host.'/ | sort -r | tail -n +'.$directory);
         $old_dir = rtrim($old_dir, '/');
 
         // nama app_url & tanggal backup
-        $directory_backup = $root . $this->host . '/backupserverdukungan/' . $old_dir;
+        $directory_backup = $root.$this->host.'/backupserverdukungan/'.$old_dir;
 
         if (rclone_syncs_storage() == true && cek_tgl_akhir_backup($akhir_backup) == 0) {
             // hapus folder backup terlama
-            exec('sudo rclone purge ' . $remote_name . ':/' . $directory_backup);
+            exec('sudo rclone purge '.$remote_name.':/'.$directory_backup);
             /**
              * rclone rmdir = hapus directory
              * rclone rmdirs = hapus directory dengan beberapa directory di dalamnya
@@ -94,10 +94,10 @@ class RemoteController extends Controller
              * */
 
             // notif berhasil
-            $this->command->notifMessage('Berhasil telah menghapus folder ' . $old_dir);
+            $this->command->notifMessage('Berhasil telah menghapus folder '.$old_dir);
         } else {
             // notif gagal
-            $this->command->notifMessage('Gagal hapus folder ' . $old_dir . ' tidak ada.');
+            $this->command->notifMessage('Gagal hapus folder '.$old_dir.' tidak ada.');
         }
     }
 
