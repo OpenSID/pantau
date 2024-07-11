@@ -145,4 +145,24 @@ class DashboardController extends Controller
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
 
+    public function datatablePenggunaLayanandesa(Request $request)
+    {
+        if ($request->ajax()) {
+            $desa = TrackMobile::leftJoin('kode_wilayah', 'track_mobile.kode_desa', '=', 'kode_wilayah.kode_desa')
+            ->orderBy('track_mobile.created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
+                $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
+                return $item;
+            });
+            return DataTables::of($desa)
+                ->addIndexColumn() // Menambahkan kolom indeks
+                ->escapeColumns([]) 
+                ->make(true);
+        }
+
+        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+    }
+
 }
