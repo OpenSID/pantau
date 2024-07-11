@@ -31,3 +31,11 @@
 #navbarCollapse{
     padding-left:100px
 }
+
+.header-bg {
+    width: 100%;
+    background-image: url('../../assets/img/header-bg.jpg'); /* Ganti dengan path ke gambar Anda */
+    background-size: cover; /* Menutupi seluruh div dengan gambar */
+    background-position: bottom; /* Pusatkan gambar */
+    background-repeat: no-repeat; /* Jangan ulangi gambar */
+}

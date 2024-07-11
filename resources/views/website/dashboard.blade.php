@@ -8,33 +8,46 @@
 
 @section('content')
 @include('layouts.components.daterangepicker')
+@include('layouts.components.swiper')
 <div class="row">
     <div class="col-12">
         <div class="card bg-gray-light">
             <!-- /.card-header -->
-            <div class="card-header">
-                <div class="float-left">
-                    @can('create-master-pelanggan')
-                    <div class="btn-group">
-                        <a href="{{ route('pelanggan.create') }}" type="button"
-                            class="btn btn-sm btn-block btn-primary">
-                            Tambah
-                        </a>
-                    </div>
-                    @endcan
-                    <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                        aria-expanded="false" aria-controls="collapse-filter">
-                        <i class="fas fa-filter"></i>
-                    </a>
-                </div>
-                <div class="float-right">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+            <div class="card-header header-bg">
+                <div class="row p-1">
+                    <div class="col-md-12">
+                        <div class="float-left">
+                            @can('create-master-pelanggan')
+                            <div class="btn-group">
+                                <a href="{{ route('pelanggan.create') }}" type="button"
+                                    class="btn btn-sm btn-block btn-primary">
+                                    Tambah
+                                </a>
+                            </div>
+                            @endcan
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i>
+                            </a>
                         </div>
-                        <input type="text" name="periods" class="form-control datepicker"
-                            data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
-                            autocomplete="off">
+                        <div class="float-right">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                </div>
+                                <input type="text" name="periods" class="form-control datepicker"
+                                    data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-1">    
+                    <div class="col-md-8 text-center bg-white rounded-lg" style="align-content: center;">
+                        @include('website.partial.summary')
+                    </div>
+                    <div class="col-md-4">
+                        @include('website.partial.wilayah_kerja_sama')
                     </div>
                 </div>
             </div>
@@ -52,7 +65,6 @@
                         
                     </div>
                 </div>
-                @include('website.partial.summary')
                 @include('website.partial.chart')
                 @include('website.partial.opensid_baru')
                 @include('website.partial.tanpa_opensid')
