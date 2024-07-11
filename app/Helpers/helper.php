@@ -334,11 +334,11 @@ if (! function_exists('lastrelease_opendk')) {
                 } elseif ($diff->m > 0) {
                     return $diff->m . ' bulan lalu';
                 } elseif ($diff->d > 0) {
-                    return $diff->d . ' hari yang lalu';
+                    return $diff->d . ' hari lalu';
                 } elseif ($diff->h > 0) {
                     return $diff->h . ' jam lalu';
                 } elseif ($diff->i > 0) {
-                    return $diff->i . ' menit ' . $diff->s . ' detik yang lalu';
+                    return $diff->i . ' menit ' . $diff->s . ' detik lalu';
                 } else {
                     return 'baru saja';
                 }
