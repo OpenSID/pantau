@@ -68,7 +68,7 @@ class DashboardController extends Controller
     public function datatableOpendkBaru(Request $request)
     {
         if ($request->ajax()) {
-            $desa = Opendk::select('nama_kecamatan as region', 'updated_at as tanggal')->orderBY('updated_at', 'desc')->limit(7)->get()
+            $desa = Opendk::select('nama_kecamatan as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
             ->map(function ($item) {
                 $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                 $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
@@ -86,7 +86,7 @@ class DashboardController extends Controller
     public function datatableOpensidBaru(Request $request)
     {
         if ($request->ajax()) {
-            $desa = Desa::select('nama_desa as region', 'updated_at as tanggal')->orderBY('updated_at', 'desc')->limit(7)->get()
+            $desa = Desa::select('nama_desa as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
             ->map(function ($item) {
                 $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                 $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
