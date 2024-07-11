@@ -49,6 +49,10 @@ Route::prefix('datatables')->as('datatables:')
     ->group(function () {
         Route::get('desa-baru', [DashboardController::class, 'datatableDesaBaru'])->name('desa-baru');
         Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
+        Route::get('opendk-baru', [DashboardController::class, 'datatableOpendkBaru'])->name('opendk-baru');
+        Route::get('opensid-baru', [DashboardController::class, 'datatableOpensidBaru'])->name('opensid-baru');
+        Route::get('layanandesa-baru', [DashboardController::class, 'datatableLayanandesaBaru'])->name('layanandesa-baru');
+        Route::get('keloladesa-baru', [DashboardController::class, 'datatableKeloladesaBaru'])->name('keloladesa-baru');
     });
 
 // Peta
