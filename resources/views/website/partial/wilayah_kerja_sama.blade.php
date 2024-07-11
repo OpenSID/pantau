@@ -1,25 +1,3 @@
-<style>
-    .swiper-button-next, .swiper-button-prev {
-        width: 50px;
-        height: 50px;
-        background-color: #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #007bff;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .swiper-button-next::after, .swiper-button-prev::after {
-        font-size: 20px;
-    }
-
-    .swiper-button-next:hover, .swiper-button-prev:hover {
-        background-color: #dbdbdb;
-    }
-</style>
 <h4 class="text-white" style="text-align: center">Wilayah Kerja Sama</h4>
 <div id="swiper" class="swiper">
     <div class="swiper-wrapper">
@@ -74,9 +52,9 @@
         slidesPerGroup: 1,
         loop: true,
         loopFillGroupWithBlank: true,
-        // autoplay: {
-        //     delay: 3000,
-        // },
+        autoplay: {
+            delay: 3000,
+        },
         pagination: {
             el: '.swiper-pagination',
             clickable: true,

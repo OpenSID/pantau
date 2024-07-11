@@ -67,7 +67,7 @@
                 </div>
                 @include('website.partial.chart')
                 @include('website.partial.opensid_baru')
-                @include('website.partial.tanpa_opensid')
+                @include('website.partial.peta')
             </div>
             <!-- /.card-body -->
         </div>
