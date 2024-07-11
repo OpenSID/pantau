@@ -25,11 +25,12 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Provinsi</th>
-                                                <th>Kabupaten</th>
+                                                <th>Tanggal Terpantau</th>
                                                 <th>Kecamatan</th>
+                                                <th>Kabupaten</th>
+                                                <th>Provinsi</th>
+                                                <th>Web</th>
                                                 <th>Versi</th>
-                                                <th>Tanggal Pasang</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -70,19 +71,22 @@
                     orderable: false
                 },
                 {
-                    data: 'nama_provinsi'
-                },
-                {
-                    data: 'nama_kabupaten'
+                    data: 'tanggal'
                 },
                 {
                     data: 'nama_kecamatan'
                 },
                 {
-                    data: 'versi'
+                    data: 'nama_kabupaten'
                 },
                 {
-                    data: 'tanggal'
+                    data: 'nama_provinsi'
+                },
+                {
+                    data: 'url'
+                },
+                {
+                    data: 'versi'
                 },
             ]
         })
