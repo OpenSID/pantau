@@ -43,27 +43,47 @@
     <div class="swiper-button-prev"></div>
   </div>
   
-  @push('js')
-  <script>
+@push('js')
+<script>
+    // Definisikan swiperOptions di luar scope $(document).ready()
+    var swiperOptions = {
+      slidesPerView: 2,
+      spaceBetween: -50,
+      slidesPerGroup: 1,
+      loop: true,
+      loopFillGroupWithBlank: true,
+      // autoplay: {
+      //     delay: 3000,
+      // },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    };
+  
     $(document).ready(function() {
-      var swiper = new Swiper("#swiper", {
-        slidesPerView: 2,
-        spaceBetween: -75,
-        slidesPerGroup: 1,
-        loop: true,
-        loopFillGroupWithBlank: true,
-        autoplay: {
-            delay: 3000,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
+      function checkScreenWidth() {
+        if ($(window).width() < 768) {
+          swiperOptions.slidesPerView = 1;
+          swiperOptions.spaceBetween = 0;
+        } else {
+            swiperOptions.slidesPerView = 2;
+            swiperOptions.spaceBetween = -50;
+        }
+      }
+  
+      var swiper = new Swiper("#swiper", swiperOptions);
+      checkScreenWidth();
+  
+      $(window).on('resize', function() {
+        checkScreenWidth();
+        swiper.destroy();
+        swiper = new Swiper("#swiper", swiperOptions);
       });
     });
-  </script>    
-  @endpush
+  </script>
+@endpush

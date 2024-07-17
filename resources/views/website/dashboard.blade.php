@@ -42,19 +42,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row p-1">    
-                    <div class="col-md-8 text-center bg-white rounded-lg" style="align-content: center;">
-                        @include('website.partial.summary')
-                    </div>
-                    <div class="col-md-4">
-                        @include('website.partial.wilayah_kerja_sama')
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        
                             <form name="filter" method="GET">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -62,9 +51,18 @@
                                     </div>
                                 </div>                                
                             </form>
-                        
                     </div>
                 </div>
+                <div class="row p-1">    
+                    <div class="col-xl-8 text-center bg-white rounded-lg" style="align-content: center;">
+                        @include('website.partial.summary')
+                    </div>
+                    <div class="col-xl-4">
+                        @include('website.partial.wilayah_kerja_sama')
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
                 @include('website.partial.chart')
                 @include('website.partial.opensid_baru')
                 @include('website.partial.peta')
