@@ -320,6 +320,16 @@ return [
             ],
         ],
         [
+            'text'         => 'OpenKab',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Wilayah Kerja Sama',
+                    'url'  => 'openkab/kerja-sama',
+                ],
+            ],
+        ],
+        [
             'key'          => 'khusus',
             'text'         => 'Wilayah',
             'topnav_right' => true,

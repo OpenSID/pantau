@@ -6,22 +6,23 @@ use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
 use App\Http\Middleware\PantauMiddleware;
+use App\Http\Controllers\MobileController;
 use App\Http\Controllers\OpendkController;
 use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\OpenkabController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
-use App\Http\Controllers\MobileController;
-use App\Http\Controllers\WebsiteDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,8 +102,15 @@ Route::prefix('opendk') ->group(function () {
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
-    Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');;
+    Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');
 });
+
+//openkab
+Route::prefix('openkab') ->group(function () {
+    Route::get('/kerja-sama', [OpenkabController::class, 'kerjaSama'])->name('openkab.kerjasama');
+    Route::get('/get-wilayah', [OpenkabController::class, 'getWilayah'])->name('openkab.getwilayah');
+});
+
 // Wilayah
 Route::get('wilayah', WilayahController::class);
 
