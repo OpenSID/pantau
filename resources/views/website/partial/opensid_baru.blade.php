@@ -4,12 +4,40 @@
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenKab</h4>
             </div>
-            <div class="card-body" id="openkab-baru">
+            <div class="card-body">
                 <div class="pl-4">#. Nama Wilayah</div>
                 <hr>
-                <ol>
-                    
-                </ol>
+                <div class="d-flex flex-column">
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">1. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">2. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">3. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">4. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">5. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">6. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span class="flex-shrink-0 text-nama-wilayah">7. Kabupaten</span>
+                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-block">Lihat Selengkapnya...</button>
             </div>
         </div>
     </div> -->

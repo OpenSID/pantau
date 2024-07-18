@@ -44,7 +44,7 @@ Auth::routes([
 Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
-
+Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
 // datatable
 Route::prefix('datatables')->as('datatables:')
