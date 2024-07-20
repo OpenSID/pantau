@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Openkab extends Model
 {
@@ -37,4 +38,21 @@ class Openkab extends Model
         'jumlah_bantuan',
         'tgl_rekam',
     ];
+
+    public function wilayah()
+    {
+        return $this->hasMany(Wilayah::class, 'kode_kab', 'kode_kab');
+    }
+
+    public function getNamaWilayahAttribute()
+    {
+        $sebutanKab = ($this->attributes['sebutan_kab'] == '' || $this->attributes['sebutan_kab'] == null) ? 'Kabupaten' : ucwords(strtolower($this->attributes['sebutan_kab']));
+        $namaKab = ucwords(strtolower($this->attributes['nama_kab']));
+
+        if (Str::contains($namaKab, $sebutanKab)) {
+            return $namaKab;
+        } else {
+            return $sebutanKab . ' ' . $namaKab;
+        }
+    }
 }
