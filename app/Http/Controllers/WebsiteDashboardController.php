@@ -182,6 +182,8 @@ class WebsiteDashboardController extends Controller
 
     public function openkab()
     {
-        return view('website.openkab');
+        return view('website.openkab', [
+            'latestVersion' => Openkab::latestVersion(),
+        ]);
     }
 }

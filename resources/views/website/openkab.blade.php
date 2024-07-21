@@ -13,7 +13,7 @@
             <div class="card-header header-bg">
                 <div class="row p-1 mt-3 bg-blue">
                     <div class="col-sm-12">
-                        <p class="m-0 text-white">Info Rilis Terbaru: Rilis OpenKab v2407.0.0</p>
+                        <p class="m-0 text-white">Info Rilis Terbaru: Rilis OpenKab {{ $latestVersion->versi }}</p>
                     </div>
                 </div>
                 <div class="row mt-3">
