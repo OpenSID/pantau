@@ -43,6 +43,7 @@ Auth::routes([
 
 // index dashboard
 Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('web.dashboard');
+Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
 // datatable

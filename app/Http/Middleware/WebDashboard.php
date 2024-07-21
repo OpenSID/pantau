@@ -19,11 +19,11 @@ class WebDashboard
     public function handle(Request $request, Closure $next)
     {
         $route = Route::current();
-        if (! auth()->check() && $route->uri !== 'web') {
+        if (! auth()->check() && substr($route->uri, 0, 3) !== 'web') {
             return redirect('web');
         }
         // Change the config values here
-        if ($route->uri === 'web') {
+        if (substr($route->uri, 0, 3) === 'web') {
             Config::set('adminlte', Config::get('weblte')); // example
         }
 

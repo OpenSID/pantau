@@ -179,4 +179,9 @@ class WebsiteDashboardController extends Controller
 
         return response()->json($result);
     }
+
+    public function openkab()
+    {
+        return view('website.openkab');
+    }
 }
