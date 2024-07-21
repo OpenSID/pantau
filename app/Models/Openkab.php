@@ -44,6 +44,11 @@ class Openkab extends Model
         return $this->hasMany(Wilayah::class, 'kode_kab', 'kode_kab');
     }
 
+    public function desa()
+    {
+        return $this->hasMany(Desa::class, 'kode_kabupaten', 'kode_kab');
+    }
+
     public function getNamaWilayahAttribute()
     {
         $sebutanKab = ($this->attributes['sebutan_kab'] == '' || $this->attributes['sebutan_kab'] == null) ? 'Kabupaten' : ucwords(strtolower($this->attributes['sebutan_kab']));
@@ -65,4 +70,15 @@ class Openkab extends Model
     {
         return $query->select('kode_prov')->distinct('kode_prov')->count();
     }
+
+    public function scopeJumlahDesa($query)
+    {
+        return $query->sum('jumlah_desa');
+    }
+
+    public function latestDesaVersion()
+    {
+        return $this->desa()->latestVersion();
+    }
+
 }

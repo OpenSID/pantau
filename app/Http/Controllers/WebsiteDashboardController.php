@@ -182,9 +182,17 @@ class WebsiteDashboardController extends Controller
 
     public function openkab()
     {
+        $kodeKabupaten = Openkab::pluck('kode_kab');
+
+        $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
+            ->latestVersion()
+            ->first();
+
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
+            'jumlahDesa' => Openkab::jumlahDesa(),
+            'latestDesa' => $latestDesa,
         ]);
     }
 }
