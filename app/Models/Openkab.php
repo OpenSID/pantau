@@ -60,4 +60,9 @@ class Openkab extends Model
     {
         return $query->orderBy('versi', 'desc')->first();
     }
+
+    public function scopeJumlahProvinsi($query)
+    {
+        return $query->select('kode_prov')->distinct('kode_prov')->count();
+    }
 }
