@@ -6,11 +6,11 @@ use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
-use Carbon\CarbonPeriod;
-use App\Models\TrackMobile;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Models\TrackKeloladesa;
+use App\Models\TrackMobile;
+use Carbon\CarbonPeriod;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class WebsiteDashboardController extends Controller
 {
@@ -180,8 +180,14 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
-    public function openkab()
+    public function openkab(Request $request)
     {
+        if ($request->ajax()) {
+            return DataTables::of(Openkab::query())
+                ->addIndexColumn()
+                ->make(true);
+        }
+
         $kodeKabupaten = Openkab::pluck('kode_kab');
 
         $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)

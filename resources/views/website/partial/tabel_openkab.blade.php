@@ -1,7 +1,7 @@
 <div class="card mt-3">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table" id="table-kerja-sama">
+            <table class="table" id="table-openkab">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -13,101 +13,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>11.12</td>
-                        <td>Kabupaten</td>
-                        <td>Provinsi</td>
-                        <td>100</td>
-                        <td>2407.0.0</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-@section('js')
+@push('js')
 <script>
-    var kecamatan = $('#table-kerja-sama').DataTable({
+    var kabupaten = $('#table-openkab').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('openkab/kerja-sama') }}`,
+                url: `{{ url('web/openkab') }}`,
                 method: 'get',
                 data: function(data) {
                     
@@ -127,7 +47,19 @@
                     data: 'nama_kab',
                     name: 'nama_kab'
                 },
+                {
+                    data: 'nama_prov',
+                    name: 'nama_prov'
+                },
+                {
+                    data: 'jumlah_desa',
+                    name: 'jumlah_desa'
+                },
+                {
+                    data: 'versi',
+                    name: 'versi'
+                },
             ]
         })
 </script>
-@endsection
+@endpush
