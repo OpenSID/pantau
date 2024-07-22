@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
-use App\Models\TrackKeloladesa;
-use App\Models\TrackMobile;
 use Carbon\CarbonPeriod;
+use App\Models\TrackMobile;
 use Illuminate\Http\Request;
+use App\Models\TrackKeloladesa;
+use App\Models\Wilayah;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class WebsiteDashboardController extends Controller
@@ -194,11 +196,42 @@ class WebsiteDashboardController extends Controller
             ->latestVersion()
             ->first();
 
+        $openkab = Openkab::select('kode_prov', 'nama_prov', DB::raw('count(kode_kab) as jumlah_kab'))
+            ->groupBy('kode_prov')
+            ->get();
+        
+        $provinsi = [];
+        
+        foreach ($openkab as $kab) {
+            $total_kab = Wilayah::where('kode_prov', $kab->kode_prov)
+                ->groupBY('kode_kab')
+                ->get()
+                ->count();
+
+            if ($total_kab == 0) {
+                $persentase = 0;
+            } else {
+                $persentase = round(($kab->jumlah_kab / $total_kab) * 100, 2);
+            }
+        
+            $provinsi[] = [
+                'kode_prov'  => $kab->kode_prov,
+                'nama_prov'  => $kab->nama_prov,
+                'jumlah_kab' => $kab->jumlah_kab,
+                'total_kab'  => $total_kab,
+                'persentase' => $persentase,
+            ];
+        }
+
+        $provinsiCollection = collect($provinsi);
+        $sortedProvinsi = $provinsiCollection->sortByDesc('persentase');
+
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
             'jumlahDesa' => Openkab::jumlahDesa(),
             'latestDesa' => $latestDesa,
+            'provinsi' => $sortedProvinsi->values()->all(),
         ]);
     }
     
