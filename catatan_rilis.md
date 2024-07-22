@@ -8,6 +8,7 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 4. [#313](https://github.com/OpenSID/pantau/issues/313) Penambahan detail aplikasi OpenDK.
 5. [#346](https://github.com/OpenSID/pantau/issues/346) Penambahan daftar wilayah yang bekerja sama dengan OpenDesa.
 6. [#306](https://github.com/OpenSID/pantau/issues/306) Penambahan informasi daftar kerja sama pada dasbor baru pantau.
+7. [#318](https://github.com/OpenSID/pantau/issues/318) Penambahan halaman khusus untuk OpenKab.
 
 #### Perbaikan Bug
 
