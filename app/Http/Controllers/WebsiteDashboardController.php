@@ -184,4 +184,9 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.openkab');
     }
+    
+    public function opendk(Request $request)
+    {
+        return view('website.opendk');
+    }
 }
