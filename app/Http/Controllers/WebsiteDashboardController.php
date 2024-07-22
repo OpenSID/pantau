@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
-use App\Models\TrackKeloladesa;
-use App\Models\TrackMobile;
-use Carbon\Carbon;
+use App\Models\Openkab;
 use Carbon\CarbonPeriod;
+use App\Models\TrackMobile;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TrackKeloladesa;
 
 class WebsiteDashboardController extends Controller
 {
@@ -30,6 +32,7 @@ class WebsiteDashboardController extends Controller
 
         return view('website.dashboard', [
             'fillters' => $fillters,
+            'wilayah' => Openkab::withCount('wilayah')->get(),
         ]);
     }
 
