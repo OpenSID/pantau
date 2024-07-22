@@ -15,3 +15,5 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#349](https://github.com/OpenSID/pantau/issues/349) Penambahan API untuk menangkap data dari OpenKab.
+
