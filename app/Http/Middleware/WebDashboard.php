@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +20,14 @@ class WebDashboard
     public function handle(Request $request, Closure $next)
     {
         $route = Route::current();
-        if (! auth()->check() && $route->uri !== 'web') {
+        $uri = $route->uri();
+
+        if (!auth()->check() && !Str::startsWith($uri, 'web')) {
             return redirect('web');
         }
+
         // Change the config values here
-        if ($route->uri === 'web') {
+        if (Str::startsWith($uri, 'web')) {
             Config::set('adminlte', Config::get('weblte')); // example
         }
 
