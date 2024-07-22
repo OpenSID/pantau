@@ -1,4 +1,4 @@
-<h4 class="text-white" style="text-align: center">Wilayah Kerja Sama</h4>
+<h4 class="text-white" style="text-align: left">Wilayah Kerja Sama</h4>
 <div id="swiper" class="swiper">
     <div class="swiper-wrapper">
         @foreach ($wilayah as $item)
