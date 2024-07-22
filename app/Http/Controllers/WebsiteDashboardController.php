@@ -186,4 +186,9 @@ class WebsiteDashboardController extends Controller
             'latestVersion' => Openkab::latestVersion(),
         ]);
     }
+    
+    public function opendk(Request $request)
+    {
+        return view('website.opendk');
+    }
 }
