@@ -195,4 +195,9 @@ class WebsiteDashboardController extends Controller
             'latestDesa' => $latestDesa,
         ]);
     }
+    
+    public function opendk(Request $request)
+    {
+        return view('website.opendk');
+    }
 }
