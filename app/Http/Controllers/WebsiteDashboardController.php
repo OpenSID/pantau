@@ -187,4 +187,9 @@ class WebsiteDashboardController extends Controller
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
         ]);
     }
+    
+    public function opendk(Request $request)
+    {
+        return view('website.opendk');
+    }
 }
