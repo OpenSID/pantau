@@ -55,4 +55,9 @@ class Openkab extends Model
             return $sebutanKab . ' ' . $namaKab;
         }
     }
+
+    public function scopeLatestVersion($query)
+    {
+        return $query->orderBy('versi', 'desc')->first();
+    }
 }
