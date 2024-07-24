@@ -189,4 +189,17 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
+
+    public function opensid(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+        ];
+
+        return view('website.opensid', [
+            'fillters' => $fillters,
+        ]);
+    }
 }
