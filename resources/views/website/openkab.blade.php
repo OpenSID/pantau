@@ -24,7 +24,7 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-green">
                                 <div class="inner text-center">
-                                    <h3 class="text-white">5</h3>
+                                    <h3 class="text-white">{{ $jumlahProvinsi }}</h3>
                                     <p class="text-white">Provinsi</p>
                                 </div>
                             </div>

@@ -184,6 +184,7 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
+            'jumlahProvinsi' => Openkab::jumlahProvinsi(),
         ]);
     }
     
