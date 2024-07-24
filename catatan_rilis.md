@@ -10,6 +10,7 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 6. [#306](https://github.com/OpenSID/pantau/issues/306) Penambahan informasi daftar kerja sama pada dasbor baru pantau.
 7. [#318](https://github.com/OpenSID/pantau/issues/318) Penambahan halaman khusus untuk OpenKab.
 8. [#319](https://github.com/OpenSID/pantau/issues/319) Penambahan info rilis OpenKab terbaru.
+9. [#321](https://github.com/OpenSID/pantau/issues/321) Penambahan info jumlah provinsi.
 
 #### Perbaikan Bug
 
