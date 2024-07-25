@@ -234,7 +234,7 @@ return [
         ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'OpenKab',
-            'url'          => '/',
+            'url'          => 'web/openkab',
             'icon'         => 'fas pantau-icon fa-openkab',
         ],
         [

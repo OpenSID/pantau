@@ -184,6 +184,9 @@ if (! function_exists('abaikan_domain')) {
             case 'opendk':
                 return Cache::get('abaikan_domain_opendk', '');
                 break;
+            case 'openkab':
+                return Cache::get('abaikan_domain_openkab', '');
+                break;
             default:
                 return Cache::get('abaikan_domain_opensid', '');
         }
