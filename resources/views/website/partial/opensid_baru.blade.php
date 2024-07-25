@@ -69,6 +69,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <a href="{{ url('web/opensid') }}" id="view-more-button-opensid" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>
@@ -167,6 +168,15 @@
                 },
             ],
             dom: 't<"bottom">', 
+            drawCallback: function(settings) {
+                var api = this.api();
+                var data = api.rows({ page: 'current' }).data().length;
+                if (data > 0) {
+                    $('#view-more-button-opensid').show();
+                } else {
+                    $('#view-more-button-opensid').hide();
+                }
+            }
         });
         $('#table-opensid-baru thead').hide();
 

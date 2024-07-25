@@ -163,4 +163,27 @@ class DashboardController extends Controller
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
 
+    public function datatablePenggunaOpensid(Request $request)
+    {
+        if ($request->ajax()) {
+            $desa = Desa::orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                if($item->modul_tte == 0){
+                    $item->modul_tte = '<span class="badge badge-secondary">Tidak Aktif</span>';
+                }elseif($item->modul_tte == 1){
+                    $item->modul_tte = '<span class="badge badge-success">Aktif</span>';
+                }
+                $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
+                $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
+                return $item;
+            });
+            return DataTables::of($desa)
+                ->addIndexColumn() // Menambahkan kolom indeks
+                ->escapeColumns([]) 
+                ->make(true);
+        }
+
+        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+    }
 }

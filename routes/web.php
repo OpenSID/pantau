@@ -46,6 +46,7 @@ Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('we
 Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
+Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
 // datatable
@@ -58,6 +59,7 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('layanandesa-baru', [DashboardController::class, 'datatableLayanandesaBaru'])->name('layanandesa-baru');
         Route::get('keloladesa-baru', [DashboardController::class, 'datatableKeloladesaBaru'])->name('keloladesa-baru');
         Route::get('pengguna-opendk', [DashboardController::class, 'datatablePenggunaOpendk'])->name('pengguna-opendk');
+        Route::get('pengguna-opensid', [DashboardController::class, 'datatablePenggunaOpensid'])->name('pengguna-opensid');
     });
 
 // Peta

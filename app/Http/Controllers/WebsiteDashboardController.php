@@ -192,4 +192,9 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
+
+    public function opensid(Request $request)
+    {
+        return view('website.opensid');
+    }
 }
