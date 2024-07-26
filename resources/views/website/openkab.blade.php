@@ -13,7 +13,7 @@
             <div class="card-header header-bg">
                 <div class="row p-1 mt-3 bg-blue">
                     <div class="col-sm-12">
-                        <p class="m-0 text-white">Info Rilis Terbaru: Rilis OpenKab v2407.0.0</p>
+                        <p class="m-0 text-white">Info Rilis Terbaru: Rilis OpenKab {{ $latestVersion->versi }}</p>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -24,7 +24,7 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-green">
                                 <div class="inner text-center">
-                                    <h3 class="text-white">5</h3>
+                                    <h3 class="text-white">{{ $jumlahProvinsi }}</h3>
                                     <p class="text-white">Provinsi</p>
                                 </div>
                             </div>

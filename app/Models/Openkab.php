@@ -55,4 +55,14 @@ class Openkab extends Model
             return $sebutanKab . ' ' . $namaKab;
         }
     }
+
+    public function scopeLatestVersion($query)
+    {
+        return $query->orderBy('versi', 'desc')->first();
+    }
+
+    public function scopeJumlahProvinsi($query)
+    {
+        return $query->select('kode_prov')->distinct('kode_prov')->count();
+    }
 }
