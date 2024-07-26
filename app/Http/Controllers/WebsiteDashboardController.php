@@ -220,6 +220,7 @@ class WebsiteDashboardController extends Controller
             'fillters' => $fillters,
             'latestPremiumVersion' => Desa::latestPremiumVersion(),
             'latestUmumVersion' => Desa::latestUmumVersion(),
+            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 }
