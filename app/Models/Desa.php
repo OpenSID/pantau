@@ -385,21 +385,29 @@ class Desa extends Model
 
     public function scopeLatestPremiumVersion($query)
     {
-        return $query->where('versi_hosting', 'like', '%-premium')
+        $versi = $query->where('versi_hosting', 'like', '%-premium')
                     ->orderByRaw(
                         "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
-                    )->first()->versi_hosting;
+                    )->first();
+
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        
+        return $versi;
     }
 
     public function scopeLatestUmumVersion($query)
     {
-        return $query->where('versi_hosting', 'not like', '%-premium')
+        $versi = $query->where('versi_hosting', 'not like', '%-premium')
                     ->orderByRaw(
                         "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
-                    )->first()->versi_hosting;
+                    )->first();
+
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+
+        return $versi;
     }
 }

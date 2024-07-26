@@ -23,7 +23,7 @@
                                 </a>
                             </div>
                             <div class="col-md-9 bg-blue p-1">
-                                <p class="m-0 text-white">Info Rilis Terbaru: Rilis Umum v{{ $latestUmumVersion }} | Rilis Premium v{{ $latestPremiumVersion }}</p>
+                                <p class="m-0 text-white">Info Rilis Terbaru: Rilis Umum {{ $latestUmumVersion }} | Rilis Premium {{ $latestPremiumVersion }}</p>
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group">
