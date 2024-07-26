@@ -382,4 +382,24 @@ class Desa extends Model
     {
         return $query->online()->aktif($batasTgl);
     }
+
+    public function scopeLatestPremiumVersion($query)
+    {
+        return $query->where('versi_hosting', 'like', '%-premium')
+                    ->orderByRaw(
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
+                    )->first()->versi_hosting;
+    }
+
+    public function scopeLatestUmumVersion($query)
+    {
+        return $query->where('versi_hosting', 'not like', '%-premium')
+                    ->orderByRaw(
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
+                    )->first()->versi_hosting;
+    }
 }

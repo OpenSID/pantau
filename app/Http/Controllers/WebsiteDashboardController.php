@@ -215,9 +215,11 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-
+        
         return view('website.opensid', [
             'fillters' => $fillters,
+            'latestPremiumVersion' => Desa::latestPremiumVersion(),
+            'latestUmumVersion' => Desa::latestUmumVersion(),
         ]);
     }
 }
