@@ -87,7 +87,7 @@ class WebsiteDashboardController extends Controller
         );
     }
 
-    public function chartUsage(Request $request)
+    public function chartUsage(Request $request, $data = false)
     {
         $period = $request->get('period');
         $provinsi = $request->get('provinsi');
@@ -166,15 +166,30 @@ class WebsiteDashboardController extends Controller
 
             $openkabData[] = 0;
         }
-        $result = [
-            'labels' => $labels,
-            'datasets' => [
+
+        $datasets = [];
+
+        if ($data === 'opensid') {
+            $datasets[] = ['label' => 'OpenSID', 'data' => $opensidData];
+        } elseif ($data === 'opendk') {
+            $datasets[] = ['label' => 'OpenDK', 'data' => $opendkData];
+        } elseif ($data === 'layanan') {
+            $datasets[] = ['label' => 'LayananDesa', 'data' => $layananData];
+        } elseif ($data === 'kelola') {
+            $datasets[] = ['label' => 'KelolaDesa', 'data' => $kelolaData];
+        } else {
+            $datasets = [
                 ['label' => 'OpenKab', 'data' => $openkabData],
                 ['label' => 'OpenDK', 'data' => $opendkData],
                 ['label' => 'OpenSID', 'data' => $opensidData],
                 ['label' => 'LayananDesa', 'data' => $layananData],
                 ['label' => 'KelolaDesa', 'data' => $kelolaData],
-            ],
+            ];
+        }
+    
+        $result = [
+            'labels' => $labels,
+            'datasets' => $datasets,
         ];
 
         return response()->json($result);

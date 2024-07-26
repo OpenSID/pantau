@@ -177,7 +177,7 @@
         const params = {period : $('input[name=periods]').val(), provinsi : $('select[name=provinsi]').val(), kabupaten : $('select[name=kabupaten]').val(), kecamatan : $('select[name=kecamatan]').val()}        
 
         $.ajax({
-            url: 'api/web/summary',
+            url: "{{ url('api/web/summary') }}",
             data: params,
             type: "GET",
             beforeSend: function(){
@@ -218,7 +218,7 @@
 
 
                 $.ajax({
-                    url: 'api/web/chart-usage',
+                    url: "{{ url('api/web/chart-usage/opensid') }}",
                     data: params,
                     type: "GET",            
                     success: function(data) {
