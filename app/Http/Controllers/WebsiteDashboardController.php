@@ -192,9 +192,14 @@ class WebsiteDashboardController extends Controller
 
         $kodeKabupaten = Openkab::pluck('kode_kab');
 
-        $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
-            ->latestVersion()
-            ->first();
+        if ($kodeKabupaten->count() > 0) {
+            $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
+                ->latestVersion()
+                ->first()->versi_hosting;
+        } else {
+            $latestDesa = 'Belum ada data';
+        }
+
 
         $openkab = Openkab::select('kode_prov', 'nama_prov', DB::raw('count(kode_kab) as jumlah_kab'))
             ->groupBy('kode_prov')
