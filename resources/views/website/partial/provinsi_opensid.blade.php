@@ -19,7 +19,7 @@
         <div class="card-body">
             <table class="table table-responsive table-custom">
                 <tbody>
-                    @foreach ($provinsi as $item)
+                    @forelse ($provinsi as $item)
                         <tr>
                             <td>
                                 {{ $item['nama_prov'] }}
@@ -30,7 +30,9 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                    Belum ada data
+                    @endforelse
                 </tbody>
             </table>
         </div>

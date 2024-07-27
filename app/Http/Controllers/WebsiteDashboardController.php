@@ -208,6 +208,11 @@ class WebsiteDashboardController extends Controller
         $provinsi = [];
         
         foreach ($openkab as $kab) {
+            
+            if (empty($kab->kode_prov)) {
+                continue; // Skip data dengan kode_prov kosong
+            }
+            
             $total_kab = Wilayah::where('kode_prov', $kab->kode_prov)
                 ->groupBY('kode_kab')
                 ->get()
