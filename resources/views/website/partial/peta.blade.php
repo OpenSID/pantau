@@ -74,62 +74,77 @@
 </div>
 
 @section('js')
-    <script>
-        $(document).ready(function() {
-            var mapbox_token = "{{ config('tracksid.sandi.mapbox_token') }}";
-            var markersBar;
-            var barLayer;
+<script>
+    $(document).ready(function() {
+        var mapbox_token = "{{ config('tracksid.sandi.mapbox_token') }}";
+        var markersBar;
+        var barLayer;
 
-            var map = L.map('map', {
-                fullscreenControl: {
-                    pseudoFullscreen: false
-                }
-            }).setView([{{ config('leaflet.map_center_latitude') }}, {{ config('leaflet.map_center_longitude') }}], {{ config('leaflet.zoom_level') }});
-
-            var mbAttr =
-                'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-            var mbUrl =
-                'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapbox_token;
-
-            var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-            var streets = L.tileLayer(mbUrl, {
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
-            });
-
-            var osm = L.tileLayer(osmUrl, {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
-
-            var baseLayers = {
-                'OpenStreetMap': osm,
-                'Streets': streets
-            };
-
-            // Tambahkan jenis map
-            var layerControl = L.control.layers(baseLayers).addTo(map);
-
-            var satellite = L.tileLayer(mbUrl, {
-                id: 'mapbox/satellite-v9',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
-            });
-            layerControl.addBaseLayer(satellite, 'Satellite');
-
-            // Ubah icon
-            var baseballIcon = L.icon({
-                iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
-                iconSize: [20, 20],
-            });
-
-            function onEachFeature(feature, layer) {
-                layer.bindPopup(feature.properties.popupContent);
+        var map = L.map('map', {
+            fullscreenControl: {
+                pseudoFullscreen: false
             }
+        }).setView([{{ config('leaflet.map_center_latitude') }}, {{ config('leaflet.map_center_longitude') }}], {{ config('leaflet.zoom_level') }});
+
+        var mbAttr =
+            'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+        var mbUrl =
+            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapbox_token;
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+        var streets = L.tileLayer(mbUrl, {
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: mbAttr
         });
-    </script>
+
+        var osm = L.tileLayer(osmUrl, {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var baseLayers = {
+            'OpenStreetMap': osm,
+            'Streets': streets
+        };
+
+        // Tambahkan jenis map
+        var layerControl = L.control.layers(baseLayers).addTo(map);
+
+        var satellite = L.tileLayer(mbUrl, {
+            id: 'mapbox/satellite-v9',
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: mbAttr
+        });
+        layerControl.addBaseLayer(satellite, 'Satellite');
+
+        // Ubah icon
+        var iconUrl = "{{ url('assets/img/opensid_logo.png') }}";
+
+        function createIcon(color) {
+            return L.icon({
+                iconUrl: iconUrl,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+                popupAnchor: [0, -10],
+                className: color
+            });
+        }
+
+        // Menambahkan banyak marker dengan ikon berbeda
+        var markers = [
+            {lat: -7.322962697427194, lng: 112.56597161293031, popup: 'Marker 1', color: 'default'},
+            {lat: -7.0131397, lng: 112.3854046, popup: 'Marker 2', color: 'default'},
+            {lat: -7.408239413897698, lng: 109.56422567367555, popup: 'Marker 3', color: 'default'}
+        ];
+
+        markers.forEach(function(marker) {
+            L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
+                .bindPopup(marker.popup);
+        });
+    });
+</script>
 @endsection
