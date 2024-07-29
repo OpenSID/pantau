@@ -47,6 +47,7 @@ Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->midd
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
+Route::get('/web/data-peta', [WebsiteDashboardController::class, 'dataPeta']);
 
 // datatable
 Route::prefix('datatables')->as('datatables:')

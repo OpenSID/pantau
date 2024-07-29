@@ -33,6 +33,11 @@ class WebsiteDashboardController extends Controller
         return view('website.dashboard', [
             'fillters' => $fillters,
             'wilayah' => Openkab::withCount('wilayah')->get(),
+            'jml_openkab' => Openkab::count(),
+            'jml_opendk' => Opendk::count(),
+            'jml_opensid' => Desa::count(),
+            'jml_layanandesa' => TrackMobile::count(),
+            'jml_keloladesa' => TrackKeloladesa::count(),
         ]);
     }
 
@@ -191,5 +196,16 @@ class WebsiteDashboardController extends Controller
     public function opendk(Request $request)
     {
         return view('website.opendk');
+    }
+    
+    public function dataPeta()
+    {
+        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->get()->map(function ($marker) {
+            $marker->color = 'default';
+            return $marker;
+        });
+        
+        // Mengembalikan data sebagai response JSON
+        return response()->json($markers);
     }
 }

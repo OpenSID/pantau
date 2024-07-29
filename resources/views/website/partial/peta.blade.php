@@ -23,7 +23,7 @@
               OpenKab
           </div>
           <div class="apps-number bg-pink">
-              21
+              {{$jml_openkab}}
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -34,7 +34,7 @@
               OpenDK
           </div>
           <div class="apps-number bg-green">
-              2981
+            {{$jml_opendk}}
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -45,7 +45,7 @@
               OpenSID
           </div>
           <div class="apps-number bg-orange">
-              31981
+            {{$jml_opensid}}
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -56,7 +56,7 @@
               LayananDesa
           </div>
           <div class="apps-number bg-red">
-              4321
+           {{$jml_layanandesa}}
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -67,7 +67,7 @@
               KelolaDesa
           </div>
           <div class="apps-number bg-blue">
-              121
+              {{$jml_keloladesa}}
           </div>
       </div>
   </div>
@@ -134,16 +134,12 @@
             });
         }
 
-        // Menambahkan banyak marker dengan ikon berbeda
-        var markers = [
-            {lat: -7.322962697427194, lng: 112.56597161293031, popup: 'Marker 1', color: 'default'},
-            {lat: -7.0131397, lng: 112.3854046, popup: 'Marker 2', color: 'default'},
-            {lat: -7.408239413897698, lng: 109.56422567367555, popup: 'Marker 3', color: 'default'}
-        ];
-
-        markers.forEach(function(marker) {
-            L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
-                .bindPopup(marker.popup);
+        // Mendapatkan data marker dari API Laravel
+        $.getJSON('/web/data-peta', function(data) {
+            data.forEach(function(marker) {
+                L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
+                    .bindPopup(marker.popup);
+            });
         });
     });
 </script>
