@@ -197,15 +197,4 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
-    
-    public function dataPeta()
-    {
-        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->get()->map(function ($marker) {
-            $marker->color = 'default';
-            return $marker;
-        });
-        
-        // Mengembalikan data sebagai response JSON
-        return response()->json($markers);
-    }
 }
