@@ -221,6 +221,11 @@ class WebsiteDashboardController extends Controller
         return view('website.opendk');
     }
 
+    public function keloladesa(Request $request)
+    {
+        return view('website.keloladesa');
+    }
+    
     public function opensid(Request $request)
     {
         $fillters = [
