@@ -43,18 +43,18 @@
                 {
                     data: 'versi',
                     name: 'x.versi',
-                },
+                },                
                 {
-                    name: 'offline',
+                    name: 'online',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}"><span class="badge badge-success">${data.online}</span></a>`
                     },
                     searchable: false,
                 },
                 {
-                    name: 'online',
+                    name: 'offline',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
                     },
                     searchable: false,
                 },
