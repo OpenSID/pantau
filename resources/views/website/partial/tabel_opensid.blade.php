@@ -1,0 +1,111 @@
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="table-opensid">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Desa</th>
+                        <th>Nama Desa</th>
+                        <th>Nama Kecamatan</th>
+                        <th>Nama Kabupaten</th>
+                        <th>Nama Provinsi</th>
+                        <th>Versi Terpasang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>11.12</td>
+                        <td>Desa</td>
+                        <td>Kecamatan</td>
+                        <td>Kabupaten</td>
+                        <td>Provinsi</td>
+                        <td>2407.0.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

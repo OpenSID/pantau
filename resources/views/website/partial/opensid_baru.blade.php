@@ -58,6 +58,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <a href="{{ url('web/layanandesa') }}" id="view-more-button-layanandesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>
@@ -73,6 +74,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <a href="{{ url('web/keloladesa') }}" id="view-more-button-keloladesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>    
@@ -199,6 +201,15 @@
                 },
             ],
             dom: 't<"bottom">', 
+            drawCallback: function(settings) {
+                var api = this.api();
+                var data = api.rows({ page: 'current' }).data().length;
+                if (data > 0) {
+                    $('#view-more-button-layanandesa').show();
+                } else {
+                    $('#view-more-button-layanandesa').hide();
+                }
+            }
         });
         $('#table-layanandesa-baru thead').hide();
 
@@ -224,6 +235,15 @@
                 },
             ],
             dom: 't<"bottom">', 
+            drawCallback: function(settings) {
+                var api = this.api();
+                var data = api.rows({ page: 'current' }).data().length;
+                if (data > 0) {
+                    $('#view-more-button-keloladesa').show();
+                } else {
+                    $('#view-more-button-keloladesa').hide();
+                }
+            }
         });
         $('#table-keloladesa-baru thead').hide();
     });
