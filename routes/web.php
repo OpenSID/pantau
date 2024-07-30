@@ -45,6 +45,7 @@ Auth::routes([
 Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
+Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
@@ -57,6 +58,7 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('opensid-baru', [DashboardController::class, 'datatableOpensidBaru'])->name('opensid-baru');
         Route::get('layanandesa-baru', [DashboardController::class, 'datatableLayanandesaBaru'])->name('layanandesa-baru');
         Route::get('keloladesa-baru', [DashboardController::class, 'datatableKeloladesaBaru'])->name('keloladesa-baru');
+        Route::get('pengguna-layanandesa', [DashboardController::class, 'datatablePenggunaLayanandesa'])->name('pengguna-layanandesa');
         Route::get('pengguna-opendk', [DashboardController::class, 'datatablePenggunaOpendk'])->name('pengguna-opendk');
     });
 
