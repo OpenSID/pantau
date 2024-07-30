@@ -382,4 +382,10 @@ class Desa extends Model
     {
         return $query->online()->aktif($batasTgl);
     }
+
+    public function scopeLatestVersion($query)
+    {
+        return $query->orderByRaw('CAST(SUBSTRING_INDEX(versi_hosting, "-", 1) AS DECIMAL) DESC')
+                     ->orderBy('versi_hosting', 'DESC');
+    }
 }
