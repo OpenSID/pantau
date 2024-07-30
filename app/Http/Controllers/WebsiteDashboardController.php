@@ -195,11 +195,24 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
+    public function layanandesa(Request $request)
+    {
+        return view('website.layanandesa');
+    }
+  
     public function openkab()
     {
+        $kodeKabupaten = Openkab::pluck('kode_kab');
+
+        $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
+            ->latestVersion()
+            ->first();
+
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
+            'jumlahDesa' => Openkab::jumlahDesa(),
+            'latestDesa' => $latestDesa,
         ]);
     }
     

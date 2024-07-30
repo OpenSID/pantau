@@ -32,8 +32,8 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-blue">
                                 <div class="inner text-center">
-                                    <h3 class="text-white">21</h3>
-                                    <p class="text-white">Terpasang <br> Versi Terakhir: 2407.0.0</p>
+                                    <h3 class="text-white">{{ $jumlahDesa }}</h3>
+                                    <p class="text-white">Terpasang <br> Versi Terakhir: {{ $latestDesa->versi_hosting }}</p>
                                 </div>
                             </div>
                         </div>
