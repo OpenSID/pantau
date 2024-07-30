@@ -8,9 +8,11 @@ use App\Models\Opendk;
 use App\Models\Openkab;
 use Carbon\CarbonPeriod;
 use App\Models\TrackMobile;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TrackKeloladesa;
+use App\Models\Wilayah;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class WebsiteDashboardController extends Controller
 {
@@ -30,14 +32,16 @@ class WebsiteDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
 
+        $wilayah = Openkab::count() > 0 ? Openkab::withCount('wilayah')->get() : [];
+
         return view('website.dashboard', [
             'fillters' => $fillters,
-            'wilayah' => Openkab::withCount('wilayah')->get(),
             'jml_openkab' => Openkab::count(),
             'jml_opendk' => Opendk::count(),
             'jml_opensid' => Desa::count(),
             'jml_layanandesa' => TrackMobile::count(),
             'jml_keloladesa' => TrackKeloladesa::count(),
+            'wilayah' => $wilayah,
         ]);
     }
 
@@ -92,7 +96,7 @@ class WebsiteDashboardController extends Controller
         );
     }
 
-    public function chartUsage(Request $request)
+    public function chartUsage(Request $request, $data = false)
     {
         $period = $request->get('period');
         $provinsi = $request->get('provinsi');
@@ -171,30 +175,123 @@ class WebsiteDashboardController extends Controller
 
             $openkabData[] = 0;
         }
-        $result = [
-            'labels' => $labels,
-            'datasets' => [
+
+        $datasets = [];
+
+        if ($data === 'opensid') {
+            $datasets[] = ['label' => 'OpenSID', 'data' => $opensidData];
+        } elseif ($data === 'opendk') {
+            $datasets[] = ['label' => 'OpenDK', 'data' => $opendkData];
+        } elseif ($data === 'layanan') {
+            $datasets[] = ['label' => 'LayananDesa', 'data' => $layananData];
+        } elseif ($data === 'kelola') {
+            $datasets[] = ['label' => 'KelolaDesa', 'data' => $kelolaData];
+        } else {
+            $datasets = [
                 ['label' => 'OpenKab', 'data' => $openkabData],
                 ['label' => 'OpenDK', 'data' => $opendkData],
                 ['label' => 'OpenSID', 'data' => $opensidData],
                 ['label' => 'LayananDesa', 'data' => $layananData],
                 ['label' => 'KelolaDesa', 'data' => $kelolaData],
-            ],
+            ];
+        }
+    
+        $result = [
+            'labels' => $labels,
+            'datasets' => $datasets,
         ];
 
         return response()->json($result);
     }
 
-    public function openkab()
+    public function layanandesa(Request $request)
     {
+        return view('website.layanandesa');
+    }
+  
+    public function openkab(Request $request)
+    {
+        if ($request->ajax()) {
+            return DataTables::of(Openkab::query())
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        $kodeKabupaten = Openkab::pluck('kode_kab');
+
+        if ($kodeKabupaten->count() > 0) {
+            $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
+                ->latestVersion()
+                ->first()->versi_hosting;
+        } else {
+            $latestDesa = 'Belum ada data';
+        }
+
+
+        $openkab = Openkab::select('kode_prov', 'nama_prov', DB::raw('count(kode_kab) as jumlah_kab'))
+            ->groupBy('kode_prov')
+            ->get();
+        
+        $provinsi = [];
+        
+        foreach ($openkab as $kab) {
+            
+            if (empty($kab->kode_prov)) {
+                continue; // Skip data dengan kode_prov kosong
+            }
+            
+            $total_kab = Wilayah::where('kode_prov', $kab->kode_prov)
+                ->groupBY('kode_kab')
+                ->get()
+                ->count();
+
+            if ($total_kab == 0) {
+                $persentase = 0;
+            } else {
+                $persentase = round(($kab->jumlah_kab / $total_kab) * 100, 2);
+            }
+        
+            $provinsi[] = [
+                'kode_prov'  => $kab->kode_prov,
+                'nama_prov'  => $kab->nama_prov,
+                'jumlah_kab' => $kab->jumlah_kab,
+                'total_kab'  => $total_kab,
+                'persentase' => $persentase,
+            ];
+        }
+
+        $provinsiCollection = collect($provinsi);
+        $sortedProvinsi = $provinsiCollection->sortByDesc('persentase');
+
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
+            'jumlahDesa' => Openkab::jumlahDesa(),
+            'latestDesa' => $latestDesa,
+            'provinsi' => $sortedProvinsi->values()->all(),
         ]);
     }
     
     public function opendk(Request $request)
     {
         return view('website.opendk');
+    }
+
+    public function keloladesa(Request $request)
+    {
+        return view('website.keloladesa');
+    }
+    
+    public function opensid(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+        ];
+
+        return view('website.opensid', [
+            'fillters' => $fillters,
+        ]);
     }
 }
