@@ -307,7 +307,8 @@ class WebsiteDashboardController extends Controller
         return view('website.opensid', [
             'fillters' => $fillters,
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
-            'versi_terakhir' => lastrelease_opensid()
+            'versi_terakhir' => lastrelease_opensid(),
+            'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get()
         ]);
     }
 }

@@ -142,7 +142,7 @@
                         <div class="bg-blue p-2">
                             OpenSID Terpasang Berdasarkan Provinsi
                         </div>
-                        @include('website.partial.provinsi_pengguna_opensid')
+                        @include('website.partial.provinsi_pengguna_opensid', ['provinsi_pengguna_opensid' => $provinsi_pengguna_opensid])
                     </div>
                 </div>
                 <div class="row mt-3">
