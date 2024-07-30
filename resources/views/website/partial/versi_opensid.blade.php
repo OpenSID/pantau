@@ -53,7 +53,7 @@
                     orderable: false
                 },
                 {
-                    name: 'offline',
+                    name: 'online',
                     data: function (data) {
                         return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
                     },
