@@ -180,6 +180,11 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
+    public function layanandesa(Request $request)
+    {
+        return view('website.layanandesa');
+    }
+  
     public function openkab()
     {
         $kodeKabupaten = Openkab::pluck('kode_kab');
