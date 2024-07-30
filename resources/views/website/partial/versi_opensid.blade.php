@@ -19,7 +19,7 @@
 
 @push('js')
     <script>
-        var desa = $('#table-versi').DataTable({
+        var desaVersi = $('#table-versi').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
@@ -27,13 +27,13 @@
             pageLength: 5,
             dom: 't',
             lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-            order: [[1, 'desc']],
+            order: [[1, 'desc']],            
             ajax: {
                 url: `{{ url('laporan/versi') }}`,
                 method: 'get',
                 data: function(data) {                     
                 }
-            },
+            },            
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -42,21 +42,23 @@
                 },
                 {
                     data: 'versi',
-                    name: 'x.versi',
+                    name: 'x.versi',                    
+                },                
+                {
+                    name: 'online',
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}"><span class="badge badge-success">${data.online}</span></a>`
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     name: 'offline',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
                     },
                     searchable: false,
-                },
-                {
-                    name: 'online',
-                    data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
-                    },
-                    searchable: false,
+                    orderable: false
                 },
             ]
         })        
