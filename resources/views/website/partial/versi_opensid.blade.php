@@ -1,42 +1,64 @@
 <div class="card mt-3">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table" id="table-opensid">
+            <table class="table" id="table-versi">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>No</th>
                         <th>Versi</th>
                         <th>Online</th>
-                        <th>Offline</th>
+                        <th>Offline</th>                        
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>2406.0.0-premium</td>
-                        <td><span class="badge badge-success">200</span></td>
-                        <td><span class="badge badge-danger">200</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2406.0.0</td>
-                        <td><span class="badge badge-success">200</span></td>
-                        <td><span class="badge badge-danger">200</span></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>2405.0.0-premium</td>
-                        <td><span class="badge badge-success">200</span></td>
-                        <td><span class="badge badge-danger">200</span></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>2404.0.0</td>
-                        <td><span class="badge badge-success">200</span></td>
-                        <td><span class="badge badge-danger">200</span></td>
-                    </tr>
-                </tbody>
+                <tbody></tbody>
             </table>
+            <div class="text-center"><a href="{{ url('laporan/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
         </div>
     </div>
 </div>
+
+@push('js')
+    <script>
+        var desa = $('#table-versi').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: true,
+            pageLength: 5,
+            dom: 't',
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            order: [[1, 'desc']],
+            ajax: {
+                url: `{{ url('laporan/versi') }}`,
+                method: 'get',
+                data: function(data) {                     
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'versi',
+                    name: 'x.versi',
+                },
+                {
+                    name: 'offline',
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}">${data.offline}</a>`
+                    },
+                    searchable: false,
+                },
+                {
+                    name: 'online',
+                    data: function (data) {
+                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}">${data.online}</a>`
+                    },
+                    searchable: false,
+                },
+            ]
+        })        
+    </script>
+@endpush
