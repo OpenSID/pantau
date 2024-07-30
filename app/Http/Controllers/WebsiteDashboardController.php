@@ -87,7 +87,7 @@ class WebsiteDashboardController extends Controller
         );
     }
 
-    public function chartUsage(Request $request)
+    public function chartUsage(Request $request, $data = false)
     {
         $period = $request->get('period');
         $provinsi = $request->get('provinsi');
@@ -166,25 +166,53 @@ class WebsiteDashboardController extends Controller
 
             $openkabData[] = 0;
         }
-        $result = [
-            'labels' => $labels,
-            'datasets' => [
+
+        $datasets = [];
+
+        if ($data === 'opensid') {
+            $datasets[] = ['label' => 'OpenSID', 'data' => $opensidData];
+        } elseif ($data === 'opendk') {
+            $datasets[] = ['label' => 'OpenDK', 'data' => $opendkData];
+        } elseif ($data === 'layanan') {
+            $datasets[] = ['label' => 'LayananDesa', 'data' => $layananData];
+        } elseif ($data === 'kelola') {
+            $datasets[] = ['label' => 'KelolaDesa', 'data' => $kelolaData];
+        } else {
+            $datasets = [
                 ['label' => 'OpenKab', 'data' => $openkabData],
                 ['label' => 'OpenDK', 'data' => $opendkData],
                 ['label' => 'OpenSID', 'data' => $opensidData],
                 ['label' => 'LayananDesa', 'data' => $layananData],
                 ['label' => 'KelolaDesa', 'data' => $kelolaData],
-            ],
+            ];
+        }
+    
+        $result = [
+            'labels' => $labels,
+            'datasets' => $datasets,
         ];
 
         return response()->json($result);
     }
 
+    public function layanandesa(Request $request)
+    {
+        return view('website.layanandesa');
+    }
+  
     public function openkab()
     {
+        $kodeKabupaten = Openkab::pluck('kode_kab');
+
+        $latestDesa = Desa::whereIn('kode_kabupaten', $kodeKabupaten)
+            ->latestVersion()
+            ->first();
+
         return view('website.openkab', [
             'latestVersion' => Openkab::latestVersion(),
             'jumlahProvinsi' => Openkab::jumlahProvinsi(),
+            'jumlahDesa' => Openkab::jumlahDesa(),
+            'latestDesa' => $latestDesa,
         ]);
     }
     
@@ -196,5 +224,18 @@ class WebsiteDashboardController extends Controller
     public function keloladesa(Request $request)
     {
         return view('website.keloladesa');
+    }
+    
+    public function opensid(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+        ];
+
+        return view('website.opensid', [
+            'fillters' => $fillters,
+        ]);
     }
 }

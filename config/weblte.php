@@ -244,7 +244,7 @@ return [
         ],
         [
             'text'         => 'OpenSID',
-            'url'          => 'peta',
+            'url'          => 'web/opensid',
             'icon'         => 'fas pantau-icon fa-opensid',
         ],   
         [
