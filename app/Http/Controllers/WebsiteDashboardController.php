@@ -192,4 +192,9 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
+    
+    public function openkabData(Request $request)
+    {
+        return view('website.openkab_data');
+    }
 }
