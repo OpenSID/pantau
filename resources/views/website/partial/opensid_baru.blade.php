@@ -1,3 +1,10 @@
+<style>
+@media (min-width: 768px) {
+    .col-md {
+        max-width: 267px!important;
+    }
+}
+</style>
 <div class="row" style="width:100%">
     <div class="col-md">
         <div class="card bg-white">
