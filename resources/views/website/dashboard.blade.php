@@ -54,12 +54,14 @@
                     </div>
                 </div>
                 <div class="row p-1">    
-                    <div class="col-xl-8 text-center bg-white rounded-lg" style="align-content: center;">
+                    <div class="col-xl-{{ count($wilayah) > 0 ? 8 : 12 }} text-center bg-white rounded-lg" style="align-content: center;">
                         @include('website.partial.summary')
                     </div>
-                    <div class="col-xl-4">
-                        @include('website.partial.wilayah_kerja_sama')
-                    </div>
+                    @if(count($wilayah) > 0)
+                        <div class="col-xl-4">
+                            @include('website.partial.wilayah_kerja_sama')
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

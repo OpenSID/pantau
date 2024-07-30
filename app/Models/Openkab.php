@@ -63,7 +63,7 @@ class Openkab extends Model
 
     public function scopeLatestVersion($query)
     {
-        return $query->orderBy('versi', 'desc')->first();
+        return $query->orderBy('versi', 'desc')->first()->versi ?? 'Belum ada data';
     }
 
     public function scopeJumlahProvinsi($query)
