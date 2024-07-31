@@ -158,6 +158,33 @@ if (! function_exists('lastrelease_opensid')) {
     }
 }
 
+if (! function_exists('lastrelease_pbb')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_pbb()
+    {
+        
+        // Cache data until the end of the day
+        $version = Cache::remember('my_data', now()->endOfDay(), function () {            
+            $version = '2401.0.0';
+            $versi_pbb = lastrelease('https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest');
+
+            if ($versi_pbb !== false) {
+                $version = str_replace('v', '', $versi_pbb->tag_name);                
+            }
+
+            return $version;
+        });
+        
+
+        return $version;
+    }
+}
+
 if (! function_exists('pantau_wilayah_khusus')) {
     /**
      * Validasi domain.
