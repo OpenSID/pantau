@@ -29,9 +29,12 @@ class InstallOpensidController extends Controller
         
         $opensidData = $opensid->get();
         $labels = [];
-        $datasetOpensid = [];
-        foreach ($opensidData as $item) {
-            $labels[] = Carbon::createFromFormat('m-Y', $item->month_year)->translatedFormat('M-y');            
+        $datasetOpensid = [];        
+        foreach ($opensidData as $item) {            
+            $period = Carbon::createFromFormat('d-m-Y', '01-'.$item->month_year)->translatedFormat('M-y');            
+            \Log::error($item);
+            \Log::error($period);
+            $labels[] = $period;
             $datasetOpensid[] = $item->total;
         }        
         $datasets = [                

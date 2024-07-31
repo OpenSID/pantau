@@ -8,9 +8,47 @@
     </div>
 </div>
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('vendor/chartjs/js/chart.min.js') }}"></script>
+<script src="{{ asset('vendor/chartjs/plugin/chartjs-plugin-annotation.min.js') }}"></script>
 <script>    
     const ctx = document.getElementById('myChart');
+    const annotation1 = {
+        type: 'line',
+        borderColor: 'gray',
+        borderWidth: 1,
+        label: {
+            display: true,
+            backgroundColor: 'transparent',
+            borderColor: 'black',
+            color: "black",
+            position: 'start',
+            borderRadius: 10,
+            borderWidth: 0,
+            content: (ctx) => `{{date('Y')}}`,
+            rotation: false
+        },
+        scaleID: 'x',
+        value: `Jan-{{date('y')}}`
+    };
+    const annotation2 = {
+        type: 'line',
+        borderColor: 'gray',
+        borderWidth: 1,
+        label: {
+            display: true,
+            backgroundColor: 'transparent',
+            borderColor: 'black',
+            color: "black",
+            position: 'start',
+            borderRadius: 10,
+            borderWidth: 0,
+            content: (ctx) => `{{date('Y') - 1}}`,
+            rotation: false
+        },
+        scaleID: 'x',
+        value: `Jan-{{date('y') - 1}}`
+    };
+    
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {},
@@ -37,7 +75,8 @@
             plugins: {
                 annotation: {
                     annotations: {
-                    
+                        annotation1,
+                        annotation2                        
                     }
                 },                    
                 tooltip: {
