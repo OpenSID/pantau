@@ -115,17 +115,15 @@
                     </div>
                     <div class="col-xl-6">
                         <div class="small-box bg-blue rounded-lg">
-                            <div class="row p-2">
+                            <div class="row p-3">
                                 <div class="col-md-2 text-center align-content-center">
-                                    <i class="fas fa-building fa-3x text-white"></i>
+                                    <i class="fas fa-building fa-6x text-white"></i>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <h4>Anjungan Mandiri</h4>
-                                    <p class="m-0">1823</p>
-                                    <p class="m-0">Pengguna Terpasang</p>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                </div>
+                                    <div class="display-4 text-bold mt-n3">1823</div>
+                                    <div class="text-bold mt-n2">Pengguna Terpasang</div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
