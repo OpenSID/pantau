@@ -50,6 +50,7 @@ Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])
 Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
+Route::get('/web/opensid-data', [WebsiteDashboardController::class, 'opensidData'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
 // datatable

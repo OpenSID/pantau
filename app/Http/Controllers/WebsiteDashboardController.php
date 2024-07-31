@@ -276,6 +276,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.keloladesa');
     }
+
+    public function opensidData(Request $request)
+    {
+        return view('website.opensid_data');
+    }
     
     public function opensid(Request $request)
     {

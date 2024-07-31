@@ -69,7 +69,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <a href="{{ url('web/opensid') }}" id="view-more-button-opensid" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
+                <a href="{{ url('web/opensid-data') }}" id="view-more-button-opensid" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>
