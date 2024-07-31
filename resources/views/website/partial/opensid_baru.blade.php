@@ -1,12 +1,5 @@
-<style>
-@media (min-width: 768px) {
-    .col-md {
-        max-width: 267px!important;
-    }
-}
-</style>
-<div class="row" style="width:100%">
-    <div class="col-md">
+<div class="row">
+    <div class="col-md-2 offset-1">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenKab</h4>
@@ -22,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenDK</h4>
@@ -38,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenSID</h4>
@@ -53,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>Layanan Desa</h4>
@@ -69,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>Kelola Desa</h4>
