@@ -13,7 +13,44 @@
     const ctx = document.getElementById('myChart');
     const myChart = new Chart(ctx, {
         type: 'line',
-        data: {}
-    });    
+        data: {},
+        options: {
+            animation: {
+                duration: 0,
+                onComplete: function () {
+                    let ctxz = this.ctx;
+                    ctxz.font = Chart.helpers.fontString(Chart.defaults.font.size, Chart.defaults.font.style, Chart.defaults.font.family);
+                    ctxz.textAlign = 'center';
+                    ctxz.textBaseline = 'bottom';
+                    chartinst = this;
+                    this.data.datasets.forEach(function (dataset, i) {
+                        if (chartinst.isDatasetVisible(i)) {
+                            var meta = chartinst.getDatasetMeta(i);
+                            meta.data.forEach(function (bar, index) {
+                                var data = dataset.data[index];
+                                ctxz.fillText(data, bar.x, bar.y - 10);
+                            });
+                        }
+                    });
+                }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                    
+                    }
+                },                    
+                tooltip: {
+                    enabled: false,
+                },
+            },
+
+
+
+
+        }
+
+
+    });
 </script>
 @endpush
