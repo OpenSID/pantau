@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h4>Anjungan Mandiri</h4>
-                                    <div class="display-4 text-bold mt-n3">1823</div>
+                                    <div class="display-4 text-bold mt-n3">{{ $pengguna_anjungan }}</div>
                                     <div class="text-bold mt-n2">Pengguna Terpasang</div>
                                 </div>                                
                             </div>
