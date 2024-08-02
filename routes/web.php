@@ -41,15 +41,20 @@ Auth::routes([
     'verify' => true,
 ]);
 
-// index dashboard
-Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->middleware('web.dashboard');
-Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
-Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])->middleware('web.dashboard');
-Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
-Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
-Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
+Route::group(['middleware' => 'web.dashboard'],function(){
+    Route::get('/', [WebsiteDashboardController::class, 'index']);
+    Route::prefix('web')->group(function(){
+        Route::get('', [WebsiteDashboardController::class, 'index']);
+        Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
+        Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
+        Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
+        Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);
+        Route::get('layanandesa', [WebsiteDashboardController::class, 'layanandesa']);
+        Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
+    });    
+});
+
 
 // datatable
 Route::prefix('datatables')->as('datatables:')

@@ -311,4 +311,28 @@ class WebsiteDashboardController extends Controller
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get()
         ]);
     }
+
+    public function opensid_versi(Request $request)
+    {
+        $fillters = [
+            'aktif' => $request->aktif,
+        ];
+        return view('website.opensid_versi', compact('fillters'));
+    }
+
+    public function opensid_versi_detail(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_versi_detail', compact('fillters'));
+    }
 }

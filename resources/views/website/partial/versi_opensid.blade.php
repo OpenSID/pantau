@@ -12,7 +12,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
-            <div class="text-center"><a href="{{ url('laporan/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
+            <div class="text-center"><a href="{{ url('web/opensid/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
         </div>
     </div>
 </div>
@@ -47,15 +47,15 @@
                 {
                     name: 'online',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_hosting=${data.versi}"><span class="badge badge-success">${data.online}</span></a>`
+                        return `<a target="_blank" href="{{ url('web/opensid/versi/detail') }}?versi_hosting=${data.versi}"><span class="badge badge-success">${data.online}</span></a>`
                     },
                     searchable: false,
                     orderable: false
                 },
                 {
-                    name: 'online',
+                    name: 'offline',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('laporan/desa') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
+                        return `<a target="_blank" href="{{ url('web/opensid/versi/detail') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
                     },
                     searchable: false,
                     orderable: false
