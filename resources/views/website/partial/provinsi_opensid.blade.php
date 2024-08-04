@@ -19,46 +19,20 @@
         <div class="card-body">
             <table class="table table-responsive table-custom">
                 <tbody>
-                    <tr>
-                        <td>
-                            Nusa Tenggara Barat
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Provinsi Kedua
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Provinsi ketiga
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Provinsi Keempat
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25</div>
-                            </div>
-                        </td>
-                    </tr>
+                    @forelse ($provinsi as $item)
+                        <tr>
+                            <td>
+                                {{ $item['nama_prov'] }}
+                            </td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $item['persentase'] }}%" aria-valuenow="{{ $item['persentase'] }}" aria-valuemin="0" aria-valuemax="100">{{ $item['jumlah_kab'] }}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                    Belum ada data
+                    @endforelse
                 </tbody>
             </table>
         </div>
