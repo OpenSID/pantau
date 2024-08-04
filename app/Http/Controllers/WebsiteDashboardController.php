@@ -287,8 +287,8 @@ class WebsiteDashboardController extends Controller
         
         return view('website.opensid', [
             'fillters' => $fillters,
-            'latestPremiumVersion' => Desa::latestPremiumVersion(),
-            'latestUmumVersion' => Desa::latestUmumVersion(),
+            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
+            'latestUmumVersion' => 'v' . lastrelease_opensid(),
         ]);
     }
 }
