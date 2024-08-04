@@ -60,8 +60,8 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">{{ $statistikDesa->desa_total }}</h3>
-                                    <p class="text-black">Total Desa: {{ $statistikDesa->aktif }}</p>
+                                    <h3 class="text-blue">{{ $statistikDesa->aktif }}</h3>
+                                    <p class="text-black">Total Desa: {{ $statistikDesa->desa_total }}</p>
                                 </div>
                             </div>
                         </div>
