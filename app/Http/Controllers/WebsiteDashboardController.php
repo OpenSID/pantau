@@ -289,6 +289,7 @@ class WebsiteDashboardController extends Controller
             'fillters' => $fillters,
             'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
             'latestUmumVersion' => 'v' . lastrelease_opensid(),
+            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 }
