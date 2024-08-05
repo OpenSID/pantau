@@ -48,14 +48,19 @@ Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->midd
 Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])->middleware('web.dashboard');
-Route::get('/web/layanandesa', [LayananDesaDashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/layanandesa/detail', [LayananDesaDashboardController::class, 'detail'])->middleware('web.dashboard');
-Route::get('/web/layanandesa/versi', [LayananDesaDashboardController::class, 'versi'])->middleware('web.dashboard');
-Route::get('/web/layanandesa/versi/detail', [LayananDesaDashboardController::class, 'versi_detail'])->middleware('web.dashboard');
-Route::get('/web/layanandesa/install_baru', [LayananDesaDashboardController::class, 'install_baru'])->middleware('web.dashboard');
-Route::get('/web/layanandesa/peta', [LayananDesaDashboardController::class, 'peta'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
+
+Route::group(['middleware' => 'web.dashboard'],function(){
+    Route::prefix('web')->group(function(){
+        Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
+        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
+        Route::get('layanandesa/versi', [LayananDesaDashboardController::class, 'versi']);
+        Route::get('layanandesa/versi/detail', [LayananDesaDashboardController::class, 'versi_detail']);
+        Route::get('layanandesa/install_baru', [LayananDesaDashboardController::class, 'install_baru']);
+        Route::get('layanandesa/peta', [LayananDesaDashboardController::class, 'peta']);
+    });
+});
 
 // datatable
 Route::prefix('datatables')->as('datatables:')

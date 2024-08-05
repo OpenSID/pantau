@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row g-0 text-center">
+                <div class="row g-0 text-center mt-2">
                     <div class="col-8">
                         <div class="p-2 bg-white rounded-lg">
                             @include('website.partial.summary', ['barisTambahan' => true])
