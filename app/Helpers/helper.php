@@ -349,3 +349,30 @@ if (! function_exists('lastrelease_opendk')) {
         }
     }
 }
+
+if (! function_exists('lastrelease_api_layanandesa')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_api_layanandesa()
+    {
+
+        // Cache data until the end of the day
+        $version = Cache::remember('release_layanan_desa', now()->endOfDay(), function () {            
+            $version = '2404.0.0';
+            $versi_api = lastrelease('https://api.github.com/repos/OpenSID/rilis-opensid-api/releases/latest');
+
+            if ($versi_api !== false) {
+                $version = str_replace('v', '', $versi_api->tag_name);                
+            }
+
+            return $version;
+        });
+
+
+        return $version;
+    }
+}

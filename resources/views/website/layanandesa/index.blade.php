@@ -16,15 +16,19 @@
                 <div class="row p-1">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-1">
-                                <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                    role="button" aria-expanded="false" aria-controls="collapse-filter">
-                                    <i class="fas fa-filter"></i>
-                                </a>
-                            </div>
-                            <div class="col-md-9 bg-blue p-1">
-                                <p class="m-0 text-white">Info Rilis Terbaru: Rilis Umum v2407.0.0 | Rilis Premium
-                                    v2407.0.0</p>
+                            <div class="col-md-10">
+                                <div class="d-flex">
+                                    <div>
+                                        <a class="btn btn-sm btn-secondary" data-toggle="collapse"
+                                            href="#collapse-filter" role="button" aria-expanded="false"
+                                            aria-controls="collapse-filter">
+                                            <i class="fas fa-filter"></i>
+                                        </a>
+                                    </div>
+                                    <div class="bg-blue pt-1 ml-2 w-100">
+                                        <marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group">
@@ -172,18 +176,7 @@
                     for (let j in detail[i]) {
                         _listElm.append(`<li>${detail[i][j]}</li>`)
                     }
-                }
-
-
-                $.ajax({
-                    url: "{{ url('api/web/chart-usage/opensid') }}",
-                    data: params,
-                    type: "GET",
-                    success: function (data) {
-                        myChart.data = data;
-                        myChart.update();
-                    }
-                }, 'json')
+                }                
             }
         }, 'json')
     }

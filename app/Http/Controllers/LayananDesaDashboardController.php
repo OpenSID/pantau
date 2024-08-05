@@ -13,10 +13,12 @@ class LayananDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
+        $versiTerakhir = lastrelease_api_layanandesa();
         return view('website.layanandesa.index', [
             'fillters' => $fillters,
             'total_versi' => 2,
-            'versi_terakhir' => '2407.0.0'
+            'versi_terakhir' => $versiTerakhir,
+            'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir
         ]);
     }
 
