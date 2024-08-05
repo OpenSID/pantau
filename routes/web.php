@@ -53,6 +53,7 @@ Route::get('/web/layanandesa/detail', [LayananDesaDashboardController::class, 'd
 Route::get('/web/layanandesa/versi', [LayananDesaDashboardController::class, 'versi'])->middleware('web.dashboard');
 Route::get('/web/layanandesa/versi/detail', [LayananDesaDashboardController::class, 'versi_detail'])->middleware('web.dashboard');
 Route::get('/web/layanandesa/install_baru', [LayananDesaDashboardController::class, 'install_baru'])->middleware('web.dashboard');
+Route::get('/web/layanandesa/peta', [LayananDesaDashboardController::class, 'peta'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 

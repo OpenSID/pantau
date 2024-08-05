@@ -124,4 +124,84 @@ class LayananDesaDashboardController extends Controller
             ]
         );
     }
+
+    public function peta(Request $request)
+    {
+        if ($request->ajax()) {
+            $fillters = [
+                'kode_provinsi' => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,  
+                'status' => null,
+                'akses' => null,
+                'versi_lokal' => null,
+                'versi_hosting' => null,
+                'tte' => null,              
+            ];
+
+            $geoJSONdata = Desa::fillter($fillters)
+                ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+                ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+                ->whereRaw('lat BETWEEN -10 AND 6')
+                ->whereRaw('lng BETWEEN 95 AND 142')                
+                ->where(function ($query) {
+                    $query
+                    ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
+                    ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
+                })                
+                ->whereIn('kode_desa', function($q){
+                    return $q->selectRaw('distinct kode_desa')->from('track_mobile');
+                })->orderBy('kode_desa', 'ASC')->get()->map(function ($desa) {
+                return [
+                    'type' => 'Feature',
+                    'geometry' => [
+                        'type' => 'Point',
+                        'coordinates' => [
+                            (float) $desa->lng,
+                            (float) $desa->lat,
+                        ],
+                    ],
+                    'properties' => $this->properties($desa),
+                    'id' => $desa->id,
+                ];
+            });
+
+            return response()->json([
+                'type' => 'FeatureCollection',
+                'features' => $geoJSONdata,
+            ]);
+        }        
+    }
+
+    private function properties($desa)
+    {
+        $link = '';
+        if (auth()->check()) {
+            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($desa->url_hosting).'" target="_blank">'.strtolower($desa->url_hosting).'</a></b></td></tr>';
+        }
+
+        return [
+            'logo' => null,
+            'popupContent' => '
+                <h6 class="text-center"><b style="color:red">'.strtoupper($desa->sebutan_desa.' '.$desa->nama_desa).'</b></h6>
+                <b><table width="100%">
+                    <tr>
+                        <td>'.ucwords($desa->sebutan_desa).'</td><td> : '.ucwords($desa->sebutan_desa.' '.$desa->nama_desa).'</b></td>
+                    </tr>
+                    <tr>
+                        <td>Kecamatan</td><td> : '.ucwords($desa->nama_kecamatan).'</b></td>
+                    </tr>
+                    <tr>
+                    <td>Kab/Kota</td><td> : '.ucwords($desa->nama_kabupaten).'</b></td>
+                    </tr>
+                    <tr>
+                        <td>Provinsi</td><td> : '.ucwords($desa->nama_provinsi).'</b></td>
+                    </tr>
+                    <tr>
+                        <td>Alamat</td><td> : '.$desa->alamat_kantor.'</b></td>
+                    </tr>
+                    '.$link.'
+                </table></b>',
+        ];
+    }
 }
