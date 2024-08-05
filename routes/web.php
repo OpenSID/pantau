@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\LayananDesaDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,8 @@ Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->midd
 Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
 Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])->middleware('web.dashboard');
-Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
+Route::get('/web/layanandesa', [LayananDesaDashboardController::class, 'index'])->middleware('web.dashboard');
+Route::get('/web/layanandesa/detail', [LayananDesaDashboardController::class, 'detail'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 

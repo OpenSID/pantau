@@ -249,7 +249,7 @@ return [
         ],   
         [
             'text'         => 'LayananDesa',
-            'url'          => '/',
+            'url'          => 'web/layanandesa',
             'icon'         => 'fas pantau-icon fa-layanandesa',
         ],
         [
