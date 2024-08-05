@@ -81,4 +81,47 @@ class LayananDesaDashboardController extends Controller
                 ->make(true);
         }        
     }    
+
+    public function summary(Request $request)
+    {
+        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+        $provinsi = $request->get('provinsi');
+        $kabupaten = $request->get('kabupaten');
+        $kecamatan = $request->get('kecamatan');
+        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function($q){
+            return $q->selectRaw('distinct kode_desa')->from('track_mobile');
+        });
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function($q){
+            return $q->selectRaw('distinct kode_desa')->from('track_mobile');
+        });
+
+        $tanggalAkhir = explode(' - ', $period)[1];
+        $summary->where('created_at', '<=', $tanggalAkhir);
+        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));            
+
+        if ($provinsi) {
+            $summary->where('kode_provinsi', $provinsi);
+            $summarySebelumnya->where('kode_provinsi', $provinsi);
+        }
+        if ($kabupaten) {
+            $summary->where('kode_kabupaten', $kabupaten);
+            $summarySebelumnya->where('kode_kabupaten', $kabupaten);
+        }
+        if ($kecamatan) {
+            $summary->where('kode_kecamatan', $kecamatan);
+            $summarySebelumnya->where('kode_kecamatan', $kecamatan);
+        }
+        $summareResult = $summary->first();
+        $summarySebelumnyaResult = $summarySebelumnya->first();
+
+        return response()->json([
+            'total' => [
+                'provinsi' => ['total' => $summareResult->provinsi, 'pertumbuhan' => $summareResult->provinsi - $summarySebelumnyaResult->provinsi],
+                'kabupaten' => ['total' => $summareResult->kabupaten, 'pertumbuhan' => $summareResult->kabupaten - $summarySebelumnyaResult->kabupaten],
+                'kecamatan' => ['total' => $summareResult->kecamatan, 'pertumbuhan' => $summareResult->kecamatan - $summarySebelumnyaResult->kecamatan],
+                'desa' => ['total' => $summareResult->desa, 'pertumbuhan' => $summareResult->desa - $summarySebelumnyaResult->desa],
+            ],            
+            ]
+        );
+    }
 }

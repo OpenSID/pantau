@@ -139,7 +139,7 @@
         }
 
         $.ajax({
-            url: "{{ url('api/web/summary') }}",
+            url: "{{ url('api/web/summary-layanan') }}",
             data: params,
             type: "GET",
             beforeSend: function () {
@@ -166,17 +166,7 @@
                 $('#box-desa>.total').text(total.desa.total)
                 $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                ${total.desa.pertumbuhan}</span></a>`)
-
-
-                let _listElm;
-                for (let i in detail) {
-                    _listElm = $(`#${i}-baru`).find('ol')
-                    _listElm.empty()
-                    for (let j in detail[i]) {
-                        _listElm.append(`<li>${detail[i][j]}</li>`)
-                    }
-                }                
+                                ${total.desa.pertumbuhan}</span></a>`)                
             }
         }, 'json')
     }
