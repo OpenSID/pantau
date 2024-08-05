@@ -63,8 +63,8 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">3065</h3>
-                                    <p class="text-black">Total Desa: 21.304</p>
+                                    <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
+                                    <p class="text-black">Total Desa: {{ $total_desa }}</p>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="col-2">
                         <div class="p-2 bg-blue rounded-lg" id="box-install_versi_terakhir">
-                            <div class="display-4 text-bold total">0</div>
+                            <div class="display-4 text-bold total">{{ $pengguna_versi_terakhir }}</div>
                             <div class="text-bold" style="margin-top:-10px">Terpasang <br>Versi Terakhir
                                 {{ $versi_terakhir }}</div>
                         </div>

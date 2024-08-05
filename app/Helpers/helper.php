@@ -351,12 +351,7 @@ if (! function_exists('lastrelease_opendk')) {
 }
 
 if (! function_exists('lastrelease_api_layanandesa')) {
-    /**
-     * Validasi domain.
-     *
-     * @param  string $url
-     * @return object
-     */
+    
     function lastrelease_api_layanandesa()
     {
 
@@ -374,5 +369,12 @@ if (! function_exists('lastrelease_api_layanandesa')) {
 
 
         return $version;
+    }
+}
+
+if (! function_exists('format_angka')) {    
+    function format_angka($angka, $decimals = 0)
+    {
+        return number_format($angka, $decimals, ',', '.');
     }
 }
