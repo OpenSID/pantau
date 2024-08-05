@@ -18,15 +18,17 @@ class LayananDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_api_layanandesa();
+        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=',Carbon::now()->format('Y-m-d'))->get();
         return view('website.layanandesa.index', [
             'fillters' => $fillters,
             'total_versi' => 2,
             'total_desa' => format_angka(Desa::count()),
-            'pengguna_layanan_desa' => TrackMobile::distinct('kode_desa')->active()->count(),
+            'pengguna_layanan_desa' => TrackMobile::distinct('kode_desa')->count(),
             'versi_terakhir' => $versiTerakhir,
             'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir,
             'total_versi' => TrackMobile::distinct('versi')->count(),
             'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),
+            'installHariIni' => $installHariIni
         ]);
     }
 
