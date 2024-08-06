@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\TrackOpendkController;
 use App\Http\Controllers\Api\TrackOpenkabController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Api\TrackKelolaDesaController;
+use App\Http\Controllers\KelolaDesaDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +48,6 @@ Route::prefix('track')
 Route::prefix('web')
     ->group(function () {
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
-        Route::get('summary', [WebsiteDashboardController::class, 'summary']);        
+        Route::get('summary', [WebsiteDashboardController::class, 'summary']);
+        Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);
     });

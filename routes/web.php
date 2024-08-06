@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\KelolaDesaDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,17 @@ Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])
 Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
+
+Route::group(['middleware' => 'web.dashboard'],function(){
+    Route::prefix('web')->group(function(){
+        Route::get('keloladesa', [KelolaDesaDashboardController::class, 'index']);
+        Route::get('keloladesa/detail', [KelolaDesaDashboardController::class, 'detail']);
+        Route::get('keloladesa/versi', [KelolaDesaDashboardController::class, 'versi']);
+        Route::get('keloladesa/versi/detail', [KelolaDesaDashboardController::class, 'versi_detail']);
+        Route::get('keloladesa/install_baru', [KelolaDesaDashboardController::class, 'install_baru']);
+        Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
+    });
+});
 
 // datatable
 Route::prefix('datatables')->as('datatables:')

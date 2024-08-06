@@ -254,7 +254,7 @@ return [
         ],
         [
             'text'         => 'KelolaDesa',
-            'url'          => '/',
+            'url'          => 'web/keloladesa',
             'icon'         => 'fas pantau-icon fa-keloladesa',
         ],        
     ],
