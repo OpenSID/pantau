@@ -46,6 +46,9 @@
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
+                                    @auth
+                                        <th>Kontak</th>
+                                    @endauth
                                     <th>Web</th>
                                     <th>Versi Offline</th>
                                     <th>Versi Online</th>
@@ -159,6 +162,13 @@
                 {
                     data: 'nama_provinsi'
                 },
+                @auth {
+                        data: 'kontak',
+                        name: 'kontak',
+                        searchable: false,
+                        orderable: false
+                    },
+                @endauth
                 {
                     data: function(data) {
                         if (data.url_hosting) {

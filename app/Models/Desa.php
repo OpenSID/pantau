@@ -23,6 +23,7 @@ class Desa extends Model
         'tgl_rekam_hosting' => 'datetime',
         'tgl_akses_lokal' => 'datetime',
         'tgl_akses_hosting' => 'datetime',
+        'kontak' => 'array'
     ];
 
     /** {@inheritdoc} */
@@ -272,7 +273,7 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
             ->when(auth()->check() == true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
