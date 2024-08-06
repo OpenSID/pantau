@@ -1,24 +1,28 @@
 <img src="{{ asset('assets/img/opensid_logo.png') }}" width="20" alt="Logo">
 <span class="text-black">Daftar Desa Baru Install</span>
-<div class="container marquee" style="height: 335px;">
-    <div class="track-vertical w-100">
-        <div class="flex-vertical marquee-fix">          
-          @forelse($installHariIni as $item)
-            <div class="mt-3 w-100 block-info">
-                <div class="d-flex justify-content-between">
-                    <div class="text-wrap">
-                        <p class="m-0">{{ $item->desa->nama_desa }}</p>
-                        <p class="m-0">{{ $item->desa->nama_provinsi }}, {{ $item->desa->nama_kabupaten }}
-                        </p>
-                        <p class="m-0">INSTALL {{ $item->created_at->format('H:i') }} | versi {{ $item->versi}}</p>
+<div class="container">
+    <div class="marquee">
+        <div class="track-vertical w-100">
+            <div class="flex-vertical marquee-fix">
+                @forelse($installHariIni as $item)
+                <div class="mt-3 w-100 block-info">
+                    <div class="d-flex justify-content-between">
+                        <div class="text-wrap">
+                            <p class="m-0">{{ $item->desa->nama_desa }}</p>
+                            <p class="m-0">{{ $item->desa->nama_provinsi }}, {{ $item->desa->nama_kabupaten }}
+                            </p>
+                            <p class="m-0">INSTALL {{ $item->created_at->format('H:i') }} | versi {{ $item->versi}}</p>
+                        </div>
+                        <div class="p-0"><span
+                                class="badge badge-success text-wrap">{{ formatDateTimeForHuman($item->created_at) }}</span>
+                        </div>
                     </div>
-                    <div class="p-0"><span class="badge badge-success text-wrap">{{ formatDateTimeForHuman($item->created_at) }}</span></div>
                 </div>
+                <hr>
+                @empty
+                <div class="text-wrap text-center mt-5">Tidak ada desa yang memasang LayananDesa hari ini</div>
+                @endforelse
             </div>
-            <hr>
-          @empty          
-          <div class="text-wrap text-center mt-5">Tidak ada desa yang memasang LayananDesa hari ini</div>
-          @endforelse
         </div>
     </div>
 </div>
@@ -39,7 +43,7 @@
       display: flex;
       overflow: hidden;
       width: 100%;
-      height: 600px;
+      height: 405px;
       -webkit-box-orient: horizontal;
       -webkit-box-direction: normal;
       -webkit-flex-direction: row;
