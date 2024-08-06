@@ -169,7 +169,7 @@ if (! function_exists('lastrelease_pbb')) {
     {
         
         // Cache data until the end of the day
-        $version = Cache::remember('my_data', now()->endOfDay(), function () {            
+        $version = Cache::remember('release_pbb', now()->endOfDay(), function () {            
             $version = '2401.0.0';
             $versi_pbb = lastrelease('https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest');
 
