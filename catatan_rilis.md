@@ -17,6 +17,7 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 13. [#316](https://github.com/OpenSID/pantau/issues/316) Penambahan halaman details untuk aplikasi KelolaDesa.
 14. [#323](https://github.com/OpenSID/pantau/issues/323) Penambahan daftar pengguna OpenKab.
 15. [#324](https://github.com/OpenSID/pantau/issues/324) Penambahan ringkasan OpenKab yang terpasang berdasarkan wilayah.
+16. [#314](https://github.com/OpenSID/pantau/issues/314) Penambahan halaman rincian pengguna OpenSID.
 
 #### Perbaikan Bug
 
