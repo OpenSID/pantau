@@ -281,6 +281,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.keloladesa');
     }
+
+    public function opensidData(Request $request)
+    {
+        return view('website.opensid_data');
+    }
     
     public function opensid(Request $request)
     {
@@ -289,9 +294,12 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-
+        
         return view('website.opensid', [
             'fillters' => $fillters,
+            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
+            'latestUmumVersion' => 'v' . lastrelease_opensid(),
+            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 }
