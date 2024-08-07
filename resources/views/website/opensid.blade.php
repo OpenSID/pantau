@@ -23,7 +23,7 @@
                                         <i class="fas fa-filter"></i>
                                     </a>
                                     <div class="bg-blue p-1 ml-1" style="width: 100%">
-                                        <p class="m-0 text-white">Info Rilis Terbaru: Rilis Umum {{ $latestUmumVersion }} | Rilis Premium {{ $latestPremiumVersion }}</p>
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: Rilis Umum {{ $latestUmumVersion }} | Rilis Premium {{ $latestPremiumVersion }}</marquee></p>
                                     </div>
                                 </div>
                             </div>
