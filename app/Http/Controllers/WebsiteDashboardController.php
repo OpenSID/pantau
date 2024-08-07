@@ -289,9 +289,11 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-
+        
         return view('website.opensid', [
             'fillters' => $fillters,
+            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
+            'latestUmumVersion' => 'v' . lastrelease_opensid(),
         ]);
     }
 }
