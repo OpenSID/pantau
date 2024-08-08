@@ -60,7 +60,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <a href="{{ url('web/layanandesa') }}" id="view-more-button-layanandesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
+                <a href="{{ url('web/layanandesa/detail') }}" id="view-more-button-layanandesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>

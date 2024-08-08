@@ -80,64 +80,6 @@
             function onEachFeature(feature, layer) {
                 layer.bindPopup(feature.properties.popupContent);
             }
-
-            loadData();
-
-            $('#filter').click(function() {
-                // Kosongkan Map Telebih Dahulu
-                map.removeLayer(markersBar);
-                loadData($('#provinsi').val(), $('#kabupaten').val(), $('#kecamatan').val());
-            });
-
-            $('#reset').click(function() {
-                $('#provinsi').val('').trigger('change');
-                $('#kabupaten').val('').trigger('change');
-                $('#kecamatan').val('').trigger('change');
-
-                // Kosongkan Map Telebih Dahulu
-                map.removeLayer(markersBar);
-                loadData();
-            });
-
-            function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
-
-                $.ajax({
-                    url: "{{ url('peta') }}",
-                    contentType: "application/json; charset=utf-8",
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        kode_provinsi: kode_provinsi,
-                        kode_kabupaten: kode_kabupaten,
-                        kode_kecamatan: kode_kecamatan,
-                        status: status,
-                    },
-                    responseType: "json",
-                    success: function(response) {
-
-                        // Buat Marker Cluster Group
-                        markersBar = L.markerClusterGroup();
-
-                        // Simpan Data geoJSON
-                        barLayer = new L.geoJSON(response, {
-                            pointToLayer: function(feature, latlng) {
-                                return L.marker(latlng, {
-                                    icon: baseballIcon
-                                });
-                            },
-
-                            onEachFeature: onEachFeature
-                        });
-
-                        // Tambahkan Marker dan Marker Cluster Group pada Map
-                        markersBar.addLayer(barLayer);
-                        map.addLayer(markersBar);
-                    },
-                    error: function() {
-                        alert('Gagal mengambil data');
-                    },
-                });
-            }
         });
     </script>
 @endsection
