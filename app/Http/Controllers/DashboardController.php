@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Akses;
 use App\Models\Desa;
 use App\Models\Opendk;
+use App\Models\Openkab;
 use App\Models\PengaturanAplikasi;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
@@ -69,6 +70,24 @@ class DashboardController extends Controller
     {
         if ($request->ajax()) {
             $desa = Opendk::select('nama_kecamatan as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
+            ->map(function ($item) {
+                $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
+                $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
+                return $item;
+            });
+            return DataTables::of($desa)
+                ->addIndexColumn() // Menambahkan kolom indeks
+                ->escapeColumns([]) 
+                ->make(true);
+        }
+    
+        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+    }
+
+    public function datatableOpenkabBaru(Request $request)
+    {
+        if ($request->ajax()) {
+            $desa = Openkab::select('nama_kab as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
             ->map(function ($item) {
                 $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                 $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
@@ -200,6 +219,48 @@ class DashboardController extends Controller
                 ->make(true);
         }
 
+        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+    }
+
+    public function datatablePenggunaOpenkab(Request $request)
+    {
+        if ($request->ajax()) {
+            $desa = Openkab::orderBY('created_at', 'desc')->get()
+            ->map(function ($item) {
+                $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
+                $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
+                return $item;
+            });
+            return DataTables::of($desa)
+                ->addIndexColumn() // Menambahkan kolom indeks
+                ->escapeColumns([]) 
+                ->make(true);
+        }
+
+        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+    }
+    
+    public function datatablePenggunaOpensid(Request $request)
+    {
+        if ($request->ajax()) {
+            $desa = Desa::orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                if($item->modul_tte == 0){
+                    $item->modul_tte = '<span class="badge badge-secondary">Tidak Aktif</span>';
+                }elseif($item->modul_tte == 1){
+                    $item->modul_tte = '<span class="badge badge-success">Aktif</span>';
+                }
+                $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
+                $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
+                return $item;
+            });
+            return DataTables::of($desa)
+                ->addIndexColumn() // Menambahkan kolom indeks
+                ->escapeColumns([]) 
+                ->make(true);
+        }
+    
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
 

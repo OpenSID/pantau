@@ -181,7 +181,7 @@ class TrackRequest extends FormRequest
             'jml_dokumen',
             'jml_keluarga',
             'anjungan',
-            'kontak'
+            'kontak'            
         ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\InstallOpensidController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Api\TrackOpendkController;
 use App\Http\Controllers\Api\TrackOpenkabController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Api\TrackKelolaDesaController;
+use App\Http\Controllers\Api\TrackPBBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +44,12 @@ Route::prefix('track')
         Route::post('openkab', TrackOpenkabController::class);
         Route::post('mobile', TrackMobileController::class);
         Route::post('keloladesa', [TrackKelolaDesaController::class, 'store']);
+        Route::post('pbb', TrackPBBController::class);
     });
 
 Route::prefix('web')
     ->group(function () {
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
         Route::get('summary', [WebsiteDashboardController::class, 'summary']);        
+        Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
     });
