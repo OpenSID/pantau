@@ -227,7 +227,7 @@
 
 
                 $.ajax({
-                    url: "{{ url('api/web/chart-usage/opensid') }}",
+                    url: "{{ url('api/web/chart-opensid') }}",
                     data: params,
                     type: "GET",
                     success: function (data) {
