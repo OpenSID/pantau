@@ -1,7 +1,7 @@
 <img src="{{ asset('assets/img/opensid_logo.png') }}" width="20" alt="Logo">
 <span class="text-black">Daftar Desa Baru Install</span>
-<div class="container">
-    <div class="marquee">
+<div class="container marquee" style="height: 335px;">
+    <div class="track-vertical w-100 pr-4">
         <div class="track-vertical w-100">
             <div class="flex-vertical marquee-fix">
                 @forelse($installHariIni as $item)
