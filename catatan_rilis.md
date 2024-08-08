@@ -29,6 +29,7 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 25. [#340](https://github.com/OpenSID/pantau/issues/340) Penambahan pengguna aplikasi PBB.
 26. [#341](https://github.com/OpenSID/pantau/issues/341) Penambahan pengguna anjungan mandiri.
 27. [#347](https://github.com/OpenSID/pantau/issues/347) Penambahan menu akan dapat dilihat pada tampilan mobile.
+28. [#336](https://github.com/OpenSID/pantau/issues/336) Penambahan informasi pemasangan OpenSID.
 
 #### Perbaikan Bug
 
