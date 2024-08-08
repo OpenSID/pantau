@@ -26,6 +26,8 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 22. [#344](https://github.com/OpenSID/pantau/issues/344) Penambahan pengguna baru dalam 7 Hari terakhir.
 23. [#345](https://github.com/OpenSID/pantau/issues/345) Penambahan daftar versi dan jumlah terpasang.
 24. [#342](https://github.com/OpenSID/pantau/issues/342) Penambahan statistik pengguna OpenSID bulanan.
+25. [#340](https://github.com/OpenSID/pantau/issues/340) Penambahan pengguna aplikasi PBB.
+26. [#341](https://github.com/OpenSID/pantau/issues/341) PenambahanpPengguna anjungan mandiri.
 
 #### Perbaikan Bug
 

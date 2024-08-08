@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\TrackOpenkabController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Api\TrackKelolaDesaController;
 use App\Http\Controllers\LayananDesaDashboardController;
+use App\Http\Controllers\Api\TrackPBBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::prefix('track')
         Route::post('openkab', TrackOpenkabController::class);
         Route::post('mobile', TrackMobileController::class);
         Route::post('keloladesa', [TrackKelolaDesaController::class, 'store']);
+        Route::post('pbb', TrackPBBController::class);
     });
 
 Route::prefix('web')
