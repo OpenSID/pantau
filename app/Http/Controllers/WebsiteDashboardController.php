@@ -276,6 +276,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.keloladesa');
     }
+
+    public function opensidData(Request $request)
+    {
+        return view('website.opensid_data');
+    }
     
     public function opensid(Request $request)
     {
@@ -290,7 +295,10 @@ class WebsiteDashboardController extends Controller
         return view('website.opensid', [
             'fillters' => $fillters,
             'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
-            'installHariIni' => $installHariIni
+            'installHariIni' => $installHariIni,                
+            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
+            'latestUmumVersion' => 'v' . lastrelease_opensid(),
+            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 }
