@@ -17,11 +17,11 @@
     </div>
 </div>
 <hr>
-<div class="container marquee" style="height: 315px;">
+<div class="container marquee" style="height: 250px;">
     <div class="track-vertical w-100 pr-4">
         <div class="flex-vertical marquee-fix">          
           @forelse($installHariIni as $item)
-            <div class="mt-3 w-100">
+            <div class="mt-3 w-100 block-info">
                 <div class="row">
                     <div class="col-10 text-wrap">
                         <h6 class="m-0">{{ $item->nama_desa }}</h6>
@@ -43,7 +43,13 @@
 
 @push('css')
 <style>
-  .marquee {
+   .block-info p {
+    font-size: 80%;
+   } 
+   .block-info .badge {
+    font-size: 60%;
+   } 
+.marquee {
       position: relative;
       display: -webkit-box;
       display: -webkit-flex;
@@ -74,7 +80,7 @@
         position: absolute;
         white-space: nowrap;
         will-change: transform;        
-        animation: marquee-vertical 100s linear infinite;        
+        animation: marquee-vertical 50s linear infinite;        
         /* manipulate the speed of the marquee by changing "20s" line above*/
     }
 
