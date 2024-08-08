@@ -1,3 +1,6 @@
+.col-custom {
+        max-width: 100%;
+}
 .pantau-icon{
     background-size: 24px 24px; /* adjust the size to your needs */
     width: 24px;
