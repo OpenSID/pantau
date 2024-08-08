@@ -100,34 +100,32 @@
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="small-box bg-blue rounded-lg">
-                            <div class="row p-2">
+                            <div class="row p-3">
                                 <div class="col-md-2 text-center align-content-center">
-                                    <i class="fas fa-building fa-3x text-white"></i>
+                                    <i class="fas fa-building fa-6x text-white"></i>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <h4>Aplikasi PBB</h4>
-                                    <p class="m-0">2213</p>
-                                    <p class="m-0">Pengguna Terpasang</p>
+                                    <div class="display-4 text-bold mt-n3">{{ $pengguna_pbb }}</div>
+                                    <div class="text-bold mt-n2">Pengguna Terpasang</div>
                                 </div>
-                                <div class="col-md-2 text-center">
-                                    <span class="badge badge-warning">versi 24.07.0.0</span>
+                                <div class="col-md-4 text-right">
+                                    <h3><span class="badge badge-warning rounded-pill">versi {{ $versi_pbb }}</span></h3>                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-6">
                         <div class="small-box bg-blue rounded-lg">
-                            <div class="row p-2">
+                            <div class="row p-3">
                                 <div class="col-md-2 text-center align-content-center">
-                                    <i class="fas fa-building fa-3x text-white"></i>
+                                    <i class="fas fa-building fa-6x text-white"></i>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <h4>Anjungan Mandiri</h4>
-                                    <p class="m-0">1823</p>
-                                    <p class="m-0">Pengguna Terpasang</p>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                </div>
+                                    <div class="display-4 text-bold mt-n3">{{ $pengguna_anjungan }}</div>
+                                    <div class="text-bold mt-n2">Pengguna Terpasang</div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -227,7 +225,7 @@
 
 
                 $.ajax({
-                    url: "{{ url('api/web/chart-usage/opensid') }}",
+                    url: "{{ url('api/web/chart-opensid') }}",
                     data: params,
                     type: "GET",
                     success: function (data) {

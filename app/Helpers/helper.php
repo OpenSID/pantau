@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2401.0.0';
+        return 'v2408.0.0';
     }
 }
 
@@ -153,6 +153,33 @@ if (! function_exists('lastrelease_opensid')) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
             Cache::forever('opensid_premium_version', $version);
         }
+
+        return $version;
+    }
+}
+
+if (! function_exists('lastrelease_pbb')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_pbb()
+    {
+        
+        // Cache data until the end of the day
+        $version = Cache::remember('release_pbb', now()->endOfDay(), function () {            
+            $version = '2401.0.0';
+            $versi_pbb = lastrelease('https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest');
+
+            if ($versi_pbb !== false) {
+                $version = str_replace('v', '', $versi_pbb->tag_name);                
+            }
+
+            return $version;
+        });
+        
 
         return $version;
     }
