@@ -174,6 +174,7 @@ class TrackRequest extends FormRequest
             'jml_persil',
             'jml_dokumen',
             'jml_keluarga',
+            'anjungan'
         ]);
     }
 }

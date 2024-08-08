@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
+use App\Models\Pbb;
 use Carbon\CarbonPeriod;
 use App\Models\TrackMobile;
 use Illuminate\Http\Request;
@@ -319,6 +320,9 @@ class WebsiteDashboardController extends Controller
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
+            'pengguna_pbb' => Pbb::count(),
+            'versi_pbb' => lastrelease_pbb(),
+            'pengguna_anjungan' => Desa::anjungan()->count(),
             'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
             'latestUmumVersion' => 'v' . lastrelease_opensid(),
             'statistikDesa' => Desa::jumlahDesa()->get()->first(),
