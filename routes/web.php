@@ -51,6 +51,8 @@ Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])
 Route::get('/web/layanandesa', [LayananDesaDashboardController::class, 'index'])->middleware('web.dashboard');
 Route::get('/web/layanandesa/detail', [LayananDesaDashboardController::class, 'detail'])->middleware('web.dashboard');
 Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
+Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
+Route::get('/web/opensid-data', [WebsiteDashboardController::class, 'opensidData'])->middleware('web.dashboard');
 Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
 
 // datatable
@@ -65,6 +67,7 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('pengguna-keloladesa', [DashboardController::class, 'datatablePenggunaKeloladesa'])->name('pengguna-keloladesa');
         Route::get('pengguna-layanandesa', [DashboardController::class, 'datatablePenggunaLayanandesa'])->name('pengguna-layanandesa');
         Route::get('pengguna-opendk', [DashboardController::class, 'datatablePenggunaOpendk'])->name('pengguna-opendk');
+        Route::get('pengguna-opensid', [DashboardController::class, 'datatablePenggunaOpensid'])->name('pengguna-opensid');
     });
 
 // Peta
