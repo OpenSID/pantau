@@ -19,46 +19,22 @@
         <div class="card-body">
             <table class="table table-responsive table-custom">
                 <tbody>
+                    @php
+                    $maxTotal = $provinsi_pengguna_opensid->max('total')
+                    @endphp
+                    @foreach($provinsi_pengguna_opensid as $provinsi)
                     <tr>
                         <td>
-                            Nusa Tenggara Barat
+                            {{ $provinsi->nama_provinsi }}
                         </td>
-                        <td>
+                        <td>                            
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100</div>
+                                <div class="progress-bar" role="progressbar" style="width: {{ $provinsi->total/$maxTotal * 100 }}%" aria-valuenow="{{ $provinsi->total/$maxTotal * 100 }}" aria-valuemin="0" aria-valuemax="{{ $provinsi->total }}"></div>
+                                <div class="pt-2"> &nbsp;{{ $provinsi->total }}</div>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            Provinsi Kedua
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Provinsi ketiga
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Provinsi Keempat
-                        </td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25</div>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach                    
                 </tbody>
             </table>
         </div>
