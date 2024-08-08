@@ -16,15 +16,16 @@
                 <div class="row p-1">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-1">
-                                <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter"
-                                    role="button" aria-expanded="false" aria-controls="collapse-filter">
-                                    <i class="fas fa-filter"></i>
-                                </a>
-                            </div>
-                            <div class="col-md-9 bg-blue p-1">
-                                <p class="m-0 text-white">Info Rilis Terbaru: Rilis Umum v2407.0.0 | Rilis Premium
-                                    v2407.0.0</p>
+                            <div class="col-md-10 align-content-center">
+                                <div class="d-flex">
+                                    <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse" href="#collapse-filter" role="button"
+                                        aria-expanded="false" aria-controls="collapse-filter">
+                                        <i class="fas fa-filter"></i>
+                                    </a>
+                                    <div class="bg-blue p-1 ml-1" style="width: 100%">
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: Rilis Umum {{ $latestUmumVersion }} | Rilis Premium {{ $latestPremiumVersion }}</marquee></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group">
@@ -59,8 +60,8 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">3065</h3>
-                                    <p class="text-black">Total Desa: 21.304</p>
+                                    <h3 class="text-blue">{{ $statistikDesa->aktif }}</h3>
+                                    <p class="text-black">Total Desa: {{ $statistikDesa->desa_total }}</p>
                                 </div>
                             </div>
                         </div>

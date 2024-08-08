@@ -295,6 +295,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.keloladesa');
     }
+
+    public function opensidData(Request $request)
+    {
+        return view('website.opensid_data');
+    }
     
     public function opensid(Request $request)
     {
@@ -303,12 +308,15 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-
+        
         return view('website.opensid', [
             'fillters' => $fillters,
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
-            'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get()
+            'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
+            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
+            'latestUmumVersion' => 'v' . lastrelease_opensid(),
+            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 
