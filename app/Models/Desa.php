@@ -23,6 +23,7 @@ class Desa extends Model
         'tgl_rekam_hosting' => 'datetime',
         'tgl_akses_lokal' => 'datetime',
         'tgl_akses_hosting' => 'datetime',
+        'anjungan' => 'bool'
     ];
 
     /** {@inheritdoc} */
@@ -415,5 +416,10 @@ class Desa extends Model
     {
         return $query->orderByRaw('CAST(SUBSTRING_INDEX(versi_hosting, "-", 1) AS DECIMAL) DESC')
                      ->orderBy('versi_hosting', 'DESC');
+    }
+
+    public function scopeAnjungan($query)
+    {
+        return $query->where('anjungan', true);
     }
 }
