@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\LayananDesaDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +50,9 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);
-        Route::get('layanandesa', [WebsiteDashboardController::class, 'layanandesa']);
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
+        Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
+        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
         Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
