@@ -59,7 +59,13 @@ class WebsiteDashboardController extends Controller
         $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7)->get();
         $layanan = TrackMobile::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
         $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
-        
+
+        $openkabWilayah = Openkab::where('created_at', '<=', $tanggalAkhir);
+        $opensidWilayah = Desa::where('created_at', '<=', $tanggalAkhir);
+        $opendkWilayah = Opendk::where('created_at', '<=', $tanggalAkhir);
+        $layananWilayah = TrackMobile::where('created_at', '<=', $tanggalAkhir);
+        $kelolaDesaWilayah = TrackKeloladesa::where('created_at', '<=', $tanggalAkhir);
+        $versiTerakhirOpensid = collect();
         if($versiOpensid){
             $versiTerakhirOpensid = Desa::where(function($query) use ($versiOpensid){
                 return $query->where('versi_hosting', 'like', "{$versiOpensid}-premium%")
@@ -71,16 +77,33 @@ class WebsiteDashboardController extends Controller
             $summary->where('kode_provinsi', $provinsi);
             $summarySebelumnya->where('kode_provinsi', $provinsi);
             $versiTerakhirOpensid->where('kode_provinsi', $provinsi);
+
+            $openkabWilayah->where('kode_prov', $provinsi);
+            $opensidWilayah->where('kode_provinsi', $provinsi);
+            $opendkWilayah->where('kode_provinsi', $provinsi);
+            $layananWilayah->provinsi($provinsi);
+            $kelolaDesaWilayah->provinsi($provinsi);
         }
         if ($kabupaten) {
             $summary->where('kode_kabupaten', $kabupaten);
             $summarySebelumnya->where('kode_kabupaten', $kabupaten);
             $versiTerakhirOpensid->where('kode_kabupaten', $kabupaten);
+
+            $openkabWilayah->where('kode_kab', $kabupaten);
+            $opensidWilayah->where('kode_kabupaten', $kabupaten);
+            $opendkWilayah->where('kode_kabupaten', $kabupaten);
+            $layananWilayah->kabupaten($kabupaten);
+            $kelolaDesaWilayah->kabupaten($kabupaten);
         }
         if ($kecamatan) {
             $summary->where('kode_kecamatan', $kecamatan);
             $summarySebelumnya->where('kode_kecamatan', $kecamatan);
             $versiTerakhirOpensid->where('kode_kecamatan', $kecamatan);
+
+            $opensidWilayah->where('kode_kecamatan', $kabupaten);
+            $opendkWilayah->where('kode_kecamatan', $kabupaten);
+            $layananWilayah->kecamatan($kecamatan);
+            $kelolaDesaWilayah->kecamatan($kecamatan);
         }
         $summareResult = $summary->first();
         $summarySebelumnyaResult = $summarySebelumnya->first();
@@ -106,6 +129,13 @@ class WebsiteDashboardController extends Controller
             ],
             'additional' => [
                 'opensid' => ['install_versi_terakhir' =>  $totalVersiTerakhirOpensid]
+            ],
+            'summary' => [
+                'openkab' => $openkabWilayah->count(),
+                'opensid' => $opensidWilayah->count(),
+                'opendk' => $opendkWilayah->count(),
+                'layanandesa' => $layananWilayah->count(),
+                'keloladesa' => $kelolaDesaWilayah->count()
             ]
         ]
         );
