@@ -4,8 +4,7 @@
 .pantau-icon{
     background-size: 24px 24px; /* adjust the size to your needs */
     width: 24px;
-    height: 24px;
-    
+    height: 24px;    
 }
 .fa-openkab {    
     background-image: url('../../assets/icon/openkab.png');    
@@ -29,11 +28,28 @@
     align-items: center;
     height: 20px;
     font-size: larger;
-  }
-
-#navbarCollapse{
-    padding-left:100px
 }
+.control-sidebar-light .nav-link{
+    display: block;    
+    margin-bottom: 10px;
+    font-size: small;       
+}
+.control-sidebar-light .pantau-icon{
+    background-size: 24px 24px; /* adjust the size to your needs */
+    width: 24px;
+    height: 18px;    
+}
+button.navbar-toggler {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    /* styles for desktop screens */
+    #navbarCollapse{
+        padding-left:100px
+    }
+}
+
 
 .header-bg {
     width: 100%;
