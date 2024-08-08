@@ -291,6 +291,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
+    
+    public function openkabData(Request $request)
+    {
+        return view('website.openkab_data');
+    }
 
     public function keloladesa(Request $request)
     {
@@ -322,5 +327,29 @@ class WebsiteDashboardController extends Controller
             'latestUmumVersion' => 'v' . lastrelease_opensid(),
             'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
+    }
+
+    public function opensid_versi(Request $request)
+    {
+        $fillters = [
+            'aktif' => $request->aktif,
+        ];
+        return view('website.opensid_versi', compact('fillters'));
+    }
+
+    public function opensid_versi_detail(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_versi_detail', compact('fillters'));
     }
 }
