@@ -16,17 +16,14 @@
                 <div class="row p-1">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-10 align-content-center">
                                 <div class="d-flex">
-                                    <div>
-                                        <a class="btn btn-sm btn-secondary" data-toggle="collapse"
-                                            href="#collapse-filter" role="button" aria-expanded="false"
-                                            aria-controls="collapse-filter">
-                                            <i class="fas fa-filter"></i>
-                                        </a>
-                                    </div>
-                                    <div class="bg-blue pt-1 ml-2 w-100">
-                                        <marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee>
+                                    <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse" href="#collapse-filter" role="button"
+                                        aria-expanded="false" aria-controls="collapse-filter">
+                                        <i class="fas fa-filter"></i>
+                                    </a>
+                                    <div class="bg-blue p-1 ml-1" style="width: 100%">
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
                                     </div>
                                 </div>
                             </div>
