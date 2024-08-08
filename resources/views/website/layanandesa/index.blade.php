@@ -23,10 +23,17 @@
                                         <i class="fas fa-filter"></i>
                                     </a>
                                     <div class="bg-blue p-1 ml-1" style="width: 100%">
+<<<<<<< HEAD
                                         <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
                                     </div>
                                 </div>
                             </div>                            
+=======
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: Rilis LayananDesa 2407.0.0</marquee></p>
+                                    </div>
+                                </div>
+                            </div>
+>>>>>>> rilis-dev
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
