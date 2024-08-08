@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\InstallOpensidController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
@@ -49,5 +50,6 @@ Route::prefix('web')
     ->group(function () {
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
         Route::get('summary', [WebsiteDashboardController::class, 'summary']);
-        Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);
+        Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);              
+        Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
     });

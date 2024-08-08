@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'web',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -239,7 +239,7 @@ return [
         ],
         [
             'text'         => 'OpenDK',
-            'url'          => '/',
+            'url'          => 'web/opendk',
             'icon'         => 'fas pantau-icon fa-opendk',
         ],
         [
@@ -249,7 +249,7 @@ return [
         ],   
         [
             'text'         => 'LayananDesa',
-            'url'          => '/',
+            'url'          => 'web/layanandesa',
             'icon'         => 'fas pantau-icon fa-layanandesa',
         ],
         [

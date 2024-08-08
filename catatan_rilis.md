@@ -19,6 +19,13 @@ Di rilis v2407.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 15. [#324](https://github.com/OpenSID/pantau/issues/324) Penambahan ringkasan OpenKab yang terpasang berdasarkan wilayah.
 16. [#314](https://github.com/OpenSID/pantau/issues/314) Penambahan halaman rincian pengguna OpenSID.
 17. [#335](https://github.com/OpenSID/pantau/issues/335) Penambahan informasi Pengguna Aktif.
+18. [#310](https://github.com/OpenSID/pantau/issues/310) Penambahan halaman details untuk aplikasi OpenKab.
+19. [#338](https://github.com/OpenSID/pantau/issues/338) Penambahan total versi opensid dan informasi pengguna terbaru serta versi terakhir.
+20. [#339](https://github.com/OpenSID/pantau/issues/339) Penambahan informasi pengguna terbaru dan versi terakhir.
+21. [#343](https://github.com/OpenSID/pantau/issues/343) Penambahan statistik pengguna berdasarkan provinsi.
+22. [#344](https://github.com/OpenSID/pantau/issues/344) Penambahan pengguna baru dalam 7 Hari terakhir.
+23. [#345](https://github.com/OpenSID/pantau/issues/345) Penambahan daftar versi dan jumlah terpasang.
+24. [#342](https://github.com/OpenSID/pantau/issues/342) Penambahan statistik pengguna OpenSID bulanan.
 
 #### Perbaikan Bug
 
