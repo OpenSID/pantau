@@ -51,14 +51,17 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
         Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
-        Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
-        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
         Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
+        Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
+        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
+        Route::get('layanandesa/versi', [LayananDesaDashboardController::class, 'versi']);
+        Route::get('layanandesa/versi/detail', [LayananDesaDashboardController::class, 'versi_detail']);
+        Route::get('layanandesa/install_baru', [LayananDesaDashboardController::class, 'install_baru']);
+        Route::get('layanandesa/peta', [LayananDesaDashboardController::class, 'peta']);
     });    
 });
-
 
 // datatable
 Route::prefix('datatables')->as('datatables:')

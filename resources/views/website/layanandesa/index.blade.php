@@ -23,10 +23,10 @@
                                         <i class="fas fa-filter"></i>
                                     </a>
                                     <div class="bg-blue p-1 ml-1" style="width: 100%">
-                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: Rilis LayananDesa 2407.0.0</marquee></p>
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -60,8 +60,8 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">3065</h3>
-                                    <p class="text-black">Total Desa: 21.304</p>
+                                    <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
+                                    <p class="text-black">Total Desa: {{ $total_desa }}</p>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row g-0 text-center">
+                <div class="row g-0 text-center mt-2">
                     <div class="col-8">
                         <div class="p-2 bg-white rounded-lg">
                             @include('website.partial.summary', ['barisTambahan' => true])
@@ -88,7 +88,7 @@
                     </div>
                     <div class="col-2">
                         <div class="p-2 bg-blue rounded-lg" id="box-install_versi_terakhir">
-                            <div class="display-4 text-bold total">0</div>
+                            <div class="display-4 text-bold total">{{ $pengguna_versi_terakhir }}</div>
                             <div class="text-bold" style="margin-top:-10px">Terpasang <br>Versi Terakhir
                                 {{ $versi_terakhir }}</div>
                         </div>
@@ -136,7 +136,7 @@
         }
 
         $.ajax({
-            url: "{{ url('api/web/summary') }}",
+            url: "{{ url('api/web/summary-layanan') }}",
             data: params,
             type: "GET",
             beforeSend: function () {
@@ -163,28 +163,7 @@
                 $('#box-desa>.total').text(total.desa.total)
                 $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                ${total.desa.pertumbuhan}</span></a>`)
-
-
-                let _listElm;
-                for (let i in detail) {
-                    _listElm = $(`#${i}-baru`).find('ol')
-                    _listElm.empty()
-                    for (let j in detail[i]) {
-                        _listElm.append(`<li>${detail[i][j]}</li>`)
-                    }
-                }
-
-
-                $.ajax({
-                    url: "{{ url('api/web/chart-usage/opensid') }}",
-                    data: params,
-                    type: "GET",
-                    success: function (data) {
-                        myChart.data = data;
-                        myChart.update();
-                    }
-                }, 'json')
+                                ${total.desa.pertumbuhan}</span></a>`)                
             }
         }, 'json')
     }
