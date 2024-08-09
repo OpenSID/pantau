@@ -31,7 +31,9 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 27. [#347](https://github.com/OpenSID/pantau/issues/347) Penambahan menu akan dapat dilihat pada tampilan mobile.
 28. [#336](https://github.com/OpenSID/pantau/issues/336) Penambahan informasi pemasangan OpenSID.
 29. [#334](https://github.com/OpenSID/pantau/issues/334) Penambahan informasi pengguna berdasarkan wilayah. 
-30. [#326](https://github.com/OpenSID/pantau/issues/326) Penambahan halaman khusus untuk halaman LayananDesa.
+30. [#326](https://github.com/OpenSID/pantau/issues/326) Penambahan halaman khusus untuk LayananDesa.
+31. [#327](https://github.com/OpenSID/pantau/issues/327) Penambahan halaman khusus untuk KelolaDesa.
+
 
 #### Perbaikan Bug
 
