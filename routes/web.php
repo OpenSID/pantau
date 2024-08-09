@@ -50,7 +50,8 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
-        Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);        
+        Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
         Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\TrackOpenkabController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Api\TrackKelolaDesaController;
 use App\Http\Controllers\KelolaDesaDashboardController;
+use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\Api\TrackPBBController;
 
 /*
@@ -53,5 +54,6 @@ Route::prefix('web')
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
         Route::get('summary', [WebsiteDashboardController::class, 'summary']);
         Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);              
+        Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);            
         Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
     });
