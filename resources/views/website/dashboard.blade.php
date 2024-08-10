@@ -99,6 +99,7 @@
             success: function(data) {
                 const total = data.total
                 const detail = data.detail
+                const summary = data.summary
                 $('#box-provinsi>.total').text(total.provinsi.total)
                 $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.provinsi.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
@@ -126,6 +127,9 @@
                     }
                 }
 
+                for(let i in summary){
+                    $(`#app-${i}-count`).text(summary[i])
+                }
 
                 $.ajax({
                     url: 'api/web/chart-usage',
