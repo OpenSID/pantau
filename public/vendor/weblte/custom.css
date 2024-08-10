@@ -1,0 +1,161 @@
+.col-custom {
+        max-width: 100%;
+}
+.pantau-icon{
+    background-size: 24px 24px; /* adjust the size to your needs */
+    width: 24px;
+    height: 24px;    
+}
+.fa-openkab {    
+    background-image: url('../../assets/icon/openkab.png');    
+}
+.fa-opendk {    
+    background-image: url('../../assets/icon/opendk.png');    
+}
+.fa-opensid {    
+    background-image: url('../../assets/icon/opensid.png');    
+}
+.fa-layanandesa {    
+    background-image: url('../../assets/icon/layanandesa.png');    
+}
+.fa-keloladesa {    
+    background-image: url('../../assets/icon/keloladesa.png');    
+}
+
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    font-size: larger;
+}
+.control-sidebar-light .nav-link{
+    display: block;    
+    margin-bottom: 10px;
+    font-size: small;       
+}
+.control-sidebar-light .pantau-icon{
+    background-size: 24px 24px; /* adjust the size to your needs */
+    width: 24px;
+    height: 18px;    
+}
+button.navbar-toggler {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    /* styles for desktop screens */
+    #navbarCollapse{
+        padding-left:100px
+    }
+}
+
+
+.header-bg {
+    width: 100%;
+    background-image: url('../../assets/img/header-bg.jpg');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.header-bg-top {
+    width: 100%;
+    background-image: url('../../assets/img/header-bg.jpg');
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+.swiper-button-next, .swiper-button-prev {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.swiper-button-next::after, .swiper-button-prev::after {
+    font-size: 20px;
+}
+
+.swiper-button-next:hover, .swiper-button-prev:hover {
+    background-color: #dbdbdb;
+}
+
+.apps-icon {
+    background-color: #007bff;
+    color: white;
+    padding: 7px;
+    flex: 0 0 auto;
+}
+
+.apps-name {
+    background-color: #b9b9b9;
+    flex: 1;
+    padding: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.apps-number {
+    padding: 10px;
+    width: 25%;
+    text-align: center;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 576px) {
+    .apps-icon {
+        padding: 5px;
+    }
+
+    .apps-name, .apps-number {
+        padding: 5px;
+    }
+}
+
+@media (min-width: 768px) {
+    .apps-name {
+        padding: 10px 15px;
+    }
+
+    .apps-number {
+        width: 20%;
+    }
+}
+
+@media (min-width: 992px) {
+    .apps-name {
+        padding: 10px 20px;
+    }
+
+    .apps-number {
+        width: 25%;
+    }
+}
+
+.text-nama-wilayah {
+    max-width: 70%; /* Anda bisa menyesuaikan ini sesuai kebutuhan */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+    .text-nama-wilayah {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 980px) {
+    .box-provinsi {
+        margin-top: 16px;
+    }
+}

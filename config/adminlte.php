@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -243,7 +243,7 @@ return [
         ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Dasbor',
-            'url'          => '/',
+            'url'          => '/dashboard',
             'icon'         => 'fas fa-tachometer-alt',
         ],
         [
@@ -316,6 +316,16 @@ return [
                     'can'  => 'is-admin',
                     'text' => 'Pengguna Kelola Desa',
                     'url'  => 'mobile/pengguna_kelola_desa',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'OpenKab',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Wilayah Kerja Sama',
+                    'url'  => 'openkab/kerja-sama',
                 ],
             ],
         ],

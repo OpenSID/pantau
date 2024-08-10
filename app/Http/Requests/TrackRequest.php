@@ -134,10 +134,16 @@ class TrackRequest extends FormRequest
      */
     public function requestData()
     {
+        $kontak = [
+            'nama' => $this->nama_kontak,
+            'hp' => $this->hp_kontak,
+            'jabatan' => $this->jabatan_kontak
+        ];
         $this->merge([
             'nama_kabupaten' => Region::where('region_code', $this->kode_kabupaten)->first()->region_name ?? $this->nama_kabupaten,
             'nama_kecamatan' => Region::where('region_code', $this->kode_kecamatan)->first()->region_name ?? $this->nama_kecamatan,
             'nama_desa' => Region::where('region_code', $this->kode_desa)->first()->region_name ?? $this->nama_desa,
+            'kontak' => $kontak
         ]);
 
         return $this->only([
@@ -174,6 +180,8 @@ class TrackRequest extends FormRequest
             'jml_persil',
             'jml_dokumen',
             'jml_keluarga',
+            'anjungan',
+            'kontak'            
         ]);
     }
 }

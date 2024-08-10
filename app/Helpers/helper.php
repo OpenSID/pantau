@@ -3,6 +3,7 @@
 use App\Models\PengaturanAplikasi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Carbon;
 
 if (! function_exists('pantau_versi')) {
     /**c:\xampp\htdocs\OpenDesa\dashboard-saas\catatan_rilis.md
@@ -157,6 +158,33 @@ if (! function_exists('lastrelease_opensid')) {
     }
 }
 
+if (! function_exists('lastrelease_pbb')) {
+    /**
+     * Validasi domain.
+     *
+     * @param  string $url
+     * @return object
+     */
+    function lastrelease_pbb()
+    {
+        
+        // Cache data until the end of the day
+        $version = Cache::remember('release_pbb', now()->endOfDay(), function () {            
+            $version = '2401.0.0';
+            $versi_pbb = lastrelease('https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest');
+
+            if ($versi_pbb !== false) {
+                $version = str_replace('v', '', $versi_pbb->tag_name);                
+            }
+
+            return $version;
+        });
+        
+
+        return $version;
+    }
+}
+
 if (! function_exists('pantau_wilayah_khusus')) {
     /**
      * Validasi domain.
@@ -182,6 +210,9 @@ if (! function_exists('abaikan_domain')) {
         switch($aplikasi) {
             case 'opendk':
                 return Cache::get('abaikan_domain_opendk', '');
+                break;
+            case 'openkab':
+                return Cache::get('abaikan_domain_openkab', '');
                 break;
             default:
                 return Cache::get('abaikan_domain_opensid', '');
@@ -301,5 +332,76 @@ if (! function_exists('lastrelease_opendk')) {
                 return $selisih;
             }
         }
+    }
+
+    if (! function_exists('formatDateTimeForHuman')) {
+        function formatDateTimeForHuman($datetime)
+        {
+            $now = Carbon::now();
+            $formattedDateTime = Carbon::parse($datetime);
+    
+            // Calculate differences
+            $diff = $formattedDateTime->diff($now);
+    
+            // Determine the appropriate format based on the difference
+            if ($formattedDateTime->isFuture()) {
+                if ($diff->y > 0) {
+                    return $diff->y . ' tahun ' . $diff->m . ' bulan ' . $diff->d . ' hari lagi';
+                } elseif ($diff->m > 0) {
+                    return $diff->m . ' bulan ' . $diff->d . ' hari lagi';
+                } elseif ($diff->d > 0) {
+                    return $diff->d . ' hari lagi';
+                } elseif ($diff->h > 0) {
+                    return $diff->h . ' jam ' . $diff->i . ' menit lagi';
+                } elseif ($diff->i > 0) {
+                    return $diff->i . ' menit ' . $diff->s . ' detik lagi';
+                } else {
+                    return 'baru saja';
+                }
+            } else {
+                if ($diff->y > 0) {
+                    return $diff->y . ' tahun lalu';
+                } elseif ($diff->m > 0) {
+                    return $diff->m . ' bulan lalu';
+                } elseif ($diff->d > 0) {
+                    return $diff->d . ' hari lalu';
+                } elseif ($diff->h > 0) {
+                    return $diff->h . ' jam lalu';
+                } elseif ($diff->i > 0) {
+                    return $diff->i . ' menit ' . $diff->s . ' detik lalu';
+                } else {
+                    return 'baru saja';
+                }
+            }
+        }
+    }
+}
+
+if (! function_exists('lastrelease_api_layanandesa')) {
+    
+    function lastrelease_api_layanandesa()
+    {
+
+        // Cache data until the end of the day
+        $version = Cache::remember('release_layanan_desa', now()->endOfDay(), function () {            
+            $version = '2404.0.0';
+            $versi_api = lastrelease('https://api.github.com/repos/OpenSID/rilis-opensid-api/releases/latest');
+
+            if ($versi_api !== false) {
+                $version = str_replace('v', '', $versi_api->tag_name);                
+            }
+
+            return $version;
+        });
+
+
+        return $version;
+    }
+}
+
+if (! function_exists('format_angka')) {    
+    function format_angka($angka, $decimals = 0)
+    {
+        return number_format($angka, $decimals, ',', '.');
     }
 }

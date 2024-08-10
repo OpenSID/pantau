@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\V1\WilayahController;
 use App\Http\Controllers\Api\TrackMobileController;
 use App\Http\Controllers\Api\TrackOpendkController;
+use App\Http\Controllers\Api\TrackOpenkabController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,5 @@ Route::prefix('track')
         Route::post('desa', TrackController::class);
         Route::post('opendk', TrackOpendkController::class);
         Route::get('mobile', TrackMobileController::class);
+        Route::post('openkab', TrackOpenkabController::class);
     });
