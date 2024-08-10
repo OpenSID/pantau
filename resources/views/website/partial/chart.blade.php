@@ -2,7 +2,7 @@
     <style>
         .chart-container {
             width: 100%;
-            height: 90vh; /* Atur tinggi sesuai kebutuhan */
+            height: 100vh; /* Atur tinggi sesuai kebutuhan */
         }
 
         #myChart {
@@ -32,7 +32,7 @@
         data: {},
         options: {
             layout: {
-                padding: 20
+                padding: 5
             },
             elements: {
                 point: {
@@ -42,12 +42,12 @@
             scales: {
                 x: {
                     ticks: {
-                        padding: 10
+                        padding: 5
                     }
                 },
                 y: {
                     ticks: {
-                        padding: 10
+                        padding: 5
                     }
                 }
             }
