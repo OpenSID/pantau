@@ -28,7 +28,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('web/layanandesa/install_baru') }}`,
+                url: `{{ url('web/keloladesa/install_baru') }}`,
                 method: 'get',
             },
             columns: [{
@@ -38,7 +38,7 @@
                     orderable: false
                 },                
                 {
-                    data: 'id'
+                    data: 'id_device'
                 },
                 {
                     data: 'desa.nama_desa'

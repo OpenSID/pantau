@@ -102,7 +102,7 @@
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
 
                 $.ajax({
-                    url: "{{ url('web/layanandesa/peta') }}",
+                    url: "{{ url('web/keloladesa/peta') }}",
                     contentType: "application/json; charset=utf-8",
                     cache: false,
                     dataType: "json",

@@ -76,7 +76,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <a href="{{ url('web/keloladesa') }}" id="view-more-button-keloladesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
+                <a href="{{ url('web/keloladesa/detail') }}" id="view-more-button-keloladesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>    

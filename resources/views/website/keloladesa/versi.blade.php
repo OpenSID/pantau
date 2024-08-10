@@ -11,7 +11,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
-            <div class="text-center"><a href="{{ url('web/layanandesa/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
+            <div class="text-center"><a href="{{ url('web/keloladesa/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
         </div>
     </div>
 </div>
@@ -28,7 +28,7 @@
             lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             order: [[1, 'desc']],            
             ajax: {
-                url: `{{ url('web/layanandesa/versi') }}`,
+                url: `{{ url('web/keloladesa/versi') }}`,
                 method: 'get',
                 data: function(data) {                     
                 }
@@ -46,7 +46,7 @@
                 {
                     name: 'jumlah',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('web/layanandesa/versi/detail') }}?versi=${data.versi}"><span class="badge badge-success">${data.jumlah}</span></a>`
+                        return `<a target="_blank" href="{{ url('web/keloladesa/versi/detail') }}?versi=${data.versi}"><span class="badge badge-success">${data.jumlah}</span></a>`
                     },
                     searchable: false,
                     orderable: false

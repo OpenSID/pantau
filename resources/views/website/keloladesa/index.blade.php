@@ -1,6 +1,6 @@
 @extends('layouts.web')
 @include('layouts.components.select2_wilayah')
-@section('title', 'Dasbor LayananDesa')
+@section('title', 'Dasbor KelolaDesa')
 
 @section('content_header')
 
@@ -26,7 +26,7 @@
                                         <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-10">
-                        @include('website.layanandesa.peta')
+                        @include('website.keloladesa.peta')
                     </div>
                     <div class="col-lg-2 box-provinsi">
                         <p>Desa / Kelurahan Aktif</p>
@@ -68,7 +68,7 @@
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-left">
-                                    @include('website.layanandesa.install_baru')
+                                    @include('website.keloladesa.install_baru')
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                     <div class="col-2">
                         <div class="p-2 bg-green rounded-lg">
                             <div class="display-4 text-bold total">{{ $total_versi }}</div>
-                            <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi LayananDesa</div>
+                            <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi KelolaDesa</div>
                         </div>
                     </div>
                     <div class="col-2">
@@ -101,15 +101,15 @@
         <div class="row mt-3">
             <div class="col-lg-8">
                 <b>
-                    Daftar Pengguna LayananDesa 7 Hari Terakhir
+                    Daftar Pengguna KelolaDesa 7 Hari Terakhir
                 </b>
-                @include('website.layanandesa.tabel')
+                @include('website.keloladesa.tabel')
             </div>
             <div class="col-lg-4">
                 <b>
-                    Daftar Versi Aplikasi LayananDesa
+                    Daftar Versi Aplikasi KelolaDesa
                 </b>
-                @include('website.layanandesa.versi')
+                @include('website.keloladesa.versi')
             </div>
         </div>
     </div>
@@ -136,7 +136,7 @@
         }
 
         $.ajax({
-            url: "{{ url('api/web/summary-layanan') }}",
+            url: "{{ url('api/web/summary-keloladesa') }}",
             data: params,
             type: "GET",
             beforeSend: function () {

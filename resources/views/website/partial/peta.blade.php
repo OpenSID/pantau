@@ -22,8 +22,8 @@
           <div class="apps-name">
               OpenKab
           </div>
-          <div class="apps-number bg-pink">
-              21
+          <div class="apps-number bg-pink" id="app-openkab-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -33,8 +33,8 @@
           <div class="apps-name">
               OpenDK
           </div>
-          <div class="apps-number bg-green">
-              2981
+          <div class="apps-number bg-green" id="app-opendk-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -44,8 +44,8 @@
           <div class="apps-name">
               OpenSID
           </div>
-          <div class="apps-number bg-orange">
-              31981
+          <div class="apps-number bg-orange" id="app-opensid-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -55,8 +55,8 @@
           <div class="apps-name">
               LayananDesa
           </div>
-          <div class="apps-number bg-red">
-              4321
+          <div class="apps-number bg-red" id="app-layanandesa-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -66,8 +66,8 @@
           <div class="apps-name">
               KelolaDesa
           </div>
-          <div class="apps-number bg-blue">
-              121
+          <div class="apps-number bg-blue" id="app-keloladesa-count">
+              0
           </div>
       </div>
   </div>
