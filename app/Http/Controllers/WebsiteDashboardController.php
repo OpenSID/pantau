@@ -314,9 +314,13 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        
+        $totalInstall = Desa::count(); 
+        $totalInstallOnline = Desa::online()->count();
+        $installHariIni = Desa::whereDate('created_at', '>=',Carbon::now()->format('Y-m-d'))->get();
         return view('website.opensid', [
             'fillters' => $fillters,
+            'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
+            'installHariIni' => $installHariIni,                
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
