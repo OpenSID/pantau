@@ -35,6 +35,7 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 31. [#327](https://github.com/OpenSID/pantau/issues/327) Penambahan halaman khusus untuk KelolaDesa.
 32. [#386](https://github.com/OpenSID/pantau/issues/386) Penambahan data no hp pada pengguna OpenSID yang diambil dari identitas desa.
 33. [#389](https://github.com/OpenSID/pantau/issues/389) Penambahan fungsi collapse pada bagian pengguna OpenSID berdasarkan wilayah.
+34. [#309](https://github.com/OpenSID/pantau/issues/309) Penambahan fungsi filter di halaman dasbor.
 
 #### Perbaikan Bug
 
