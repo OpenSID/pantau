@@ -26,6 +26,16 @@ class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'url' => $item->url,
                 'versi' => $item->versi,
                 'format_updated_at' => $item->format_updated_at,
+                'Batas Wilayah Utara' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_utara'] ?? '',
+                'Batas Wilayah Barat' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_barat'] ?? '',
+                'Batas Wilayah Timur' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_timur'] ?? '',
+                'Batas Wilayah Selatan' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_selatan'] ?? '',
+                'Jumlah Desa' => $item->jml_desa,
+                'Jumlah Desa Tersinkronisasi' => $item->jumlahdesa_sinkronisasi,
+                'Jumlah Penduduk' => $item->jumlah_penduduk,
+                'Jumlah KK' => $item->jumlah_keluarga,
+                'Jumlah Program Bantuan' => $item->jumlah_bantuan,
+                'Alamat Kantor' => $item->alamat,
             ];
         });
     }
@@ -40,6 +50,16 @@ class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Web',
             'Versi',
             'Akses Terakhir',
+            'Batas Wilayah Utara',
+            'Batas Wilayah Barat',
+            'Batas Wilayah Timur',
+            'Batas Wilayah Selatan',
+            'Jumlah Desa',
+            'Jumlah Desa Tersinkronisasi',
+            'Jumlah Penduduk',
+            'Jumlah KK',
+            'Jumlah Program Bantuan',
+            'Alamat Kantor'
         ];
     }
 }
