@@ -5,7 +5,7 @@
 @section('content')
     @include('layouts.components.global_delete')
     <div class="row">
-    <h1>Versi OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(desa OpenSID)</small></h1>
+    <h1>Versi OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang di desa OpenSID)</small></h1>
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
