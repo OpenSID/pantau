@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
+use App\Models\Pbb;
 use Carbon\CarbonPeriod;
 use App\Models\TrackMobile;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class WebsiteDashboardController extends Controller
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
+        $versiOpensid = $request->get('versi_opensid');
         $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
         $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
 
@@ -63,20 +65,58 @@ class WebsiteDashboardController extends Controller
         $layanan = TrackMobile::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
         $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
 
+        $openkabWilayah = Openkab::where('created_at', '<=', $tanggalAkhir);
+        $opensidWilayah = Desa::where('created_at', '<=', $tanggalAkhir);
+        $opendkWilayah = Opendk::where('created_at', '<=', $tanggalAkhir);
+        $layananWilayah = TrackMobile::where('created_at', '<=', $tanggalAkhir);
+        $kelolaDesaWilayah = TrackKeloladesa::where('created_at', '<=', $tanggalAkhir);
+        $versiTerakhirOpensid = collect();
+        if($versiOpensid){
+            $versiTerakhirOpensid = Desa::where(function($query) use ($versiOpensid){
+                return $query->where('versi_hosting', 'like', "{$versiOpensid}-premium%")
+                    ->orWhere('versi_lokal', 'like', "{$versiOpensid}-premium%");
+            });
+        }
+
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
             $summarySebelumnya->where('kode_provinsi', $provinsi);
+            $versiTerakhirOpensid->where('kode_provinsi', $provinsi);
+
+            $openkabWilayah->where('kode_prov', $provinsi);
+            $opensidWilayah->where('kode_provinsi', $provinsi);
+            $opendkWilayah->where('kode_provinsi', $provinsi);
+            $layananWilayah->provinsi($provinsi);
+            $kelolaDesaWilayah->provinsi($provinsi);
         }
         if ($kabupaten) {
             $summary->where('kode_kabupaten', $kabupaten);
             $summarySebelumnya->where('kode_kabupaten', $kabupaten);
+            $versiTerakhirOpensid->where('kode_kabupaten', $kabupaten);
+
+            $openkabWilayah->where('kode_kab', $kabupaten);
+            $opensidWilayah->where('kode_kabupaten', $kabupaten);
+            $opendkWilayah->where('kode_kabupaten', $kabupaten);
+            $layananWilayah->kabupaten($kabupaten);
+            $kelolaDesaWilayah->kabupaten($kabupaten);
         }
         if ($kecamatan) {
             $summary->where('kode_kecamatan', $kecamatan);
             $summarySebelumnya->where('kode_kecamatan', $kecamatan);
+            $versiTerakhirOpensid->where('kode_kecamatan', $kecamatan);
+
+            $opensidWilayah->where('kode_kecamatan', $kabupaten);
+            $opendkWilayah->where('kode_kecamatan', $kabupaten);
+            $layananWilayah->kecamatan($kecamatan);
+            $kelolaDesaWilayah->kecamatan($kecamatan);
         }
         $summareResult = $summary->first();
         $summarySebelumnyaResult = $summarySebelumnya->first();
+        $totalVersiTerakhirOpensid = 0;
+        if($versiOpensid){
+            $totalVersiTerakhirOpensid = $versiTerakhirOpensid->count();
+        }
+        
 
         return response()->json([
             'total' => [
@@ -92,6 +132,16 @@ class WebsiteDashboardController extends Controller
                 'layanandesa' => $layanan ? $layanan->map(static fn ($q) => $q->desa->nama_desa)->toArray() : [],
                 'keloladesa' => $kelolaDesa ? $kelolaDesa->map(static fn ($q) => $q->desa->nama_desa)->toArray() : [],
             ],
+            'additional' => [
+                'opensid' => ['install_versi_terakhir' =>  $totalVersiTerakhirOpensid]
+            ],
+            'summary' => [
+                'openkab' => $openkabWilayah->count(),
+                'opensid' => $opensidWilayah->count(),
+                'opendk' => $opendkWilayah->count(),
+                'layanandesa' => $layananWilayah->count(),
+                'keloladesa' => $kelolaDesaWilayah->count()
+            ]
         ]
         );
     }
@@ -276,6 +326,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opendk');
     }
+    
+    public function openkabData(Request $request)
+    {
+        return view('website.openkab_data');
+    }
 
     public function keloladesa(Request $request)
     {
@@ -294,12 +349,46 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        
+        $totalInstall = Desa::count(); 
+        $totalInstallOnline = Desa::online()->count();
+        $installHariIni = Desa::whereDate('created_at', '>=',Carbon::now()->format('Y-m-d'))->get();
         return view('website.opensid', [
             'fillters' => $fillters,
+            'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
+            'installHariIni' => $installHariIni,                
+            'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
+            'versi_terakhir' => lastrelease_opensid(),
+            'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
+            'pengguna_pbb' => Pbb::count(),
+            'versi_pbb' => lastrelease_pbb(),
+            'pengguna_anjungan' => Desa::anjungan()->count(),
             'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
             'latestUmumVersion' => 'v' . lastrelease_opensid(),
             'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
+    }
+
+    public function opensid_versi(Request $request)
+    {
+        $fillters = [
+            'aktif' => $request->aktif,
+        ];
+        return view('website.opensid_versi', compact('fillters'));
+    }
+
+    public function opensid_versi_detail(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_versi_detail', compact('fillters'));
     }
 }

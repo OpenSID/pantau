@@ -1,47 +1,22 @@
-<div class="row">
-    <!-- <div class="col-md">
+<div class="container-fluid">
+        <div class="row justify-content-center">
+    <div class="col-md-2 col-custom">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenKab</h4>
             </div>
-            <div class="card-body">
-                <div class="pl-4">#. Nama Wilayah</div>
-                <hr>
-                <div class="d-flex flex-column">
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">1. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">2. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">3. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">4. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">5. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">6. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-1">
-                        <span class="flex-shrink-0 text-nama-wilayah">7. Kabupaten</span>
-                        <span class="flex-grow-1 text-right">5 Menit Lalu</span>
-                    </div>
+            <div class="card-body" id="openkab-baru">
+                <div class="pl-2">#<span class="pl-4">Nama Wilayah</span></div>
+                <div class="table-responsive">
+                    <table class="table" id="table-openkab-baru">
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <button type="button" class="btn btn-secondary btn-block">Lihat Selengkapnya...</button>
+                <a href="{{ url('web/openkab-data') }}" id="view-more-button-openkab" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
-    </div> -->
-    <div class="col-md">
+    </div>
+    <div class="col-md-2 col-custom">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenDK</h4>
@@ -57,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2 col-custom">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>OpenSID</h4>
@@ -73,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2 col-custom">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>Layanan Desa</h4>
@@ -85,11 +60,11 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <a href="{{ url('web/layanandesa') }}" id="view-more-button-layanandesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
+                <a href="{{ url('web/layanandesa/detail') }}" id="view-more-button-layanandesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-2 col-custom">
         <div class="card bg-white">
             <div class="card-header bg-blue text-white text-center">
                 <h4>Kelola Desa</h4>
@@ -101,7 +76,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <a href="{{ url('web/keloladesa') }}" id="view-more-button-keloladesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
+                <a href="{{ url('web/keloladesa/detail') }}" id="view-more-button-keloladesa" class="btn btn-outline-dark btn-block" style="display: none;">Lihat Selengkapnya...</a>
             </div>
         </div>
     </div>    
@@ -148,6 +123,39 @@
         });
         $('#table-opendk-baru thead').hide();
 
+        $('#table-openkab-baru').DataTable({
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ordering: false,
+            ajax: {
+                url: `{{ route('datatables:openkab-baru') }}`,
+                method: 'get',
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                },
+                {
+                    data: 'region'
+                },
+                {
+                    data: 'tanggal'
+                },
+            ],
+            dom: 't<"bottom">', 
+            drawCallback: function(settings) {
+                var api = this.api();
+                var data = api.rows({ page: 'current' }).data().length;
+
+                if (data > 0) {
+                    $('#view-more-button-openkab').show();
+                } else {
+                    $('#view-more-button-openkab').hide();
+                }
+            }
+        });
+        $('#table-openkab-baru thead').hide();
         
         $('#table-opensid-baru').DataTable({
             processing: true,

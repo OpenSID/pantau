@@ -1,20 +1,13 @@
-@extends('layouts.index')
+@extends('layouts.web')
 @include('layouts.components.select2_wilayah')
 
 @section('title', 'Desa OpenSID')
 
-@section('content_header')
-    <h1>
-        Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID) @if ($provinsi = session('provinsi'))
-                {{ "| {$provinsi->nama_prov}" }}
-            @endif
-        </small></h1>
-@stop
-
-@section('content')
-    @include('layouts.components.global_delete')
-    @include('layouts.components.notification')
+@section('content')        
     <div class="row">
+    <h1>
+        Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa yang memasang OpenSID)
+        </small></h1>
         <div class="col-lg-12">
 
             <div class="card card-outline card-primary">
@@ -38,34 +31,16 @@
                         <table class="table" id="table-desa">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    @auth
-                                        <th>Aksi</th>
-                                    @endauth
+                                    <th>No</th>                                    
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
-                                    @auth
-                                        <th>Kontak</th>
-                                    @endauth
                                     <th>Web</th>
                                     <th>Versi Offline</th>
                                     <th>Versi Online</th>
                                     <th>Modul TTE</th>
-                                    <th>Surat ter-TTE</th>
-                                    @auth
-                                        <th>Penduduk</th>
-                                        <th>Artikel</th>
-                                        <th>Surat Keluar</th>
-                                        <th>Program Bantuan</th>
-                                        <th>Pengguna Mandiri</th>
-                                        <th>Pengguna</th>
-                                        <th>Unsur Peta</th>
-                                        <th>Persil</th>
-                                        <th>Dokumen</th>
-                                        <th>Keluarga</th>
-                                    @endauth
+                                    <th>Surat ter-TTE</th>                                    
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -144,13 +119,7 @@
                         searchable: false,
                         orderable: false
                     },
-                    @auth {
-                        data: 'action',
-                        name: 'action',
-                        searchable: false,
-                        orderable: false
-                    },
-                @endauth {
+                    {
                     data: 'nama_desa'
                 },
                 {
@@ -162,13 +131,6 @@
                 {
                     data: 'nama_provinsi'
                 },
-                @auth {
-                        data: 'kontak',
-                        name: 'kontak',
-                        searchable: false,
-                        orderable: false
-                    },
-                @endauth
                 {
                     data: function(data) {
                         if (data.url_hosting) {
@@ -205,59 +167,15 @@
                     data: 'jml_surat_tte',
                     searchable: false,
                 },
-                @auth {
-                    data: 'jml_penduduk',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_artikel',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_surat_keluar',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_bantuan',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_mandiri',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_pengguna',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_unsur_peta',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_persil',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_dokumen',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_keluarga',
-                    searchable: false,
-                },
-            @endauth {
+                 {
                 data: 'tgl_akses',
                 searchable: false,
             }, ],
-            @auth
-        order: [
-                [21, 'desc']
-            ],
-        @else
+            
             order: [
                 [10, 'desc']
             ],
-        @endauth
+        
         });
 
         $('#filter').on('click', function(e) {

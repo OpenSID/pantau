@@ -22,8 +22,8 @@
           <div class="apps-name">
               OpenKab
           </div>
-          <div class="apps-number bg-pink">
-              {{$jml_openkab}}
+          <div class="apps-number bg-pink" id="app-openkab-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -33,8 +33,8 @@
           <div class="apps-name">
               OpenDK
           </div>
-          <div class="apps-number bg-green">
-            {{$jml_opendk}}
+          <div class="apps-number bg-green" id="app-opendk-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -44,8 +44,8 @@
           <div class="apps-name">
               OpenSID
           </div>
-          <div class="apps-number bg-orange">
-            {{$jml_opensid}}
+          <div class="apps-number bg-orange" id="app-opensid-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -55,8 +55,8 @@
           <div class="apps-name">
               LayananDesa
           </div>
-          <div class="apps-number bg-red">
-           {{$jml_layanandesa}}
+          <div class="apps-number bg-red" id="app-layanandesa-count">
+              0
           </div>
       </div>
       <div class="d-flex align-items-center pb-2">
@@ -66,8 +66,8 @@
           <div class="apps-name">
               KelolaDesa
           </div>
-          <div class="apps-number bg-blue">
-              {{$jml_keloladesa}}
+          <div class="apps-number bg-blue" id="app-keloladesa-count">
+              0
           </div>
       </div>
   </div>

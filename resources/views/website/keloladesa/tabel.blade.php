@@ -4,14 +4,14 @@
             <table class="table" id="table-desa-baru">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Tgl Terpantau</th>
+                        <th>No</th>                        
+                        <th>Id Perangkat</th>
                         <th>Desa</th>
                         <th>Kecamatan</th>
                         <th>Kabupaten</th>
-                        <th>Provinsi</th>
-                        <th>Web</th>
-                        <th>Versi</th>
+                        <th>Provinsi</th>                        
+                        <th>Versi Mobile</th>
+                        <th>Akses Terakhir</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -28,7 +28,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ route('datatables:desa-baru') }}`,
+                url: `{{ url('web/keloladesa/install_baru') }}`,
                 method: 'get',
             },
             columns: [{
@@ -36,38 +36,28 @@
                     name: 'DT_RowIndex',
                     searchable: false,
                     orderable: false
+                },                
+                {
+                    data: 'id_device'
                 },
                 {
-                    data: 'format_created_at', name: 'created_at'
+                    data: 'desa.nama_desa'
                 },
                 {
-                    data: 'nama_desa'
+                    data: 'desa.nama_kecamatan'
                 },
                 {
-                    data: 'nama_kecamatan'
+                    data: 'desa.nama_kabupaten'
                 },
                 {
-                    data: 'nama_kabupaten'
-                },
-                {
-                    data: 'nama_provinsi'
-                },
-                {
-                    data: function (data) {
-                        if (data.url_hosting) {
-                            return `<a target="_blank" href="https://${data.url_hosting}">https://${data.url_hosting}</a>`
-                        } else if (data.url_lokal) {
-                            return `<a target="_blank" href="http://${data.url_lokal}">http://${data.url_lokal}</a>`
-                        }
-
-                        return '';
-                    },
-                    searchable: false,
-                    orderable: false,
-                    visible : {{ auth()->check() == false ?'false' : 'true' }}
-                },
+                    data: 'desa.nama_provinsi'
+                },                
                 {
                     data: 'versi',
+                    searchable: false
+                },
+                {
+                    data: 'updated_at',
                     searchable: false
                 },
             ],

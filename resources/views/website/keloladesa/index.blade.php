@@ -1,6 +1,6 @@
 @extends('layouts.web')
 @include('layouts.components.select2_wilayah')
-@section('title', 'Dasbor OpenSID')
+@section('title', 'Dasbor KelolaDesa')
 
 @section('content_header')
 
@@ -23,7 +23,7 @@
                                         <i class="fas fa-filter"></i>
                                     </a>
                                     <div class="bg-blue p-1 ml-1" style="width: 100%">
-                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: Rilis Umum {{ $latestUmumVersion }} | Rilis Premium {{ $latestPremiumVersion }}</marquee></p>
+                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
                                     </div>
                                 </div>
                             </div>
@@ -53,29 +53,28 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-10">
-                        @include('website.partial.peta_opensid')
+                        @include('website.keloladesa.peta')
                     </div>
                     <div class="col-lg-2 box-provinsi">
                         <p>Desa / Kelurahan Aktif</p>
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">{{ $statistikDesa->aktif }}</h3>
-                                    <p class="text-black">Total Desa: {{ $statistikDesa->desa_total }}</p>
+                                    <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
+                                    <p class="text-black">Total Desa: {{ $total_desa }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12">
                             <div class="small-box bg-white">
                                 <div class="inner text-left">
-                                    @include('website.partial.desa_opensid')
+                                    @include('website.keloladesa.install_baru')
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row g-0 text-center">
+                <div class="row g-0 text-center mt-2">
                     <div class="col-8">
                         <div class="p-2 bg-white rounded-lg">
                             @include('website.partial.summary', ['barisTambahan' => true])
@@ -84,85 +83,40 @@
                     <div class="col-2">
                         <div class="p-2 bg-green rounded-lg">
                             <div class="display-4 text-bold total">{{ $total_versi }}</div>
-                            <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi OpenSID</div>
+                            <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi KelolaDesa</div>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="p-2 bg-blue rounded-lg" id="box-install_versi_terakhir">
-                            <div class="display-4 text-bold total">0</div>
+                            <div class="display-4 text-bold total">{{ $pengguna_versi_terakhir }}</div>
                             <div class="text-bold" style="margin-top:-10px">Terpasang <br>Versi Terakhir
                                 {{ $versi_terakhir }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="small-box bg-blue rounded-lg">
-                            <div class="row p-3">
-                                <div class="col-md-2 text-center align-content-center">
-                                    <i class="fas fa-building fa-6x text-white"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4>Aplikasi PBB</h4>
-                                    <div class="display-4 text-bold mt-n3">{{ $pengguna_pbb }}</div>
-                                    <div class="text-bold mt-n2">Pengguna Terpasang</div>
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    <h3><span class="badge badge-warning rounded-pill">versi {{ $versi_pbb }}</span></h3>                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="small-box bg-blue rounded-lg">
-                            <div class="row p-3">
-                                <div class="col-md-2 text-center align-content-center">
-                                    <i class="fas fa-building fa-6x text-white"></i>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4>Anjungan Mandiri</h4>
-                                    <div class="display-4 text-bold mt-n3">{{ $pengguna_anjungan }}</div>
-                                    <div class="text-bold mt-n2">Pengguna Terpasang</div>
-                                </div>                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-lg-8">
-                        <div class="bg-blue p-2">
-                            OpenSID Terpasang Berdasarkan Bulan
-                        </div>
-                        @include('website.partial.chart_opensid')
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="bg-blue p-2">
-                            OpenSID Terpasang Berdasarkan Provinsi
-                        </div>
-                        @include('website.partial.provinsi_pengguna_opensid', ['provinsi_pengguna_opensid' => $provinsi_pengguna_opensid])
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-lg-8">
-                        <b>
-                            Daftar Pengguna OpenSID 7 Hari Terakhir
-                        </b>
-                        @include('website.partial.tabel_opensid')
-                    </div>
-                    <div class="col-lg-4">
-                        <b>
-                            Versi Yang Terpasang Di Desa OpenSID
-                        </b>
-                        @include('website.partial.versi_opensid')
-                    </div>
-                </div>
-            </div>
-            <!-- /.card-body -->
         </div>
-        <!-- /.card -->
     </div>
+    <div class="card-body">
+        <div class="row mt-3">
+            <div class="col-lg-8">
+                <b>
+                    Daftar Pengguna KelolaDesa 7 Hari Terakhir
+                </b>
+                @include('website.keloladesa.tabel')
+            </div>
+            <div class="col-lg-4">
+                <b>
+                    Daftar Versi Aplikasi KelolaDesa
+                </b>
+                @include('website.keloladesa.versi')
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+</div>
 </div>
 @stop
 
@@ -178,12 +132,11 @@
             period: $('input[name=periods]').val(),
             provinsi: $('select[name=provinsi]').val(),
             kabupaten: $('select[name=kabupaten]').val(),
-            kecamatan: $('select[name=kecamatan]').val(),
-            versi_opensid: '{{ $versi_terakhir }}'
+            kecamatan: $('select[name=kecamatan]').val()
         }
 
         $.ajax({
-            url: "{{ url('api/web/summary') }}",
+            url: "{{ url('api/web/summary-keloladesa') }}",
             data: params,
             type: "GET",
             beforeSend: function () {
@@ -195,7 +148,6 @@
             success: function (data) {
                 const total = data.total
                 const detail = data.detail
-                const additional = data.additional
                 $('#box-provinsi>.total').text(total.provinsi.total)
                 $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.provinsi.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
@@ -211,28 +163,7 @@
                 $('#box-desa>.total').text(total.desa.total)
                 $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                ${total.desa.pertumbuhan}</span></a>`)
-                $('#box-install_versi_terakhir>.total').text(additional.opensid.install_versi_terakhir)
-
-                let _listElm;
-                for (let i in detail) {
-                    _listElm = $(`#${i}-baru`).find('ol')
-                    _listElm.empty()
-                    for (let j in detail[i]) {
-                        _listElm.append(`<li>${detail[i][j]}</li>`)
-                    }
-                }
-
-
-                $.ajax({
-                    url: "{{ url('api/web/chart-opensid') }}",
-                    data: params,
-                    type: "GET",
-                    success: function (data) {
-                        myChart.data = data;
-                        myChart.update();
-                    }
-                }, 'json')
+                                ${total.desa.pertumbuhan}</span></a>`)                
             }
         }, 'json')
     }

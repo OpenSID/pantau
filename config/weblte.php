@@ -85,9 +85,9 @@ return [
 
     'layout_topnav' => true,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => true,
+    'layout_fixed_sidebar' => false,
     'layout_fixed_navbar' => true,
-    'layout_fixed_footer' => true,
+    'layout_fixed_footer' => false,
     'layout_dark_mode' => null,
 
     /*
@@ -130,7 +130,7 @@ return [
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light p-0',
-    'classes_topnav_nav' => 'navbar-expand',
+    'classes_topnav_nav' => 'navbar-expand-lg',
     'classes_topnav_container' => 'container col-lg-12 pl-4',
 
     /*
@@ -148,11 +148,11 @@ return [
     'sidebar_mini' => 'lg',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => true,
+    'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
-    'sidebar_nav_accordion' => true,
+    'sidebar_nav_accordion' => false,
     'sidebar_nav_animation_speed' => 300,
 
     /*
@@ -167,10 +167,10 @@ return [
     |
     */
 
-    'right_sidebar' => false,
-    'right_sidebar_icon' => 'fas fa-cogs',
-    'right_sidebar_theme' => 'dark',
-    'right_sidebar_slide' => false,
+    'right_sidebar' => true,
+    'right_sidebar_icon' => 'fas fa-bars',
+    'right_sidebar_theme' => 'light',
+    'right_sidebar_slide' => true,
     'right_sidebar_push' => false,
     'right_sidebar_scrollbar_theme' => 'os-theme-light',
     'right_sidebar_scrollbar_auto_hide' => 'l',
@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'web',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -239,7 +239,7 @@ return [
         ],
         [
             'text'         => 'OpenDK',
-            'url'          => '/',
+            'url'          => 'web/opendk',
             'icon'         => 'fas pantau-icon fa-opendk',
         ],
         [
@@ -249,12 +249,12 @@ return [
         ],   
         [
             'text'         => 'LayananDesa',
-            'url'          => '/',
+            'url'          => 'web/layanandesa',
             'icon'         => 'fas pantau-icon fa-layanandesa',
         ],
         [
             'text'         => 'KelolaDesa',
-            'url'          => '/',
+            'url'          => 'web/keloladesa',
             'icon'         => 'fas pantau-icon fa-keloladesa',
         ],        
     ],

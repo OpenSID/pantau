@@ -6,13 +6,12 @@
                     <tr>
                         <th>No</th>
                         <th>Versi</th>
-                        <th>Online</th>
-                        <th>Offline</th>                        
+                        <th>Jumlah</th>                        
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
-            <div class="text-center"><a href="{{ url('web/opensid/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
+            <div class="text-center"><a href="{{ url('web/keloladesa/versi') }}" target="_blank" rel="noopener noreferrer">Lihat Semua Versi</a></div>
         </div>
     </div>
 </div>
@@ -29,7 +28,7 @@
             lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             order: [[1, 'desc']],            
             ajax: {
-                url: `{{ url('laporan/versi') }}`,
+                url: `{{ url('web/keloladesa/versi') }}`,
                 method: 'get',
                 data: function(data) {                     
                 }
@@ -42,24 +41,16 @@
                 },
                 {
                     data: 'versi',
-                    name: 'x.versi',                    
+                    name: 'versi',                    
                 },                
                 {
-                    name: 'online',
+                    name: 'jumlah',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('web/opensid/versi/detail') }}?versi_hosting=${data.versi}"><span class="badge badge-success">${data.online}</span></a>`
+                        return `<a target="_blank" href="{{ url('web/keloladesa/versi/detail') }}?versi=${data.versi}"><span class="badge badge-success">${data.jumlah}</span></a>`
                     },
                     searchable: false,
                     orderable: false
-                },
-                {
-                    name: 'offline',
-                    data: function (data) {
-                        return `<a target="_blank" href="{{ url('web/opensid/versi/detail') }}?versi_lokal=${data.versi}"><span class="badge badge-danger">${data.offline}</span></a>`
-                    },
-                    searchable: false,
-                    orderable: false
-                },
+                },                
             ]
         })        
     </script>
