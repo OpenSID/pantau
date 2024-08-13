@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br><br>
 @endsection
 
 @section('js')
