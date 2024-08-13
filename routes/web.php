@@ -142,6 +142,7 @@ Route::prefix('opendk') ->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kecamatan/export', [OpendkController::class, 'kecamatanExport']);
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
     Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');

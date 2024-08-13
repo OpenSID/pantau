@@ -7,6 +7,8 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OpenDKExport;
 
 class OpendkController extends Controller
 {
@@ -84,6 +86,21 @@ class OpendkController extends Controller
         }
 
         return view($this->baseView.'.kecamatan', compact('fillters', 'listVersi'));
+    }
+
+    public function kecamatanExport(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'akses_opendk' => $request->akses_opendk,
+            'versi_opendk' => $request->versi_opendk,
+        ];
+
+        $data = Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get();
+
+        // Export the data to Excel
+        return Excel::download(new OpenDKExport($data), 'Kecamatan-yang-memasang-OpenDK.xlsx');
     }
 
     public function kabupaten(Request $request)
