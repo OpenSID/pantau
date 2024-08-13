@@ -25,6 +25,19 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            @if($fillters['versi_hosting'])
+                            <a class="btn btn-sm btn-success" role="button" href="{{ url('laporan/desa/export') }}?versi_hosting={{$fillters['versi_hosting']}}">
+                                <i class="fas fa-file-excel"></i> Excels
+                            </a>
+                            @elseif($fillters['versi_lokal'])
+                            <a class="btn btn-sm btn-success" role="button" href="{{ url('laporan/desa/export') }}?versi_lokal={{$fillters['versi_lokal']}}">
+                                <i class="fas fa-file-excel"></i> Excels
+                            </a>
+                            @else
+                            <a class="btn btn-sm btn-success" role="button" href="{{ url('laporan/desa/export') }}?status={{$fillters['status']}}&kode_kabupaten={{$fillters['kode_kabupaten']}}&kode_provinsi={{$fillters['kode_provinsi']}}">
+                                <i class="fas fa-file-excel"></i> Excels
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -76,7 +89,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br><br>
 @endsection
 
 @section('js')
