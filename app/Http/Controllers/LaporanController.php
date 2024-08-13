@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DesaExport;
 
 class LaporanController extends Controller
 {
@@ -49,6 +51,28 @@ class LaporanController extends Controller
         }
 
         return view('laporan.desa', compact('fillters'));
+    }
+
+    public function desaExport(Request $request)
+    {
+        $filters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'versi_lokal' => $request->versi_lokal,
+            'versi_hosting' => $request->versi_hosting,
+            'tte' => $request->tte,
+        ];
+    
+        $query = $this->desa->fillter($filters)->laporan();
+    
+        // Mengurutkan berdasarkan akses terakhir
+        $data = $query->orderBy('tgl_akses', 'desc')->get();
+    
+        // Export the data to Excel
+        return Excel::download(new DesaExport($data), 'Desa-yang-memasang-OpenSID.xlsx');
     }
 
     public function deleteDesa(Desa $desa)

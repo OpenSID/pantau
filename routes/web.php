@@ -124,6 +124,7 @@ Route::prefix('sesi')
 Route::prefix('laporan')
     ->group(function () {
         Route::get('desa', [LaporanController::class, 'desa']);
+        Route::get('desa/export', [LaporanController::class, 'desaExport']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
