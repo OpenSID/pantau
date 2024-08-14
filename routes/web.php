@@ -43,21 +43,7 @@ Auth::routes([
     'verify' => true,
 ]);
 
-// index dashboard
-Route::get('/web', [WebsiteDashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/openkab', [WebsiteDashboardController::class, 'openkab'])->middleware('web.dashboard');
-Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
-Route::get('/', [DashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/keloladesa', [WebsiteDashboardController::class, 'keloladesa'])->middleware('web.dashboard');
-Route::get('/web/layanandesa', [WebsiteDashboardController::class, 'layanandesa'])->middleware('web.dashboard');
-Route::get('/web/opendk', [WebsiteDashboardController::class, 'opendk'])->middleware('web.dashboard');
-Route::get('/web/opensid', [WebsiteDashboardController::class, 'opensid'])->middleware('web.dashboard');
-Route::get('/web/opensid-data', [WebsiteDashboardController::class, 'opensidData'])->middleware('web.dashboard');
-Route::get('/home', [DashboardController::class, 'index'])->middleware('web.dashboard');
-Route::get('/web/data-peta', [DashboardController::class, 'dataPeta']);
-
 Route::group(['middleware' => 'web.dashboard'],function(){
-    Route::get('/', [WebsiteDashboardController::class, 'index']);
     Route::prefix('web')->group(function(){
         Route::get('', [WebsiteDashboardController::class, 'index']);
         Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
@@ -80,6 +66,8 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('keloladesa/versi/detail', [KelolaDesaDashboardController::class, 'versi_detail']);
         Route::get('keloladesa/install_baru', [KelolaDesaDashboardController::class, 'install_baru']);
         Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
+        Route::get('data-peta', [DashboardController::class, 'dataPeta']);
+
     });    
 });
 
