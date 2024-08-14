@@ -44,6 +44,7 @@ Auth::routes([
 ]);
 
 Route::group(['middleware' => 'web.dashboard'],function(){
+    Route::get('/', [WebsiteDashboardController::class, 'index']);
     Route::prefix('web')->group(function(){
         Route::get('', [WebsiteDashboardController::class, 'index']);
         Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
