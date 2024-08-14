@@ -68,7 +68,6 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('keloladesa/install_baru', [KelolaDesaDashboardController::class, 'install_baru']);
         Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
         Route::get('data-peta', [DashboardController::class, 'dataPeta']);
-
     });    
 });
 
