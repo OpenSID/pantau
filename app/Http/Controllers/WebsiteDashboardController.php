@@ -37,6 +37,11 @@ class WebsiteDashboardController extends Controller
 
         return view('website.dashboard', [
             'fillters' => $fillters,
+            'jml_openkab' => Openkab::count(),
+            'jml_opendk' => Opendk::count(),
+            'jml_opensid' => Desa::count(),
+            'jml_layanandesa' => TrackMobile::count(),
+            'jml_keloladesa' => TrackKeloladesa::count(),
             'wilayah' => $wilayah,
         ]);
     }
