@@ -405,3 +405,11 @@ if (! function_exists('format_angka')) {
         return number_format($angka, $decimals, ',', '.');
     }
 }
+
+if (! function_exists('local_date')) {
+    function local_date($date, $format = 'l, j F Y  H:i:s'){
+        $date = Carbon::parse($date)->locale('id');
+        $date->settings(['formatFunction' => 'translatedFormat']);
+        return $date->format($format); 
+    }
+}

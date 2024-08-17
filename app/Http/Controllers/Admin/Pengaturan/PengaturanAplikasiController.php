@@ -33,11 +33,12 @@ class PengaturanAplikasiController extends Controller
             foreach ($request->all() as $key => $value) {
                 if (is_array($value)) {
                     switch ($key) {
-                        case 'abaikan_domain_opendk':
+                        case 'id_telegram':                        
+                        case 'abaikan_domain_opendk':                        
                         case 'abaikan_domain_opensid':
                             $value = $value ? implode('|', $value) : null;
                             break;
-                        default:
+                        default:                            
                             $value = collect($value)->map(function ($item) {
                                 return json_decode($item);
                             })->toJson();
@@ -63,6 +64,8 @@ class PengaturanAplikasiController extends Controller
             }
 
             Cache::forever('pantau_wilayah_khusus', $wilayahKhusus);
+            Cache::forever('token_bot_telegram', $request->get('token_bot_telegram'));
+            Cache::forever('id_telegram', $request->get('id_telegram'));
         } catch (\Throwable $th) {
             return back()->with('error', 'Data gagal diubah');
         }
