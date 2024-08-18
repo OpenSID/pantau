@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\KelolaDesaDashboardController;
+use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\LayananDesaDashboardController;
 
 /*
@@ -128,6 +129,7 @@ Route::prefix('laporan')
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
+        Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
     });
 
 Route::prefix('mobile')
