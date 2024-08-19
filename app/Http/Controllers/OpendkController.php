@@ -78,6 +78,10 @@ class OpendkController extends Controller
             'akses_opendk' => $request->akses_opendk,
             'versi_opendk' => $request->versi_opendk,
         ];
+
+          // Simpan filter dalam session
+          session(['kecamatan_filters' => $fillters]);
+
         $listVersi = $this->getListVersion();
         if ($request->ajax()) {
             return DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get())
@@ -90,14 +94,10 @@ class OpendkController extends Controller
 
     public function kecamatanExport(Request $request)
     {
-        $fillters = [
-            'kode_provinsi' => $request->kode_provinsi,
-            'kode_kabupaten' => $request->kode_kabupaten,
-            'akses_opendk' => $request->akses_opendk,
-            'versi_opendk' => $request->versi_opendk,
-        ];
+        // Ambil filter dari session
+        $filters = session('kecamatan_filters', []);
 
-        $data = Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get();
+        $data = Opendk::wilayahkhusus()->kecamatan($filters)->selectRaw('updated_at as format_updated_at')->get();
 
         // Export the data to Excel
         return Excel::download(new OpenDKExport($data), 'Kecamatan-yang-memasang-OpenDK.xlsx');
