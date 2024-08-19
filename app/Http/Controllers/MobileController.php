@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KelolaDesaExport;
 
 class MobileController extends Controller
 {
@@ -96,6 +98,9 @@ class MobileController extends Controller
             'akses_mobile' => $request->akses_mobile,
         ];
 
+        // Simpan filter dalam session
+        session(['keloladesa_filters' => $fillters]);
+
         if ($request->ajax()) {
             return DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($request)->with(['desa']))
                 ->addIndexColumn()
@@ -103,6 +108,20 @@ class MobileController extends Controller
         }
 
         return view($this->baseView.'.penggunakeloladesa', compact('fillters'));
+    }
+
+    public function penggunaKelolaDesaExport(Request $request)
+    {
+         // Ambil filter dari session
+        $filters = session('keloladesa_filters', []);
+
+        $query = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa']);
+
+        // Mengurutkan berdasarkan akses terakhir
+        $data = $query->orderBy('id', 'asc')->get();
+
+        // Export the data to Excel
+        return Excel::download(new KelolaDesaExport($data), 'Desa-yang-memasang-Kelola-Desa.xlsx');
     }
 
     public function desa(Request $request)
