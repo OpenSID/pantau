@@ -31,6 +31,9 @@ class LaporanController extends Controller
             'tte' => $request->tte,
         ];
 
+         // Simpan filter dalam session
+        session(['desa_filters' => $fillters]);
+
         if ($request->ajax()) {
             return DataTables::of($this->desa->fillter($fillters)->laporan())
                 ->addIndexColumn()
@@ -55,16 +58,8 @@ class LaporanController extends Controller
 
     public function desaExport(Request $request)
     {
-        $filters = [
-            'kode_provinsi' => $request->kode_provinsi,
-            'kode_kabupaten' => $request->kode_kabupaten,
-            'kode_kecamatan' => $request->kode_kecamatan,
-            'status' => $request->status,
-            'akses' => $request->akses,
-            'versi_lokal' => $request->versi_lokal,
-            'versi_hosting' => $request->versi_hosting,
-            'tte' => $request->tte,
-        ];
+         // Ambil filter dari session
+        $filters = session('desa_filters', []);
     
         $query = $this->desa->fillter($filters)->laporan();
     
