@@ -134,6 +134,7 @@ Route::prefix('mobile')
     ->group(function () {
         Route::get('/', [MobileController::class, 'index']);
         Route::get('pengguna', [MobileController::class, 'pengguna']);
+        Route::get('pengguna/export', [MobileController::class, 'penggunaExport']);
         Route::get('pengguna_kelola_desa', [MobileController::class, 'penggunaKelolaDesa']);
         Route::get('desa', [MobileController::class, 'desa']);
     });

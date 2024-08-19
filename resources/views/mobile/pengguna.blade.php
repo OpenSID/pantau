@@ -19,6 +19,11 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            @if($fillters['kode_provinsi'])
+                            <a class="btn btn-sm btn-success" role="button" href="{{ url('mobile/pengguna/export') }}?kode_provinsi={{$fillters['kode_provinsi']}}&kode_kabupaten={{$fillters['kode_kabupaten']}}">
+                                <i class="fas fa-file-excel"></i> Excels
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>
