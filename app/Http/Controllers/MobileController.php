@@ -85,7 +85,7 @@ class MobileController extends Controller
          session(['layanandesa_filters' => $fillters]);
 
         if ($request->ajax()) {
-            return DataTables::of(TrackMobile::wilayahKhusus()->filter($request)->with(['desa']))
+            return DataTables::of(TrackMobile::wilayahKhusus()->filter($fillters)->with(['desa']))
                 ->addIndexColumn()
                 ->make(true);
         }
