@@ -102,7 +102,7 @@ class MobileController extends Controller
         session(['keloladesa_filters' => $fillters]);
 
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($request)->with(['desa']))
+            return DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($fillters)->with(['desa']))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -115,7 +115,7 @@ class MobileController extends Controller
          // Ambil filter dari session
         $filters = session('keloladesa_filters', []);
 
-        $data = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa']);
+        $data = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa'])->get();
 
         // Export the data to Excel
         return Excel::download(new KelolaDesaExport($data), 'Desa-yang-memasang-Kelola-Desa.xlsx');
