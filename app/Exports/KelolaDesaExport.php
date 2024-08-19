@@ -20,6 +20,7 @@ class KelolaDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
         return $this->data->map(function($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
+                'id' => $item->id,
                 'tgl_terpantau' => $item->tgl_akses,
                 'nama_desa' => $item->desa->nama_desa,
                 'nama_kecamatan' => $item->desa->nama_kecamatan,

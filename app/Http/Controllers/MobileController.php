@@ -115,10 +115,7 @@ class MobileController extends Controller
          // Ambil filter dari session
         $filters = session('keloladesa_filters', []);
 
-        $query = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa']);
-
-        // Mengurutkan berdasarkan akses terakhir
-        $data = $query->orderBy('id', 'asc')->get();
+        $data = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa']);
 
         // Export the data to Excel
         return Excel::download(new KelolaDesaExport($data), 'Desa-yang-memasang-Kelola-Desa.xlsx');
