@@ -92,56 +92,27 @@ class MobileController extends Controller
 
     public function penggunaKelolaDesa(Request $request)
     {
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'akses_mobile' => $request->akses_mobile,
         ];
-
-        // Simpan filter dalam session
-        session(['keloladesa_filters' => $fillters]);
-
-        if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($fillters)->with(['desa']))
-                ->addIndexColumn()
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(TrackKeloladesa::wilayahKhusus()->filter($fillters)->with(['desa']));
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new KelolaDesaExport($query->results()), 'Desa-yang-memasang-Kelola-Desa.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->make(true);
         }
 
         return view($this->baseView.'.penggunakeloladesa', compact('fillters'));
-    }
-
-    public function penggunaKelolaDesaExport(Request $request)
-    {
-          // Ambil filter dari session
-          $params = json_decode($request->input('params'), true);
-          $search = $params['search']['value'];
-  
-         // Ambil filter dari session
-        $filters = session('keloladesa_filters', []);
-
-          // Bangun query utama dengan filter yang ada
-          $query = TrackKeloladesa::wilayahKhusus()->filter($filters)->with(['desa']);
-
-          // Mengurutkan berdasarkan akses terakhir
-          // Tambahkan kondisi pencarian untuk setiap field
-          if ($search) {
-              $query->where(function($q) use ($search) {
-                  $q->where('id_device', 'like', "%{$search}%")
-                  ->orWhere('tgl_akses', 'like', "%{$search}%")
-                  ->orWhereHas('desa', function($q) use ($search) {
-                      $q->where('nama_desa', 'like', "%{$search}%")
-                          ->orWhere('nama_kecamatan', 'like', "%{$search}%")
-                          ->orWhere('nama_kabupaten', 'like', "%{$search}%")
-                          ->orWhere('nama_provinsi', 'like', "%{$search}%");
-                  });
-              });
-          }
-  
-          // Mengurutkan berdasarkan ID atau field lain jika diperlukan
-          $data = $query->get();
-
-        // Export the data to Excel
-        return Excel::download(new KelolaDesaExport($data), 'Desa-yang-memasang-Kelola-Desa.xlsx');
     }
 
     public function desa(Request $request)

@@ -19,11 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            @if($fillters['kode_provinsi'])
-                            <a id="export-btn" class="btn btn-sm btn-success" role="button">
-                                Export to Excel
-                            </a>
-                            @endif
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('mobile/pengguna_kelola_desa') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -82,13 +78,7 @@
                     data.kode_kecamatan = $('#kecamatan').val()? $('#kecamatan').val() : params.get('kode_kecamatan');
                     data.kode_desa = $('#desa').val()? $('#desa').val() : params.get('kode_desa');
                     data.akses_mobile = $('#akses_mobile').val();
-                },
-                complete: function() {
-                // Update href tombol export setiap kali data diperbarui
-                const params = pengguna.ajax.params();
-                const url = `{{ url('mobile/pengguna_kelola_desa/export') }}?params=${encodeURIComponent(JSON.stringify(params))}`;
-                $('#export-btn').attr('href', url);
-            }
+                }
         },
         columns: [
             {
@@ -133,6 +123,9 @@
 
         pengguna.ajax.reload();
     });
-
+    $('#btn-export').click(function(){
+        const _href = $(this).data('href')
+        window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-pengguna').DataTable().ajax.params())
+    })
 </script>
 @endsection
