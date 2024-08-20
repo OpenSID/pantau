@@ -78,14 +78,7 @@
                     data.kode_kecamatan = $('#kecamatan').val()? $('#kecamatan').val() : params.get('kode_kecamatan');
                     data.kode_desa = $('#desa').val()? $('#desa').val() : params.get('kode_desa');
                     data.akses_mobile = $('#akses_mobile').val();
-                },
-
-            complete: function() {
-                // Update href tombol export setiap kali data diperbarui
-                const params = pengguna.ajax.params();
-                const url = `{{ url('mobile/pengguna/export') }}?params=${encodeURIComponent(JSON.stringify(params))}`;
-                $('#export-btn').attr('href', url);
-            }
+                }
         },
         columns: [
             {
