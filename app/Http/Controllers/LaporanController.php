@@ -58,11 +58,37 @@ class LaporanController extends Controller
 
     public function desaExport(Request $request)
     {
+        $params = json_decode($request->input('params'), true);
+        $search = $params['search']['value'];
+
          // Ambil filter dari session
         $filters = session('desa_filters', []);
     
         $query = $this->desa->fillter($filters)->laporan();
-    
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama_desa', 'like', "%{$search}%")
+                  ->orWhere('nama_kecamatan', 'like', "%{$search}%")
+                  ->orWhere('nama_kabupaten', 'like', "%{$search}%")
+                  ->orWhere('nama_provinsi', 'like', "%{$search}%")
+                  ->orWhere('url_hosting', 'like', "%{$search}%")
+                  ->orWhere('versi_lokal', 'like', "%{$search}%")
+                  ->orWhere('versi_hosting', 'like', "%{$search}%")
+                  ->orWhere('jml_surat_tte', 'like', "%{$search}%")
+                  ->orWhere('jml_penduduk', 'like', "%{$search}%")
+                  ->orWhere('jml_artikel', 'like', "%{$search}%")
+                  ->orWhere('jml_surat_keluar', 'like', "%{$search}%")
+                  ->orWhere('jml_bantuan', 'like', "%{$search}%")
+                  ->orWhere('jml_mandiri', 'like', "%{$search}%")
+                  ->orWhere('jml_pengguna', 'like', "%{$search}%")
+                  ->orWhere('jml_unsur_peta', 'like', "%{$search}%")
+                  ->orWhere('jml_persil', 'like', "%{$search}%")
+                  ->orWhere('jml_dokumen', 'like', "%{$search}%")
+                  ->orWhere('jml_keluarga', 'like', "%{$search}%");
+            });
+        }
+        
         // Mengurutkan berdasarkan akses terakhir
         $data = $query->orderBy('tgl_akses', 'desc')->get();
     
