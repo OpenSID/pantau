@@ -25,7 +25,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <button class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('laporan/desa') }}"><i class="fas fa-file-excel"></i> Excels<button>
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('laporan/desa') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
