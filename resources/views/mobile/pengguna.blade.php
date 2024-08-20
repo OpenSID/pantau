@@ -19,11 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            @if($fillters['kode_provinsi'])
-                            <a id="export-btn" class="btn btn-sm btn-success" role="button">
-    Export to Excel
-</a>
-                            @endif
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('mobile/pengguna') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -134,6 +130,9 @@
 
         pengguna.ajax.reload();
     });
-
+    $('#btn-export').click(function(){
+        const _href = $(this).data('href')
+        window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-pengguna').DataTable().ajax.params())
+    })
 </script>
 @endsection
