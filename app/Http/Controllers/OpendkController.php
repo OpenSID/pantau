@@ -72,6 +72,11 @@ class OpendkController extends Controller
 
     public function kecamatan(Request $request)
     {
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -83,24 +88,17 @@ class OpendkController extends Controller
           session(['kecamatan_filters' => $fillters]);
 
         $listVersi = $this->getListVersion();
-        if ($request->ajax()) {
-            return DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get())
-                ->addIndexColumn()
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new OpenDKExport($query->results()), 'Desa-yang-memasang-OpenDK.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->make(true);
         }
 
         return view($this->baseView.'.kecamatan', compact('fillters', 'listVersi'));
-    }
-
-    public function kecamatanExport(Request $request)
-    {
-        // Ambil filter dari session
-        $filters = session('kecamatan_filters', []);
-
-        $data = Opendk::wilayahkhusus()->kecamatan($filters)->selectRaw('updated_at as format_updated_at')->get();
-
-        // Export the data to Excel
-        return Excel::download(new OpenDKExport($data), 'Kecamatan-yang-memasang-OpenDK.xlsx');
     }
 
     public function kabupaten(Request $request)

@@ -19,15 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            @if($fillters['versi_opendk'])
-                            <a class="btn btn-sm btn-success" role="button" href="{{ url('opendk/kecamatan/export') }}?versi_opendk={{$fillters['versi_opendk']}}">
-                                <i class="fas fa-file-excel"></i> Excels
-                            </a>
-                            @else
-                            <a class="btn btn-sm btn-success" role="button" href="{{ url('opendk/kecamatan/export') }}?kode_provinsi={{$fillters['kode_provinsi']}}&kode_kabupaten={{$fillters['kode_kabupaten']}}">
-                                <i class="fas fa-file-excel"></i> Excels
-                            </a>
-                            @endif
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('opendk/kecamatan') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -238,6 +230,9 @@
 
         kecamatan.ajax.reload();
     });
-
+    $('#btn-export').click(function(){
+        const _href = $(this).data('href')
+        window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-versi').DataTable().ajax.params())
+    })
 </script>
 @endsection
