@@ -95,13 +95,32 @@ class MobileController extends Controller
 
     public function penggunaExport(Request $request)
     {
-         // Ambil filter dari session
+        $params = json_decode($request->input('params'), true);
+        $search = $params['search']['value'];
+
+        // Ambil filter dari session
         $filters = session('layanandesa_filters', []);
 
+        // Bangun query utama dengan filter yang ada
         $query = TrackMobile::wilayahKhusus()->filter($filters)->with(['desa']);
 
-        // Mengurutkan berdasarkan akses terakhir
+        // Tambahkan kondisi pencarian untuk setiap field
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                ->orWhere('tgl_akses', 'like', "%{$search}%")
+                ->orWhereHas('desa', function($q) use ($search) {
+                    $q->where('nama_desa', 'like', "%{$search}%")
+                        ->orWhere('nama_kecamatan', 'like', "%{$search}%")
+                        ->orWhere('nama_kabupaten', 'like', "%{$search}%")
+                        ->orWhere('nama_provinsi', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        // Mengurutkan berdasarkan ID atau field lain jika diperlukan
         $data = $query->orderBy('id', 'asc')->get();
+
 
         // Export the data to Excel
         return Excel::download(new LayananDesaExport($data), 'Desa-yang-memasang-Layanan-Desa.xlsx');
