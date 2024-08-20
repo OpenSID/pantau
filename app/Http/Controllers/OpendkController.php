@@ -84,9 +84,6 @@ class OpendkController extends Controller
             'versi_opendk' => $request->versi_opendk,
         ];
 
-          // Simpan filter dalam session
-          session(['kecamatan_filters' => $fillters]);
-
         $listVersi = $this->getListVersion();
         if ($request->ajax() || $request->excel) {                        
             $query = DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
