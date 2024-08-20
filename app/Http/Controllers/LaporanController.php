@@ -59,24 +59,8 @@ class LaporanController extends Controller
                 ->make(true);            
         }
 
-
-
         return view('laporan.desa', compact('fillters'));
-    }
-
-    public function desaExport(Request $request)
-    {
-         // Ambil filter dari session
-        $filters = session('desa_filters', []);
-    
-        $query = $this->desa->fillter($filters)->laporan();
-    
-        // Mengurutkan berdasarkan akses terakhir
-        $data = $query->orderBy('tgl_akses', 'desc')->get();
-    
-        // Export the data to Excel
-        return Excel::download(new DesaExport($data), 'Desa-yang-memasang-OpenSID.xlsx');
-    }
+    }    
 
     public function deleteDesa(Desa $desa)
     {
