@@ -20,8 +20,8 @@
                                 <i class="fas fa-filter"></i>
                             </a>
                             @if($fillters['kode_provinsi'])
-                            <a class="btn btn-sm btn-success" role="button" href="{{ url('mobile/pengguna_kelola_desa/export') }}?kode_provinsi={{$fillters['kode_provinsi']}}&kode_kabupaten={{$fillters['kode_kabupaten']}}">
-                                <i class="fas fa-file-excel"></i> Excels
+                            <a id="export-btn" class="btn btn-sm btn-success" role="button">
+                                Export to Excel
                             </a>
                             @endif
                         </div>
@@ -82,7 +82,13 @@
                     data.kode_kecamatan = $('#kecamatan').val()? $('#kecamatan').val() : params.get('kode_kecamatan');
                     data.kode_desa = $('#desa').val()? $('#desa').val() : params.get('kode_desa');
                     data.akses_mobile = $('#akses_mobile').val();
-                }
+                },
+                complete: function() {
+                // Update href tombol export setiap kali data diperbarui
+                const params = pengguna.ajax.params();
+                const url = `{{ url('mobile/pengguna_kelola_desa/export') }}?params=${encodeURIComponent(JSON.stringify(params))}`;
+                $('#export-btn').attr('href', url);
+            }
         },
         columns: [
             {
