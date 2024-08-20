@@ -25,8 +25,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <a id="export-btn" class="btn btn-sm btn-success" href="#" role="button">Export to Excel</a>
-
+                            <button class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('laporan/desa') }}"><i class="fas fa-file-excel"></i> Excels<button>
                         </div>
                     </div>
                 </div>
@@ -138,13 +137,7 @@
                         data.tte = $('#tte').val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
-                    },
-        complete: function() {
-            // Update href tombol export setiap kali data diperbarui
-            const params = desa.ajax.params(); // Pastikan menggunakan variabel yang benar
-            const url = `{{ url('laporan/desa/export') }}?params=${encodeURIComponent(JSON.stringify(params))}`;
-            $('#export-btn').attr('href', url);
-        }
+                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -283,5 +276,10 @@
 
             desa.ajax.reload();
         });
+
+        $('#btn-export').click(function(){
+            const _href = $(this).data('href')
+            window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-desa').DataTable().ajax.params())
+        })
     </script>
 @endsection
