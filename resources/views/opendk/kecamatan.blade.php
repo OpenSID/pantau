@@ -128,7 +128,8 @@
             },
             {
                 data: 'format_updated_at',
-                orderable: true
+                orderable: true,
+                searchable: false
             },
 
         ],
