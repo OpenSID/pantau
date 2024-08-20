@@ -10,14 +10,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
+use App\Exports\WilayahDesaExport;
 
 class DesaController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return DataTables::of(Region::desa())
-                ->addIndexColumn()
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(Region::desa());
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new WilayahDesaExport($query->results()), 'Wilayah-Desa.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $edit = '<a href="'.url('desa/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
                     $delete = '<button data-href="'.url('desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
