@@ -222,6 +222,17 @@ class DashboardController extends Controller
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
 
+    public function dataPeta()
+    {
+        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->get()->map(function ($marker) {
+            $marker->color = 'default';
+            return $marker;
+        });
+        
+        // Mengembalikan data sebagai response JSON
+        return response()->json($markers);
+    }
+  
     public function datatablePenggunaOpenkab(Request $request)
     {
         if ($request->ajax()) {
@@ -239,7 +250,7 @@ class DashboardController extends Controller
 
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
-    
+  
     public function datatablePenggunaOpensid(Request $request)
     {
         if ($request->ajax()) {
