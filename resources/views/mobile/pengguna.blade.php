@@ -33,7 +33,7 @@
                         <table class="table" id="table-pengguna">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>No</th>
                                     <th>Tgl Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
@@ -82,7 +82,9 @@
         },
         columns: [
             {
-                data: 'id',
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                searchable: false,
                 orderable: false
             },
             {
