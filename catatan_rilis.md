@@ -39,7 +39,8 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 35. [#308](https://github.com/OpenSID/pantau/issues/308) Penambahan fungsi peta untuk keseluruhan aplikasi OpenDesa.
 36. [#392](https://github.com/OpenSID/pantau/issues/392) Penambahan fungsi export excel pada data OpenSID.
 37. [#393](https://github.com/OpenSID/pantau/issues/393) Penambahan fungsi export excel pada data OpenDK.
-38. [#201](https://github.com/OpenSID/pantau/issues/201) Penambahan fungsi laporan desa yg paling aktif. 
+38. [#201](https://github.com/OpenSID/pantau/issues/201) Penambahan fungsi laporan desa yg paling aktif.
+39. [#401](https://github.com/OpenSID/pantau/issues/401) Penambahan fungsi export layanan desa.
 
 #### Perbaikan Bug
 
