@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LayananDesaExport;
 
 class MobileController extends Controller
 {
@@ -73,15 +75,24 @@ class MobileController extends Controller
 
     public function pengguna(Request $request)
     {
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'akses_mobile' => $request->akses_mobile,
         ];
 
-        if ($request->ajax()) {
-            return DataTables::of(TrackMobile::wilayahKhusus()->filter($request)->with(['desa']))
-                ->addIndexColumn()
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(TrackMobile::wilayahKhusus()->filter($fillters)->with(['desa']));
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new LayananDesaExport($query->results()), 'Desa-yang-memasang-Layanan-Desa.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->make(true);
         }
 
