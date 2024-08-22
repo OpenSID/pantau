@@ -267,6 +267,10 @@ return [
                     'text' => 'Versi OpenSID',
                     'url'  => 'laporan/versi',
                 ],
+                [
+                    'text' => 'Desa Aktif',
+                    'url'  => 'laporan/desa-aktif',
+                ],
             ],
         ],
         [
