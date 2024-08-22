@@ -72,13 +72,6 @@ Route::group(['middleware' => 'web.dashboard'],function(){
     });    
 });
 
-
-Route::group(['middleware' => 'web.dashboard'],function(){
-    Route::prefix('web')->group(function(){
-        
-    });
-});
-
 // datatable
 Route::prefix('datatables')->as('datatables:')
     ->group(function () {
