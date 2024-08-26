@@ -52,4 +52,4 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Penyesuaian Teknis
 
 1. [#349](https://github.com/OpenSID/pantau/issues/349) Penambahan API untuk menangkap data dari OpenKab.
-
+2. [#394](https://github.com/OpenSID/pantau/issues/394) Ubah ID dengan No Urut pada halaman pengguna aplikasi LayananDesa.
