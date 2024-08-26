@@ -21,9 +21,13 @@ class WebDashboard
     {
         $route = Route::current();
         $uri = $route->uri();
-
+        
         if (!auth()->check() && !Str::startsWith($uri, 'web')) {
             return redirect('web');
+        }
+
+        if (auth()->check() && $uri == '/') {
+            return redirect('dashboard');
         }
 
         // Change the config values here
