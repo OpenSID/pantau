@@ -13,8 +13,9 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header with-border">
-                    <a href="{{ route('kecamatan.create') }}" class="btn btn-success btn-sm mb-3"><i class="fas fa-plus"></i>
+                    <a href="{{ route('kecamatan.create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i>
                         &ensp;Tambah</a>
+                    <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('kecamatan') }}"><i class="fas fa-file-excel"></i> Excels<a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -81,5 +82,10 @@
                 ]
             });
         });
+        
+        $('#btn-export').click(function(){
+            const _href = $(this).data('href')
+            window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#datatable').DataTable().ajax.params())
+        })
     </script>
 @endsection

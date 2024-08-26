@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\WilayahProvinsiExport;
 
 class ProvinsiController extends Controller
 {
@@ -16,9 +18,18 @@ class ProvinsiController extends Controller
 
     public function datatables(Request $request)
     {
-        if ($request->ajax()) {
-            return DataTables::of(Region::provinsi())
-                ->addIndexColumn()
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(Region::provinsi());
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new WilayahProvinsiExport($query->results()), 'Wilayah-Provinsi.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->make(true);
         }
 
