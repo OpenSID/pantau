@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DesaExport;
 
 class LaporanController extends Controller
 {
@@ -18,6 +20,11 @@ class LaporanController extends Controller
 
     public function desa(Request $request)
     {
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -26,12 +33,16 @@ class LaporanController extends Controller
             'akses' => $request->akses,
             'versi_lokal' => $request->versi_lokal,
             'versi_hosting' => $request->versi_hosting,
-            'tte' => $request->tte,
-        ];
+            'tte' => $request->tte,            
+        ];         
 
-        if ($request->ajax()) {
-            return DataTables::of($this->desa->fillter($fillters)->laporan())
-                ->addIndexColumn()
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of($this->desa->fillter($fillters)->laporan());
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->editColumn('kontak', function($q){
                     $identitas = $q->kontak;
                     if($identitas){                        
@@ -45,8 +56,10 @@ class LaporanController extends Controller
                     return '<div class="btn btn-group">'.$delete.'</div>';
                 })
                 ->rawColumns(['action', 'kontak'])
-                ->make(true);
+                ->make(true);            
         }
+
+
 
         return view('laporan.desa', compact('fillters'));
     }
