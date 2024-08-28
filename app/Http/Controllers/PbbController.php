@@ -54,13 +54,15 @@ class PbbController extends Controller
         $listVersi = $this->getListVersion();
         if ($request->ajax() || $request->excel) {                        
             $query = DataTables::of(Pbb::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
-            if($request->excel){
-                $query->filtering();
-                dd('eksport');exit;
-                // return Excel::download(new OpenDKExport($query->results()), 'Desa-yang-memasang-OpenDK.xlsx');;
-            }
+            
             return $query->addIndexColumn()
-                ->make(true);
+            ->addColumn('action', function ($data) {
+                $delete = '<button data-href="'.url('pbb/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+
+                return '<div class="btn btn-group">'.$delete.'</div>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);  
         }
 
         return view($this->baseView.'.kecamatan', compact('fillters', 'listVersi'));
@@ -93,5 +95,14 @@ class PbbController extends Controller
         return Pbb::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),4)),4) as versi')->get()->sortByDesc('versi')->map(function ($item) {
             return $item->versi;
         })->values()->all();
+    }
+    
+    public function deleteDesa(Pbb $desa)
+    {
+        if ($desa->delete()) {
+            return redirect('pbb/kecamatan')->with('success', 'Data berhasil dihapus');
+        }
+
+        return redirect('pbb/kecamatan')->with('error', 'Data gagal dihapus');
     }
 }

@@ -8,6 +8,8 @@
 @stop
 
 @section('content')
+@include('layouts.components.global_delete')
+@include('layouts.components.notification')
     <div class="row">
         <div class="col-lg-12">
 
@@ -33,6 +35,10 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    @auth
+                                        <th>Aksi</th>
+                                    @endauth
+                                    <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
@@ -86,15 +92,23 @@
                     data.akses_opendk = $('#akses_opendk').val();
                     data.versi_opendk = $('#versi_opendk').val();
                 }
-        },
-        columns: [
-            {
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                searchable: false,
-                orderable: false
             },
-            {
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                @auth {
+                    data: 'action',
+                    name: 'action',
+                    searchable: false,
+                    orderable: false
+                },
+            @endauth {
+                data: 'nama_desa',
+                orderable: false
+            },{
                 data: 'nama_kecamatan',
                 orderable: false
             },
