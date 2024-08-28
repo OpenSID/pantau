@@ -12,16 +12,6 @@
         <div class="col-lg-12">
 
             <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
-                                aria-expanded="false" aria-controls="collapse-filter">
-                                <i class="fas fa-filter"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">

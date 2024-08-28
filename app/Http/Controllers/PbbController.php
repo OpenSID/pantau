@@ -88,35 +88,9 @@ class PbbController extends Controller
         return view($this->baseView.'.kabupaten', compact('fillters', 'listVersi'));
     }
 
-    private function properties($kec)
-    {
-        $link = '';
-        if (auth()->check()) {
-            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($kec->url).'" target="_blank">'.strtolower($kec->url_hosting).'</a></b></td></tr>';
-        }
-
-        return [
-            'logo' => null,
-            'popupContent' => '
-                <h6 class="text-center"><b style="color:red">'.strtoupper($kec->sebutan_wilayah.' '.$kec->nama_kecamatan).'</b></h6>
-                <b><table width="100%">
-                    <tr>
-                    <td>Kab/Kota</td><td> : '.ucwords($kec->nama_kabupaten).'</b></td>
-                    </tr>
-                    <tr>
-                        <td>Provinsi</td><td> : '.ucwords($kec->nama_provinsi).'</b></td>
-                    </tr>
-                    <tr>
-                        <td>Alamat</td><td> : '.($kec->alamat_kantor ?? '').'</b></td>
-                    </tr>
-                    '.$link.'
-                </table></b>',
-        ];
-    }
-
     private function getListVersion()
     {
-        return Pbb::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi')->get()->sortByDesc('versi')->map(function ($item) {
+        return Pbb::selectRaw('DISTINCT right((LEFT(replace(versi, \'.\',\'\'),4)),4) as versi')->get()->sortByDesc('versi')->map(function ($item) {
             return $item->versi;
         })->values()->all();
     }

@@ -350,7 +350,7 @@ return [
             'submenu'      => [
                 [
                     'text' => 'Desa',
-                    'url'  => 'pbb/desa',
+                    'url'  => 'pbb/kecamatan',
                 ],
                 [
                     'text' => 'Kabupaten',

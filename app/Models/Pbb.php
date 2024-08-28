@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pbb extends Model
 {
     use HasFactory;
-
+    
+    const ACTIVE_DAYS = 7;
+    
     /** {@inheritdoc} */
     protected $table = 'pbb';
 
@@ -32,7 +35,7 @@ class Pbb extends Model
      */
     public function scopeVersi($query, $fillters = [])
     {
-        return $query->filterDatatable($fillters)->selectRaw('versi, count(versi) as jumlah, right((LEFT(replace(versi, \'.\',\'\'),5)),4) as versi_clean')->groupBy(['versi']);
+        return $query->filterDatatable($fillters)->selectRaw('versi, count(versi) as jumlah, right((LEFT(replace(versi, \'.\',\'\'),4)),4) as versi_clean')->groupBy(['versi']);
     }
 
     /**
@@ -59,7 +62,7 @@ class Pbb extends Model
     protected function scopeFilterDatatable($query, $fillters)
     {
         return $query->when(! empty($fillters['versi_opendk']), function ($query) use ($fillters) {
-            return $query->whereRaw("right((LEFT(replace(versi, '.',''),5)),4) = '".$fillters['versi_opendk']."'");
+            return $query->whereRaw("right((LEFT(replace(versi, '.',''),4)),4) = '".$fillters['versi_opendk']."'");
         })->when(! empty($fillters['akses_opendk']), function ($query) use ($fillters) {
             $interval = 'interval '.self::ACTIVE_DAYS.' day';
             $sign = '>=';
