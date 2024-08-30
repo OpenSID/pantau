@@ -43,7 +43,8 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 39. [#201](https://github.com/OpenSID/pantau/issues/201) Penambahan fungsi laporan desa yg paling aktif.
 40. [#401](https://github.com/OpenSID/pantau/issues/401) Penambahan fungsi export layanan desa.
 41. [#403](https://github.com/OpenSID/pantau/issues/403) Penambahan fungsi export kelola desa.
-42. [#402](https://github.com/OpenSID/pantau/issues/402) Penambahan fugnsi export semua wilayah.
+42. [#402](https://github.com/OpenSID/pantau/issues/402) Penambahan fungsi export semua wilayah.
+43. [#416](https://github.com/OpenSID/pantau/issues/416) Penambahan pengguna PBB pada daftar kolom ke 6.
 
 #### Perbaikan Bug
 
