@@ -345,6 +345,24 @@ return [
             ],
         ],
         [
+            'text'         => 'PBB',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Desa',
+                    'url'  => 'pbb/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'pbb/kabupaten',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'pbb/versi',
+                ],
+            ],
+        ],
+        [
             'text'         => '',
             'url'          => '#',
             'icon'         => 'fas fa-info-circle',

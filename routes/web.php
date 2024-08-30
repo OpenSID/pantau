@@ -9,6 +9,7 @@ use App\Http\Middleware\PantauMiddleware;
 use App\Http\Controllers\MobileController;
 use App\Http\Controllers\OpendkController;
 use App\Http\Controllers\PantauController;
+use App\Http\Controllers\PbbController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
@@ -126,6 +127,16 @@ Route::prefix('laporan')
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
+    });
+
+// PBB
+Route::prefix('pbb')
+    ->group(function () {
+        Route::get('kecamatan', [PbbController::class, 'kecamatan']);
+        Route::get('desa', [PbbController::class, 'kecamatan']);
+        Route::delete('desa/{desa}', [PbbController::class, 'deleteDesa'])->middleware('auth');
+        Route::get('kabupaten', [PbbController::class, 'kabupaten']);
+        Route::get('versi', [PbbController::class, 'versi']);
     });
 
 Route::prefix('mobile')
