@@ -17,6 +17,8 @@
         @endforeach
     </div>
     <!-- Add Arrows -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Navigation -->
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
   </div>
@@ -24,23 +26,25 @@
 @push('js')
 <script>
     var swiperOptions = {
-      slidesPerView: 2,
-      spaceBetween: -50,
-      slidesPerGroup: 1,
-      loop: true,
-      loopFillGroupWithBlank: true,
-      autoplay: {
+    slidesPerView: 2,
+    spaceBetween: -50,
+    slidesPerGroup: 1,
+    loop: true,
+    loopFillGroupWithBlank: true,
+    autoplay: {
         delay: 3000,
-      },
-      pagination: {
+    },
+    pagination: {
         el: '.swiper-pagination',
         clickable: true,
-      },
-      navigation: {
+    },
+    navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
-      },
-    };
+    },
+};
+
+var swiper = new Swiper('.swiper-container', swiperOptions);
   
     $(document).ready(function() {
       function checkScreenWidth() {
