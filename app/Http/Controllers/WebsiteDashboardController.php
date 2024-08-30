@@ -341,6 +341,11 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.opensid_data');
     }
+
+    public function pbbData(Request $request)
+    {
+        return view('website.pbb_data');
+    }
     
     public function opensid(Request $request)
     {
