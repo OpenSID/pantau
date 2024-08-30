@@ -11,10 +11,10 @@
 
 <h3>Peta Pengguna OpenDesa</h3>
 <div class="row">
-  <div class="col-lg-10">
+  <div class="col-lg-9">
       <div id="map"></div>
   </div>
-  <div class="col-lg-2">
+  <div class="col-lg-3">
       <div class="d-flex align-items-center pb-2">
           <div class="apps-icon">
               <i class="fas pantau-icon fa-openkab"></i>

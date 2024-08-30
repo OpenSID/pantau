@@ -54,11 +54,11 @@
                     </div>
                 </div>
                 <div class="row p-1">    
-                    <div class="col-xl-{{ count($wilayah) > 0 ? 8 : 12 }} text-center bg-white rounded-lg" style="align-content: center;">
+                    <div class="col-xl-{{ count($wilayah) > 0 ?7 : 12 }} text-center bg-white rounded-lg" style="align-content: center;">
                         @include('website.partial.summary')
                     </div>
                     @if(count($wilayah) > 0)
-                        <div class="col-xl-4">
+                        <div class="col-xl-5">
                             @include('website.partial.wilayah_kerja_sama')
                         </div>
                     @endif

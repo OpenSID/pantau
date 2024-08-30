@@ -53,9 +53,10 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);       
         Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
+        Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
         Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
         Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
@@ -83,11 +84,13 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('opensid-baru', [DashboardController::class, 'datatableOpensidBaru'])->name('opensid-baru');
         Route::get('layanandesa-baru', [DashboardController::class, 'datatableLayanandesaBaru'])->name('layanandesa-baru');
         Route::get('keloladesa-baru', [DashboardController::class, 'datatableKeloladesaBaru'])->name('keloladesa-baru');
+        Route::get('pbb-baru', [DashboardController::class, 'datatablePbbBaru'])->name('pbb-baru');
         Route::get('pengguna-keloladesa', [DashboardController::class, 'datatablePenggunaKeloladesa'])->name('pengguna-keloladesa');
         Route::get('pengguna-layanandesa', [DashboardController::class, 'datatablePenggunaLayanandesa'])->name('pengguna-layanandesa');
         Route::get('pengguna-opendk', [DashboardController::class, 'datatablePenggunaOpendk'])->name('pengguna-opendk');
         Route::get('pengguna-openkab', [DashboardController::class, 'datatablePenggunaOpenkab'])->name('pengguna-openkab');
         Route::get('pengguna-opensid', [DashboardController::class, 'datatablePenggunaOpensid'])->name('pengguna-opensid');
+        Route::get('pengguna-pbb', [DashboardController::class, 'datatablePenggunaPbb'])->name('pengguna-pbb');
     });
 
 // Peta

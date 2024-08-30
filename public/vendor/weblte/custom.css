@@ -22,6 +22,32 @@
     background-image: url('../../assets/icon/keloladesa.png');    
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.swiper-container:hover .swiper-button-next,
+.swiper-container:hover .swiper-button-prev {
+    opacity: 1;
+}
+
+#menu-center h4 {
+    font-size: 15px;
+}
+#menu-center .card-header.bg-blue.text-white.text-center {
+    padding: 9px 7px 1px !important;
+}
+#menu-center .card-body {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+#menu-center a{
+    font-size: 12px;
+}
+
 .nav-link {
     display: flex;
     justify-content: center;
