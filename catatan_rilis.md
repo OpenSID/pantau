@@ -1,4 +1,4 @@
-Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2409.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
