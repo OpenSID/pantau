@@ -26,7 +26,7 @@ class WebDashboard
             return redirect('dashboard');
         }
 
-        if (!auth()->check() && $uri == '/') {
+        if (!auth()->check()) {
             if(!Str::startsWith($uri, 'web') && $uri !== '/'){
                 return redirect('web');
             }
