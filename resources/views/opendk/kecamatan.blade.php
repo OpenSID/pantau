@@ -19,6 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('opendk/kecamatan') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br><br>
 @endsection
 
 @section('js')
@@ -127,7 +128,8 @@
             },
             {
                 data: 'format_updated_at',
-                orderable: true
+                orderable: true,
+                searchable: false
             },
 
         ],
@@ -229,6 +231,9 @@
 
         kecamatan.ajax.reload();
     });
-
+    $('#btn-export').click(function(){
+        const _href = $(this).data('href')
+        window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-versi').DataTable().ajax.params())
+    })
 </script>
 @endsection

@@ -7,6 +7,8 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OpenDKExport;
 
 class OpendkController extends Controller
 {
@@ -70,16 +72,26 @@ class OpendkController extends Controller
 
     public function kecamatan(Request $request)
     {
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'akses_opendk' => $request->akses_opendk,
             'versi_opendk' => $request->versi_opendk,
         ];
+
         $listVersi = $this->getListVersion();
-        if ($request->ajax()) {
-            return DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at')->get())
-                ->addIndexColumn()
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new OpenDKExport($query->results()), 'Desa-yang-memasang-OpenDK.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->make(true);
         }
 

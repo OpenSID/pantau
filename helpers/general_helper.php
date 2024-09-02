@@ -228,6 +228,11 @@ function format_date($date)
     return  Carbon::parse($date)->translatedFormat('d F Y');
 }
 
+function format_daydate($date)
+{
+    return  Carbon::parse($date)->translatedFormat('l, d F Y');
+}
+
 function kuartal_bulan()
 {
     return [

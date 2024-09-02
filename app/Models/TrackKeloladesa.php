@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -103,5 +104,27 @@ class TrackKeloladesa extends Model
     public function scopeNonActive($query)
     {
         return $query->whereRaw('tgl_akses <= now() - interval '.self::ACTIVE_DAYS.' day');
+    }
+
+    public function scopeAktif($query, $batasTgl)
+    {
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->format('Y-m-d');
+
+        return $query->where('tgl_akses', '>=', $maksimalTanggal);
+    }
+
+    public function scopeProvinsi($query, $provinsi)
+    {        
+        return $query->whereRaw('left(kode_desa, 2) = \''.$provinsi.'\'');
+    }
+
+    public function scopeKabupaten($query, $kabupaten)
+    {        
+        return $query->whereRaw('left(kode_desa, 5) = \''.$kabupaten.'\'');
+    }
+
+    public function scopeKecamatan($query, $kecamatan)
+    {        
+        return $query->whereRaw('left(kode_desa, 8) = \''.$kecamatan.'\'');
     }
 }

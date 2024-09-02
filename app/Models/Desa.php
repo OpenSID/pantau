@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class Desa extends Model
 {
     use HasFactory;
@@ -22,6 +23,8 @@ class Desa extends Model
         'tgl_rekam_hosting' => 'datetime',
         'tgl_akses_lokal' => 'datetime',
         'tgl_akses_hosting' => 'datetime',
+        'kontak' => 'array',
+        'anjungan' => 'bool'
     ];
 
     /** {@inheritdoc} */
@@ -271,7 +274,7 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
             ->when(auth()->check() == true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
@@ -363,5 +366,69 @@ class Desa extends Model
         $query->when($provinsi, function ($r) use ($provinsi) {
             $r->where('kode_provinsi', $provinsi);
         });
+    }
+
+    public function scopeOnline($query)
+    {
+        return $query->where('versi_hosting', '!=', '');
+    }
+
+    public function scopeAktif($query, $batasTgl)
+    {
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+
+        return $query->whereRaw(DB::raw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= '{$maksimalTanggal}'"));
+    }
+
+    public function scopeAktifOnline($query, $batasTgl)
+    {
+        return $query->online()->aktif($batasTgl);
+    }
+
+    public function scopeLatestPremiumVersion($query)
+    {
+        $versi = $query->where('versi_hosting', 'like', '%-premium')
+                    ->orderByRaw(
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
+                    )->first();
+
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        
+        return $versi;
+    }
+
+    public function scopeLatestUmumVersion($query)
+    {
+        $versi = $query->where('versi_hosting', 'not like', '%-premium')
+                    ->orderByRaw(
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
+                    )->first();
+
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+
+        return $versi;
+    }
+
+    public function scopeLatestVersion($query)
+    {
+        return $query->orderByRaw('CAST(SUBSTRING_INDEX(versi_hosting, "-", 1) AS DECIMAL) DESC')
+                     ->orderBy('versi_hosting', 'DESC');
+    }
+
+    public function scopeAnjungan($query)
+    {
+        return $query->where('anjungan', true);
+    }
+
+    public function isPemdaHosting(){
+        return Str::endsWith($this->url_hosting, '.go.id');
+    }
+
+    public function isNew(){
+        return $this->created_at->format('Y-m-d') == date('Y-m-d');
     }
 }

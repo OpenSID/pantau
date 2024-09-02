@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => false,
@@ -243,7 +243,7 @@ return [
         ['header'          => 'MENU UTAMA'],
         [
             'text'         => 'Dasbor',
-            'url'          => '/',
+            'url'          => '/dashboard',
             'icon'         => 'fas fa-tachometer-alt',
         ],
         [
@@ -266,6 +266,10 @@ return [
                 [
                     'text' => 'Versi OpenSID',
                     'url'  => 'laporan/versi',
+                ],
+                [
+                    'text' => 'Desa Aktif',
+                    'url'  => 'laporan/desa-aktif',
                 ],
             ],
         ],
@@ -320,6 +324,16 @@ return [
             ],
         ],
         [
+            'text'         => 'OpenKab',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Wilayah Kerja Sama',
+                    'url'  => 'openkab/kerja-sama',
+                ],
+            ],
+        ],
+        [
             'key'          => 'khusus',
             'text'         => 'Wilayah',
             'topnav_right' => true,
@@ -327,6 +341,24 @@ return [
                 [
                     'text' => 'Semua',
                     'url'  => 'sesi/hapus',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'PBB',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Desa',
+                    'url'  => 'pbb/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'pbb/kabupaten',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'pbb/versi',
                 ],
             ],
         ],

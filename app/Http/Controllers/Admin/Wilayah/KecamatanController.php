@@ -7,6 +7,8 @@ use App\Http\Requests\RegionKecamatanRequest;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\WilayahKecamatanExport;
 
 class KecamatanController extends Controller
 {
@@ -14,9 +16,18 @@ class KecamatanController extends Controller
     {
         $r = Region::with(['child'])->find(67);
 
-        if ($request->ajax()) {
-            return DataTables::of(Region::kecamatan())
-                ->addIndexColumn()
+        if($request->excel){
+            $paramDatatable = json_decode($request->get('params'), 1);            
+            $request->merge($paramDatatable);            
+        }
+
+        if ($request->ajax() || $request->excel) {                        
+            $query = DataTables::of(Region::kecamatan());
+            if($request->excel){
+                $query->filtering();
+                return Excel::download(new WilayahKecamatanExport($query->results()), 'Wilayah-Kecamatan.xlsx');;
+            }
+            return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $edit = '<a href="'.url('kecamatan/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
                     $delete = '<button data-href="'.url('kecamatan/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
