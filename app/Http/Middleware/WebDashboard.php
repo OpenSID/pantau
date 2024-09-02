@@ -22,18 +22,18 @@ class WebDashboard
         $route = Route::current();
         $uri = $route->uri();
         
-        if (!auth()->check() && !Str::startsWith($uri, 'web')) {
-            return redirect('web');
-        }
-
         if (auth()->check() && $uri == '/') {
             return redirect('dashboard');
         }
 
+        if (!auth()->check() && $uri == '/') {
+            if(!Str::startsWith($uri, 'web') && $uri !== '/'){
+                return redirect('web');
+            }
+        }        
+
         // Change the config values here
-        if (Str::startsWith($uri, 'web')) {
-            Config::set('adminlte', Config::get('weblte')); // example
-        }
+        Config::set('adminlte', Config::get('weblte')); // example        
 
         return $next($request);
     }
