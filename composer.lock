@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ceeb5a079a631feba9df4aa34ca0a0a",
+    "content-hash": "64045001b517918157e3264d5a58f266",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1725,16 +1725,16 @@
         },
         {
             "name": "jeroennoten/laravel-adminlte",
-            "version": "v3.9.4",
+            "version": "v3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeroennoten/Laravel-AdminLTE.git",
-                "reference": "479197945506d691d9b73c56dc365d3f5e7a9a9b"
+                "reference": "b254870c3bc38616fbd45c8884712a34915ac774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/479197945506d691d9b73c56dc365d3f5e7a9a9b",
-                "reference": "479197945506d691d9b73c56dc365d3f5e7a9a9b",
+                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/b254870c3bc38616fbd45c8884712a34915ac774",
+                "reference": "b254870c3bc38616fbd45c8884712a34915ac774",
                 "shasum": ""
             },
             "require": {
@@ -1744,8 +1744,7 @@
             },
             "require-dev": {
                 "orchestra/testbench": ">=4.0",
-                "phpunit/phpunit": ">=9.1",
-                "scrutinizer/ocular": "^1.9"
+                "phpunit/phpunit": ">=9.1"
             },
             "type": "library",
             "extra": {
@@ -1779,9 +1778,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jeroennoten/Laravel-AdminLTE/issues",
-                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.9.4"
+                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.13.0"
             },
-            "time": "2024-01-19T14:51:27+00:00"
+            "time": "2024-08-04T14:57:59+00:00"
         },
         {
             "name": "laravel-notification-channels/telegram",
@@ -10244,5 +10243,5 @@
         "php": "^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
