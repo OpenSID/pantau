@@ -19,6 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('mobile/pengguna') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -32,7 +33,7 @@
                         <table class="table" id="table-pengguna">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>No</th>
                                     <th>Tgl Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
@@ -81,7 +82,9 @@
         },
         columns: [
             {
-                data: 'id',
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                searchable: false,
                 orderable: false
             },
             {
@@ -122,6 +125,9 @@
 
         pengguna.ajax.reload();
     });
-
+    $('#btn-export').click(function(){
+        const _href = $(this).data('href')
+        window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#table-pengguna').DataTable().ajax.params())
+    })
 </script>
 @endsection

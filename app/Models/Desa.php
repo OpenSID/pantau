@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class Desa extends Model
 {
     use HasFactory;
@@ -422,5 +422,13 @@ class Desa extends Model
     public function scopeAnjungan($query)
     {
         return $query->where('anjungan', true);
+    }
+
+    public function isPemdaHosting(){
+        return Str::endsWith($this->url_hosting, '.go.id');
+    }
+
+    public function isNew(){
+        return $this->created_at->format('Y-m-d') == date('Y-m-d');
     }
 }

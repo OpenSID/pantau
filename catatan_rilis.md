@@ -1,4 +1,4 @@
-Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2409.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
@@ -34,6 +34,18 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 30. [#326](https://github.com/OpenSID/pantau/issues/326) Penambahan halaman khusus untuk LayananDesa.
 31. [#327](https://github.com/OpenSID/pantau/issues/327) Penambahan halaman khusus untuk KelolaDesa.
 32. [#386](https://github.com/OpenSID/pantau/issues/386) Penambahan data no hp pada pengguna OpenSID yang diambil dari identitas desa.
+33. [#389](https://github.com/OpenSID/pantau/issues/389) Penambahan fungsi collapse pada bagian pengguna OpenSID berdasarkan wilayah.
+34. [#309](https://github.com/OpenSID/pantau/issues/309) Penambahan fungsi filter di halaman dasbor.
+35. [#308](https://github.com/OpenSID/pantau/issues/308) Penambahan fungsi peta untuk keseluruhan aplikasi OpenDesa.
+36. [#202](https://github.com/OpenSID/pantau/issues/202) Penambahan notifikasi pemda yang memasang OpenSID.
+37. [#392](https://github.com/OpenSID/pantau/issues/392) Penambahan fungsi export excel pada data OpenSID.
+38. [#393](https://github.com/OpenSID/pantau/issues/393) Penambahan fungsi export excel pada data OpenDK.
+39. [#201](https://github.com/OpenSID/pantau/issues/201) Penambahan fungsi laporan desa yg paling aktif.
+40. [#401](https://github.com/OpenSID/pantau/issues/401) Penambahan fungsi export layanan desa.
+41. [#403](https://github.com/OpenSID/pantau/issues/403) Penambahan fungsi export kelola desa.
+42. [#402](https://github.com/OpenSID/pantau/issues/402) Penambahan fungsi export semua wilayah.
+43. [#416](https://github.com/OpenSID/pantau/issues/416) Penambahan pengguna PBB pada daftar kolom ke 6.
+44. [#244](https://github.com/OpenSID/pantau/issues/244) Penambahan mencatat pengguna pbb.
 
 #### Perbaikan Bug
 
@@ -43,4 +55,6 @@ Di rilis v2408.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 1. [#311](https://github.com/OpenSID/pantau/issues/311) Perbaikan Error saat klik head/menu PantauSID.
 2. [#349](https://github.com/OpenSID/pantau/issues/349) Penambahan API untuk menangkap data dari OpenKab.
+3. [#404](https://github.com/OpenSID/pantau/issues/404) Perbaikan data pengguna KelolaDesa tidak tampil.
+4. [#394](https://github.com/OpenSID/pantau/issues/394) Ubah ID dengan No Urut pada halaman pengguna aplikasi LayananDesa.
 

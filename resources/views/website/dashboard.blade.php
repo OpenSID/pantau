@@ -54,11 +54,11 @@
                     </div>
                 </div>
                 <div class="row p-1">    
-                    <div class="col-xl-{{ count($wilayah) > 0 ? 8 : 12 }} text-center bg-white rounded-lg" style="align-content: center;">
+                    <div class="col-xl-{{ count($wilayah) > 0 ?7 : 12 }} text-center bg-white rounded-lg" style="align-content: center;">
                         @include('website.partial.summary')
                     </div>
                     @if(count($wilayah) > 0)
-                        <div class="col-xl-4">
+                        <div class="col-xl-5">
                             @include('website.partial.wilayah_kerja_sama')
                         </div>
                     @endif
@@ -99,6 +99,7 @@
             success: function(data) {
                 const total = data.total
                 const detail = data.detail
+                const summary = data.summary
                 $('#box-provinsi>.total').text(total.provinsi.total)
                 $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.provinsi.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
@@ -126,6 +127,9 @@
                     }
                 }
 
+                for(let i in summary){
+                    $(`#app-${i}-count`).text(summary[i])
+                }
 
                 $.ajax({
                     url: 'api/web/chart-usage',

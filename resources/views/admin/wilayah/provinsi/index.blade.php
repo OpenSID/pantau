@@ -10,6 +10,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
+                <div class="card-header with-border">
+                    <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('provinsi/datatables') }}"><i class="fas fa-file-excel"></i> Excels<a>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table" id="datatable">
@@ -55,5 +58,9 @@
                 ]
             });
         });
+        $('#btn-export').click(function(){
+            const _href = $(this).data('href')
+            window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#datatable').DataTable().ajax.params())
+        })
     </script>
 @endsection

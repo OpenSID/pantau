@@ -16,12 +16,12 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Pengguna Aplikasi KelolaDesa</h3>                
+                                <h3 class="card-title">Pengguna Aplikasi PBB</h3>                
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table" id="table-pengguna-keloladesa">
+                                    <table class="table" id="table-pengguna-pbb">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -29,6 +29,8 @@
                                                 <th>Kecamatan</th>
                                                 <th>Kabupaten</th>
                                                 <th>Provinsi</th>
+                                                <th>URL</th>
+                                                <th>Versi</th>
                                                 <th>Akses Terakhir</th>
                                             </tr>
                                         </thead>
@@ -54,13 +56,13 @@
 @push('js')
 <script>
     $(document).ready(function() {
-        $('#table-pengguna-keloladesa').DataTable({
+        $('#table-pengguna-pbb').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ route('datatables:pengguna-keloladesa') }}`,
+                url: `{{ route('datatables:pengguna-pbb') }}`,
                 method: 'get',
             },
             columns: [{
@@ -73,20 +75,25 @@
                     data: 'nama_desa'
                 },
                 {
-                    data: 'nama_kec'
+                    data: 'nama_kecamatan'
                 },
                 {
-                    data: 'nama_kab'
+                    data: 'nama_kabupaten'
                 },
                 {
-                    data: 'nama_prov'
+                    data: 'nama_provinsi'
                 },
                 {
-                    data: 'tgl_akses'
+                    data: 'url'
+                },
+                {
+                    data: 'versi'
+                },
+                {
+                    data: 'tanggal'
                 },
             ]
         })
     })
 </script>
 @endpush
-

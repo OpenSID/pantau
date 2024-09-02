@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2408.0.0';
+        return 'v2409.0.0';
     }
 }
 
@@ -403,5 +403,13 @@ if (! function_exists('format_angka')) {
     function format_angka($angka, $decimals = 0)
     {
         return number_format($angka, $decimals, ',', '.');
+    }
+}
+
+if (! function_exists('local_date')) {
+    function local_date($date, $format = 'l, j F Y  H:i:s'){
+        $date = Carbon::parse($date)->locale('id');
+        $date->settings(['formatFunction' => 'translatedFormat']);
+        return $date->format($format); 
     }
 }

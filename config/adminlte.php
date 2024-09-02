@@ -267,6 +267,10 @@ return [
                     'text' => 'Versi OpenSID',
                     'url'  => 'laporan/versi',
                 ],
+                [
+                    'text' => 'Desa Aktif',
+                    'url'  => 'laporan/desa-aktif',
+                ],
             ],
         ],
         [
@@ -337,6 +341,24 @@ return [
                 [
                     'text' => 'Semua',
                     'url'  => 'sesi/hapus',
+                ],
+            ],
+        ],
+        [
+            'text'         => 'PBB',
+            'icon'         => 'fas fa-file-alt',
+            'submenu'      => [
+                [
+                    'text' => 'Desa',
+                    'url'  => 'pbb/kecamatan',
+                ],
+                [
+                    'text' => 'Kabupaten',
+                    'url'  => 'pbb/kabupaten',
+                ],
+                [
+                    'text' => 'Versi',
+                    'url'  => 'pbb/versi',
                 ],
             ],
         ],
