@@ -26,6 +26,7 @@
             <div class="h3" style="margin-bottom:-5px;font-weight:bold" id="timeClock">00:00:00</div>
             <div class="date">{{ format_daydate(date('Y-m-d')) }}</div>
             </div>`)
+            $('nav.main-header>.container>a.navbar-brand>span.brand-text').addClass('d-none d-sm-block float-right')
 
             setInterval(myTimer, 1000);
             function myTimer() {

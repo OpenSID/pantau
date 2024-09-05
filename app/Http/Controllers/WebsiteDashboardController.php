@@ -320,12 +320,7 @@ class WebsiteDashboardController extends Controller
             'latestDesa' => $latestDesa,
             'provinsi' => $sortedProvinsi->values()->all(),
         ]);
-    }
-    
-    public function opendk(Request $request)
-    {
-        return view('website.opendk');
-    }
+    }    
     
     public function openkabData(Request $request)
     {
