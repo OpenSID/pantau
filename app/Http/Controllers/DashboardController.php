@@ -214,6 +214,7 @@ class DashboardController extends Controller
                 return $item;
             });
             return DataTables::of($desa)
+                ->editColumn('updated_at', static fn($q) => $q->updated_at->format('Y-m-d H:i:s'))
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns([]) 
                 ->make(true);

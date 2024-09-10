@@ -1,5 +1,5 @@
 @extends('layouts.web')
-
+@include('layouts.components.select2_wilayah')
 @section('title', 'Versi LayananDesa')
 
 @section('content')
