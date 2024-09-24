@@ -33,6 +33,10 @@ class LaporanTemaController extends Controller
             }
             return $data->addIndexColumn()
             ->editColumn('updated_at', fn($q) => $q->updated_at->format('Y-m-d H:i:s'))
+            ->editColumn('url_hosting', function ($q) {
+                return '<a href="https://' . $q->url_hosting . '" target="_blank">'. $q->url_hosting .'</a>';
+            })
+            ->rawColumns(['url_hosting']) // Mengizinkan HTML di kolom url_hosting
             ->make(true);
         }
 
