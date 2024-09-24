@@ -271,6 +271,10 @@ return [
                     'text' => 'Desa Aktif',
                     'url'  => 'laporan/desa-aktif',
                 ],
+                [
+                    'text' => 'Pengguna Tema Bawaan',
+                    'url'  => 'laporan/tema',
+                ],
             ],
         ],
         [

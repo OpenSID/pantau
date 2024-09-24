@@ -28,6 +28,7 @@ use App\Http\Controllers\KelolaDesaDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\OpenDKDashboardController;
+use App\Http\Controllers\LaporanTemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,7 @@ Route::prefix('laporan')
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
+        Route::get('tema', [LaporanTemaController::class, 'index']);
     });
 
 // PBB
