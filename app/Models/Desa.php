@@ -24,7 +24,8 @@ class Desa extends Model
         'tgl_akses_lokal' => 'datetime',
         'tgl_akses_hosting' => 'datetime',
         'kontak' => 'array',
-        'anjungan' => 'bool'
+        'anjungan' => 'bool',
+        'tema' => 'string'
     ];
 
     /** {@inheritdoc} */
