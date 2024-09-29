@@ -10,3 +10,4 @@ Di rilis v2409.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#429](https://github.com/OpenSID/pantau/issues/429) Perbaikan performa query datatable pengguna OpenSID.
