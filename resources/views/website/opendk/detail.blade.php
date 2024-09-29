@@ -16,23 +16,18 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Pengguna Aplikasi OpenSID</h3>                
+                                <h3 class="card-title">Pengguna Aplikasi OpenDK</h3>                
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table" id="table-pengguna-opensid">
+                                    <table class="table" id="table-pengguna-opendk">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Desa</th>
+                                                <th>No</th>                                                
                                                 <th>Kecamatan</th>
                                                 <th>Kabupaten</th>
                                                 <th>Provinsi</th>
-                                                <th>Versi Offline</th>
-                                                <th>Versi Online</th>
-                                                <th>Modul TTE</th>
-                                                <th>Surat ter-TTE</th>
                                                 <th>Akses Terakhir</th>
                                             </tr>
                                         </thead>
@@ -58,13 +53,13 @@
 @push('js')
 <script>
     $(document).ready(function() {
-        $('#table-pengguna-opensid').DataTable({
+        $('#table-pengguna-opendk').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ route('datatables:pengguna-opensid') }}`,
+                url: `{{ route('datatables:pengguna-opendk') }}`,
                 method: 'get',
             },
             columns: [{
@@ -72,10 +67,7 @@
                     name: 'DT_RowIndex',
                     searchable: false,
                     orderable: false
-                },
-                {
-                    data: 'nama_desa'
-                },
+                },                
                 {
                     data: 'nama_kecamatan'
                 },
@@ -86,26 +78,11 @@
                     data: 'nama_provinsi'
                 },
                 {
-                    data: 'versi_lokal'
-                },
-                {
-                    data: 'versi_hosting'
-                },
-                {
-                    data: 'modul_tte',
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    data: 'jml_surat_tte'
-                },
-                {
-                    data: 'tanggal',
-                    searchable: false,
-                    orderable: false
+                    data: 'updated_at'
                 },
             ]
         })
     })
 </script>
 @endpush
+

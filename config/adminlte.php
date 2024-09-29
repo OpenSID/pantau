@@ -242,6 +242,11 @@ return [
         // Menu
         ['header'          => 'MENU UTAMA'],
         [
+            'text'         => 'Dasbor Web',
+            'url'          => '/web',
+            'icon'         => 'fas fa-globe',
+        ],
+        [
             'text'         => 'Dasbor',
             'url'          => '/dashboard',
             'icon'         => 'fas fa-tachometer-alt',
@@ -270,6 +275,10 @@ return [
                 [
                     'text' => 'Desa Aktif',
                     'url'  => 'laporan/desa-aktif',
+                ],
+                [
+                    'text' => 'Pengguna Tema Bawaan',
+                    'url'  => 'laporan/tema',
                 ],
             ],
         ],
