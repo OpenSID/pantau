@@ -92,13 +92,17 @@
                     data: 'versi_hosting'
                 },
                 {
-                    data: 'modul_tte'
+                    data: 'modul_tte',
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: 'jml_surat_tte'
                 },
                 {
-                    data: 'tanggal'
+                    data: 'tanggal',
+                    searchable: false,
+                    orderable: false
                 },
             ]
         })

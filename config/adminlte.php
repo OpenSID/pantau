@@ -242,6 +242,11 @@ return [
         // Menu
         ['header'          => 'MENU UTAMA'],
         [
+            'text'         => 'Dasbor Web',
+            'url'          => '/web',
+            'icon'         => 'fas fa-globe',
+        ],
+        [
             'text'         => 'Dasbor',
             'url'          => '/dashboard',
             'icon'         => 'fas fa-tachometer-alt',
