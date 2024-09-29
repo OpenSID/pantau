@@ -24,7 +24,8 @@ class Desa extends Model
         'tgl_akses_lokal' => 'datetime',
         'tgl_akses_hosting' => 'datetime',
         'kontak' => 'array',
-        'anjungan' => 'bool'
+        'anjungan' => 'bool',
+        'tema' => 'string'
     ];
 
     /** {@inheritdoc} */
@@ -430,5 +431,25 @@ class Desa extends Model
 
     public function isNew(){
         return $this->created_at->format('Y-m-d') == date('Y-m-d');
+    }
+
+    public function scopeTemaPalanta($query)
+    {
+        return $query->where('tema', 'Palanta')->count();
+    }
+
+    public function scopeTemaNatra($query)
+    {
+        return $query->where('tema', 'Natra')->count();
+    }
+
+    public function scopeTemaEsensi($query)
+    {
+        return $query->where('tema', 'Esensi')->count();
+    }
+
+    public function scopeTema($query)
+    {
+        return $query->whereIn('tema', ['esensi', 'natra', 'palanta'])->count();
     }
 }

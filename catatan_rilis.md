@@ -2,7 +2,7 @@ Di rilis v2409.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 1. [#419](https://github.com/OpenSID/pantau/issues/419) Perbaikan halaman OpenDK.
-
+2. [#427](https://github.com/OpenSID/pantau/issues/427) Penambahan API pantau tema dan tampilkan data tema di pantau.
 
 #### Perbaikan Bug
 
