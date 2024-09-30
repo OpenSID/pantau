@@ -25,8 +25,8 @@ if (! function_exists('kode_wilayah')) {
     function kode_wilayah($kode_wilayah)
     {
         $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
-        $kode_desa = (strlen($kode_wilayah) > 6) ? '.'.substr($kode_wilayah, 6) : '';
-        $kode_standar = implode('.', $kode_prov_kab_kec).$kode_desa;
+        $kode_desa = (strlen($kode_wilayah) > 6) ? '.' . substr($kode_wilayah, 6) : '';
+        $kode_standar = implode('.', $kode_prov_kab_kec) . $kode_desa;
 
         return $kode_standar;
     }
@@ -127,8 +127,8 @@ if (! function_exists('lastrelease')) {
             $response = Http::withHeaders([
                 'Accept' => 'application/vnd.github.v3+json',
             ])
-            ->get($url)
-            ->throw();
+                ->get($url)
+                ->throw();
 
             return json_decode($response->body());
         } catch (Throwable $th) {
@@ -167,19 +167,19 @@ if (! function_exists('lastrelease_pbb')) {
      */
     function lastrelease_pbb()
     {
-        
+
         // Cache data until the end of the day
-        $version = Cache::remember('release_pbb', now()->endOfDay(), function () {            
+        $version = Cache::remember('release_pbb', now()->endOfDay(), function () {
             $version = '2401.0.0';
             $versi_pbb = lastrelease('https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest');
 
             if ($versi_pbb !== false) {
-                $version = str_replace('v', '', $versi_pbb->tag_name);                
+                $version = str_replace('v', '', $versi_pbb->tag_name);
             }
 
             return $version;
         });
-        
+
 
         return $version;
     }
@@ -207,7 +207,7 @@ if (! function_exists('abaikan_domain')) {
      */
     function abaikan_domain($aplikasi)
     {
-        switch($aplikasi) {
+        switch ($aplikasi) {
             case 'opendk':
                 return Cache::get('abaikan_domain_opendk', '');
                 break;
@@ -245,16 +245,16 @@ if (! function_exists('lastrelease_opendk')) {
     function lastrelease_opendk()
     {
         // Cache data until the end of the day
-        $version = Cache::remember('release_opendk', now()->endOfDay(), function () {            
+        $version = Cache::remember('release_opendk', now()->endOfDay(), function () {
             $version = '2404.0.0';
             $versi_api = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
 
             if ($versi_api !== false) {
-                $version = str_replace('v', '', $versi_api->tag_name);                
+                $version = str_replace('v', '', $versi_api->tag_name);
             }
 
             return $version;
-        });        
+        });
 
         return $version;
     }
@@ -265,7 +265,7 @@ if (! function_exists('lastrelease_opendk')) {
             $folder_backup = 'backup';
 
             if (! file_exists($folder_backup)) {
-                exec('mkdir '.$folder_backup);
+                exec('mkdir ' . $folder_backup);
             }
 
             return $folder_backup;
@@ -275,10 +275,10 @@ if (! function_exists('lastrelease_opendk')) {
     if (! function_exists('folderBackupDatabase')) {
         function folderBackupDatabase()
         {
-            $folder_database = folder_backup().DIRECTORY_SEPARATOR.'database';
+            $folder_database = folder_backup() . DIRECTORY_SEPARATOR . 'database';
 
             if (! file_exists($folder_database)) {
-                exec('mkdir '.$folder_database);
+                exec('mkdir ' . $folder_database);
             }
 
             return $folder_database;
@@ -343,10 +343,10 @@ if (! function_exists('lastrelease_opendk')) {
         {
             $now = Carbon::now();
             $formattedDateTime = Carbon::parse($datetime);
-    
+
             // Calculate differences
             $diff = $formattedDateTime->diff($now);
-    
+
             // Determine the appropriate format based on the difference
             if ($formattedDateTime->isFuture()) {
                 if ($diff->y > 0) {
@@ -382,17 +382,17 @@ if (! function_exists('lastrelease_opendk')) {
 }
 
 if (! function_exists('lastrelease_api_layanandesa')) {
-    
+
     function lastrelease_api_layanandesa()
     {
 
         // Cache data until the end of the day
-        $version = Cache::remember('release_layanan_desa', now()->endOfDay(), function () {            
+        $version = Cache::remember('release_layanan_desa', now()->endOfDay(), function () {
             $version = '2404.0.0';
             $versi_api = lastrelease('https://api.github.com/repos/OpenSID/rilis-opensid-api/releases/latest');
 
             if ($versi_api !== false) {
-                $version = str_replace('v', '', $versi_api->tag_name);                
+                $version = str_replace('v', '', $versi_api->tag_name);
             }
 
             return $version;
@@ -403,7 +403,7 @@ if (! function_exists('lastrelease_api_layanandesa')) {
     }
 }
 
-if (! function_exists('format_angka')) {    
+if (! function_exists('format_angka')) {
     function format_angka($angka, $decimals = 0)
     {
         return number_format($angka, $decimals, ',', '.');
@@ -411,9 +411,29 @@ if (! function_exists('format_angka')) {
 }
 
 if (! function_exists('local_date')) {
-    function local_date($date, $format = 'l, j F Y  H:i:s'){
+    function local_date($date, $format = 'l, j F Y  H:i:s')
+    {
         $date = Carbon::parse($date)->locale('id');
         $date->settings(['formatFunction' => 'translatedFormat']);
-        return $date->format($format); 
+        return $date->format($format);
+    }
+}
+
+if (! function_exists('changeLogPermissions')) {
+    function changeLogPermissions($permissions = '777')
+    {
+        // Path ke folder logs
+        $logPath = storage_path('logs');
+
+        // Periksa apakah folder ada
+        if (is_dir($logPath)) {
+            // Ubah izin sesuai parameter
+            exec("chmod -R $permissions $logPath", $output, $returnVar);
+
+            // Cek hasil perintah
+            return $returnVar === 0;
+        }
+
+        return false;
     }
 }

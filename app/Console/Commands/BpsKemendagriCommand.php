@@ -81,8 +81,10 @@ class BpsKemendagriCommand extends Command
             $this->requests($this->provinsi, 'kabupaten');
             $this->requests($this->kabupaten, 'kecamatan');
             $this->requests($this->kecamatan, 'desa');
+            changeLogPermissions('777');
         } catch (ClientException $e) {
             report($e);
+            changeLogPermissions('777');
         }
     }
 
