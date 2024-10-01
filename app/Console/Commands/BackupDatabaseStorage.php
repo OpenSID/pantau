@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\Helpers\CommandController;
+use App\Models\LogBackup;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\DbDumper\Databases\MySql;
@@ -65,8 +66,17 @@ class BackupDatabaseStorage extends Command
                 ->setPassword(env('DB_PASSWORD'));
 
             $backup->dumpToFile($this->folder_database.'/'.$this->database_name);
+
+            LogBackup::create([
+                'status' => 1,
+                'log' => 'Success backup pantau:backup-database-storage',
+            ]);
         } catch (Exception $ex) {
             $this->command->notifMessage('Peringatan : gagal backup ke database Pantau, silakan cek koneksi !!!');
+            LogBackup::create([
+                'status' => 0,
+                'log' => 'pantau:backup-database-storage :'.$ex->getMessage(),
+            ]);
 
             return exec('rm '.$this->folder_database.'/'.$this->database_name);
         }
