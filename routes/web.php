@@ -27,6 +27,8 @@ use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\KelolaDesaDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\LayananDesaDashboardController;
+use App\Http\Controllers\OpenDKDashboardController;
+use App\Http\Controllers\LaporanTemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,8 +55,7 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);       
-        Route::get('opendk', [WebsiteDashboardController::class, 'opendk']);    
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
@@ -71,6 +72,12 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('keloladesa/install_baru', [KelolaDesaDashboardController::class, 'install_baru']);
         Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
         Route::get('data-peta', [DashboardController::class, 'dataPeta']);
+        Route::get('opendk', [OpenDKDashboardController::class, 'index']);
+        Route::get('opendk/detail', [OpenDKDashboardController::class, 'detail']);
+        Route::get('opendk/versi', [OpenDKDashboardController::class, 'versi']);
+        Route::get('opendk/versi/detail', [OpenDKDashboardController::class, 'versi_detail']);
+        Route::get('opendk/install_baru', [OpenDKDashboardController::class, 'install_baru']);
+        Route::get('opendk/peta', [OpenDKDashboardController::class, 'peta']);
     });    
 });
 
@@ -127,6 +134,7 @@ Route::prefix('laporan')
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
+        Route::get('tema', [LaporanTemaController::class, 'index']);
     });
 
 // PBB

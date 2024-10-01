@@ -20,21 +20,19 @@ class WebDashboard
     public function handle(Request $request, Closure $next)
     {
         $route = Route::current();
-        $uri = $route->uri();
-        
-        if (!auth()->check() && !Str::startsWith($uri, 'web')) {
-            return redirect('web');
-        }
+        $uri = $route->uri();            
 
-        if (auth()->check() && $uri == '/') {
-            return redirect('dashboard');
-        }
+        if (!auth()->check()) {
+            if(!Str::startsWith($uri, 'web') && $uri !== '/'){
+                return redirect('web');
+            }
+        }        
 
         // Change the config values here
-        if (Str::startsWith($uri, 'web')) {
-            Config::set('adminlte', Config::get('weblte')); // example
+        Config::set('adminlte', Config::get('weblte')); // example        
+        if(auth()->check()){
+            Config::set('adminlte.dashboard_url', 'dashboard');
         }
-
         return $next($request);
     }
 }

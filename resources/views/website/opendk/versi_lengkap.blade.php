@@ -1,11 +1,10 @@
 @extends('layouts.web')
 @include('layouts.components.select2_wilayah')
-@section('title', 'Versi KelolaDesa')
+@section('title', 'Versi OpenDK')
 
-@section('content')
-    @include('layouts.components.global_delete')
+@section('content')    
     <div class="row">
-    <h1>Versi KelolaDesa<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang di desa)</small></h1>
+    <h1>Versi OpenDK<small class="font-weight-light ml-1 text-md font-weight-bold">(Versi yang terpasang di kecamatan)</small></h1>
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
@@ -47,17 +46,19 @@
     <script>
         $('#aktif').select2();
 
-        var layananVersi = $('#table-versi').DataTable({
+        var opendkVersi = $('#table-versi').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             ordering: true,
             order: [[1, 'desc']],
             ajax: {
-                url: `{{ url('web/keloladesa/versi') }}`,
+                url: `{{ url('web/opendk/versi') }}`,
                 method: 'get',
                 data: function(data) {
-                    data.aktif = $('#aktif').val();
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_kecamatan = $('#kecamatan').val();
                 }
             },
             columns: [{
@@ -73,7 +74,7 @@
                 {
                     name: 'jumlah',
                     data: function (data) {
-                        return `<a target="_blank" href="{{ url('web/keloladesa/versi/detail') }}?versi=${data.versi}">${data.jumlah}</a>`
+                        return `<a target="_blank" href="{{ url('web/opendk/versi/detail') }}?versi=${data.versi}">${data.jumlah}</a>`
                     },
                     searchable: false,
                 },                
@@ -81,14 +82,15 @@
         })
 
         $('#filter').on('click', function(e) {
-            layananVersi.draw();
+            opendkVersi.draw();
         });
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
-            $('#aktif').val('').change();
-
-            layananVersi.ajax.reload();
+            $('#provinsi').val('').change();
+            $('#kabupaten').val('').change();
+            $('#kecamatan').val('').change();
+            opendkVersi.draw();
         });
     </script>
 @endsection

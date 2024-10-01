@@ -28,7 +28,7 @@
                         <tbody></tbody>
                     </table>
                 </div><br>
-                <a href="{{ url('web/opendk') }}" id="view-more-button-opendk" class="btn btn-outline-dark btn-block" style="display: none;">lihat selengkapnya</a>
+                <a href="{{ url('web/opendk/detail') }}" id="view-more-button-opendk" class="btn btn-outline-dark btn-block" style="display: none;">lihat selengkapnya</a>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\InstallOpenDKController;
 use App\Http\Controllers\Api\InstallOpensidController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
@@ -56,4 +57,5 @@ Route::prefix('web')
         Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);              
         Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);            
         Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
+        Route::get('chart-opendk', [InstallOpenDKController::class, 'chart']);
     });

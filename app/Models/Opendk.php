@@ -153,4 +153,23 @@ class Opendk extends Model
 
         return $query->where('updated_at', '>=', $maksimalTanggal);
     }
+
+    /**
+     * Scope a query laporan desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilter($query, array $fillters)
+    {
+        return $query->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
+                $query->where('kode_provinsi', $kode_provinsi);
+            })
+            ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
+                $query->where('kode_kabupaten', $kode_kabupaten);
+            })
+            ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
+                $query->where('kode_kecamatan', $kode_kecamatan);
+            });
+    }
 }

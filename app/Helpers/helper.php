@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2409.0.0';
+        return 'v2410.0.0';
     }
 }
 
@@ -244,13 +244,17 @@ if (! function_exists('lastrelease_opendk')) {
      */
     function lastrelease_opendk()
     {
-        $version = Cache::get('opendk_version', '2307.0.0');
-        $versi_opendk = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
+        // Cache data until the end of the day
+        $version = Cache::remember('release_opendk', now()->endOfDay(), function () {            
+            $version = '2404.0.0';
+            $versi_api = lastrelease('https://api.github.com/repos/OpenSID/opendk/releases/latest');
 
-        if ($versi_opendk !== false) {
-            $version = str_replace('v', '', $versi_opendk->tag_name);
-            Cache::forever('opendk_version', $version);
-        }
+            if ($versi_api !== false) {
+                $version = str_replace('v', '', $versi_api->tag_name);                
+            }
+
+            return $version;
+        });        
 
         return $version;
     }

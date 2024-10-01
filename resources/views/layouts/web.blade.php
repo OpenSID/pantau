@@ -18,14 +18,20 @@
             const _login = $('nav.main-header>.container>ul.navbar-nav>.nav-item:eq(1)')
             const _burger = $('nav.main-header>.container>ul.navbar-nav>.nav-item:last')
             const _timer = _login.prev('.nav-item')
+            @guest
             _login.addClass('bg-blue d-none d-lg-block')
             _login.find('a').html('Login')
+            @endguest
+            @auth
+            $('li.dropdown.user-menu').addClass('pt-2')
+            @endauth
             _burger.addClass('d-block d-lg-none pt-1')
 
             _timer.html(`<div class="mr-1">
             <div class="h3" style="margin-bottom:-5px;font-weight:bold" id="timeClock">00:00:00</div>
             <div class="date">{{ format_daydate(date('Y-m-d')) }}</div>
             </div>`)
+            $('nav.main-header>.container>a.navbar-brand>span.brand-text').addClass('d-none d-sm-block float-right')
 
             setInterval(myTimer, 1000);
             function myTimer() {
