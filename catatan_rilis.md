@@ -1,4 +1,4 @@
-Di rilis v2409.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2410.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 1. [#419](https://github.com/OpenSID/pantau/issues/419) Perbaikan halaman OpenDK.
