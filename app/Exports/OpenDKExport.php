@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -17,7 +17,7 @@ class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function collection()
     {
-        return $this->data->map(function($item, $index) {
+        return $this->data->map(function ($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'nama_kecamatan' => $item->nama_kecamatan,
@@ -26,10 +26,10 @@ class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'url' => $item->url,
                 'versi' => $item->versi,
                 'format_updated_at' => $item->format_updated_at,
-                'Batas Wilayah Utara' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_utara'] ?? '',
-                'Batas Wilayah Barat' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_barat'] ?? '',
-                'Batas Wilayah Timur' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_timur'] ?? '',
-                'Batas Wilayah Selatan' => ($item->batas_wilayah == null)? '' : $item->batas_wilayah['bts_wil_selatan'] ?? '',
+                'Batas Wilayah Utara' => ($item->batas_wilayah == null) ? '' : $item->batas_wilayah['bts_wil_utara'] ?? '',
+                'Batas Wilayah Barat' => ($item->batas_wilayah == null) ? '' : $item->batas_wilayah['bts_wil_barat'] ?? '',
+                'Batas Wilayah Timur' => ($item->batas_wilayah == null) ? '' : $item->batas_wilayah['bts_wil_timur'] ?? '',
+                'Batas Wilayah Selatan' => ($item->batas_wilayah == null) ? '' : $item->batas_wilayah['bts_wil_selatan'] ?? '',
                 'Jumlah Desa' => $item->jml_desa,
                 'Jumlah Desa Tersinkronisasi' => $item->jumlahdesa_sinkronisasi,
                 'Jumlah Penduduk' => $item->jumlah_penduduk,
@@ -59,7 +59,7 @@ class OpenDKExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Jumlah Penduduk',
             'Jumlah KK',
             'Jumlah Program Bantuan',
-            'Alamat Kantor'
+            'Alamat Kantor',
         ];
     }
 }

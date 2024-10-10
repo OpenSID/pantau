@@ -66,7 +66,7 @@ class TrackMobileRequest extends FormRequest
             'id',
             'kode_desa',
             'tgl_akses',
-            'versi'
+            'versi',
         ]);
     }
 }

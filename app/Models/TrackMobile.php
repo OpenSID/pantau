@@ -114,17 +114,17 @@ class TrackMobile extends Model
     }
 
     public function scopeProvinsi($query, $provinsi)
-    {        
+    {
         return $query->whereRaw('left(kode_desa, 2) = \''.$provinsi.'\'');
     }
 
     public function scopeKabupaten($query, $kabupaten)
-    {        
+    {
         return $query->whereRaw('left(kode_desa, 5) = \''.$kabupaten.'\'');
     }
 
     public function scopeKecamatan($query, $kecamatan)
-    {        
+    {
         return $query->whereRaw('left(kode_desa, 8) = \''.$kecamatan.'\'');
-    }    
+    }
 }

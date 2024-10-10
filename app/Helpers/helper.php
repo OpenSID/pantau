@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\PengaturanAplikasi;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Carbon;
 
 if (! function_exists('pantau_versi')) {
     /**c:\xampp\htdocs\OpenDesa\dashboard-saas\catatan_rilis.md
@@ -25,8 +25,8 @@ if (! function_exists('kode_wilayah')) {
     function kode_wilayah($kode_wilayah)
     {
         $kode_prov_kab_kec = str_split(substr($kode_wilayah, 0, 6), 2);
-        $kode_desa = (strlen($kode_wilayah) > 6) ? '.' . substr($kode_wilayah, 6) : '';
-        $kode_standar = implode('.', $kode_prov_kab_kec) . $kode_desa;
+        $kode_desa = (strlen($kode_wilayah) > 6) ? '.'.substr($kode_wilayah, 6) : '';
+        $kode_standar = implode('.', $kode_prov_kab_kec).$kode_desa;
 
         return $kode_standar;
     }
@@ -167,7 +167,6 @@ if (! function_exists('lastrelease_pbb')) {
      */
     function lastrelease_pbb()
     {
-
         // Cache data until the end of the day
         $version = Cache::remember('release_pbb', now()->endOfDay(), function () {
             $version = '2401.0.0';
@@ -179,7 +178,6 @@ if (! function_exists('lastrelease_pbb')) {
 
             return $version;
         });
-
 
         return $version;
     }
@@ -265,7 +263,7 @@ if (! function_exists('lastrelease_opendk')) {
             $folder_backup = 'backup';
 
             if (! file_exists($folder_backup)) {
-                exec('mkdir ' . $folder_backup);
+                exec('mkdir '.$folder_backup);
             }
 
             return $folder_backup;
@@ -275,10 +273,10 @@ if (! function_exists('lastrelease_opendk')) {
     if (! function_exists('folderBackupDatabase')) {
         function folderBackupDatabase()
         {
-            $folder_database = folder_backup() . DIRECTORY_SEPARATOR . 'database';
+            $folder_database = folder_backup().DIRECTORY_SEPARATOR.'database';
 
             if (! file_exists($folder_database)) {
-                exec('mkdir ' . $folder_database);
+                exec('mkdir '.$folder_database);
             }
 
             return $folder_database;
@@ -350,29 +348,29 @@ if (! function_exists('lastrelease_opendk')) {
             // Determine the appropriate format based on the difference
             if ($formattedDateTime->isFuture()) {
                 if ($diff->y > 0) {
-                    return $diff->y . ' tahun ' . $diff->m . ' bulan ' . $diff->d . ' hari lagi';
+                    return $diff->y.' tahun '.$diff->m.' bulan '.$diff->d.' hari lagi';
                 } elseif ($diff->m > 0) {
-                    return $diff->m . ' bulan ' . $diff->d . ' hari lagi';
+                    return $diff->m.' bulan '.$diff->d.' hari lagi';
                 } elseif ($diff->d > 0) {
-                    return $diff->d . ' hari lagi';
+                    return $diff->d.' hari lagi';
                 } elseif ($diff->h > 0) {
-                    return $diff->h . ' jam ' . $diff->i . ' menit lagi';
+                    return $diff->h.' jam '.$diff->i.' menit lagi';
                 } elseif ($diff->i > 0) {
-                    return $diff->i . ' menit ' . $diff->s . ' detik lagi';
+                    return $diff->i.' menit '.$diff->s.' detik lagi';
                 } else {
                     return 'baru saja';
                 }
             } else {
                 if ($diff->y > 0) {
-                    return $diff->y . ' tahun lalu';
+                    return $diff->y.' tahun lalu';
                 } elseif ($diff->m > 0) {
-                    return $diff->m . ' bulan lalu';
+                    return $diff->m.' bulan lalu';
                 } elseif ($diff->d > 0) {
-                    return $diff->d . ' hari lalu';
+                    return $diff->d.' hari lalu';
                 } elseif ($diff->h > 0) {
-                    return $diff->h . ' jam lalu';
+                    return $diff->h.' jam lalu';
                 } elseif ($diff->i > 0) {
-                    return $diff->i . ' menit ' . $diff->s . ' detik lalu';
+                    return $diff->i.' menit '.$diff->s.' detik lalu';
                 } else {
                     return 'baru saja';
                 }
@@ -382,10 +380,8 @@ if (! function_exists('lastrelease_opendk')) {
 }
 
 if (! function_exists('lastrelease_api_layanandesa')) {
-
     function lastrelease_api_layanandesa()
     {
-
         // Cache data until the end of the day
         $version = Cache::remember('release_layanan_desa', now()->endOfDay(), function () {
             $version = '2404.0.0';
@@ -397,7 +393,6 @@ if (! function_exists('lastrelease_api_layanandesa')) {
 
             return $version;
         });
-
 
         return $version;
     }
@@ -415,6 +410,7 @@ if (! function_exists('local_date')) {
     {
         $date = Carbon::parse($date)->locale('id');
         $date->settings(['formatFunction' => 'translatedFormat']);
+
         return $date->format($format);
     }
 }
