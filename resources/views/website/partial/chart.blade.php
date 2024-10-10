@@ -28,7 +28,7 @@
 <script>    
     const ctx = document.getElementById('myChart');
     const myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {},
         options: {
             layout: {
@@ -47,6 +47,7 @@
                 },
                 y: {
                     ticks: {
+                        stepSize: 300, // This ensures the tick spacing is every 300
                         padding: 5
                     }
                 }
