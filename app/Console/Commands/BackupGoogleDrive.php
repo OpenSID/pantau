@@ -56,6 +56,7 @@ class BackupGoogleDrive extends Command
 
             // proses backup
             $this->remote->backupToCloudStorage($storage_type, $remote_name, tanggal_backup(), null);
+            changeLogPermissions('777');
         }
     }
 }

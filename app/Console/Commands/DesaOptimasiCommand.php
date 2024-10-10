@@ -65,5 +65,7 @@ class DesaOptimasiCommand extends Command
                         ]);
                 }
             });
+
+        changeLogPermissions('777');
     }
 }

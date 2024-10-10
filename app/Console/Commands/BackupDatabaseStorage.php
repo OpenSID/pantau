@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Helpers\CommandController;
 use App\Models\LogBackup;
 use Exception;
 use Illuminate\Console\Command;
 use Spatie\DbDumper\Databases\MySql;
+use App\Http\Controllers\Helpers\CommandController;
 
 class BackupDatabaseStorage extends Command
 {
@@ -52,6 +52,8 @@ class BackupDatabaseStorage extends Command
             $this->folder_database = folderBackupDatabase();
             $this->backupDatabase();
             $this->backupStorage();
+
+            changeLogPermissions('777');
         }
     }
 
@@ -78,21 +80,21 @@ class BackupDatabaseStorage extends Command
                 'log' => 'pantau:backup-database-storage :'.$ex->getMessage(),
             ]);
 
-            return exec('rm '.$this->folder_database.'/'.$this->database_name);
+            return exec('rm ' . $this->folder_database . '/' . $this->database_name);
         }
     }
 
     private function backupStorage()
     {
-        $folderdesa_from = 'storage'.DIRECTORY_SEPARATOR.'app';
-        $folderdesa_to = folder_backup().DIRECTORY_SEPARATOR.'storage';
+        $folderdesa_from = 'storage' . DIRECTORY_SEPARATOR . 'app';
+        $folderdesa_to = folder_backup() . DIRECTORY_SEPARATOR . 'storage';
 
         if (! file_exists($folderdesa_to)) {
             mkdir($folderdesa_to, 0755, true);
         }
 
         if (file_exists($folderdesa_from)) {
-            exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
+            exec('cp -R ' . $folderdesa_from . ' ' . $folderdesa_to);
         }
     }
 }

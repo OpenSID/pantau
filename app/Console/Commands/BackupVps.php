@@ -59,6 +59,7 @@ class BackupVps extends Command
 
             // proses backup
             $this->remote->backupToCloudStorage($storage_type, $remote_name, tanggal_backup(), $root);
+            changeLogPermissions('777');
         }
     }
 }
