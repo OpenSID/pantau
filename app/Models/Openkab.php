@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Openkab extends Model
 {
     use HasFactory;
 
-     /** {@inheritdoc} */
-     protected $table = 'openkab';
+    /** {@inheritdoc} */
+    protected $table = 'openkab';
 
-     /** {@inheritdoc} */
+    /** {@inheritdoc} */
     protected $primaryKey = 'kode_kab';
 
     /** {@inheritdoc} */
@@ -22,7 +22,7 @@ class Openkab extends Model
     /** {@inheritdoc} */
     public $incrementing = false;
 
-     protected $fillable = [
+    protected $fillable = [
         'kode_kab',
         'nama_kab',
         'kode_prov',
@@ -57,7 +57,7 @@ class Openkab extends Model
         if (Str::contains($namaKab, $sebutanKab)) {
             return $namaKab;
         } else {
-            return $sebutanKab . ' ' . $namaKab;
+            return $sebutanKab.' '.$namaKab;
         }
     }
 
@@ -80,5 +80,4 @@ class Openkab extends Model
     {
         return $this->desa()->latestVersion();
     }
-
 }

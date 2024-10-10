@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 class Desa extends Model
 {
     use HasFactory;
@@ -25,7 +26,7 @@ class Desa extends Model
         'tgl_akses_hosting' => 'datetime',
         'kontak' => 'array',
         'anjungan' => 'bool',
-        'tema' => 'string'
+        'tema' => 'string',
     ];
 
     /** {@inheritdoc} */
@@ -395,8 +396,8 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
                     )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
-        
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
+
         return $versi;
     }
 
@@ -409,7 +410,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
                     )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -425,11 +426,13 @@ class Desa extends Model
         return $query->where('anjungan', true);
     }
 
-    public function isPemdaHosting(){
+    public function isPemdaHosting()
+    {
         return Str::endsWith($this->url_hosting, '.go.id');
     }
 
-    public function isNew(){
+    public function isNew()
+    {
         return $this->created_at->format('Y-m-d') == date('Y-m-d');
     }
 
