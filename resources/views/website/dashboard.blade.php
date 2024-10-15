@@ -134,12 +134,33 @@
                 $.ajax({
                     url: 'api/web/chart-usage',
                     data: params,
-                    type: "GET",            
+                    type: "GET",
                     success: function(data) {
-                        myChart.data = data;
-                        myChart.update();
+                        const maxDataValue = Math.max(...data.datasets.flatMap(dataset => dataset.data));  // Find the largest data value
+                        const threshold = maxDataValue > 0 ? maxDataValue * 0.1 : 1;  // Set threshold to 10% of the largest dataset value, avoid zero
+
+                        myChart.data = {
+                            labels: data.labels,  // API-provided labels
+                            datasets: data.datasets.map((dataset) => {
+                                const datasetMaxValue = Math.max(...dataset.data);
+                                
+                                // If the dataset max value is smaller than the threshold, assign it to the secondary y-axis (y1)
+                                const isSmallDataset = datasetMaxValue <= threshold;
+
+                                return {
+                                    ...dataset,
+                                    yAxisID: isSmallDataset ? 'y1' : 'y',  // Use secondary axis for small datasets
+                                    borderWidth: 1,
+                                };
+                            })
+                        };
+
+                        myChart.update();  // Update the chart with the new data
+                    },
+                    error: function(error) {
+                        console.error("Error fetching chart data: ", error);
                     }
-                }, 'json')
+                })
             }
         }, 'json')
     }
