@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -17,14 +17,14 @@ class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function collection()
     {
-        return $this->data->map(function($item, $index) {
+        return $this->data->map(function ($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'nama_desa' => $item->nama_desa,
                 'nama_kecamatan' => $item->nama_kecamatan,
                 'nama_kabupaten' => $item->nama_kabupaten,
                 'nama_provinsi' => $item->nama_provinsi,
-                'kontak' => ($item->kontak['nama'] ?? '') . ' ' . ($item->kontak['hp'] ?? ''),
+                'kontak' => ($item->kontak['nama'] ?? '').' '.($item->kontak['hp'] ?? ''),
                 'url_hosting' => $item->url_hosting,
                 'versi_lokal' => $item->versi_lokal,
                 'versi_hosting' => $item->versi_hosting,

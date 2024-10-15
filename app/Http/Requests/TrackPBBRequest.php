@@ -49,7 +49,7 @@ class TrackPBBRequest extends FormRequest
             'url' => ['required', 'url', "not_regex:/{$this->listAbaikanDomain()}/"],
             'versi' => 'required',
         ];
-    }    
+    }
 
     /**
      * List abikan domain.
@@ -80,7 +80,7 @@ class TrackPBBRequest extends FormRequest
             'nama_kabupaten',
             'nama_provinsi',
             'url',
-            'versi',            
+            'versi',
         ]);
     }
 }
