@@ -127,8 +127,8 @@ if (! function_exists('lastrelease')) {
             $response = Http::withHeaders([
                 'Accept' => 'application/vnd.github.v3+json',
             ])
-            ->get($url)
-            ->throw();
+                ->get($url)
+                ->throw();
 
             return json_decode($response->body());
         } catch (Throwable $th) {
@@ -205,7 +205,7 @@ if (! function_exists('abaikan_domain')) {
      */
     function abaikan_domain($aplikasi)
     {
-        switch($aplikasi) {
+        switch ($aplikasi) {
             case 'opendk':
                 return Cache::get('abaikan_domain_opendk', '');
                 break;
@@ -412,5 +412,24 @@ if (! function_exists('local_date')) {
         $date->settings(['formatFunction' => 'translatedFormat']);
 
         return $date->format($format);
+    }
+}
+
+if (! function_exists('changeLogPermissions')) {
+    function changeLogPermissions($permissions = '777')
+    {
+        // Path ke folder logs
+        $logPath = storage_path('logs');
+
+        // Periksa apakah folder ada
+        if (is_dir($logPath)) {
+            // Ubah izin sesuai parameter
+            exec("chmod -R $permissions $logPath", $output, $returnVar);
+
+            // Cek hasil perintah
+            return $returnVar === 0;
+        }
+
+        return false;
     }
 }
