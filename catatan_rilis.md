@@ -5,6 +5,7 @@ Di rilis v2410.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Perbaikan Bug
 
 1. [#430](https://github.com/OpenSID/pantau/issues/430) Perbaikan permission file logging ketika backup otomatis.
+2. [#443](https://github.com/OpenSID/pantau/issues/443) Perbaikan simpan kordinat lat & lng kecamatan.
 
 #### Penyesuaian Teknis
 
