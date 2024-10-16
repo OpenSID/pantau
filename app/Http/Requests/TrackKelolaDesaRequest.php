@@ -66,7 +66,7 @@ class TrackKelolaDesaRequest extends FormRequest
             'id_device',
             'kode_desa',
             'tgl_akses',
-            'versi'
+            'versi',
         ]);
     }
 }

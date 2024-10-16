@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Wilayah;
 
+use App\Exports\WilayahKecamatanExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegionKecamatanRequest;
 use App\Models\Region;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\WilayahKecamatanExport;
+use Yajra\DataTables\DataTables;
 
 class KecamatanController extends Controller
 {
@@ -16,17 +16,19 @@ class KecamatanController extends Controller
     {
         $r = Region::with(['child'])->find(67);
 
-        if($request->excel){
-            $paramDatatable = json_decode($request->get('params'), 1);            
-            $request->merge($paramDatatable);            
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
         }
 
-        if ($request->ajax() || $request->excel) {                        
+        if ($request->ajax() || $request->excel) {
             $query = DataTables::of(Region::kecamatan());
-            if($request->excel){
+            if ($request->excel) {
                 $query->filtering();
-                return Excel::download(new WilayahKecamatanExport($query->results()), 'Wilayah-Kecamatan.xlsx');;
+
+                return Excel::download(new WilayahKecamatanExport($query->results()), 'Wilayah-Kecamatan.xlsx');
             }
+
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $edit = '<a href="'.url('kecamatan/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';

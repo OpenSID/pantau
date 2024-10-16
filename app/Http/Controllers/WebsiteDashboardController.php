@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
 use App\Models\Pbb;
-use Carbon\CarbonPeriod;
-use App\Models\TrackMobile;
-use Illuminate\Http\Request;
 use App\Models\TrackKeloladesa;
+use App\Models\TrackMobile;
 use App\Models\Wilayah;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -71,8 +71,8 @@ class WebsiteDashboardController extends Controller
         $layananWilayah = TrackMobile::where('created_at', '<=', $tanggalAkhir);
         $kelolaDesaWilayah = TrackKeloladesa::where('created_at', '<=', $tanggalAkhir);
         $versiTerakhirOpensid = collect();
-        if($versiOpensid){
-            $versiTerakhirOpensid = Desa::where(function($query) use ($versiOpensid){
+        if ($versiOpensid) {
+            $versiTerakhirOpensid = Desa::where(function ($query) use ($versiOpensid) {
                 return $query->where('versi_hosting', 'like', "{$versiOpensid}-premium%")
                     ->orWhere('versi_lokal', 'like', "{$versiOpensid}-premium%");
             });
@@ -113,10 +113,9 @@ class WebsiteDashboardController extends Controller
         $summareResult = $summary->first();
         $summarySebelumnyaResult = $summarySebelumnya->first();
         $totalVersiTerakhirOpensid = 0;
-        if($versiOpensid){
+        if ($versiOpensid) {
             $totalVersiTerakhirOpensid = $versiTerakhirOpensid->count();
         }
-        
 
         return response()->json([
             'total' => [
@@ -133,15 +132,15 @@ class WebsiteDashboardController extends Controller
                 'keloladesa' => $kelolaDesa ? $kelolaDesa->map(static fn ($q) => $q->desa->nama_desa)->toArray() : [],
             ],
             'additional' => [
-                'opensid' => ['install_versi_terakhir' =>  $totalVersiTerakhirOpensid]
+                'opensid' => ['install_versi_terakhir' => $totalVersiTerakhirOpensid],
             ],
             'summary' => [
                 'openkab' => $openkabWilayah->count(),
                 'opensid' => $opensidWilayah->count(),
                 'opendk' => $opendkWilayah->count(),
                 'layanandesa' => $layananWilayah->count(),
-                'keloladesa' => $kelolaDesaWilayah->count()
-            ]
+                'keloladesa' => $kelolaDesaWilayah->count(),
+            ],
         ]
         );
     }
@@ -245,7 +244,7 @@ class WebsiteDashboardController extends Controller
                 ['label' => 'KelolaDesa', 'data' => $kelolaData],
             ];
         }
-    
+
         $result = [
             'labels' => $labels,
             'datasets' => $datasets,
@@ -258,7 +257,7 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.layanandesa');
     }
-  
+
     public function openkab(Request $request)
     {
         if ($request->ajax()) {
@@ -277,19 +276,17 @@ class WebsiteDashboardController extends Controller
             $latestDesa = 'Belum ada data';
         }
 
-
         $openkab = Openkab::select('kode_prov', 'nama_prov', DB::raw('count(kode_kab) as jumlah_kab'))
             ->groupBy('kode_prov')
             ->get();
-        
+
         $provinsi = [];
-        
+
         foreach ($openkab as $kab) {
-            
             if (empty($kab->kode_prov)) {
                 continue; // Skip data dengan kode_prov kosong
             }
-            
+
             $total_kab = Wilayah::where('kode_prov', $kab->kode_prov)
                 ->groupBY('kode_kab')
                 ->get()
@@ -300,12 +297,12 @@ class WebsiteDashboardController extends Controller
             } else {
                 $persentase = round(($kab->jumlah_kab / $total_kab) * 100, 2);
             }
-        
+
             $provinsi[] = [
-                'kode_prov'  => $kab->kode_prov,
-                'nama_prov'  => $kab->nama_prov,
+                'kode_prov' => $kab->kode_prov,
+                'nama_prov' => $kab->nama_prov,
                 'jumlah_kab' => $kab->jumlah_kab,
-                'total_kab'  => $total_kab,
+                'total_kab' => $total_kab,
                 'persentase' => $persentase,
             ];
         }
@@ -320,8 +317,8 @@ class WebsiteDashboardController extends Controller
             'latestDesa' => $latestDesa,
             'provinsi' => $sortedProvinsi->values()->all(),
         ]);
-    }    
-    
+    }
+
     public function openkabData(Request $request)
     {
         return view('website.openkab_data');
@@ -341,7 +338,7 @@ class WebsiteDashboardController extends Controller
     {
         return view('website.pbb_data');
     }
-    
+
     public function opensid(Request $request)
     {
         $fillters = [
@@ -349,21 +346,22 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        $totalInstall = Desa::count(); 
+        $totalInstall = Desa::count();
         $totalInstallOnline = Desa::online()->count();
-        $installHariIni = Desa::whereDate('created_at', '>=',Carbon::now()->format('Y-m-d'))->get();
+        $installHariIni = Desa::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
+
         return view('website.opensid', [
             'fillters' => $fillters,
             'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
-            'installHariIni' => $installHariIni,                
+            'installHariIni' => $installHariIni,
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
             'pengguna_pbb' => Pbb::count(),
             'versi_pbb' => lastrelease_pbb(),
             'pengguna_anjungan' => Desa::anjungan()->count(),
-            'latestPremiumVersion' => 'v' . lastrelease_opensid() . '-premium',
-            'latestUmumVersion' => 'v' . lastrelease_opensid(),
+            'latestPremiumVersion' => 'v'.lastrelease_opensid().'-premium',
+            'latestUmumVersion' => 'v'.lastrelease_opensid(),
             'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
@@ -373,6 +371,7 @@ class WebsiteDashboardController extends Controller
         $fillters = [
             'aktif' => $request->aktif,
         ];
+
         return view('website.opensid_versi', compact('fillters'));
     }
 

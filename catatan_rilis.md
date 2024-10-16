@@ -1,15 +1,13 @@
 Di rilis v2410.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
-1. [#419](https://github.com/OpenSID/pantau/issues/419) Perbaikan halaman OpenDK.
-2. [#427](https://github.com/OpenSID/pantau/issues/427) Penambahan API pantau tema dan tampilkan data tema di pantau.
 
 #### Perbaikan Bug
 
-1. [#420](https://github.com/OpenSID/pantau/issues/420) Perbaikan route default pantau.
+1. [#430](https://github.com/OpenSID/pantau/issues/430) Perbaikan permission file logging ketika backup otomatis.
+2. [#443](https://github.com/OpenSID/pantau/issues/443) Perbaikan simpan kordinat lat & lng kecamatan.
 
 #### Penyesuaian Teknis
 
-1. [#429](https://github.com/OpenSID/pantau/issues/429) Perbaikan performa query datatable pengguna OpenSID.
-2. [#433](https://github.com/OpenSID/pantau/issues/433) Ijinkan akses web dashboard setelah login.
-3. [#422](https://github.com/OpenSID/pantau/issues/422) Mutahirkan daftar wilayah berdasarkan permendagri yang baru.
+1. [#437](https://github.com/OpenSID/pantau/issues/437) Menambah  file readme.md.
+2. [#440](https://github.com/OpenSID/pantau/issues/440) Penyesuaian statistik pada pantau agar terlihat lebih infografik.

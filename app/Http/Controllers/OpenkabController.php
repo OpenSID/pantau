@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Opendk;
-use GuzzleHttp\Client;
 use App\Models\Openkab;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
@@ -36,13 +35,13 @@ class OpenkabController extends Controller
 
     public function getWilayah()
     {
-        $url = config('layanan.uri') . '/api/v1/pelanggan/diskominfo';
+        $url = config('layanan.uri').'/api/v1/pelanggan/diskominfo';
         try {
             $client = new Client();
 
             $response = $client->request('GET', $url, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . config('layanan.token'),
+                    'Authorization' => 'Bearer '.config('layanan.token'),
                     'Accept' => 'application/json',
                 ],
             ]);
@@ -51,9 +50,10 @@ class OpenkabController extends Controller
             $data = json_decode($body, true);
             if (Openkab::upsert($data, ['kode_kab'])) {
                 return back()->with('success', 'Data Wilayah berhasil diperbarui');
-            }          
+            }
         } catch (\Exception $e) {
             report($e);
+
             return back()->with('error', 'Data Wilayah gagal diperbarui');
         }
     }
