@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Wilayah;
 
+use App\Exports\WilayahKabupatenExport;
 use App\Http\Controllers\Controller;
 use App\Models\Region;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\WilayahKabupatenExport;
+use Yajra\DataTables\DataTables;
 
 class KabupatenController extends Controller
 {
@@ -18,19 +18,21 @@ class KabupatenController extends Controller
 
     public function datatables(Request $request)
     {
-    if($request->excel){
-        $paramDatatable = json_decode($request->get('params'), 1);            
-        $request->merge($paramDatatable);            
-    }
-
-    if ($request->ajax() || $request->excel) {                        
-        $query = DataTables::of(Region::kabupaten());
-        if($request->excel){
-            $query->filtering();
-            return Excel::download(new WilayahKabupatenExport($query->results()), 'Wilayah-Kabupaten.xlsx');;
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
         }
-        return $query->addIndexColumn()
-                ->make(true);
+
+        if ($request->ajax() || $request->excel) {
+            $query = DataTables::of(Region::kabupaten());
+            if ($request->excel) {
+                $query->filtering();
+
+                return Excel::download(new WilayahKabupatenExport($query->results()), 'Wilayah-Kabupaten.xlsx');
+            }
+
+            return $query->addIndexColumn()
+                    ->make(true);
         }
 
         abort(404);

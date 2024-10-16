@@ -163,8 +163,8 @@ class Opendk extends Model
     public function scopeFilter($query, array $fillters)
     {
         return $query->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-                $query->where('kode_provinsi', $kode_provinsi);
-            })
+            $query->where('kode_provinsi', $kode_provinsi);
+        })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
                 $query->where('kode_kabupaten', $kode_kabupaten);
             })
