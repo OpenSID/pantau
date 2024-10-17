@@ -101,6 +101,7 @@
             },
             {
                 orderable: false,
+                searchable: false,
                 data: function (data) {
                         @auth
                             return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_mobile}</a>`
@@ -112,6 +113,7 @@
             },
             {
                 orderable: false,
+                searchable: false,
                 data: function (data) {
                         @auth
                             return `<a target="_blank" href="{{ url('mobile/pengguna_kelola_desa') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_keloladesa}</a>`

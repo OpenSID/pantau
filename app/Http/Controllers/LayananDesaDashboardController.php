@@ -18,7 +18,8 @@ class LayananDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=',Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+
         return view('website.layanandesa.index', [
             'fillters' => $fillters,
             'total_versi' => 2,
@@ -28,7 +29,7 @@ class LayananDesaDashboardController extends Controller
             'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir,
             'total_versi' => TrackMobile::distinct('versi')->count(),
             'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),
-            'installHariIni' => $installHariIni
+            'installHariIni' => $installHariIni,
         ]);
     }
 
@@ -38,7 +39,7 @@ class LayananDesaDashboardController extends Controller
     }
 
     public function versi(Request $request)
-    {     
+    {
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -46,7 +47,7 @@ class LayananDesaDashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(TrackMobile::groupBy('versi')->selectRaw('versi, count(*) as jumlah'))                
+            return DataTables::of(TrackMobile::groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -55,16 +56,17 @@ class LayananDesaDashboardController extends Controller
     }
 
     public function versi_detail(Request $request)
-    {                
+    {
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        
+
         if ($request->ajax()) {
             $versi = $request->versi;
-            return DataTables::of(TrackMobile::filter($fillters)->when($versi, static fn($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
+
+            return DataTables::of(TrackMobile::filter($fillters)->when($versi, static fn ($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -73,14 +75,14 @@ class LayananDesaDashboardController extends Controller
     }
 
     public function install_baru(Request $request)
-    {        
+    {
         if ($request->ajax()) {
             return DataTables::of(TrackMobile::with('desa')->whereDate('created_at', '>=', Carbon::now()->subDays(7)))
-                ->editColumn('updated_at', static fn($q) => $q->updated_at->translatedFormat('j F Y H:i'))
+                ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
-        }        
-    }    
+        }
+    }
 
     public function summary(Request $request)
     {
@@ -88,16 +90,16 @@ class LayananDesaDashboardController extends Controller
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
-        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function($q){
+        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
             return $q->selectRaw('distinct kode_desa')->from('track_mobile');
         });
-        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function($q){
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
             return $q->selectRaw('distinct kode_desa')->from('track_mobile');
         });
 
         $tanggalAkhir = explode(' - ', $period)[1];
         $summary->where('created_at', '<=', $tanggalAkhir);
-        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));            
+        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
 
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
@@ -120,8 +122,8 @@ class LayananDesaDashboardController extends Controller
                 'kabupaten' => ['total' => $summareResult->kabupaten, 'pertumbuhan' => $summareResult->kabupaten - $summarySebelumnyaResult->kabupaten],
                 'kecamatan' => ['total' => $summareResult->kecamatan, 'pertumbuhan' => $summareResult->kecamatan - $summarySebelumnyaResult->kecamatan],
                 'desa' => ['total' => $summareResult->desa, 'pertumbuhan' => $summareResult->desa - $summarySebelumnyaResult->desa],
-            ],            
-            ]
+            ],
+        ]
         );
     }
 
@@ -131,46 +133,46 @@ class LayananDesaDashboardController extends Controller
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
-                'kode_kecamatan' => $request->kode_kecamatan,  
+                'kode_kecamatan' => $request->kode_kecamatan,
                 'status' => null,
                 'akses' => null,
                 'versi_lokal' => null,
                 'versi_hosting' => null,
-                'tte' => null,              
+                'tte' => null,
             ];
 
             $geoJSONdata = Desa::fillter($fillters)
                 ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
                 ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
                 ->whereRaw('lat BETWEEN -10 AND 6')
-                ->whereRaw('lng BETWEEN 95 AND 142')                
+                ->whereRaw('lng BETWEEN 95 AND 142')
                 ->where(function ($query) {
                     $query
                     ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                     ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
-                })                
-                ->whereIn('kode_desa', function($q){
+                })
+                ->whereIn('kode_desa', function ($q) {
                     return $q->selectRaw('distinct kode_desa')->from('track_mobile');
                 })->orderBy('kode_desa', 'ASC')->get()->map(function ($desa) {
-                return [
-                    'type' => 'Feature',
-                    'geometry' => [
-                        'type' => 'Point',
-                        'coordinates' => [
-                            (float) $desa->lng,
-                            (float) $desa->lat,
+                    return [
+                        'type' => 'Feature',
+                        'geometry' => [
+                            'type' => 'Point',
+                            'coordinates' => [
+                                (float) $desa->lng,
+                                (float) $desa->lat,
+                            ],
                         ],
-                    ],
-                    'properties' => $this->properties($desa),
-                    'id' => $desa->id,
-                ];
-            });
+                        'properties' => $this->properties($desa),
+                        'id' => $desa->id,
+                    ];
+                });
 
             return response()->json([
                 'type' => 'FeatureCollection',
                 'features' => $geoJSONdata,
             ]);
-        }        
+        }
     }
 
     private function properties($desa)

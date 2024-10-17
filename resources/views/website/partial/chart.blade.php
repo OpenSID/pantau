@@ -25,11 +25,14 @@
 </div>
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>    
+<script>
     const ctx = document.getElementById('myChart');
     const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {},
+        type: 'bar',
+        data: {
+            labels: [],  // Will be populated dynamically
+            datasets: [] // Will be populated dynamically
+        },
         options: {
             layout: {
                 padding: 5
@@ -46,14 +49,22 @@
                     }
                 },
                 y: {
+                    beginAtZero: true,
                     ticks: {
-                        padding: 5
+                        padding: 5,
+                    }
+                },
+                y1: {  // Secondary y-axis for smaller datasets
+                    position: 'right',
+                    beginAtZero: true,
+                    ticks: {
+                        padding: 5,
                     }
                 }
-            }
-        },
-        responsive: true,
-        maintainAspectRatio: false
-    });    
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
 </script>
 @endpush

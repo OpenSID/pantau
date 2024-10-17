@@ -18,12 +18,13 @@ class OpenDKDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_opendk();
-        $installHariIni = Opendk::whereDate('created_at', '>=',Carbon::now()->format('Y-m-d'))->get();
+        $installHariIni = Opendk::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
+
         return view('website.opendk.index', [
-            'fillters' => $fillters,            
+            'fillters' => $fillters,
             'total_desa' => format_angka(Desa::count()),
-            'pengguna_opendk' => Opendk::count(),            
-            'info_rilis' => 'Rilis OpenDK '.$versiTerakhir,            
+            'pengguna_opendk' => Opendk::count(),
+            'info_rilis' => 'Rilis OpenDK '.$versiTerakhir,
             'installHariIni' => $installHariIni,
             'provinsi_pengguna_opendk' => Opendk::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
         ]);
@@ -35,7 +36,7 @@ class OpenDKDashboardController extends Controller
     }
 
     public function versi(Request $request)
-    {     
+    {
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -43,7 +44,7 @@ class OpenDKDashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(Opendk::filter($fillters)->groupBy('versi')->selectRaw('versi, count(*) as jumlah'))                
+            return DataTables::of(Opendk::filter($fillters)->groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -52,17 +53,18 @@ class OpenDKDashboardController extends Controller
     }
 
     public function versi_detail(Request $request)
-    {                
+    {
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        
+
         if ($request->ajax()) {
             $versi = $request->versi;
-            return DataTables::of(Opendk::filter($fillters)->when($versi, static fn($q) => $q->where('versi', $versi)))
-                ->editColumn('updated_at', static fn($q) => $q->updated_at->translatedFormat('Y-m-d H:i:s'))
+
+            return DataTables::of(Opendk::filter($fillters)->when($versi, static fn ($q) => $q->where('versi', $versi)))
+                ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('Y-m-d H:i:s'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -71,14 +73,14 @@ class OpenDKDashboardController extends Controller
     }
 
     public function install_baru(Request $request)
-    {        
+    {
         if ($request->ajax()) {
             return DataTables::of(Opendk::whereDate('created_at', '>=', Carbon::now()->subDays(7)))
-                ->editColumn('created_at', static fn($q) => $q->created_at->translatedFormat('j F Y H:i'))
+                ->editColumn('created_at', static fn ($q) => $q->created_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
-        }        
-    }    
+        }
+    }
 
     public function peta(Request $request)
     {
@@ -86,38 +88,38 @@ class OpenDKDashboardController extends Controller
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
-                'kode_kecamatan' => $request->kode_kecamatan                
+                'kode_kecamatan' => $request->kode_kecamatan,
             ];
-            // 
+            //
             $geoJSONdata = Opendk::filter($fillters)
                 ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
                 ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
                 ->whereRaw('lat BETWEEN -10 AND 6')
-                ->whereRaw('lng BETWEEN 95 AND 142')                
+                ->whereRaw('lng BETWEEN 95 AND 142')
                 ->where(function ($query) {
                     $query
                     ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                     ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
                 })->orderBy('kode_kecamatan', 'ASC')->get()->map(function ($kecamatan) {
-                return [
-                    'type' => 'Feature',
-                    'geometry' => [
-                        'type' => 'Point',
-                        'coordinates' => [
-                            (float) $kecamatan->lng,
-                            (float) $kecamatan->lat,
+                    return [
+                        'type' => 'Feature',
+                        'geometry' => [
+                            'type' => 'Point',
+                            'coordinates' => [
+                                (float) $kecamatan->lng,
+                                (float) $kecamatan->lat,
+                            ],
                         ],
-                    ],
-                    'properties' => $this->properties($kecamatan),
-                    'id' => $kecamatan->id,
-                ];
-            });
+                        'properties' => $this->properties($kecamatan),
+                        'id' => $kecamatan->id,
+                    ];
+                });
 
             return response()->json([
                 'type' => 'FeatureCollection',
                 'features' => $geoJSONdata,
             ]);
-        }        
+        }
     }
 
     private function properties(Opendk $kecamatan)
