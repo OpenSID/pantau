@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PbbController;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\AksesController;
@@ -9,7 +10,6 @@ use App\Http\Middleware\PantauMiddleware;
 use App\Http\Controllers\MobileController;
 use App\Http\Controllers\OpendkController;
 use App\Http\Controllers\PantauController;
-use App\Http\Controllers\PbbController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
@@ -18,17 +18,18 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanTemaController;
+use App\Http\Controllers\OpenDKDashboardController;
+use App\Http\Controllers\LaporanDesaAktifController;
+use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
+use App\Http\Controllers\KelolaDesaDashboardController;
+use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
-use App\Http\Controllers\KelolaDesaDashboardController;
-use App\Http\Controllers\LaporanDesaAktifController;
-use App\Http\Controllers\LayananDesaDashboardController;
-use App\Http\Controllers\OpenDKDashboardController;
-use App\Http\Controllers\LaporanTemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,7 @@ Route::group(['middleware' => 'web.dashboard'],function(){
     Route::prefix('web')->group(function(){
         Route::get('', [WebsiteDashboardController::class, 'index']);
         Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
+        Route::get('openkab/peta', [OpenKabDashboardController::class, 'peta']);
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
