@@ -44,6 +44,10 @@
             
         });
 
+        $.extend($.fn.dataTable.defaults, {
+            language: { url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/id.json" }
+        });
+
         function filter_open () {
             if ($('a[href="#collapse-filter"]').attr('aria-expanded') == 'false') {
                 $('a[href="#collapse-filter"]').trigger('click')
