@@ -52,6 +52,8 @@ class BackupDatabaseStorage extends Command
             $this->folder_database = folderBackupDatabase();
             $this->backupDatabase();
             $this->backupStorage();
+
+            changeLogPermissions('777');
         }
     }
 

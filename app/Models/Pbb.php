@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Pbb extends Model
 {
     use HasFactory;
-    
+
     const ACTIVE_DAYS = 7;
-    
+
     /** {@inheritdoc} */
     protected $table = 'pbb';
 
