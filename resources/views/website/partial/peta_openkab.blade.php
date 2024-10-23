@@ -80,6 +80,41 @@
             function onEachFeature(feature, layer) {
                 layer.bindPopup(feature.properties.popupContent);
             }
+
+            loadData();
+
+            function loadData() {
+                $.ajax({
+                    url: "{{ url('web/openkab/peta') }}",
+                    contentType: "application/json; charset=utf-8",
+                    cache: false,
+                    dataType: "json",
+                    responseType: "json",
+                    success: function(response) {
+
+                        // Buat Marker Cluster Group
+                        markersBar = L.markerClusterGroup();
+
+                        // Simpan Data geoJSON
+                        barLayer = new L.geoJSON(response, {
+                            pointToLayer: function(feature, latlng) {
+                                return L.marker(latlng, {
+                                    icon: baseballIcon
+                                });
+                            },
+
+                            onEachFeature: onEachFeature
+                        });
+
+                        // Tambahkan Marker dan Marker Cluster Group pada Map
+                        markersBar.addLayer(barLayer);
+                        map.addLayer(markersBar);
+                    },
+                    error: function() {
+                        alert('Gagal mengambil data');
+                    },
+                });
+            }
         });
     </script>
 @endsection
