@@ -33,7 +33,7 @@ class WebsiteDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
 
-        $wilayah = Openkab::count() > 0 ? Openkab::withCount('wilayah')->get() : [];
+        $wilayah = Openkab::count() > 0 ? Openkab::withCount(['desa', 'wilayah'])->get() : [];
 
         return view('website.dashboard', [
             'fillters' => $fillters,
