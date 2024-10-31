@@ -106,6 +106,8 @@ class TrackOpendkRequest extends FormRequest
             'alamat',
             'jumlahdesa_sinkronisasi',
             'nama_camat',
+            'lat',
+            'lng',
         ]);
     }
 

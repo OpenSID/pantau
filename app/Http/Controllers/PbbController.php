@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pbb;
-use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Yajra\DataTables\Facades\DataTables;
@@ -39,9 +38,9 @@ class PbbController extends Controller
 
     public function kecamatan(Request $request)
     {
-        if($request->excel){
-            $paramDatatable = json_decode($request->get('params'), 1);            
-            $request->merge($paramDatatable);            
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
         }
 
         $fillters = [
@@ -52,9 +51,9 @@ class PbbController extends Controller
         ];
 
         $listVersi = $this->getListVersion();
-        if ($request->ajax() || $request->excel) {                        
+        if ($request->ajax() || $request->excel) {
             $query = DataTables::of(Pbb::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
-            
+
             return $query->addIndexColumn()
             ->addColumn('action', function ($data) {
                 $delete = '<button data-href="'.url('pbb/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
@@ -62,7 +61,7 @@ class PbbController extends Controller
                 return '<div class="btn btn-group">'.$delete.'</div>';
             })
             ->rawColumns(['action'])
-            ->make(true);  
+            ->make(true);
         }
 
         return view($this->baseView.'.kecamatan', compact('fillters', 'listVersi'));
@@ -96,7 +95,7 @@ class PbbController extends Controller
             return $item->versi;
         })->values()->all();
     }
-    
+
     public function deleteDesa(Pbb $desa)
     {
         if ($desa->delete()) {
