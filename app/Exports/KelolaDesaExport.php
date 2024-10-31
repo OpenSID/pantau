@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class KelolaDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -17,7 +17,7 @@ class KelolaDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function collection()
     {
-        return $this->data->map(function($item, $index) {
+        return $this->data->map(function ($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'id_device' => $item->id_device,
@@ -39,7 +39,7 @@ class KelolaDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Desa',
             'Kecamatan',
             'Kabupaten',
-            'Provinsi'
+            'Provinsi',
         ];
     }
 }

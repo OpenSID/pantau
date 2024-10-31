@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OpenDKExport;
 use App\Models\Opendk;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\OpenDKExport;
+use Yajra\DataTables\Facades\DataTables;
 
 class OpendkController extends Controller
 {
@@ -72,9 +72,9 @@ class OpendkController extends Controller
 
     public function kecamatan(Request $request)
     {
-        if($request->excel){
-            $paramDatatable = json_decode($request->get('params'), 1);            
-            $request->merge($paramDatatable);            
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
         }
 
         $fillters = [
@@ -85,12 +85,14 @@ class OpendkController extends Controller
         ];
 
         $listVersi = $this->getListVersion();
-        if ($request->ajax() || $request->excel) {                        
+        if ($request->ajax() || $request->excel) {
             $query = DataTables::of(Opendk::wilayahkhusus()->kecamatan($request)->selectRaw('updated_at as format_updated_at'));
-            if($request->excel){
+            if ($request->excel) {
                 $query->filtering();
-                return Excel::download(new OpenDKExport($query->results()), 'Desa-yang-memasang-OpenDK.xlsx');;
+
+                return Excel::download(new OpenDKExport($query->results()), 'Desa-yang-memasang-OpenDK.xlsx');
             }
+
             return $query->addIndexColumn()
                 ->make(true);
         }

@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class WilayahProvinsiExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -17,7 +17,7 @@ class WilayahProvinsiExport implements FromCollection, WithHeadings, ShouldAutoS
 
     public function collection()
     {
-        return $this->data->map(function($item, $index) {
+        return $this->data->map(function ($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'kode_provinsi' => $item->kode_provinsi,

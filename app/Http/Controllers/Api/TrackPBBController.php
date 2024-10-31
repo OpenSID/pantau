@@ -13,7 +13,7 @@ class TrackPBBController extends Controller
     public function __invoke(TrackPBBRequest $request)
     {
         try {
-            Pbb::upsert($request->requestData(),['kode_desa']);
+            Pbb::upsert($request->requestData(), ['kode_desa']);
 
             return response()->json(['status' => true]);
         } catch (Exception $e) {

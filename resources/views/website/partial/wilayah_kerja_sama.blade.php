@@ -8,8 +8,8 @@
                       <div class="card-body">
                           <p class="card-text m-0 text-blue">{{ $item->nama_wilayah }}</p>
                           <p class="card-text m-0">OpenSID</p>
-                          <p class="card-text m-0">Terpasang: {{ $item->jumlah_desa }}</p>
-                          <p class="card-text m-0">Belum Terpasang: {{ $item->wilayah_count - $item->jumlah_desa }}</p>
+                          <p class="card-text m-0">Terpasang: {{ $item->desa_count }}</p>
+                          <p class="card-text m-0">Belum Terpasang: {{ $item->wilayah_count - $item->desa_count }}</p>
                       </div>
                   </div>
               </div>
