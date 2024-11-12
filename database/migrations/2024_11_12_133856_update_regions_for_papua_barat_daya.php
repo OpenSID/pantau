@@ -33,10 +33,9 @@ return new class extends Migration
 
         foreach ($provinsi as $prov) {
             DB::table('tbl_regions')
-                ->where('region_code', 'like', "{$prov}%")
+                ->where('region_code', $prov)
                 ->update([
-                    'region_code' => DB::raw("REPLACE(region_code, '92', '96')"),
-                    'parent_code' => DB::raw("REPLACE(parent_code, '92', '96')"),
+                    'parent_code' => '96',
                     'updated_at'  => now()
                 ]);
         }
@@ -64,10 +63,9 @@ return new class extends Migration
 
         foreach ($provinsi as $prov) {
             DB::table('tbl_regions')
-                ->where('region_code', 'like', "{$prov}%")
+                ->where('region_code', $prov)
                 ->update([
-                    'region_code' => DB::raw("REPLACE(region_code, '96', '92')"),
-                    'parent_code' => DB::raw("REPLACE(parent_code, '96', '92')")
+                    'parent_code' => '92'
                 ]);
         }
     }
