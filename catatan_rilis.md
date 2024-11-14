@@ -9,3 +9,4 @@ Di rilis v2410.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#458](https://github.com/OpenSID/pantau/issues/458) Mutahirkan daftar wilayah Papua Barat Daya.
