@@ -1,17 +1,12 @@
 Di rilis v2411.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
+1. [#362](https://github.com/OpenSID/OpenKab/issues/362) Penambahan halaman statistik untuk stunting pada halaman public.
 
 #### Perbaikan Bug
 
-1. [#430](https://github.com/OpenSID/pantau/issues/430) Perbaikan permission file logging ketika backup otomatis.
-2. [#443](https://github.com/OpenSID/pantau/issues/443) Perbaikan simpan kordinat lat & lng kecamatan.
-3. [#447](https://github.com/OpenSID/pantau/issues/447) Perbaikan pencarian pada halaman LayananDesa.
-4. [#442](https://github.com/OpenSID/pantau/issues/442) Perbaikan fitur lokasi map kabupaten pengguna.
-5. [#441](https://github.com/OpenSID/pantau/issues/441) Perbaikan cek kesesuaian data pada dabor saat ini masih belum valid karena data yang terpasang pada dasbor masih 0.
+
 
 #### Penyesuaian Teknis
 
-1. [#437](https://github.com/OpenSID/pantau/issues/437) Menambah  file readme.md.
-2. [#440](https://github.com/OpenSID/pantau/issues/440) Penyesuaian statistik pada pantau agar terlihat lebih infografik.
-3. [#448](https://github.com/OpenSID/pantau/issues/448) Penyesuaian informasi datatable.
+1. [#458](https://github.com/OpenSID/pantau/issues/458) Mutahirkan daftar wilayah Papua Barat Daya.
