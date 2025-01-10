@@ -26,7 +26,7 @@ class PetaPeriodController extends Controller
                 'tte' => $request->tte,
             ];
 
-            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->whereBetween('created_at',[$tanggalAwal, $tanggalAkhir])->get()->map(function ($desa) {
+            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->whereBetween('created_at',[$tanggalAwal.' 00:00:00', $tanggalAkhir.' 23:59:59'])->get()->map(function ($desa) {
                 return [
                     'type' => 'Feature',
                     'geometry' => [
