@@ -12,6 +12,7 @@ class PetaPeriodController extends Controller
     {
         if ($request->ajax()) {
             $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+            $tanggalAwal = explode(' - ', $period)[0];
             $tanggalAkhir = explode(' - ', $period)[1];
             
             $fillters = [
@@ -25,7 +26,7 @@ class PetaPeriodController extends Controller
                 'tte' => $request->tte,
             ];
 
-            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->where('created_at','<=', $tanggalAkhir)->get()->map(function ($desa) {
+            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->whereBetween('created_at',[$tanggalAwal, $tanggalAkhir])->get()->map(function ($desa) {
                 return [
                     'type' => 'Feature',
                     'geometry' => [

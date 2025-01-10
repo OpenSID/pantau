@@ -20,7 +20,7 @@
 }
 </style>
 @endpush
-
+<div class="bg-blue p-2 text-bold"><h5>Sebaran Pengguna Baru OpenSID Periode <span id="judul_range_periode"></span></h5></div>
 <div id="map"></div>
 
 @section('js')
@@ -101,6 +101,8 @@
                 var kode_kabupaten = $('#kabupaten').val();
                 var kode_kecamatan = $('#kecamatan').val();
                 var period = $('input[name=periods]').val();
+                $('#judul_range_periode').html(period);
+                
                 map.removeLayer(markersBar);
                 loadData(kode_provinsi, kode_kabupaten, kode_kecamatan, period);
             }
@@ -144,6 +146,8 @@
                     },
                 });
             }
+
+            $('input[name=periods]').trigger('change');
         });
     </script>
 @endsection
