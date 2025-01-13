@@ -287,8 +287,7 @@ class DashboardController extends Controller
             return $marker;
         });
 
-    return response()->json($markers);
-
+        return response()->json($markers);
 
         // Mengembalikan data sebagai response JSON
         return response()->json($markers);
