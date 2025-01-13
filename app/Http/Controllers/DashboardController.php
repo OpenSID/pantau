@@ -281,11 +281,14 @@ class DashboardController extends Controller
 
     public function dataPeta()
     {
-        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->get()->map(function ($marker) {
+        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->whereNotNullLatLng()->get()->map(function ($marker) {
             $marker->color = 'default';
 
             return $marker;
         });
+
+    return response()->json($markers);
+
 
         // Mengembalikan data sebagai response JSON
         return response()->json($markers);

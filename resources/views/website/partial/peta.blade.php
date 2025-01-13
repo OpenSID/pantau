@@ -122,25 +122,80 @@
         layerControl.addBaseLayer(satellite, 'Satellite');
 
         // Ubah icon
-        var iconUrl = "{{ url('assets/img/opensid_logo.png') }}";
+        // var iconUrl = "{{ url('assets/img/opensid_logo.png') }}";
+
+        // function createIcon(color) {
+        //     return L.icon({
+        //         iconUrl: iconUrl,
+        //         iconSize: [20, 20],
+        //         iconAnchor: [10, 10],
+        //         popupAnchor: [0, -10],
+        //         className: color
+        //     });
+        // }
+
+        // Mendapatkan data marker dari API Laravel
+        // $.getJSON('/web/data-peta', function(data) {
+        //     data.forEach(function(marker) {
+        //         L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
+        //             .bindPopup(marker.popup);
+        //     });
+        // });
+
+        var iconUrl = "{{ asset('assets/img/opensid_logo.png') }}";
 
         function createIcon(color) {
             return L.icon({
-                iconUrl: iconUrl,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10],
-                popupAnchor: [0, -10],
-                className: color
+                iconUrl: iconUrl, // URL gambar ikon
+                iconSize: [20, 20], // Ukuran ikon
+                iconAnchor: [10, 10], // Titik jangkar ikon
+                popupAnchor: [0, -10], // Titik jangkar popup
+                className: `marker-icon-${color}` // Tambahkan kelas CSS opsional
             });
         }
 
-        // Mendapatkan data marker dari API Laravel
-        $.getJSON('/web/data-peta', function(data) {
-            data.forEach(function(marker) {
-                L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
-                    .bindPopup(marker.popup);
+        function loadData() {
+            $.ajax({
+                url: "{{ url('web/data-peta') }}",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                dataType: "json",
+                success: function(response) {
+                    // Buat Marker Cluster Group
+                    let markersBar = L.markerClusterGroup();
+
+                    response.forEach(function(marker) {
+                        if (!isValidCoordinate(marker.lat) || !isValidCoordinate(marker.lng)) {
+                            // console.warn("Invalid coordinate skipped:", marker);
+                            return;
+                        }
+
+                        let latlng = [parseFloat(marker.lat), parseFloat(marker.lng)];
+                        let popupContent = marker.popup || "No Address";
+
+                        let icon = createIcon(marker.color || 'blue'); // Warna default jika kosong
+
+                        let leafletMarker = L.marker(latlng, { icon: icon })
+                            .bindPopup(popupContent);
+
+                        markersBar.addLayer(leafletMarker);
+                    });
+
+                    // Tambahkan Marker Cluster Group ke Map
+                    map.addLayer(markersBar);
+                },
+                error: function() {
+                    alert('Gagal mengambil data');
+                },
             });
-        });
+        }
+
+        function isValidCoordinate(value) {
+            return !isNaN(value) && value !== null && value !== '' && parseFloat(value) <= 180 && parseFloat(value) >= -180;
+        }
+
+        loadData();
+
     });
 </script>
 @endsection
