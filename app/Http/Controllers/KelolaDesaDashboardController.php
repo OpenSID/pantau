@@ -84,7 +84,6 @@ class KelolaDesaDashboardController extends Controller
         }
     }
 
-
     public function summary(Request $request)
     {
         $provinsi = $request->get('provinsi');
@@ -111,7 +110,7 @@ class KelolaDesaDashboardController extends Controller
             }
         });
 
-        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use($request) {
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use ($request) {
             $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
 
             if ($request->period) {
@@ -120,7 +119,7 @@ class KelolaDesaDashboardController extends Controller
                     // Kurangi satu bulan dari setiap tanggal
                     $startDate = Carbon::parse($dates[0])->subMonth()->format('Y-m-d');
                     $endDate = Carbon::parse($dates[1])->subMonth()->format('Y-m-d');
-            
+
                     // Jika periode mencakup rentang tanggal
                     if ($dates[0] !== $dates[1]) {
                         $q->whereBetween('created_at', [$startDate, $endDate]);
@@ -130,7 +129,6 @@ class KelolaDesaDashboardController extends Controller
                     }
                 }
             }
-
         });
 
         if ($provinsi) {
@@ -184,7 +182,7 @@ class KelolaDesaDashboardController extends Controller
                     ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                     ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
                 })
-                ->whereIn('kode_desa', function ($q) use($request){
+                ->whereIn('kode_desa', function ($q) use ($request) {
                     $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
 
                     if ($request->period) {
@@ -199,7 +197,6 @@ class KelolaDesaDashboardController extends Controller
                             }
                         }
                     }
-
                 })->orderBy('kode_desa', 'ASC')->get()->map(function ($desa) {
                     return [
                         'type' => 'Feature',

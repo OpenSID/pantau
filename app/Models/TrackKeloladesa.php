@@ -49,8 +49,7 @@ class TrackKeloladesa extends Model
 
     protected function scopeFilter($query, $request)
     {
-        if(isset($request['period']))
-        {
+        if (isset($request['period'])) {
             $query->when($request->period ?? false, function ($subQuery) use ($request) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
