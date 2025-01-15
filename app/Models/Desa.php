@@ -388,6 +388,11 @@ class Desa extends Model
         });
     }
 
+    public function scopeWhereNotNullLatLng($query)
+    {
+        return $query->whereNotNull('lat')->whereNotNull('lng');
+    }
+
     public function scopeOnline($query)
     {
         return $query->where('versi_hosting', '!=', '');
