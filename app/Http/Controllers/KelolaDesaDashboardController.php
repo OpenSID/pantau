@@ -77,29 +77,61 @@ class KelolaDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::with('desa')->whereDate('created_at', '>=', Carbon::now()->subDays(7)))
+            return DataTables::of(TrackKeloladesa::with('desa')->filter($request))
                 ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
         }
     }
 
+
     public function summary(Request $request)
     {
-        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
-        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
-            return $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
-        });
-        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
-            return $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
+
+        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')
+        ->whereIn('kode_desa', function ($q) use ($request) {
+            $q->selectRaw('distinct kode_desa')
+                ->from('track_keloladesa');
+
+            // Menambahkan filter created_at pada subquery
+            if ($request->period) {
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    // Jika periode mencakup rentang tanggal
+                    if ($dates[0] !== $dates[1]) {
+                        $q->whereBetween('created_at', [$dates[0], $dates[1]]);
+                    } else {
+                        // Jika hanya satu tanggal
+                        $q->whereDate('created_at', '=', $dates[0]);
+                    }
+                }
+            }
         });
 
-        $tanggalAkhir = explode(' - ', $period)[1];
-        $summary->where('created_at', '<=', $tanggalAkhir);
-        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use($request) {
+            $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
+
+            if ($request->period) {
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    // Kurangi satu bulan dari setiap tanggal
+                    $startDate = Carbon::parse($dates[0])->subMonth()->format('Y-m-d');
+                    $endDate = Carbon::parse($dates[1])->subMonth()->format('Y-m-d');
+            
+                    // Jika periode mencakup rentang tanggal
+                    if ($dates[0] !== $dates[1]) {
+                        $q->whereBetween('created_at', [$startDate, $endDate]);
+                    } else {
+                        // Jika hanya satu tanggal
+                        $q->whereDate('created_at', '=', $startDate);
+                    }
+                }
+            }
+
+        });
 
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
@@ -135,6 +167,7 @@ class KelolaDesaDashboardController extends Controller
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
                 'status' => null,
+                'period' => $request->period,
                 'akses' => null,
                 'versi_lokal' => null,
                 'versi_hosting' => null,
@@ -151,8 +184,22 @@ class KelolaDesaDashboardController extends Controller
                     ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                     ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
                 })
-                ->whereIn('kode_desa', function ($q) {
-                    return $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
+                ->whereIn('kode_desa', function ($q) use($request){
+                    $q->selectRaw('distinct kode_desa')->from('track_keloladesa');
+
+                    if ($request->period) {
+                        $dates = explode(' - ', $request->period);
+                        if (count($dates) === 2) {
+                            // Jika periode mencakup rentang tanggal
+                            if ($dates[0] !== $dates[1]) {
+                                $q->whereBetween('created_at', [$dates[0], $dates[1]]);
+                            } else {
+                                // Jika hanya satu tanggal
+                                $q->whereDate('created_at', '=', $dates[0]);
+                            }
+                        }
+                    }
+
                 })->orderBy('kode_desa', 'ASC')->get()->map(function ($desa) {
                     return [
                         'type' => 'Feature',
