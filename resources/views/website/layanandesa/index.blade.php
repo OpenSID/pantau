@@ -33,7 +33,7 @@
                                         <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                     </div>
                                     <input type="text" name="periods" class="form-control datepicker"
-                                        data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
+                                        data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false,"autoUpdateInput" => false, "singleDatePicker" =>false])) !!}'
                                         autocomplete="off">
                                 </div>
                             </div>
@@ -99,10 +99,7 @@
     </div>
     <div class="card-body">
         <div class="row mt-3">
-            <div class="col-lg-8">
-                <b>
-                    Daftar Pengguna LayananDesa 7 Hari Terakhir
-                </b>
+            <div class="col-lg-8">                
                 @include('website.layanandesa.tabel')
             </div>
             <div class="col-lg-4">
@@ -126,6 +123,16 @@
         const _options = $(this).data('option')
         $(this).daterangepicker(_options)
     })
+
+    $('input[name="periods"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('{{ config('local.daterangepicker.locale.format') }}') + ' - ' + picker.endDate.format('{{ config('local.daterangepicker.locale.format') }}'));
+      $(this).trigger('change')
+  });
+
+  $('input[name="periods"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+      $(this).trigger('change')
+  });
 
     function updateData() {
         const params = {

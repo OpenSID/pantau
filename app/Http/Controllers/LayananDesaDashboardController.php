@@ -18,11 +18,10 @@ class LayananDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 
         return view('website.layanandesa.index', [
-            'fillters' => $fillters,
-            'total_versi' => 2,
+            'fillters' => $fillters,            
             'total_desa' => format_angka(Desa::count()),
             'pengguna_layanan_desa' => TrackMobile::distinct('kode_desa')->count(),
             'versi_terakhir' => $versiTerakhir,
@@ -77,7 +76,16 @@ class LayananDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(TrackMobile::with('desa')->whereDate('created_at', '>=', Carbon::now()->subDays(7)))
+            $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+            $fillters = [
+                'kode_provinsi' => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+            ];
+            $tanggalPeriod = explode(' - ', $period);
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
+            return DataTables::of(TrackMobile::filter($fillters)->with('desa')->whereBetween('track_mobile.created_at', [$tanggalAwal, $tanggalAkhir]))
                 ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
@@ -86,20 +94,29 @@ class LayananDesaDashboardController extends Controller
 
     public function summary(Request $request)
     {
-        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+        $periodUser = $request->get('period');
+        $period = $request->get('period') ?? '1970-01-01'.' - '.Carbon::now()->format('Y-m-d');
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
-        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
-            return $q->selectRaw('distinct kode_desa')->from('track_mobile');
+        $tanggalPeriod = explode(' - ', $period);
+        $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+        $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';        
+        $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use($tanggalAwal, $tanggalAkhir) {
+            return $q->selectRaw('distinct kode_desa')->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->from('track_mobile');
         });
-        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) {
-            return $q->selectRaw('distinct kode_desa')->from('track_mobile');
-        });
-
-        $tanggalAkhir = explode(' - ', $period)[1];
-        $summary->where('created_at', '<=', $tanggalAkhir);
-        $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
+        if(!$periodUser){
+            $tanggalAwalSebelumnya = $tanggalAwal;
+            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d').' 23:59:59';    
+        }else {
+            $intervalDay = Carbon::parse($tanggalAkhir)->diffInDays(Carbon::parse($tanggalAwal));
+            $tanggalAwalSebelumnya = Carbon::parse($tanggalAwal)->subDays($intervalDay)->format('Y-m-d').' 00:00:00';
+            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAwal)->subDay()->format('Y-m-d').' 23:59:59';
+        }
+                
+        $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use($tanggalAwalSebelumnya, $tanggalAkhirSebelumnya) {
+            return $q->selectRaw('distinct kode_desa')->whereBetween('created_at', [$tanggalAwalSebelumnya, $tanggalAkhirSebelumnya])->from('track_mobile');
+        });            
 
         if ($provinsi) {
             $summary->where('kode_provinsi', $provinsi);
@@ -129,7 +146,11 @@ class LayananDesaDashboardController extends Controller
 
     public function peta(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()) {            
+            $period = $request->get('period') ?? '1970-01-01'.' - '.Carbon::now()->format('Y-m-d');
+            $tanggalPeriod = explode(' - ', $period);
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
@@ -151,8 +172,8 @@ class LayananDesaDashboardController extends Controller
                     ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
                     ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
                 })
-                ->whereIn('kode_desa', function ($q) {
-                    return $q->selectRaw('distinct kode_desa')->from('track_mobile');
+                ->whereIn('kode_desa', function ($q) use($tanggalAwal, $tanggalAkhir) {
+                    return $q->selectRaw('distinct kode_desa')->whereBetween('created_at',[$tanggalAwal, $tanggalAkhir])->from('track_mobile');
                 })->orderBy('kode_desa', 'ASC')->get()->map(function ($desa) {
                     return [
                         'type' => 'Feature',

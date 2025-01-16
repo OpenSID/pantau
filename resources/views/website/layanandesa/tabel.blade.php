@@ -1,3 +1,4 @@
+<div class="text-bold" id="div-title-install-baru">Daftar Pengguna Baru LayananDesa 7 Hari Terakhir</div>
 <div class="card mt-3">
     <div class="card-body">
         <div class="table-responsive">
@@ -25,48 +26,67 @@
         $.extend($.fn.dataTable.defaults, {
             language: { url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/id.json" }
         });
-        var desaBaru = $('#table-desa-baru').DataTable({
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            ordering: true,
-            ajax: {
-                url: `{{ url('web/layanandesa/install_baru') }}`,
-                method: 'get',
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    searchable: false,
-                    orderable: false
-                },                
-                {
-                    data: 'id'
-                },
-                {
-                    data: 'desa.nama_desa'
-                },
-                {
-                    data: 'desa.nama_kecamatan'
-                },
-                {
-                    data: 'desa.nama_kabupaten'
-                },
-                {
-                    data: 'desa.nama_provinsi'
-                },                
-                {
-                    data: 'versi',
-                    searchable: false
-                },
-                {
-                    data: 'updated_at',
-                    searchable: false
-                },
-            ],
-            order: [
-                [1, 'desc']
-            ],
-        })        
+        $(document).ready(function() {            
+            var desaBaru = $('#table-desa-baru').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    ordering: true,
+                    ajax: {
+                        url: `{{ url('web/layanandesa/install_baru') }}`,
+                        data: function (d) {
+                            d.kode_provinsi = $('#provinsi').val()
+                            d.kode_kabupaten =  $('#kabupaten').val()
+                            d.kode_kecamatan = $('#kecamatan').val()
+                            d.status = null
+                            d.period = $('input[name=periods]').val()
+                        },
+                        method: 'get',
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            searchable: false,
+                            orderable: false
+                        },                
+                        {
+                            data: 'id'
+                        },
+                        {
+                            data: 'desa.nama_desa'
+                        },
+                        {
+                            data: 'desa.nama_kecamatan'
+                        },
+                        {
+                            data: 'desa.nama_kabupaten'
+                        },
+                        {
+                            data: 'desa.nama_provinsi'
+                        },                
+                        {
+                            data: 'versi',
+                            searchable: false
+                        },
+                        {
+                            data: 'updated_at',
+                            searchable: false
+                        },
+                    ],
+                    order: [
+                        [1, 'desc']
+                    ],
+                })        
+
+            $('#filter').click(function() {                
+                desaBaru.draw();
+            });
+            $('input[name=periods]').change(function () {                
+                const _period = $(this).val().replace('  -  ', 'sd');
+                $('#div-title-install-baru').text('Daftar Pengguna Baru LayananDesa Periode ' + _period);
+                desaBaru.draw();
+            })
+        })
+        
     </script>
 @endpush
