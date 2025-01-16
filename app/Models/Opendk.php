@@ -162,9 +162,21 @@ class Opendk extends Model
      */
     public function scopeFilter($query, array $fillters)
     {
-        return $query->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-            $query->where('kode_provinsi', $kode_provinsi);
-        })
+        return $query
+            ->when($fillters['period'] ?? false, function ($subQuery, $period) {
+                $dates = explode(' - ', $period);
+                if (count($dates) === 2) {
+                    // Validasi jika tanggal awal dan akhir berbeda
+                    if ($dates[0] !== $dates[1]) {
+                        $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
+                    } else {
+                        $subQuery->whereDate('created_at', '=', $dates[0]);
+                    }
+                }
+            })
+            ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
+                $query->where('kode_provinsi', $kode_provinsi);
+            })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
                 $query->where('kode_kabupaten', $kode_kabupaten);
             })

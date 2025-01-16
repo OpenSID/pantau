@@ -7,14 +7,14 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PetaPeriodController extends Controller
-{    
+{
     public function index(Request $request)
     {
         if ($request->ajax()) {
             $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
             $tanggalAwal = explode(' - ', $period)[0];
             $tanggalAkhir = explode(' - ', $period)[1];
-            
+
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
@@ -26,7 +26,7 @@ class PetaPeriodController extends Controller
                 'tte' => $request->tte,
             ];
 
-            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->whereBetween('created_at',[$tanggalAwal.' 00:00:00', $tanggalAkhir.' 23:59:59'])->get()->map(function ($desa) {
+            $geoJSONdata = Desa::fillter($fillters)->petaSemua()->whereBetween('created_at', [$tanggalAwal.' 00:00:00', $tanggalAkhir.' 23:59:59'])->get()->map(function ($desa) {
                 return [
                     'type' => 'Feature',
                     'geometry' => [
