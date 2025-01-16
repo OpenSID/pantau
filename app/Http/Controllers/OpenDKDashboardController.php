@@ -75,7 +75,20 @@ class OpenDKDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Opendk::whereDate('created_at', '>=', Carbon::now()->subDays(7)))
+            return DataTables::of(Opendk::when($request->period ?? false, function ($subQuery) use ($request) {
+                    $dates = explode(' - ', $request->period);
+                    if (count($dates) === 2) {
+                        // Validasi jika tanggal awal dan akhir berbeda
+                        if ($dates[0] !== $dates[1]) {
+                            $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
+                        } else {
+                            $subQuery->whereDate('created_at', '=', $dates[0]);
+                        }
+                    }
+                }, function ($subQuery) {
+                    // Jika $request->period kosong, gunakan filter default
+                    $subQuery->whereDate('created_at', '>=', Carbon::now()->subDays(7));
+                }))
                 ->editColumn('created_at', static fn ($q) => $q->created_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
@@ -89,6 +102,7 @@ class OpenDKDashboardController extends Controller
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
+                'period' => $request->period,
             ];
             //
             $geoJSONdata = Opendk::filter($fillters)
