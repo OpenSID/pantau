@@ -76,19 +76,19 @@ class OpenDKDashboardController extends Controller
     {
         if ($request->ajax()) {
             return DataTables::of(Opendk::when($request->period ?? false, function ($subQuery) use ($request) {
-                    $dates = explode(' - ', $request->period);
-                    if (count($dates) === 2) {
-                        // Validasi jika tanggal awal dan akhir berbeda
-                        if ($dates[0] !== $dates[1]) {
-                            $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
-                        } else {
-                            $subQuery->whereDate('created_at', '=', $dates[0]);
-                        }
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    // Validasi jika tanggal awal dan akhir berbeda
+                    if ($dates[0] !== $dates[1]) {
+                        $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
+                    } else {
+                        $subQuery->whereDate('created_at', '=', $dates[0]);
                     }
-                }, function ($subQuery) {
-                    // Jika $request->period kosong, gunakan filter default
-                    $subQuery->whereDate('created_at', '>=', Carbon::now()->subDays(7));
-                }))
+                }
+            }, function ($subQuery) {
+                // Jika $request->period kosong, gunakan filter default
+                $subQuery->whereDate('created_at', '>=', Carbon::now()->subDays(7));
+            }))
                 ->editColumn('created_at', static fn ($q) => $q->created_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
