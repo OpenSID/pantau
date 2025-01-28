@@ -80,6 +80,7 @@
             function onEachFeature(feature, layer) {
                 layer.bindPopup(feature.properties.popupContent);
             }
+            
 
             loadData();
 
@@ -87,6 +88,11 @@
                 // Kosongkan Map Telebih Dahulu
                 map.removeLayer(markersBar);
                 loadData($('#provinsi').val(), $('#kabupaten').val(), $('#kecamatan').val());
+            });
+
+            // Deteksi perubahan nilai pada input periods
+            $('input[name=periods]').on('change', function () {
+                loadData(); // Panggil loadData setiap kali period berubah
             });
 
             $('#reset').click(function() {
@@ -100,7 +106,6 @@
             });
 
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
-
                 $.ajax({
                     url: "{{ url('web/keloladesa/peta') }}",
                     contentType: "application/json; charset=utf-8",
@@ -111,19 +116,31 @@
                         kode_kabupaten: kode_kabupaten,
                         kode_kecamatan: kode_kecamatan,
                         status: status,
+                        period: $('input[name=periods]').val(),
                     },
                     responseType: "json",
-                    success: function(response) {
+                    success: function (response) {
 
-                        // Buat Marker Cluster Group
+                        // Hapus marker cluster lama jika ada
+                        if (markersBar) {
+                            map.removeLayer(markersBar);
+                        }
+
+                        // Buat Marker Cluster Group baru
                         markersBar = L.markerClusterGroup();
 
                         // Simpan Data geoJSON
                         barLayer = new L.geoJSON(response, {
-                            pointToLayer: function(feature, latlng) {
-                                return L.marker(latlng, {
-                                    icon: baseballIcon
-                                });
+                            pointToLayer: function (feature, latlng) {
+                                // Validasi koordinat sebelum membuat marker
+                                if (isValidCoordinate(latlng.lat) && isValidCoordinate(latlng.lng)) {
+                                    return L.marker(latlng, {
+                                        icon: baseballIcon
+                                    });
+                                } else {
+                                    console.warn('Invalid coordinate skipped:', latlng);
+                                    return null; // Jangan buat marker jika koordinat tidak valid
+                                }
                             },
 
                             onEachFeature: onEachFeature
@@ -133,11 +150,16 @@
                         markersBar.addLayer(barLayer);
                         map.addLayer(markersBar);
                     },
-                    error: function() {
+                    error: function () {
                         alert('Gagal mengambil data');
                     },
                 });
             }
+
+            function isValidCoordinate(value) {
+                return !isNaN(value) && value !== null && value !== '' && parseFloat(value) <= 180 && parseFloat(value) >= -180;
+            }
+
         });
     </script>
 @endsection
