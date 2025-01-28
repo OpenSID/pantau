@@ -89,6 +89,11 @@
                 loadData($('#provinsi').val(), $('#kabupaten').val(), $('#kecamatan').val());
             });
 
+            // Deteksi perubahan nilai pada input periods
+            $('input[name=periods]').on('change', function () {
+                loadData(); // Panggil loadData setiap kali period berubah
+            });
+
             $('#reset').click(function() {
                 $('#provinsi').val('').trigger('change');
                 $('#kabupaten').val('').trigger('change');
@@ -111,19 +116,32 @@
                         kode_kabupaten: kode_kabupaten,
                         kode_kecamatan: kode_kecamatan,
                         status: status,
+                        period: $('input[name=periods]').val(),
                     },
                     responseType: "json",
                     success: function(response) {
+
+                        // Hapus marker cluster lama jika ada
+                        if (markersBar) {
+                            map.removeLayer(markersBar);
+                        }
 
                         // Buat Marker Cluster Group
                         markersBar = L.markerClusterGroup();
 
                         // Simpan Data geoJSON
                         barLayer = new L.geoJSON(response, {
-                            pointToLayer: function(feature, latlng) {
-                                return L.marker(latlng, {
-                                    icon: baseballIcon
-                                });
+
+                            pointToLayer: function (feature, latlng) {
+                                // Validasi koordinat sebelum membuat marker
+                                if (isValidCoordinate(latlng.lat) && isValidCoordinate(latlng.lng)) {
+                                    return L.marker(latlng, {
+                                        icon: baseballIcon
+                                    });
+                                } else {
+                                    // console.warn('Invalid coordinate skipped:', latlng);
+                                    return null; // Jangan buat marker jika koordinat tidak valid
+                                }
                             },
 
                             onEachFeature: onEachFeature
@@ -137,6 +155,10 @@
                         alert('Gagal mengambil data');
                     },
                 });
+            }
+
+            function isValidCoordinate(value) {
+                return !isNaN(value) && value !== null && value !== '' && parseFloat(value) <= 180 && parseFloat(value) >= -180;
             }
         });
     </script>
