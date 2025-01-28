@@ -122,37 +122,23 @@
         layerControl.addBaseLayer(satellite, 'Satellite');
 
         // Ubah icon
-        // var iconUrl = "{{ url('assets/img/opensid_logo.png') }}";
+        var baseballIcon = L.icon({
+            iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
+            iconSize: [20, 20],
+        });
 
-        // function createIcon(color) {
-        //     return L.icon({
-        //         iconUrl: iconUrl,
-        //         iconSize: [20, 20],
-        //         iconAnchor: [10, 10],
-        //         popupAnchor: [0, -10],
-        //         className: color
-        //     });
-        // }
-
-        // Mendapatkan data marker dari API Laravel
-        // $.getJSON('/web/data-peta', function(data) {
-        //     data.forEach(function(marker) {
-        //         L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
-        //             .bindPopup(marker.popup);
-        //     });
-        // });
-
-        var iconUrl = "{{ asset('assets/img/opensid_logo.png') }}";
-
-        function createIcon(color) {
-            return L.icon({
-                iconUrl: iconUrl, // URL gambar ikon
-                iconSize: [20, 20], // Ukuran ikon
-                iconAnchor: [10, 10], // Titik jangkar ikon
-                popupAnchor: [0, -10], // Titik jangkar popup
-                className: `marker-icon-${color}` // Tambahkan kelas CSS opsional
-            });
+        function onEachFeature(feature, layer) {
+            layer.bindPopup(feature.properties.popupContent);
         }
+
+        loadData();
+
+        // Deteksi perubahan nilai pada input periods
+        $('input[name=periods]').on('change', function () {
+            loadData(); // Panggil loadData setiap kali period berubah
+        });
+
+       
 
         function loadData() {
             $.ajax({
@@ -160,28 +146,36 @@
                 contentType: "application/json; charset=utf-8",
                 cache: false,
                 dataType: "json",
+                data: {
+                    period: $('input[name=periods]').val(),
+                },
+                responseType: "json",
                 success: function(response) {
+
+                    // Hapus marker cluster lama jika ada
+                    if (markersBar) {
+                        map.removeLayer(markersBar);
+                    }
+
                     // Buat Marker Cluster Group
-                    let markersBar = L.markerClusterGroup();
+                    markersBar = L.markerClusterGroup();
 
-                    response.forEach(function(marker) {
-                        if (!isValidCoordinate(marker.lat) || !isValidCoordinate(marker.lng)) {
-                            // console.warn("Invalid coordinate skipped:", marker);
-                            return;
-                        }
-
-                        let latlng = [parseFloat(marker.lat), parseFloat(marker.lng)];
-                        let popupContent = marker.popup || "No Address";
-
-                        let icon = createIcon(marker.color || 'blue'); // Warna default jika kosong
-
-                        let leafletMarker = L.marker(latlng, { icon: icon })
-                            .bindPopup(popupContent);
-
-                        markersBar.addLayer(leafletMarker);
+                     // Simpan Data geoJSON
+                     barLayer = new L.geoJSON(response, {
+                        pointToLayer: function (feature, latlng) {
+                            // Validasi koordinat sebelum membuat marker
+                            if (isValidCoordinate(latlng.lat) && isValidCoordinate(latlng.lng)) {
+                                return L.marker(latlng, {
+                                    icon: baseballIcon
+                                });
+                            } else {
+                                return null; // Jangan buat marker jika koordinat tidak valid
+                            }
+                        },
+                        onEachFeature: onEachFeature
                     });
-
-                    // Tambahkan Marker Cluster Group ke Map
+                    // Tambahkan Marker dan Marker Cluster Group pada Map
+                    markersBar.addLayer(barLayer);
                     map.addLayer(markersBar);
                 },
                 error: function() {
@@ -193,8 +187,6 @@
         function isValidCoordinate(value) {
             return !isNaN(value) && value !== null && value !== '' && parseFloat(value) <= 180 && parseFloat(value) >= -180;
         }
-
-        loadData();
 
     });
 </script>
