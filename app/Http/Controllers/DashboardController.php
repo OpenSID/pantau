@@ -282,7 +282,7 @@ class DashboardController extends Controller
     public function dataPeta(Request $request)
     {
         $markers = Desa::select(['lat', 'lng', 'alamat_kantor'])
-        ->when($request->period ?? false, function ($subQuery) use($request) {
+        ->when($request->period ?? false, function ($subQuery) use ($request) {
             $dates = explode(' - ', $request->period);
             if (count($dates) === 2) {
                 // Validasi jika tanggal awal dan akhir berbeda
@@ -314,15 +314,14 @@ class DashboardController extends Controller
             'type' => 'FeatureCollection',
             'features' => $markers,
         ]);
-
     }
 
     public function properties(Desa $desa)
     {
+        $alamat = $desa->alamat_kantor;
 
-        $alamat = $desa->alamat_kantor; 
         return [
-            'popupContent' => "{$alamat}"
+            'popupContent' => "{$alamat}",
         ];
     }
 
