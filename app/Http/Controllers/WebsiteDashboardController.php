@@ -147,7 +147,7 @@ class WebsiteDashboardController extends Controller
 
     public function chartUsage(Request $request, $data = false)
     {
-        $period = $request->get('period');
+        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
