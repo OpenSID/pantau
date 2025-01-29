@@ -275,7 +275,7 @@ class Desa extends Model
             ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
             ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
             ->whereRaw('lat BETWEEN -10 AND 6')
-            ->whereRaw('lng BETWEEN 95 AND 142')            
+            ->whereRaw('lng BETWEEN 95 AND 142')
             ->where(function ($query) {
                 $query
                 ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
@@ -386,6 +386,11 @@ class Desa extends Model
         $query->when($provinsi, function ($r) use ($provinsi) {
             $r->where('kode_provinsi', $provinsi);
         });
+    }
+
+    public function scopeWhereNotNullLatLng($query)
+    {
+        return $query->whereNotNull('lat')->whereNotNull('lng');
     }
 
     public function scopeOnline($query)
