@@ -13,3 +13,8 @@ Di rilis v2411.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Penyesuaian Teknis
 
 1. [#458](https://github.com/OpenSID/pantau/issues/458) Mutahirkan daftar wilayah Papua Barat Daya.
+2. [#456](https://github.com/OpenSID/pantau/pull/456) Bump symfony/process from 6.4.3 to 6.4.14.
+3. [#457](https://github.com/OpenSID/pantau/pull/457) Bump symfony/http-foundation from 6.4.3 to 6.4.14.
+4. [#460](https://github.com/OpenSID/pantau/pull/460) Bump laravel/framework from 9.52.16 to 9.52.17.
+5. [#464](https://github.com/OpenSID/pantau/pull/464) Bump symfony/var-dumper from 6.4.3 to 6.4.15.
+6. [#461](https://github.com/OpenSID/pantau/pull/461) Bump phpoffice/phpspreadsheet from 1.29.0 to 1.29.4.
