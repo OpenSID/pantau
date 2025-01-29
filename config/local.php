@@ -50,7 +50,8 @@ return [
             '30 Hari Terakhir'=> [Carbon::now()->subDays(29)->format('Y-m-d'), Carbon::now()->format('Y-m-d')],
             'Bulan Ini'=> [Carbon::now()->startOfMonth()->format('Y-m-d'), Carbon::now()->endOfMonth()->format('Y-m-d')],
             'Bulan Lalu'=> [Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d'), Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d')],
-            'Tahun Ini'=> [Carbon::now()->startOfYear()->format('Y-m-d'), Carbon::now()->endOfYear()->format('Y-m-d')]
+            'Tahun Ini'=> [Carbon::now()->startOfYear()->format('Y-m-d'), Carbon::now()->endOfYear()->format('Y-m-d')],
+            'Semua Tanggal'=> ['1970-01-01', Carbon::now()->format('Y-m-d')]
         ],
     ]    
 ];

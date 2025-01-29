@@ -20,7 +20,7 @@
 }
 </style>
 @endpush
-
+<div class="bg-blue p-2 text-bold"><h5>Sebaran Pengguna Baru OpenSID Periode <span id="judul_range_periode"></span></h5></div>
 <div id="map"></div>
 
 @section('js')
@@ -84,25 +84,32 @@
             loadData();
 
             $('#filter').click(function() {
-                // Kosongkan Map Telebih Dahulu
-                map.removeLayer(markersBar);
-                loadData($('#provinsi').val(), $('#kabupaten').val(), $('#kecamatan').val());
+                loadDataPeta();
             });
-
+            $('input[name=periods]').change(function () {
+                loadDataPeta();
+            })
             $('#reset').click(function() {
                 $('#provinsi').val('').trigger('change');
                 $('#kabupaten').val('').trigger('change');
                 $('#kecamatan').val('').trigger('change');
 
-                // Kosongkan Map Telebih Dahulu
-                map.removeLayer(markersBar);
-                loadData();
+                loadDataPeta();
             });
-
-            function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, status = null) {
+            function loadDataPeta(){
+                var kode_provinsi = $('#provinsi').val();
+                var kode_kabupaten = $('#kabupaten').val();
+                var kode_kecamatan = $('#kecamatan').val();
+                var period = $('input[name=periods]').val();
+                $('#judul_range_periode').html(period);
+                
+                map.removeLayer(markersBar);
+                loadData(kode_provinsi, kode_kabupaten, kode_kecamatan, period);
+            }
+            function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, period = null, status = null) {
 
                 $.ajax({
-                    url: "{{ url('peta') }}",
+                    url: "{{ url('web/opensid/peta') }}",
                     contentType: "application/json; charset=utf-8",
                     cache: false,
                     dataType: "json",
@@ -111,6 +118,7 @@
                         kode_kabupaten: kode_kabupaten,
                         kode_kecamatan: kode_kecamatan,
                         status: status,
+                        period: period
                     },
                     responseType: "json",
                     success: function(response) {
@@ -138,6 +146,8 @@
                     },
                 });
             }
+
+            $('input[name=periods]').trigger('change');
         });
     </script>
 @endsection

@@ -169,6 +169,10 @@
     }
 
     $(document).ready(function () {
+
+        // set default kosongkan datepicker
+        $('input[name=periods]').val('');
+
         $('#filter').click(function () {
             updateData()
         })
