@@ -2,16 +2,14 @@ Di rilis v2411.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-#### Perbaikan Bug
+1. [#465](https://github.com/OpenSID/pantau/issues/465) Penambahan kaitan peta pada tanggal filter.
+2. [#469](https://github.com/OpenSID/pantau/issues/469) Penambahan filter tanggal pada halaman LayananDesa.
+3. [#468](https://github.com/OpenSID/pantau/issues/468) Penambahan filter tanggal pada halaman KelolaDesa.
+4. [#470](https://github.com/OpenSID/pantau/issues/470) Penambahan filter tanggal pada halaman OpenDK.
+5. [#467](https://github.com/OpenSID/pantau/issues/467) Penambahan filter yang tampil pada peta sebaran OpenSID.
 
-1. [#430](https://github.com/OpenSID/pantau/issues/430) Perbaikan permission file logging ketika backup otomatis.
-2. [#443](https://github.com/OpenSID/pantau/issues/443) Perbaikan simpan kordinat lat & lng kecamatan.
-3. [#447](https://github.com/OpenSID/pantau/issues/447) Perbaikan pencarian pada halaman LayananDesa.
-4. [#442](https://github.com/OpenSID/pantau/issues/442) Perbaikan fitur lokasi map kabupaten pengguna.
-5. [#441](https://github.com/OpenSID/pantau/issues/441) Perbaikan cek kesesuaian data pada dabor saat ini masih belum valid karena data yang terpasang pada dasbor masih 0.
+#### Perbaikan Bug
 
 #### Penyesuaian Teknis
 
-1. [#437](https://github.com/OpenSID/pantau/issues/437) Menambah  file readme.md.
-2. [#440](https://github.com/OpenSID/pantau/issues/440) Penyesuaian statistik pada pantau agar terlihat lebih infografik.
-3. [#448](https://github.com/OpenSID/pantau/issues/448) Penyesuaian informasi datatable.
+1. [#458](https://github.com/OpenSID/pantau/issues/458) Mutahirkan daftar wilayah Papua Barat Daya.

@@ -122,25 +122,72 @@
         layerControl.addBaseLayer(satellite, 'Satellite');
 
         // Ubah icon
-        var iconUrl = "{{ url('assets/img/opensid_logo.png') }}";
+        var baseballIcon = L.icon({
+            iconUrl: "{{ url('assets/img/opensid_logo.png') }}",
+            iconSize: [20, 20],
+        });
 
-        function createIcon(color) {
-            return L.icon({
-                iconUrl: iconUrl,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10],
-                popupAnchor: [0, -10],
-                className: color
+        function onEachFeature(feature, layer) {
+            layer.bindPopup(feature.properties.popupContent);
+        }
+
+        loadData();
+
+        // Deteksi perubahan nilai pada input periods
+        $('input[name=periods]').on('change', function () {
+            loadData(); // Panggil loadData setiap kali period berubah
+        });
+
+       
+
+        function loadData() {
+            $.ajax({
+                url: "{{ url('web/data-peta') }}",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                dataType: "json",
+                data: {
+                    period: $('input[name=periods]').val(),
+                },
+                responseType: "json",
+                success: function(response) {
+
+                    // Hapus marker cluster lama jika ada
+                    if (markersBar) {
+                        map.removeLayer(markersBar);
+                    }
+
+                    // Buat Marker Cluster Group
+                    markersBar = L.markerClusterGroup();
+
+                     // Simpan Data geoJSON
+                     barLayer = new L.geoJSON(response, {
+                        pointToLayer: function (feature, latlng) {
+                            // Validasi koordinat sebelum membuat marker
+                            if (isValidCoordinate(latlng.lat) && isValidCoordinate(latlng.lng)) {
+                                return L.marker(latlng, {
+                                    icon: baseballIcon
+                                });
+                            } else {
+                                return null; // Jangan buat marker jika koordinat tidak valid
+                            }
+                        },
+                        onEachFeature: onEachFeature
+                    });
+                    // Tambahkan Marker dan Marker Cluster Group pada Map
+                    markersBar.addLayer(barLayer);
+                    map.addLayer(markersBar);
+                },
+                error: function() {
+                    alert('Gagal mengambil data');
+                },
             });
         }
 
-        // Mendapatkan data marker dari API Laravel
-        $.getJSON('/web/data-peta', function(data) {
-            data.forEach(function(marker) {
-                L.marker([marker.lat, marker.lng], {icon: createIcon(marker.color)}).addTo(map)
-                    .bindPopup(marker.popup);
-            });
-        });
+        function isValidCoordinate(value) {
+            return !isNaN(value) && value !== null && value !== '' && parseFloat(value) <= 180 && parseFloat(value) >= -180;
+        }
+
     });
 </script>
 @endsection

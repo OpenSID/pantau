@@ -25,6 +25,8 @@
         $.extend($.fn.dataTable.defaults, {
             language: { url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/id.json" }
         });
+
+
         var desaBaru = $('#table-desa-baru').DataTable({
             processing: true,
             serverSide: true,
@@ -33,13 +35,20 @@
             ajax: {
                 url: `{{ url('web/keloladesa/install_baru') }}`,
                 method: 'get',
+                data: function() {
+                    let period = $('input[name=periods]').val() || '';
+                    return {
+                        period,
+                    };
+                },
             },
-            columns: [{
+            columns: [
+                {
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     searchable: false,
                     orderable: false
-                },                
+                },
                 {
                     data: 'id_device'
                 },
@@ -54,7 +63,7 @@
                 },
                 {
                     data: 'desa.nama_provinsi'
-                },                
+                },
                 {
                     data: 'versi',
                     searchable: false
@@ -67,6 +76,18 @@
             order: [
                 [1, 'desc']
             ],
-        })        
+        });
+
+
+        $(document).ready(function () {
+
+            // Deteksi perubahan nilai pada input periods
+            $('input[name=periods]').on('change', function () {
+                desaBaru.ajax.reload();
+            });
+            
+            
+        })
+
     </script>
 @endpush

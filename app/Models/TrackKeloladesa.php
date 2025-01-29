@@ -49,6 +49,23 @@ class TrackKeloladesa extends Model
 
     protected function scopeFilter($query, $request)
     {
+        if (isset($request['period'])) {
+            $query->when($request->period ?? false, function ($subQuery) use ($request) {
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    // Validasi jika tanggal awal dan akhir berbeda
+                    if ($dates[0] !== $dates[1]) {
+                        $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
+                    } else {
+                        $subQuery->whereDate('created_at', '=', $dates[0]);
+                    }
+                }
+            }, function ($subQuery) {
+                // Jika $request->period kosong, gunakan filter default
+                $subQuery->whereDate('created_at', '>=', Carbon::now()->subDays(7));
+            });
+        }
+
         if (isset($request['kode_provinsi'])) {
             $query->when($request['kode_provinsi'], function ($q) use ($request) {
                 $q->whereRaw('left(kode_desa, 2) = \''.$request['kode_provinsi'].'\'');
