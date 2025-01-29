@@ -6,6 +6,7 @@ Di rilis v2411.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 2. [#469](https://github.com/OpenSID/pantau/issues/469) Penambahan filter tanggal pada halaman LayananDesa.
 3. [#468](https://github.com/OpenSID/pantau/issues/468) Penambahan filter tanggal pada halaman KelolaDesa.
 4. [#470](https://github.com/OpenSID/pantau/issues/470) Penambahan filter tanggal pada halaman OpenDK.
+5. [#467](https://github.com/OpenSID/pantau/issues/467) Penambahan filter yang tampil pada peta sebaran OpenSID.
 
 #### Perbaikan Bug
 
