@@ -266,6 +266,24 @@ class Desa extends Model
             ->orderBy('kode_desa', 'ASC');
     }
 
+    public function scopePetaSemua($query)
+    {
+        return $query
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            })
+            ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw('lat BETWEEN -10 AND 6')
+            ->whereRaw('lng BETWEEN 95 AND 142')
+            ->where(function ($query) {
+                $query
+                ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
+                ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
+            })
+            ->orderBy('kode_desa', 'ASC');
+    }
+
     /**
      * Scope a query laporan desa.
      *
@@ -368,6 +386,11 @@ class Desa extends Model
         $query->when($provinsi, function ($r) use ($provinsi) {
             $r->where('kode_provinsi', $provinsi);
         });
+    }
+
+    public function scopeWhereNotNullLatLng($query)
+    {
+        return $query->whereNotNull('lat')->whereNotNull('lng');
     }
 
     public function scopeOnline($query)

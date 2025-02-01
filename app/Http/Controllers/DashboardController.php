@@ -279,16 +279,50 @@ class DashboardController extends Controller
         abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
     }
 
-    public function dataPeta()
+    public function dataPeta(Request $request)
     {
-        $markers = Desa::select(['lat', 'lng', 'alamat_kantor as popup'])->get()->map(function ($marker) {
-            $marker->color = 'default';
-
-            return $marker;
+        $markers = Desa::select(['lat', 'lng', 'alamat_kantor'])
+        ->when($request->period ?? false, function ($subQuery) use ($request) {
+            $dates = explode(' - ', $request->period);
+            if (count($dates) === 2) {
+                // Validasi jika tanggal awal dan akhir berbeda
+                if ($dates[0] !== $dates[1]) {
+                    $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
+                } else {
+                    $subQuery->whereDate('created_at', '=', $dates[0]);
+                }
+            }
+        })
+        ->whereNotNullLatLng()
+        ->get()
+        ->map(function ($marker) {
+            return [
+                'type' => 'Feature',
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => [
+                        (float) $marker->lng,
+                        (float) $marker->lat,
+                    ],
+                ],
+                'properties' => $this->properties($marker),
+                'id' => $marker->id,
+            ];
         });
 
-        // Mengembalikan data sebagai response JSON
-        return response()->json($markers);
+        return response()->json([
+            'type' => 'FeatureCollection',
+            'features' => $markers,
+        ]);
+    }
+
+    public function properties(Desa $desa)
+    {
+        $alamat = $desa->alamat_kantor;
+
+        return [
+            'popupContent' => "{$alamat}",
+        ];
     }
 
     public function datatablePenggunaOpenkab(Request $request)
