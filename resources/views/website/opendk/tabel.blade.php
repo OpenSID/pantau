@@ -32,6 +32,12 @@
             ajax: {
                 url: `{{ url('web/opendk/install_baru') }}`,
                 method: 'get',
+                data: function() {
+                    let period = $('input[name=periods]').val() || '';
+                    return {
+                        period,
+                    };
+                },
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -60,6 +66,15 @@
             order: [
                 [1, 'desc']
             ],
-        })        
+        })      
+        
+        $(document).ready(function () {
+            // Deteksi perubahan nilai pada input periods
+            $('input[name=periods]').on('change', function () {
+                desaBaru.ajax.reload();
+            });
+            
+            
+        })
     </script>
 @endpush
