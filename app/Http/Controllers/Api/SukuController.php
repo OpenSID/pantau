@@ -10,11 +10,12 @@ class SukuController extends Controller
 {
     public function index(Request $request)
     {
-        $this->validate($request, [
-            'kode_prov' => 'required|integer',
-        ]);
-
-        $suku = Suku::select(['id','name'])->whereRelation('region', 'region_code', $request->get('kode_prov'))->paginate();
+        $kodeProv = $request->get('kode_prov');
+        $search = $request->get('q');
+        $suku = Suku::select(['id','name'])
+                ->when($kodeProv, static fn ($q) => $q->whereRelation('region', 'region_code', $kodeProv))
+                ->when($search, static fn ($q) => $q->where('name', 'like', "%{$search}%"))
+                ->paginate();
 
         return response()->json([
             'results' => $suku->items(),
