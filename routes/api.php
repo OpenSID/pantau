@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\InstallOpenDKController;
 use App\Http\Controllers\Api\InstallOpensidController;
+use App\Http\Controllers\Api\SukuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
@@ -37,6 +38,7 @@ Route::prefix('wilayah')
         Route::get('kodekecamatan', [WilayahController::class, 'kodeKecamatan']);
         Route::get('list_wilayah', [WilayahController::class, 'listWilayah']);
         Route::get('kabupaten-desa', [WilayahController::class, 'kabupatenDesa']);
+        Route::get('suku', [SukuController::class, 'index']);
     });
 
 Route::prefix('track')
@@ -54,8 +56,8 @@ Route::prefix('web')
     ->group(function () {
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
         Route::get('summary', [WebsiteDashboardController::class, 'summary']);
-        Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);              
-        Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);            
+        Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);
+        Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);
         Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
         Route::get('chart-opendk', [InstallOpenDKController::class, 'chart']);
     });
