@@ -384,6 +384,11 @@ return [
             'icon'         => 'fas fa-map',
         ],
         [
+            'text'         => 'Data Suku',
+            'url'          => 'suku',
+            'icon'         => 'fas fa-users',
+        ],
+        [
             'can'          => 'is-admin',
             'text'         => 'Review Desa',
             'icon'         => 'fas fa-file-alt',
