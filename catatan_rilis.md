@@ -9,3 +9,4 @@ Open
 
 #### Penyesuaian Teknis
 
+1. [#476](https://github.com/OpenSID/pantau/issues/476) Perbaikan file log pantau terlalu besar.
