@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\Wilayah\ProvinsiController;
 use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
+use App\Http\Controllers\Admin\SukuController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -59,7 +60,7 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
         Route::get('opensid/peta', [PetaPeriodController::class, 'index']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);        
+        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
@@ -82,7 +83,7 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('opendk/versi/detail', [OpenDKDashboardController::class, 'versi_detail']);
         Route::get('opendk/install_baru', [OpenDKDashboardController::class, 'install_baru']);
         Route::get('opendk/peta', [OpenDKDashboardController::class, 'peta']);
-    });    
+    });
 });
 
 // datatable
@@ -206,11 +207,11 @@ Route::middleware('auth')->group(function () {
 
     // Wilayah Kecamatan
     Route::resource('kecamatan', KecamatanController::class)->except('show');
-    // Route::prefix('kecamatan')->group(function () {
 
-    //     Route::get('/datatables', [KecamatanController::class, 'datatables'])->name('kecamatan.datatables');
-    // });
-
+    Route::resource('suku', SukuController::class)->except('show');
+    Route::get('suku/import', [SukuController::class, 'import'])->name('suku.import');
+    Route::post('suku/proses-import', [SukuController::class, 'prosesImport'])->name('suku.proses-import');
+    Route::get('suku/contoh-import', [SukuController::class, 'contohImport'])->name('suku.contoh-import');
 
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class)->except('show');
