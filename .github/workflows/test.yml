@@ -43,12 +43,16 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
+    - name: Extract database testing
+      run: |
+        tar -xzf database/database_test.sql.tar.gz -C database
+
     - name: Wait for MySQL
       run: sleep 15
 
     - name: Import SQL file into MySQL
       run: |
-          zcat ./database/database_test.sql.tar.gz | mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_db
+        mysql -h 127.0.0.1 -P 3306 -u root -psecret testing_db < ./database/database_test.sql
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       env:
