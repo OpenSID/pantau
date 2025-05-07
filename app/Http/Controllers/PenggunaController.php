@@ -60,7 +60,6 @@ class PenggunaController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
             ]);
 
         return redirect()->route('akun-pengguna.index')->withAlert('Data pengguna berhasil diperbarui');
