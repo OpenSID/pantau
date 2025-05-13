@@ -8,3 +8,5 @@ Di rilis v2505.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 
 #### Penyesuaian Teknis
+
+1. [#481](https://github.com/OpenSID/pantau/issues/481) Penerapan CI/CD Setup Pipeline Otomatis untuk Aplikasi Pantau.
