@@ -84,6 +84,13 @@ return [
     'not_regex'            => 'Format :attribute tidak valid.',
     'numeric'              => ':Attribute harus berupa angka.',
     'password'             => 'Kata sandi salah.',
+    'password' => [
+        'letters' => 'Password harus mengandung huruf',
+        'mixed' => 'Password harus mengandung huruf besar dan kecil',
+        'numbers' => 'Password harus mengandung angka',
+        'symbols' => 'Password harus mengandung simbol',
+        'uncompromised' => 'Password terdeteksi lemah gunakan pola lain',
+    ],
     'present'              => ':Attribute wajib ada.',
     'regex'                => 'Format :attribute tidak valid.',
     'relatable'            => 'This :attribute may not be associated with this resource.',

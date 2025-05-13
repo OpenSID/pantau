@@ -42,15 +42,23 @@
                         </div>
                         <div class="form-group">
                             <label>Username <span class="text-danger">*</span></label>
-                            <input type="text" name="username" class="form-control">
+                            <input type="text" name="username" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Konfirmasi Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password_confirmation" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Nama <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control">
+                            <input type="text" name="name" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Email <span class="text-danger">*</span></label>
-                            <input type="email" name="email" class="form-control">
+                            <input type="email" name="email" required class="form-control">
                         </div>
 
                         <div class="form-group">
