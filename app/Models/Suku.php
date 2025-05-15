@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Suku extends Model
 {
@@ -24,5 +25,15 @@ class Suku extends Model
     public function region()
     {
         return $this->belongsTo(Region::class, 'tbl_region_id');
+    }
+
+    /**
+     * Get all of the marga for the Suku
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function marga(): HasMany
+    {
+        return $this->hasMany(Marga::class, 'ethnic_group_id', 'id');
     }
 }
