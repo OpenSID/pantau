@@ -32,10 +32,11 @@ class SukuController extends Controller
 
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
+                    $detail = '<a href="'.route('marga.index', ['suku' => $data->id]).'" class="btn btn-sm btn-info btn-sm"><i class="fas fa-list-alt"></i></a>';
                     $edit = '<a href="'.route('suku.edit', $data->id).'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
                     $delete = '<button data-href="'.route('suku.destroy', $data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">'.$edit.$delete.'</div>';
+                    return '<div class="btn btn-group">'.$detail.$edit.$delete.'</div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);

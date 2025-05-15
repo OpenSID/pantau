@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MargaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PbbController;
@@ -212,6 +213,11 @@ Route::middleware('auth')->group(function () {
     Route::get('suku/import', [SukuController::class, 'import'])->name('suku.import');
     Route::post('suku/proses-import', [SukuController::class, 'prosesImport'])->name('suku.proses-import');
     Route::get('suku/contoh-import', [SukuController::class, 'contohImport'])->name('suku.contoh-import');
+
+    Route::resource('marga', MargaController::class)->except('show');
+    Route::get('marga/import', [MargaController::class, 'import'])->name('marga.import');
+    Route::post('marga/proses-import', [MargaController::class, 'prosesImport'])->name('marga.proses-import');
+    Route::get('marga/contoh-import', [MargaController::class, 'contohImport'])->name('marga.contoh-import');
 
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class)->except('show');
