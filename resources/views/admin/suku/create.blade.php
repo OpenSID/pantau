@@ -65,13 +65,10 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('/vendor/inputmask/jquery.inputmask.js') }}"></script>
     <script>
         $(function() {
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
             const token = "{{ config('tracksid.sandi.dev_token') }}";
-
-            $('[data-mask]').inputmask();
 
             $('#list_provinsi').select2({
                 ajax: {

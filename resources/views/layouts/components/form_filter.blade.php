@@ -7,6 +7,10 @@
                     <select class="select2 form-control-sm" id="provinsi" name="provinsi" data-placeholder="Semua Provinsi"
                         style="width: 100%;">
                         <option value="" selected>Semua Provinsi</option>
+                        @if ($fillters['kode_provinsi'] && is_array($fillters['kode_provinsi']))
+                            <option value="{{ $fillters['kode_provinsi']['id'] ?? '' }}" selected>
+                                {{ $fillters['kode_provinsi']['name'] ?? '' }}</option>
+                        @endif
                     </select>
                 </div>
             </div>
@@ -150,6 +154,22 @@
                     <select class="select2 form-control-sm" id="versi_opendk" name="versi_opendk"
                         data-placeholder="Semua Versi" style="width: 100%;">
                         <option selected value="0">Semua Versi</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('suku', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="text-white">Suku</label>
+                    <select class="select2 form-control-sm" id="suku" name="suku"
+                        data-placeholder="Semua Suku" style="width: 100%;">
+                        <option value="" selected>Semua Suku</option>
+                        @if ($fillters['suku'] && is_array($fillters['suku']))
+                            <option value="{{ $fillters['suku']['id'] ?? '' }}" selected>
+                                {{ $fillters['suku']['name'] ?? '' }}</option>
+                        @endif
                     </select>
                 </div>
             </div>

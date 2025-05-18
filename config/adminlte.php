@@ -389,6 +389,11 @@ return [
             'icon'         => 'fas fa-users',
         ],
         [
+            'text'         => 'Data Marga',
+            'url'          => 'marga',
+            'icon'         => 'fas fa-users',
+        ],
+        [
             'can'          => 'is-admin',
             'text'         => 'Review Desa',
             'icon'         => 'fas fa-file-alt',
