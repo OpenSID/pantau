@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Suku;
+use App\Models\Marga;
 use Illuminate\Http\Request;
 
-class SukuController extends Controller
+class MargaController extends Controller
 {
     public function index(Request $request)
     {
-        $kodeProv = $request->get('kode_prov');
+        $kodeSuku = $request->get('suku');
         $search = $request->get('q');
-        $suku = Suku::selectRaw('id, name, name as text')
-            ->when($kodeProv, static fn($q) => $q->whereRelation('region', 'region_code', $kodeProv))
+        // dd($search);
+        $marga = Marga::selectRaw('id, name')
+            ->when($kodeSuku, static fn($q) => $q->whereRelation('suku', 'ethnic_group_id', $kodeSuku))
             ->when($search, static fn($q) => $q->where('name', 'like', "%{$search}%"))
             ->paginate();
 
         return response()->json([
-            'results' => $suku->items(),
+            'results' => $marga->items(),
             'pagination' => [
-                'more' => $suku->currentPage() < $suku->lastPage(),
+                'more' => $marga->currentPage() < $marga->lastPage(),
             ],
         ]);
     }
