@@ -12,7 +12,6 @@ class MargaController extends Controller
     {
         $kodeSuku = $request->get('suku');
         $search = $request->get('q');
-        // dd($search);
         $marga = Marga::selectRaw('id, name')
             ->when($kodeSuku, static fn($q) => $q->whereRelation('suku', 'ethnic_group_id', $kodeSuku))
             ->when($search, static fn($q) => $q->where('name', 'like', "%{$search}%"))
