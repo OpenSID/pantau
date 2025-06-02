@@ -67,13 +67,10 @@
     </div>
 @endsection
 @push('js')
-    <script src="{{ asset('/vendor/inputmask/jquery.inputmask.js') }}"></script>
     <script>
         $(function() {
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
             const token = "{{ config('tracksid.sandi.dev_token') }}";
-
-            $('[data-mask]').inputmask();
 
             $('#list_provinsi').select2({
                 ajax: {
@@ -103,132 +100,6 @@
                 }
             });
 
-            list_kabupaten();
-
-            $('#list_provinsi').change(function() {
-                $("#kode_provinsi").val($('#list_provinsi').val());
-
-                // Kosongkan pilihan kab, kec, dan isian suku
-                $("#list_kabupaten").attr('disabled', false);
-                $("#list_kabupaten").val('');
-                $("#kode_kabupaten").val('');
-
-                $("#list_kecamatan").attr('disabled', true);
-                $("#list_kecamatan").val('');
-                $("#kode_kecamatan").val('');
-
-                $("#region_code").attr('disabled', true);
-                $("#region_name").attr('disabled', true);
-                $("#region_code").val('');
-                $("#region_name").val('');
-
-                list_kabupaten();
-            });
-
-            list_kecamatan();
-            $('#list_kabupaten').change(function() {
-                $("#kode_kabupaten").val($('#list_kabupaten').val());
-
-                // Kosongkan pilihan kec, dan isian suku
-                $("#list_kecamatan").attr('disabled', false);
-                $("#list_kecamatan").val('');
-                $("#kode_kecamatan").val('');
-
-                $("#region_code").attr('disabled', true);
-                $("#region_name").attr('disabled', true);
-                $("#region_code").val('');
-                $("#region_name").val('');
-
-                list_kecamatan();
-            });
-
-            $('#list_kecamatan').change(function() {
-                $("#kode_kecamatan").val($('#list_kecamatan').val());
-                $("#region_code").attr('data-inputmask', "'mask':'" + $('#list_kecamatan').val() +
-                    ".9999'");
-                $("#region_code").attr('disabled', false);
-                $("#region_name").attr('disabled', false);
-            });
-
-            function list_kabupaten() {
-                $('#list_kabupaten').select2({
-                    ajax: {
-                        url: host + '?token=' + token + '&kode=' + $('#list_provinsi')
-                            .val(),
-                        dataType: 'json',
-                        delay: 400,
-                        data: function(params) {
-                            return {
-                                cari: params.term,
-                                page: params.page || 1,
-                            };
-                        },
-                        processResults: function(response, params) {
-                            params.page = params.page || 1;
-
-                            return {
-                                results: $.map(response.results, function(item) {
-                                    return {
-                                        id: item.kode_kab,
-                                        text: item.nama_kab,
-                                    }
-                                }),
-                                pagination: response.pagination
-                            };
-                        },
-                        cache: true
-                    }
-                });
-            }
-
-            function list_kecamatan() {
-                var getkab = $('#list_kabupaten').val();
-                var getkodekab = '{!! $suku->kode_kabupaten !!}';
-                var getnamakab = '{!! $suku->nama_kabupaten !!}';
-                if (getkab == getnamakab) {
-                    var getkab = getkodekab;
-                }
-
-                $('#list_kecamatan').select2({
-                    ajax: {
-                        url: host + '?token=' + token + '&kode=' + getkab,
-                        dataType: 'json',
-                        delay: 400,
-                        data: function(params) {
-                            return {
-                                cari: params.term,
-                                page: params.page || 1,
-                            };
-                        },
-                        processResults: function(response, params) {
-                            params.page = params.page || 1;
-
-                            return {
-                                results: $.map(response.results, function(item) {
-                                    return {
-                                        id: item.kode_kec,
-                                        text: item.nama_kec
-                                    }
-                                }),
-                                pagination: response.pagination
-                            };
-                        },
-                        cache: true
-                    }
-                });
-            }
-
-            $('#region_code').keyup(function() {
-                var akas = this.value.slice(9, 11);
-                if (akas == '99') {
-                    $('#keterangan').addClass('required');
-                    $('.suku_persiapan').show();
-                } else {
-                    $('#keterangan').val('');
-                    $('#keterangan').removeClass('required');
-                    $('.suku_persiapan').hide();
-                }
-            });
         })
     </script>
 @endpush

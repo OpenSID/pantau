@@ -30,6 +30,7 @@
                                     <th>NAMA</th>
                                     <th>KODE WILAYAH</th>
                                     <th>NAMA PROVINSI</th>
+                                    <th>JUMLAH MARGA</th>
                                 </tr>
                             </thead>
                         </table>
@@ -74,6 +75,11 @@
                         data: 'region.region_name',
                         name: 'region.region_name'
                     },
+                    {
+                        data: 'marga_count',
+                        name: 'marga_count',
+                        searchable: false,
+                    }
                 ],
                 order: [
                     [2, 'asc']

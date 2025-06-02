@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\InstallOpenDKController;
 use App\Http\Controllers\Api\InstallOpensidController;
+use App\Http\Controllers\Api\MargaController;
 use App\Http\Controllers\Api\SukuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
@@ -39,6 +40,7 @@ Route::prefix('wilayah')
         Route::get('list_wilayah', [WilayahController::class, 'listWilayah']);
         Route::get('kabupaten-desa', [WilayahController::class, 'kabupatenDesa']);
         Route::get('suku', [SukuController::class, 'index']);
+        Route::get('marga', [MargaController::class, 'index']);
     });
 
 Route::prefix('track')
