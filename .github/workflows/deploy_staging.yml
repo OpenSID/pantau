@@ -3,6 +3,8 @@ name: Deploy Pantau to Staging
 on:
   release:
     types: [published]
+  pull_request:
+    branches: [rilis-dev]
 
 jobs:
   deploy:
