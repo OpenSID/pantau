@@ -394,6 +394,11 @@ return [
             'icon'         => 'fas fa-users',
         ],
         [
+            'text'         => 'Data Adat',
+            'url'          => 'adat',
+            'icon'         => 'fas fa-landmark',
+        ],
+        [
             'can'          => 'is-admin',
             'text'         => 'Review Desa',
             'icon'         => 'fas fa-file-alt',
