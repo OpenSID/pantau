@@ -20,7 +20,6 @@ jobs:
           username: ${{ secrets.STAG_USER }}
           key: ${{ secrets.STAG_SSH_KEY }}
           port: ${{ secrets.STAG_PORT }}
-          password: ${{ secrets.STAG_PASSWORD }}
           script: |
             cd ${{ secrets.STAG_DEPLOY_PATH }}
             # Restore to the state of the remote branch
