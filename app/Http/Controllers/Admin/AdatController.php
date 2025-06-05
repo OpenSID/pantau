@@ -72,6 +72,7 @@ class AdatController extends Controller
     public function update(AdatRequest $request, $id)
     {
         $input = $request->all();
+        $input['tbl_region_id'] = Region::where('region_code', $input['tbl_region_id'])->where('parent_code', 0)->first()->id;
         $adat = Adat::findOrFail($id);
 
         if ($adat->update($input)) {

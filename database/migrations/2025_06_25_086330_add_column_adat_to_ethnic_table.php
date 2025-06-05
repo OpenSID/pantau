@@ -12,14 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('adats', function (Blueprint $table) {
-            $table->id();
-            $table->integer('tbl_region_id');
-            $table->string('name', 100);
-            $table->timestamps();
-            $table->unique(['tbl_region_id', 'name']);
-            $table->foreign('tbl_region_id')
-                ->references('id')->on('tbl_regions')
+        Schema::table('ethnic_groups', function (Blueprint $table) {
+            $table->unsignedBigInteger('adat_id')->nullable()->after('id');
+            $table->foreign('adat_id')
+                ->references('id')->on('adats')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -32,6 +28,10 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('adats');
+        // Drop foreign key dan kolom adat_id dari tabel ethnic
+        Schema::table('ethnic', function (Blueprint $table) {
+            $table->dropForeign(['adat_id']);
+            $table->dropColumn('adat_id');
+        });
     }
 };

@@ -29,6 +29,11 @@ class SukuRequest extends FormRequest
                 'numeric',
                 'exists:tbl_regions,region_code',
             ],
+            'adat_id' => [
+                'required',
+                'numeric',
+                'exists:adats,id',
+            ],
             'name' => 'required|string|min:1|max:100',
         ];
     }

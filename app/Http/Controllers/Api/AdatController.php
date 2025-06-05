@@ -11,6 +11,7 @@ class AdatController extends Controller
     public function index(Request $request)
     {
         $kodeProv = $request->get('kode_prov');
+        // ambil data ini dan tampilkan di select form suku
         $search = $request->get('q');
         $suku = Adat::selectRaw('id, name, name as text')
             ->when($kodeProv, static fn($q) => $q->whereRelation('region', 'region_code', $kodeProv))

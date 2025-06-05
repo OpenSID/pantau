@@ -16,6 +16,7 @@ class Suku extends Model
     /** {@inheritdoc} */
     protected $fillable = [
         'tbl_region_id',
+        'adat_id',
         'name',
     ];
 
@@ -35,5 +36,10 @@ class Suku extends Model
     public function marga(): HasMany
     {
         return $this->hasMany(Marga::class, 'ethnic_group_id', 'id');
+    }
+
+    public function adat()
+    {
+        return $this->belongsTo(Adat::class, 'adat_id');
     }
 }

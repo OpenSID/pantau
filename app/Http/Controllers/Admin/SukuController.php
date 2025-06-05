@@ -23,7 +23,7 @@ class SukuController extends Controller
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Suku::with('region')->withCount('marga'));
+            $query = DataTables::of(Suku::with('region', 'adat')->withCount('marga'));
             if ($request->excel) {
                 $query->filtering();
 
@@ -71,6 +71,7 @@ class SukuController extends Controller
     public function update(SukuRequest $request, $id)
     {
         $input = $request->all();
+        $input['tbl_region_id'] = Region::where('region_code', $input['tbl_region_id'])->where('parent_code', 0)->first()->id;
         $suku = Suku::findOrFail($id);
 
         if ($suku->update($input)) {
