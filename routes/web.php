@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdatController;
 use App\Http\Controllers\Admin\MargaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -218,6 +219,11 @@ Route::middleware('auth')->group(function () {
     Route::get('marga/import', [MargaController::class, 'import'])->name('marga.import');
     Route::post('marga/proses-import', [MargaController::class, 'prosesImport'])->name('marga.proses-import');
     Route::get('marga/contoh-import', [MargaController::class, 'contohImport'])->name('marga.contoh-import');
+
+    Route::resource('adat', AdatController::class)->except('show');
+    Route::get('adat/import', [AdatController::class, 'import'])->name('adat.import');
+    Route::post('adat/proses-import', [AdatController::class, 'prosesImport'])->name('adat.proses-import');
+    Route::get('adat/contoh-import', [AdatController::class, 'contohImport'])->name('adat.contoh-import');
 
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class)->except('show');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdatController;
 use App\Http\Controllers\Api\InstallOpenDKController;
 use App\Http\Controllers\Api\InstallOpensidController;
 use App\Http\Controllers\Api\MargaController;
@@ -41,6 +42,7 @@ Route::prefix('wilayah')
         Route::get('kabupaten-desa', [WilayahController::class, 'kabupatenDesa']);
         Route::get('suku', [SukuController::class, 'index']);
         Route::get('marga', [MargaController::class, 'index']);
+        Route::get('adat', [AdatController::class, 'index']);
     });
 
 Route::prefix('track')

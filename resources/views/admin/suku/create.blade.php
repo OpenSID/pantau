@@ -52,6 +52,15 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-12">Adat <span class="required">*</span></label>
+                            <div class="col-12">
+                                <select class="form-control" name="adat_id" id="adat_id"
+                                    data-placeholder="Pilih Provinsi" style="width: 100%;" required>
+                                    <option selected>Pilih Adat</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <button type="reset" class="btn btn-sm btn-danger"><i class="fas fa-times"></i>
                                 &ensp;Batal</button>
                             <button class="btn btn-sm btn-success float-right"><i class="fas fa-save"></i>
@@ -68,6 +77,7 @@
     <script>
         $(function() {
             const host = "{{ url('api/wilayah/list_wilayah/') }}";
+            const hostAdat = "{{ url('api/wilayah/adat/') }}";
             const token = "{{ config('tracksid.sandi.dev_token') }}";
 
             $('#list_provinsi').select2({
@@ -96,6 +106,38 @@
                     },
                     cache: true
                 }
+            });
+
+            $('#list_provinsi').on('select2:select', function(e) {
+                const kode_prov = e.params.data.id;
+                $('#adat_id').empty().trigger('change');
+                $('#adat_id').select2({
+                    ajax: {
+                        url: hostAdat + '?kode_prov=' + kode_prov + '&token=' + token,
+                        dataType: 'json',
+                        delay: 400,
+                        data: function(params) {
+                            return {
+                                cari: params.term,
+                                page: params.page || 1,
+                            };
+                        },
+                        processResults: function(response, params) {
+                            params.page = params.page || 1;
+
+                            return {
+                                results: $.map(response.results, function(item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.name,
+                                    }
+                                }),
+                                pagination: response.pagination
+                            };
+                        },
+                        cache: true
+                    }
+                });
             });
         })
     </script>
