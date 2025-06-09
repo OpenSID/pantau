@@ -38,8 +38,8 @@ class Suku extends Model
         return $this->hasMany(Marga::class, 'ethnic_group_id', 'id');
     }
 
-    public function adat()
+    public function wilayahAdat()
     {
-        return $this->belongsTo(Adat::class, 'adat_id');
+        return $this->belongsTo(WilayahAdat::class, 'adat_id');
     }
 }

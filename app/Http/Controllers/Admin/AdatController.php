@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\AdatExport;
-use App\Exports\SukuExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdatRequest;
 use App\Imports\SukuImport;
-use App\Models\Adat;
+use App\Models\WilayahAdat;
 use App\Models\Region;
-use App\Models\Suku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -25,11 +23,11 @@ class AdatController extends Controller
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Adat::with('region'));
+            $query = DataTables::of(WilayahAdat::with('region'));
             if ($request->excel) {
                 $query->filtering();
 
-                return Excel::download(new AdatExport($query->results()), 'Wilayah-Adat.xlsx');
+                return Excel::download(new AdatExport($query->results()), 'Wilayah-WilayahAdat.xlsx');
             }
 
             return $query->addIndexColumn()
@@ -55,7 +53,7 @@ class AdatController extends Controller
     {
         $input = $request->all();
         $input['tbl_region_id'] = Region::where('region_code', $input['tbl_region_id'])->where('parent_code', 0)->first()->id;
-        if (Adat::create($input)) {
+        if (WilayahAdat::create($input)) {
             return redirect('adat')->with('success', 'Data berhasil disimpan');
         }
 
@@ -65,7 +63,7 @@ class AdatController extends Controller
     public function edit($id)
     {
         return view('admin.adat.edit', [
-            'adat' => Adat::with('region')->findOrFail($id),
+            'adat' => WilayahAdat::with('region')->findOrFail($id),
         ]);
     }
 
@@ -73,7 +71,7 @@ class AdatController extends Controller
     {
         $input = $request->all();
         $input['tbl_region_id'] = Region::where('region_code', $input['tbl_region_id'])->where('parent_code', 0)->first()->id;
-        $adat = Adat::findOrFail($id);
+        $adat = WilayahAdat::findOrFail($id);
 
         if ($adat->update($input)) {
             return redirect('adat')->with('success', 'Data berhasil diubah');
@@ -112,7 +110,7 @@ class AdatController extends Controller
 
     public function destroy($id)
     {
-        if (Adat::destroy($id)) {
+        if (WilayahAdat::destroy($id)) {
             return redirect('adat')->with('success', 'Data berhasil dihapus');
         }
 
