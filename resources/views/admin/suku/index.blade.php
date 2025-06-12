@@ -82,8 +82,8 @@
                         searchable: false,
                     },
                     {
-                        data: 'adat.name',
-                        name: 'adat.name',
+                        data: 'wilayah_adat.name',
+                        name: 'wilayah_adat.name',
                         render: function(data, type, row) {
                             return data ? data : '-';
                         }
