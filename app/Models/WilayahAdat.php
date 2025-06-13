@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Suku extends Model
+class WilayahAdat extends Model
 {
     use HasFactory;
 
-    /** {@inheritdoc} */
-    protected $table = 'ethnic_groups';
+    protected $table = 'adats';
 
     /** {@inheritdoc} */
     protected $fillable = [
         'tbl_region_id',
-        'adat_id',
         'name',
     ];
 
@@ -29,17 +27,12 @@ class Suku extends Model
     }
 
     /**
-     * Get all of the marga for the Suku
+     * Get all of the suku for the WilayahAdat
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function marga(): HasMany
+    public function suku(): HasMany
     {
-        return $this->hasMany(Marga::class, 'ethnic_group_id', 'id');
-    }
-
-    public function wilayahAdat()
-    {
-        return $this->belongsTo(WilayahAdat::class, 'adat_id');
+        return $this->hasMany(Suku::class, 'adat_id', 'id');
     }
 }
