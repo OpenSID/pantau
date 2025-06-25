@@ -1,9 +1,6 @@
 name: Laravel Test Fresh Install
 
-on:
-  workflow_dispatch:
-  pull_request:
-    branches: [rilis-dev]
+on: workflow_dispatch
 
 jobs:
   laravel-tests-fresh-install:
