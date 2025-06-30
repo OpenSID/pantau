@@ -1,4 +1,4 @@
-Di rilis v2505.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2506.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
@@ -7,7 +7,6 @@ Di rilis v2505.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Perbaikan Bug
 
 1. [#483](https://github.com/OpenSID/pantau/issues/483) Perbaikan tidak ada fungsi buat password dan error saat nambah pengguna.
-
 
 #### Penyesuaian Teknis
 
