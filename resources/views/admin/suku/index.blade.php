@@ -31,6 +31,7 @@
                                     <th>KODE WILAYAH</th>
                                     <th>NAMA PROVINSI</th>
                                     <th>JUMLAH MARGA</th>
+                                    <th>ADAT</th>
                                 </tr>
                             </thead>
                         </table>
@@ -79,7 +80,14 @@
                         data: 'marga_count',
                         name: 'marga_count',
                         searchable: false,
-                    }
+                    },
+                    {
+                        data: 'wilayah_adat.name',
+                        name: 'wilayah_adat.name',
+                        render: function(data, type, row) {
+                            return data ? data : '-';
+                        }
+                    },
                 ],
                 order: [
                     [2, 'asc']
