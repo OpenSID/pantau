@@ -102,6 +102,18 @@ class Desa extends Model
             });
     }
 
+    public function scopeSemuaDesa($query)
+    {
+        return $query
+            ->select(['*'])
+            ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
+            // filter ip lokal
+            ->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1") // 0 = i local
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
+    }
+
     /**
      * Scope a query review desa.
      *
@@ -323,10 +335,10 @@ class Desa extends Model
                 $query->where('kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
-                $query->whereRaw('versi_hosting IS NOT NULL');
+                $query->whereNotNull('versi_hosting')->whereNull('versi_lokal');
             })
             ->when($fillters['status'] == 2, function ($query) {
-                $query->whereRaw('versi_lokal IS NOT NULL');
+                $query->whereNotNull('versi_lokal')->whereNull('versi_hosting');
             })
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
