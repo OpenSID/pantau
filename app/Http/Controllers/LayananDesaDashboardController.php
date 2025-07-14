@@ -17,6 +17,7 @@ class LayananDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
+        
         $versiTerakhir = lastrelease_api_layanandesa();
         $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 

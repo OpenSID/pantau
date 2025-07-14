@@ -271,8 +271,14 @@ class DashboardController extends Controller
 
     public function datatablePenggunaKeloladesa(Request $request)
     {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+        ];
+
         if ($request->ajax()) {
-            $desa = TrackKeloladesa::leftJoin('kode_wilayah', 'track_keloladesa.kode_desa', '=', 'kode_wilayah.kode_desa')
+            $desa = TrackKeloladesa::filter($fillters)->leftJoin('kode_wilayah', 'track_keloladesa.kode_desa', '=', 'kode_wilayah.kode_desa')
                 ->orderBy('track_keloladesa.created_at', 'desc')
                 ->get()
                 ->map(function ($item) {
