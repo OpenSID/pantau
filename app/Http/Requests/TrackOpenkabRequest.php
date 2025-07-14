@@ -27,7 +27,7 @@ class TrackOpenkabRequest extends FormRequest
             'nama_kab' => ['required', "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
             'kode_kab' => [
                 'required',
-                'exists:openkab,kode_kab',
+                'exists:kode_wilayah,kode_kab',
             ],
             'nama_prov' => ['required', "not_regex:/[^\.a-zA-Z\s:-]|contoh|demo\s+|sampel\s+/i"],
             'kode_prov' => [

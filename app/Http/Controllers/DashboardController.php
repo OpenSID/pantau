@@ -224,8 +224,14 @@ class DashboardController extends Controller
 
     public function datatablePenggunaOpendk(Request $request)
     {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+        ];
+
         if ($request->ajax()) {
-            $desa = Opendk::orderBY('created_at', 'desc')->get()
+            $desa = Opendk::filter($fillters)->orderBY('created_at', 'desc')->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                     $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap

@@ -80,7 +80,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
         Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
         Route::get('data-peta', [DashboardController::class, 'dataPeta']);
         Route::get('opendk', [OpenDKDashboardController::class, 'index']);
-        Route::get('opendk/detail', [OpenDKDashboardController::class, 'detail']);
+        Route::get('opendk/detail', [OpenDKDashboardController::class, 'detail'])->name('web.opendk.detail');
         Route::get('opendk/versi', [OpenDKDashboardController::class, 'versi']);
         Route::get('opendk/versi/detail', [OpenDKDashboardController::class, 'versi_detail']);
         Route::get('opendk/install_baru', [OpenDKDashboardController::class, 'install_baru']);

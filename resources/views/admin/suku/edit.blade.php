@@ -48,15 +48,16 @@
                             <div class="col-12">
                                 <select class="form-control" name="tbl_region_id" id="list_provinsi"
                                     data-placeholder="Pilih Provinsi" style="width: 100%;" required>
-                                    <option value="{{ $suku->region->region_code }}" selected>{{ $suku->region->region_name }}</option>
+                                    <option value="{{ $suku->region->region_code }}" selected>
+                                        {{ $suku->region->region_name }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-12">Adat <span class="required">*</span></label>
                             <div class="col-12">
-                                <select class="form-control" name="adat_id" id="adat_id"
-                                    data-placeholder="Pilih Adat" style="width: 100%;" required>
+                                <select class="form-control" name="adat_id" id="adat_id" data-placeholder="Pilih Adat"
+                                    style="width: 100%;" required>
                                     <option value="{{ $suku->adat->id ?? '' }}" selected>
                                         {{ $suku->adat->name ?? 'Pilih Adat' }}</option>
                                 </select>
