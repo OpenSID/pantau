@@ -36,6 +36,7 @@ class PengaturanAplikasiController extends Controller
                         case 'id_telegram':
                         case 'abaikan_domain_opendk':
                         case 'abaikan_domain_opensid':
+                        case 'abaikan_domain_openkab':
                             $value = $value ? implode('|', $value) : null;
                             break;
                         default:
@@ -52,6 +53,9 @@ class PengaturanAplikasiController extends Controller
                         break;
                     case 'abaikan_domain_opensid':
                         Cache::forever('abaikan_domain_opensid', $value);
+                        break;
+                    case 'abaikan_domain_openkab':
+                        Cache::forever('abaikan_domain_openkab', $value);
                         break;
                 }
             }
