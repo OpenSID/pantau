@@ -52,9 +52,9 @@ Auth::routes([
     'verify' => true,
 ]);
 
-Route::group(['middleware' => 'web.dashboard'],function(){
+Route::group(['middleware' => 'web.dashboard'], function () {
     Route::get('/', [WebsiteDashboardController::class, 'index']);
-    Route::prefix('web')->group(function(){
+    Route::prefix('web')->group(function () {
         Route::get('', [WebsiteDashboardController::class, 'index']);
         Route::get('openkab', [WebsiteDashboardController::class, 'openkab']);
         Route::get('openkab/peta', [OpenKabDashboardController::class, 'peta']);
@@ -67,20 +67,20 @@ Route::group(['middleware' => 'web.dashboard'],function(){
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
         Route::get('layanandesa', [LayananDesaDashboardController::class, 'index']);
-        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail']);
+        Route::get('layanandesa/detail', [LayananDesaDashboardController::class, 'detail'])->name('web.layanandesa.detail');
         Route::get('layanandesa/versi', [LayananDesaDashboardController::class, 'versi']);
         Route::get('layanandesa/versi/detail', [LayananDesaDashboardController::class, 'versi_detail']);
         Route::get('layanandesa/install_baru', [LayananDesaDashboardController::class, 'install_baru']);
         Route::get('layanandesa/peta', [LayananDesaDashboardController::class, 'peta']);
         Route::get('keloladesa', [KelolaDesaDashboardController::class, 'index']);
-        Route::get('keloladesa/detail', [KelolaDesaDashboardController::class, 'detail']);
+        Route::get('keloladesa/detail', [KelolaDesaDashboardController::class, 'detail'])->name('web.keloladesa.detail');
         Route::get('keloladesa/versi', [KelolaDesaDashboardController::class, 'versi']);
         Route::get('keloladesa/versi/detail', [KelolaDesaDashboardController::class, 'versi_detail']);
         Route::get('keloladesa/install_baru', [KelolaDesaDashboardController::class, 'install_baru']);
         Route::get('keloladesa/peta', [KelolaDesaDashboardController::class, 'peta']);
         Route::get('data-peta', [DashboardController::class, 'dataPeta']);
         Route::get('opendk', [OpenDKDashboardController::class, 'index']);
-        Route::get('opendk/detail', [OpenDKDashboardController::class, 'detail']);
+        Route::get('opendk/detail', [OpenDKDashboardController::class, 'detail'])->name('web.opendk.detail');
         Route::get('opendk/versi', [OpenDKDashboardController::class, 'versi']);
         Route::get('opendk/versi/detail', [OpenDKDashboardController::class, 'versi_detail']);
         Route::get('opendk/install_baru', [OpenDKDashboardController::class, 'install_baru']);
@@ -128,9 +128,8 @@ Route::prefix('sesi')
             return redirect('/');
         });
 
-        Route::middleware(PantauMiddleware::class)->get('pantau/{pantau}', function (Request $request)
-        {
-            return redirect($request->pantau?? '/');
+        Route::middleware(PantauMiddleware::class)->get('pantau/{pantau}', function (Request $request) {
+            return redirect($request->pantau ?? '/');
         });
     });
 
@@ -164,7 +163,7 @@ Route::prefix('mobile')
     });
 
 //opendk
-Route::prefix('opendk') ->group(function () {
+Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
@@ -174,7 +173,7 @@ Route::prefix('opendk') ->group(function () {
 });
 
 //openkab
-Route::prefix('openkab') ->group(function () {
+Route::prefix('openkab')->group(function () {
     Route::get('/kerja-sama', [OpenkabController::class, 'kerjaSama'])->name('openkab.kerjasama');
     Route::get('/get-wilayah', [OpenkabController::class, 'getWilayah'])->name('openkab.getwilayah');
 });
@@ -248,7 +247,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pengaturan')->group(function () {
         Route::get('/', [PengaturanAplikasiController::class, 'index']);
         Route::get('aplikasi', [PengaturanAplikasiController::class, 'index']);
-        Route::post('aplikasi', [PengaturanAplikasiController::class, 'store'])->name('pengaturan.aplikasi.store');;
+        Route::post('aplikasi', [PengaturanAplikasiController::class, 'store'])->name('pengaturan.aplikasi.store');
+        ;
     });
 
 });
