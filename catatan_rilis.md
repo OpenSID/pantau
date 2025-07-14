@@ -2,7 +2,8 @@ Di rilis v2507.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#499](https://github.com/OpenSID/pantau/issues/499) Penambahan halaman pengguna opendk lengkap. 
+1. [#499](https://github.com/OpenSID/pantau/issues/499) Penambahan halaman pengguna opendk lengkap.
+2. [#500](https://github.com/OpenSID/pantau/issues/500) Penambahan halaman pengguna layanan desa lengkap.
 
 #### Perbaikan Bug
 
