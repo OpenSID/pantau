@@ -14,7 +14,7 @@
             <button class="btn btn-secondary btn-sm" data-toggle="collapse" href="#collapse-filter-form" aria-expanded="false" aria-controls="collapse-filter-form">
               <i class="fa fa-filter"></i> Filter
             </button>
-            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('datatables/semua-desa') }}"><i class="fas fa-file-excel"></i> Excel<a>
+            {{-- <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('datatables/semua-desa') }}"><i class="fas fa-file-excel"></i> Excel<a> --}}
           </div>
         </div>
 
