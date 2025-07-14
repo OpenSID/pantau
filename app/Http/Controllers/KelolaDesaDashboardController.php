@@ -18,7 +18,7 @@ class KelolaDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackKeloladesa::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+        $installHariIni = TrackKeloladesa::whereHas('desa')->with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
 
         return view('website.keloladesa.index', [
             'fillters' => $fillters,
