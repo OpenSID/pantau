@@ -201,10 +201,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Wilayah Kabupaten
-    Route::prefix('kabupaten')->group(function () {
-        Route::get('/', [KabupatenController::class, 'index']);
-        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
-    });
+    Route::resource('kabupaten', KabupatenController::class)->except('show');
 
     // Wilayah Kecamatan
     Route::resource('kecamatan', KecamatanController::class)->except('show');

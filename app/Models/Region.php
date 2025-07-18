@@ -55,6 +55,7 @@ class Region extends Model
                     'tbl_regions.id',
                     'tbl_regions.region_code AS kode_kabupaten',
                     'tbl_regions.region_name AS nama_kabupaten',
+                    'tbl_regions.new_region_name AS nama_kabupaten_baru',
                     'prov.region_code AS kode_provinsi',
                     'prov.region_name AS nama_provinsi',
                     'tbl_regions.keterangan',
