@@ -195,10 +195,8 @@ Route::middleware('auth')->group(function () {
     Route::get('akses/bersihkan', AksesController::class);
 
     // Wilayah Provinsi
-    Route::prefix('provinsi')->group(function () {
-        Route::get('/', [ProvinsiController::class, 'index']);
-        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
-    });
+    Route::resource('provinsi', ProvinsiController::class)->except('show');
+    Route::get('provinsi/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
 
     // Wilayah Kabupaten
     Route::resource('kabupaten', KabupatenController::class)->except('show');
