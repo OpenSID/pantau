@@ -21,8 +21,25 @@ class PekerjaanPmiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('pekerjaan_pmi') ? $this->route('pekerjaan_pmi')->id : null;
+
         return [
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:255|unique:pekerjaan_pmi,nama,' . $id,
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'nama.required' => 'Nama pekerjaan harus diisi.',
+            'nama.string' => 'Nama pekerjaan harus berupa teks.',
+            'nama.max' => 'Nama pekerjaan tidak boleh lebih dari 255 karakter.',
+            'nama.unique' => 'Nama pekerjaan sudah ada, silakan gunakan nama yang berbeda.',
         ];
     }
 }
