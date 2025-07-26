@@ -13,18 +13,32 @@
         <div class=" bg-gray-light">
             <div class="card-body">
                 <div class="row">
+                    <h1>Pengguna Aplikasi OpenDK</small></h1>
                     <div class="col-lg-12">
-                        <div class="card">
+                        <div class="card card-outline card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Pengguna Aplikasi OpenDK</h3>                
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-sm btn-secondary" data-toggle="collapse"
+                                            href="#collapse-filter" role="button" aria-expanded="false"
+                                            aria-controls="collapse-filter">
+                                            <i class="fas fa-filter"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('layouts.components.form_filter')
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table" id="table-pengguna-opendk">
                                         <thead>
                                             <tr>
-                                                <th>No</th>                                                
+                                                <th>No</th>
                                                 <th>Kecamatan</th>
                                                 <th>Kabupaten</th>
                                                 <th>Provinsi</th>
@@ -61,6 +75,11 @@
             ajax: {
                 url: `{{ route('datatables:pengguna-opendk') }}`,
                 method: 'get',
+                data: function(data) {
+                    data.kode_provinsi = $('#provinsi').val();
+                    data.kode_kabupaten = $('#kabupaten').val();
+                    data.kode_kecamatan = $('#kecamatan').val();
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -82,7 +101,19 @@
                 },
             ]
         })
+        
+        $('#filter').on('click', function(e) {
+            // e.preventDefault();
+            $('#table-pengguna-opendk').DataTable().draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#provinsi').val('').change();
+            $('#kabupaten').val('').change();
+            $('#kecamatan').val('').change();
+            $('#table-pengguna-opendk').DataTable().draw();
+        });
     })
 </script>
 @endpush
-

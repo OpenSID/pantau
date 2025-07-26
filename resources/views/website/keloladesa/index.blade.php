@@ -18,12 +18,15 @@
                         <div class="row">
                             <div class="col-md-10 align-content-center">
                                 <div class="d-flex">
-                                    <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse" href="#collapse-filter" role="button"
-                                        aria-expanded="false" aria-controls="collapse-filter">
+                                    <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"
+                                        href="#collapse-filter" role="button" aria-expanded="false"
+                                        aria-controls="collapse-filter">
                                         <i class="fas fa-filter"></i>
                                     </a>
                                     <div class="bg-blue p-1 ml-1" style="width: 100%">
-                                        <p class="m-0 text-white"><marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee></p>
+                                        <p class="m-0 text-white">
+                                            <marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -103,6 +106,7 @@
                 <b>
                     Daftar Pengguna KelolaDesa 7 Hari Terakhir
                 </b>
+                <a href="{{ route('web.keloladesa.detail') }}" class="btn btn-sm btn-primary">Data Selengkapnya</a>
                 @include('website.keloladesa.tabel')
             </div>
             <div class="col-lg-4">

@@ -98,6 +98,7 @@
                 <b>
                     Daftar Pengguna OpenDK 7 Hari Terakhir
                 </b>
+                <a href="{{ route('web.opendk.detail') }}" class="btn btn-sm btn-primary">Data Selengkapnya</a>
                 @include('website.opendk.tabel')
             </div>
             <div class="col-lg-4">

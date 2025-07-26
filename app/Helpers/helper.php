@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2505.0.0';
+        return 'v2507.0.0';
     }
 }
 
@@ -207,13 +207,13 @@ if (! function_exists('abaikan_domain')) {
     {
         switch ($aplikasi) {
             case 'opendk':
-                return Cache::get('abaikan_domain_opendk', '');
+                return Cache::get('abaikan_domain_opendk', 'demodk.opendesa.id|devopendk.opendesa.id');
                 break;
             case 'openkab':
-                return Cache::get('abaikan_domain_openkab', '');
+                return Cache::get('abaikan_domain_openkab', 'devopenkab.opendesa.id');
                 break;
             default:
-                return Cache::get('abaikan_domain_opensid', '');
+                return Cache::get('abaikan_domain_opensid', 'berputar.opensid.my.id');
         }
     }
 }
