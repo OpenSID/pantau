@@ -147,9 +147,15 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-lg-8">
-                        <b>
-                            Daftar Pengguna OpenSID 7 Hari Terakhir
-                        </b>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <b class="mb-0">
+                                Daftar Pengguna OpenSID 7 Hari Terakhir
+                            </b>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalSelengkapnya">
+                                Selengkapnya
+                            </button>
+                        </div>
+                        
                         @include('website.partial.tabel_opensid')
                     </div>
                     <div class="col-lg-4">
@@ -165,6 +171,8 @@
         <!-- /.card -->
     </div>
 </div>
+
+@include('website.partial.modal_pengguna_opensid')
 @stop
 
 @push('js')
