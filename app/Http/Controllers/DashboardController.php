@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DesaExport;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
@@ -10,7 +11,9 @@ use App\Models\PengaturanAplikasi;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class DashboardController extends Controller
@@ -45,7 +48,8 @@ class DashboardController extends Controller
     public function datatableDesaBaru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa) {
+
+            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa){
                 if (auth()->check() == false) {
                     unset($desa['url_hosting']);
                 }
@@ -56,6 +60,42 @@ class DashboardController extends Controller
 
         abort(404);
     }
+
+    public function datatableSemuaDesa(Request $request)
+    {
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
+        }
+
+        $filters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+            'versi_lokal' => '',
+            'versi_hosting' => '',
+        ];
+
+        if ($request->ajax() || $request->excel) {
+
+            $query = DataTables::of($this->desa->fillter($filters)->semuaDesa());
+    
+            if ($request->excel) {
+                $query->filtering();
+                return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
+            }
+    
+            return $query
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        abort(404);
+    }
+
 
     public function datatableKabupatenKosong(Request $request)
     {
@@ -332,14 +372,15 @@ class DashboardController extends Controller
             'type' => 'FeatureCollection',
             'features' => $markers,
         ]);
+
     }
 
     public function properties(Desa $desa)
     {
-        $alamat = $desa->alamat_kantor;
 
+        $alamat = $desa->alamat_kantor; 
         return [
-            'popupContent' => "{$alamat}",
+            'popupContent' => "{$alamat}"
         ];
     }
 

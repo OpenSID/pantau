@@ -5,6 +5,7 @@ Di rilis v2507.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 1. [#499](https://github.com/OpenSID/pantau/issues/499) Penambahan halaman pengguna opendk lengkap.
 2. [#500](https://github.com/OpenSID/pantau/issues/500) Penambahan halaman pengguna layanan desa lengkap.
 3. [#501](https://github.com/OpenSID/pantau/issues/501) Penambahan halaman pengguna kelola desa lengkap.
+4. [#496](https://github.com/OpenSID/pantau/issues/496) Penambahan modal action selengkapnya untuk semua pengguna opendesa, export excel, solved error leaflet, filtering.
 
 #### Perbaikan Bug
 
@@ -14,4 +15,4 @@ Di rilis v2507.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
-1. [#511](https://github.com/OpenSID/pantau/issues/511) Test fresh install untuk ceklist.
+1. [#509](https://github.com/OpenSID/pantau/issues/509) upgrade package laravel & axios.

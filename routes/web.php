@@ -92,6 +92,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
 Route::prefix('datatables')->as('datatables:')
     ->group(function () {
         Route::get('desa-baru', [DashboardController::class, 'datatableDesaBaru'])->name('desa-baru');
+        Route::get('semua-desa', [DashboardController::class, 'datatableSemuaDesa'])->name('semua-desa');
         Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
         Route::get('opendk-baru', [DashboardController::class, 'datatableOpendkBaru'])->name('opendk-baru');
         Route::get('openkab-baru', [DashboardController::class, 'datatableOpenkabBaru'])->name('openkab-baru');
