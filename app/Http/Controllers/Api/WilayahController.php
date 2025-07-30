@@ -121,10 +121,12 @@ class WilayahController extends Controller
         // For provinces, kabupaten, and kecamatan, use Region model (tbl_regions)
         // For desa, use Wilayah model (kode_wilayah)
         
-        if (strlen($request->kode) == 8) {
+        $kodeDesa = strlen($request->kode);
+        
+        if ($kodeDesa == 8) {
             // List desa - use Wilayah model
             $desa = $this->wilayah->listDesa($request, $provinsi, $kabupaten, $kecamatan)->paginate();
-        } elseif (strlen($request->kode) == 5) {
+        } elseif ($kodeDesa == 5) {
             // List kecamatan - use Region model
             $query = Region::select(
                     'tbl_regions.id',
@@ -148,7 +150,7 @@ class WilayahController extends Controller
                 ->orderBy('nama_kec', 'asc');
                 
             $desa = $query->paginate();
-        } elseif (strlen($request->kode) == 2) {
+        } elseif ($kodeDesa == 2) {
             // List kabupaten - use Region model
             $query = Region::select(
                     'tbl_regions.id',

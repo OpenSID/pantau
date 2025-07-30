@@ -77,13 +77,6 @@ class ProvinsiController extends Controller
         $input['parent_code'] = 0;
 
         if (Region::create($input)) {
-            $inputchild = [
-                'region_code' => $input['region_code'] . '.00',
-                'parent_code' => $input['region_code'],
-                'deleted_at' => date('Y-m-d H:i:s'),
-            ];
-            Region::create($inputchild);
-
             return redirect('provinsi')->with('success', 'Data berhasil disimpan');
         }
 
