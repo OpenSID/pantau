@@ -331,7 +331,16 @@ class WebsiteDashboardController extends Controller
 
     public function opensidData(Request $request)
     {
-        return view('website.opensid_data');
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_data', compact('fillters'));
     }
 
     public function pbbData(Request $request)
@@ -341,7 +350,6 @@ class WebsiteDashboardController extends Controller
 
     public function opensid(Request $request)
     {
-        
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
