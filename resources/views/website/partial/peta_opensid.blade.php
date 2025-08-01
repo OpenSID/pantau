@@ -103,7 +103,10 @@
                 var period = $('input[name=periods]').val();
                 $('#judul_range_periode').html(period);
                 
-                map.removeLayer(markersBar);
+                if (markersBar) {
+                    map.removeLayer(markersBar);
+                }
+                
                 loadData(kode_provinsi, kode_kabupaten, kode_kecamatan, period);
             }
             function loadData(kode_provinsi = null, kode_kabupaten = null, kode_kecamatan = null, period = null, status = null) {
