@@ -113,17 +113,6 @@ class E2EConfigLoader {
       config.database.password = process.env.E2E_DB_PASSWORD;
     }
 
-    // Test data overrides
-    if (process.env.E2E_TEST_DESA_ID) {
-      config.testData.pelanggan.desa.id = parseInt(process.env.E2E_TEST_DESA_ID);
-    }
-    if (process.env.E2E_TEST_KECAMATAN_ID) {
-      config.testData.pelanggan.kecamatan.id = parseInt(process.env.E2E_TEST_KECAMATAN_ID);
-    }
-    if (process.env.E2E_TEST_LAYANAN_ID) {
-      config.testData.layanan.basic.id = parseInt(process.env.E2E_TEST_LAYANAN_ID);
-    }
-
     // Browser overrides
     if (process.env.E2E_HEADLESS) {
       config.browser.headless = process.env.E2E_HEADLESS === 'true';

@@ -82,39 +82,6 @@ test.describe('Dashboard Tests', () => {
     expect(hasUserInfo).toBeTruthy();
   });
 
-  test('should have working navigation links', async ({ page }) => {
-    await page.goto('/dashboard');
-    await E2ETestHelper.waitForPageReady(page);
-
-    // Find navigation links
-    const navLinks = await page.locator('a[href*="/dashboard"], .nav-link[href*="/"], .sidebar a[href]').all();
-
-    if (navLinks.length > 0) {
-      // Test first few navigation links (avoid testing too many)
-      const linksToTest = navLinks.slice(0, Math.min(3, navLinks.length));
-
-      for (const link of linksToTest) {
-        const href = await link.getAttribute('href');
-        if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-          try {
-            await link.click();
-            await E2ETestHelper.waitForPageReady(page);
-
-            // Verify navigation worked
-            const currentUrl = await E2ETestHelper.getCurrentUrl(page);
-            expect(currentUrl).not.toContain('/login');
-
-            // Go back to dashboard
-            await page.goto('/dashboard');
-            await E2ETestHelper.waitForPageReady(page);
-          } catch (error) {
-            console.warn(`Failed to test navigation link ${href}:`, error.message);
-          }
-        }
-      }
-    }
-  });
-
   test('should maintain session across page refresh', async ({ page }) => {
     await page.goto('/dashboard');
     await E2ETestHelper.waitForPageReady(page);

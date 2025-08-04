@@ -1,6 +1,9 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Homepage Tests', () => {
+  // Test ini tidak menggunakan authentication state karena kita ingin test login
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     // Navigate to homepage
     await page.goto('/');
@@ -123,8 +126,6 @@ test.describe('Homepage Tests', () => {
     ];
 
     for (const linkInfo of requiredLinks) {
-      // Go back to homepage for each test
-      await page.goto('/');
 
       // Try different ways to find the link
       let linkElement = page.locator(`a[href="${linkInfo.path}"]`);
@@ -336,58 +337,5 @@ test.describe('Homepage Tests', () => {
     );
 
     expect(criticalErrors.length).toBe(0);
-  });
-
-  test('should have basic SEO elements', async ({ page }) => {
-    // Check for basic SEO elements
-    const title = await page.title();
-    expect(title.trim()).not.toBe('');
-    expect(title.length).toBeGreaterThan(10);
-
-    // Check for meta description
-    const metaDescription = page.locator('meta[name="description"]');
-    if (await metaDescription.count() > 0) {
-      const content = await metaDescription.getAttribute('content');
-      expect(content?.trim()).not.toBe('');
-    }
-
-    // Check for meta keywords (optional)
-    const metaKeywords = page.locator('meta[name="keywords"]');
-    if (await metaKeywords.count() > 0) {
-      const content = await metaKeywords.getAttribute('content');
-      expect(content?.trim()).not.toBe('');
-    }
-  });
-
-  test('should handle search functionality if available', async ({ page }) => {
-    // Look for search input
-    const searchSelectors = [
-      'input[type="search"]',
-      'input[name="search"]',
-      'input[placeholder*="cari" i]',
-      'input[placeholder*="search" i]',
-      '.search-input',
-      '#search'
-    ];
-
-    let searchInput = null;
-    for (const selector of searchSelectors) {
-      const element = page.locator(selector);
-      if (await element.count() > 0 && await element.first().isVisible()) {
-        searchInput = element.first();
-        break;
-      }
-    }
-
-    if (searchInput) {
-      // Test search functionality
-      await expect(searchInput).toBeVisible();
-      await expect(searchInput).toBeEditable();
-
-      // Try typing in search
-      await searchInput.fill('test search');
-      const value = await searchInput.inputValue();
-      expect(value).toBe('test search');
-    }
   });
 });

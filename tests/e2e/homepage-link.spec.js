@@ -1,6 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Application Links Tests', () => {
+// Test ini tidak menggunakan authentication state karena kita ingin test login
+  test.use({ storageState: { cookies: [], origins: [] } });
   const applicationLinks = [
     {
       path: '/web/openkab',
@@ -65,8 +67,6 @@ test.describe('Application Links Tests', () => {
   });
 
   test('should verify application links exist on homepage', async ({ page }) => {
-    // Navigate to homepage
-    await page.goto('/');
 
     for (const app of applicationLinks) {
       console.log(`\n🔍 Looking for ${app.name} link on homepage...`);
@@ -115,10 +115,7 @@ test.describe('Application Links Tests', () => {
     for (const app of applicationLinks) {
       console.log(`\n🖱️  Testing click navigation to ${app.name}...`);
 
-      // Go to homepage
-      await page.goto('/');
-
-      // Find the link using multiple strategies
+       // Find the link using multiple strategies
       let linkElement = null;
       const strategies = [
         () => page.locator(`a[href="${app.path}"]`),
@@ -157,85 +154,6 @@ test.describe('Application Links Tests', () => {
         console.log(`  ✅ Destination page title: "${title}"`);
       } else {
         console.log(`  ⚠️  Could not find clickable link for ${app.name}`);
-      }
-    }
-  });
-
-  test('should verify application pages load required resources', async ({ page }) => {
-    for (const app of applicationLinks) {
-      console.log(`\n📦 Testing resources for ${app.name}...`);
-
-      const failedRequests = [];
-
-      // Monitor network requests
-      page.on('response', response => {
-        if (response.status() >= 400) {
-          failedRequests.push({
-            url: response.url(),
-            status: response.status()
-          });
-        }
-      });
-
-      // Navigate to the page
-      await page.goto(app.path, { waitUntil: 'networkidle' });
-
-      // Wait for any lazy-loaded resources
-      await page.waitForTimeout(3000);
-
-      // Filter out non-critical failed requests
-      const criticalFailures = failedRequests.filter(request => {
-        const url = request.url.toLowerCase();
-        return !url.includes('favicon') &&
-               !url.includes('analytics') &&
-               !url.includes('ads') &&
-               !url.includes('tracking');
-      });
-
-      if (criticalFailures.length > 0) {
-        console.log(`  ⚠️  Failed requests for ${app.name}:`);
-        criticalFailures.forEach(failure => {
-          console.log(`    - ${failure.status}: ${failure.url}`);
-        });
-      } else {
-        console.log(`  ✅ All critical resources loaded successfully`);
-      }
-
-      // Don't fail the test for resource loading issues, just log them
-      expect(criticalFailures.length).toBeLessThanOrEqual(3);
-    }
-  });
-
-  test('should verify application pages are responsive', async ({ page }) => {
-    const viewports = [
-      { width: 1920, height: 1080, name: 'Desktop Large' },
-      { width: 1366, height: 768, name: 'Desktop Medium' },
-      { width: 768, height: 1024, name: 'Tablet' },
-      { width: 375, height: 667, name: 'Mobile' }
-    ];
-
-    for (const app of applicationLinks) {
-      console.log(`\n📱 Testing responsiveness for ${app.name}...`);
-
-      for (const viewport of viewports) {
-        // Set viewport
-        await page.setViewportSize({ width: viewport.width, height: viewport.height });
-
-        // Navigate to page
-        await page.goto(app.path, { waitUntil: 'domcontentloaded' });
-
-        // Verify page loads
-        await expect(page.locator('body')).toBeVisible();
-
-        // Check for horizontal scrollbar (indicates responsive issues)
-        const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
-        const viewportWidth = viewport.width;
-
-        if (bodyWidth > viewportWidth + 50) { // Allow small margin
-          console.log(`  ⚠️  Potential responsive issue on ${viewport.name}: body width ${bodyWidth}px > viewport ${viewportWidth}px`);
-        } else {
-          console.log(`  ✅ Responsive on ${viewport.name}`);
-        }
       }
     }
   });

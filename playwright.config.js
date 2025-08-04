@@ -43,17 +43,8 @@ module.exports = defineConfig({
         // Use saved authentication state
         storageState: './test-results/storage-state/auth.json'
       },
-      testIgnore: '**/login.spec.js' // Skip login tests untuk authenticated project
+      //testIgnore: ['**/login.spec.js', '**/homepage.spec.js', '**/homepage-link.spec.js'] // Skip login tests untuk authenticated project
     },
-    // Project untuk test login (tanpa auth state)
-    {
-      name: 'unauthenticated',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: { cookies: [], origins: [] } // Fresh state
-      },
-      testIgnore: ['**/login.spec.js', '**/homepage*.spec.js']
-    }
   ],
 
   webServer: {
