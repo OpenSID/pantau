@@ -1,4 +1,4 @@
-Di rilis v2507.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
@@ -11,7 +11,6 @@ Di rilis v2507.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 1. [#512](https://github.com/OpenSID/pantau/issues/512) Jumlah desa yang terpasang pada halaman OpenKab tidak mencatan pengguna dengan benar.
 2. [#497](https://github.com/OpenSID/pantau/issues/497) Perbaikan error 500 pada halaman KelolaDesa di pantau.
-
 
 #### Penyesuaian Teknis
 
