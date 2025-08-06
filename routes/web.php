@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdatController;
 use App\Http\Controllers\Admin\MargaController;
+use App\Http\Controllers\Admin\PekerjaanPmiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PbbController;
@@ -219,6 +220,11 @@ Route::middleware('auth')->group(function () {
     Route::get('adat/import', [AdatController::class, 'import'])->name('adat.import');
     Route::post('adat/proses-import', [AdatController::class, 'prosesImport'])->name('adat.proses-import');
     Route::get('adat/contoh-import', [AdatController::class, 'contohImport'])->name('adat.contoh-import');
+
+    Route::resource('pekerjaan-pmi', PekerjaanPmiController::class)->except('show');
+    Route::get('pekerjaan-pmi/import', [PekerjaanPmiController::class, 'import'])->name('pekerjaan-pmi.import');
+    Route::post('pekerjaan-pmi/proses-import', [PekerjaanPmiController::class, 'prosesImport'])->name('pekerjaan-pmi.proses-import');
+    Route::get('pekerjaan-pmi/contoh-import', [PekerjaanPmiController::class, 'contohImport'])->name('pekerjaan-pmi.contoh-import');
 
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class)->except('show');
