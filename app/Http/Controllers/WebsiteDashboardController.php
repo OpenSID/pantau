@@ -331,7 +331,16 @@ class WebsiteDashboardController extends Controller
 
     public function opensidData(Request $request)
     {
-        return view('website.opensid_data');
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_data', compact('fillters'));
     }
 
     public function pbbData(Request $request)
@@ -346,12 +355,23 @@ class WebsiteDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
+
+        $fillterModals = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+        ];
+
         $totalInstall = Desa::count();
         $totalInstallOnline = Desa::online()->count();
         $installHariIni = Desa::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 
         return view('website.opensid', [
             'fillters' => $fillters,
+            'fillterModals' => $fillterModals,
             'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
             'installHariIni' => $installHariIni,
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),

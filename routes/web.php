@@ -93,6 +93,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
 Route::prefix('datatables')->as('datatables:')
     ->group(function () {
         Route::get('desa-baru', [DashboardController::class, 'datatableDesaBaru'])->name('desa-baru');
+        Route::get('semua-desa', [DashboardController::class, 'datatableSemuaDesa'])->name('semua-desa');
         Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
         Route::get('opendk-baru', [DashboardController::class, 'datatableOpendkBaru'])->name('opendk-baru');
         Route::get('openkab-baru', [DashboardController::class, 'datatableOpenkabBaru'])->name('openkab-baru');
@@ -196,16 +197,11 @@ Route::middleware('auth')->group(function () {
     Route::get('akses/bersihkan', AksesController::class);
 
     // Wilayah Provinsi
-    Route::prefix('provinsi')->group(function () {
-        Route::get('/', [ProvinsiController::class, 'index']);
-        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
-    });
+    Route::resource('provinsi', ProvinsiController::class)->except('show');
+    Route::get('provinsi/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
 
     // Wilayah Kabupaten
-    Route::prefix('kabupaten')->group(function () {
-        Route::get('/', [KabupatenController::class, 'index']);
-        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
-    });
+    Route::resource('kabupaten', KabupatenController::class)->except('show');
 
     // Wilayah Kecamatan
     Route::resource('kecamatan', KecamatanController::class)->except('show');
