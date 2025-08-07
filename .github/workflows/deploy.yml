@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.CICD_SERVER_IP }}
           username: ${{ secrets.CICD_SERVER_USER }}
           key: ${{ secrets.CICD_SERVER_PRIVATE_KEY }}
-          port: ${{ secrets.CICD_SERVER_IP_PORT }}
+          port: ${{ secrets.CICD_SERVER_PORT }}
           script: |
             cd /opt/ansible
             ansible-playbook -v -i inventories/production/inventory.yml playbooks/deploy-pantau.yml
