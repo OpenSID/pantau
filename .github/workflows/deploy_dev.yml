@@ -1,7 +1,7 @@
 name: Deploy Pantau Rilis Dev with Ansible
 
 on:
-  pull_request:
+  push:
     branches:
       - rilis-dev
 
