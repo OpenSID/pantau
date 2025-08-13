@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdatController;
 use App\Http\Controllers\Api\InstallOpenDKController;
 use App\Http\Controllers\Api\InstallOpensidController;
 use App\Http\Controllers\Api\MargaController;
+use App\Http\Controllers\Api\PekerjaanPmiController;
 use App\Http\Controllers\Api\SukuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
@@ -43,6 +44,7 @@ Route::prefix('wilayah')
         Route::get('suku', [SukuController::class, 'index']);
         Route::get('marga', [MargaController::class, 'index']);
         Route::get('adat', [AdatController::class, 'index']);
+        Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
     });
 
 Route::prefix('track')
