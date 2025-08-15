@@ -148,19 +148,13 @@ class Desa extends Model
      */
     public function scopeKabupatenOpenSID($query, $fillters = [])
     {
-        // return $query
-        //     ->select(['nama_kabupaten', 'nama_provinsi'])
-        //     ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_lokal <> '') as offline")
-        //     ->selectRaw("(select count(*) from desa as x where x.nama_provinsi = desa.nama_provinsi and x.nama_kabupaten = desa.nama_kabupaten and x.versi_hosting <> '') as online")
-        //     ->groupBy(['nama_kabupaten', 'nama_provinsi']);
-
         return $query
             ->selectRaw('sub.kode_kabupaten')
             ->selectRaw('sub.nama_kabupaten')
             ->selectRaw('sub.kode_provinsi')
             ->selectRaw('sub.nama_provinsi')
-            ->selectRaw("count(case when versi_lokal <> '' then 1 else null end) as 'offline'")
-            ->selectRaw("count(case when versi_hosting <> '' then 1 else null end) as 'online'")
+            ->selectRaw("count(case when versi_lokal <> '' and versi_hosting is null then 1 else null end) as 'offline'")
+            ->selectRaw("count(case when versi_hosting <> '' and versi_lokal is null then 1 else null end) as 'online'")
             ->fromSub(function ($query) use ($fillters) {
                 $query
                     ->select(
@@ -176,10 +170,10 @@ class Desa extends Model
                     ->whereRaw("desa.kode_kabupaten <> ''")
                     // filter
                     ->when($fillters['status'] == 1, function ($query) {
-                        $query->whereRaw('d.versi_hosting is not null');
+                        $query->hostingOnline();
                     })
                     ->when($fillters['status'] == 2, function ($query) {
-                        $query->whereRaw('d.versi_lokal is not null');
+                        $query->hostingOffline();
                     })
                     ->when($fillters['status'] == 3, function ($query) {
                         $version = lastrelease_opensid();
@@ -335,10 +329,10 @@ class Desa extends Model
                 $query->where('kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
-                $query->whereNotNull('versi_hosting')->whereNull('versi_lokal');
+                $query->hostingOnline();
             })
             ->when($fillters['status'] == 2, function ($query) {
-                $query->whereNotNull('versi_lokal')->whereNull('versi_hosting');
+                $query->hostingOffline();
             })
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
@@ -426,8 +420,8 @@ class Desa extends Model
     {
         $versi = $query->where('versi_hosting', 'like', '%-premium')
                     ->orderByRaw(
-                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
-                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC,
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC,
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
                     )->first();
 
@@ -440,8 +434,8 @@ class Desa extends Model
     {
         $versi = $query->where('versi_hosting', 'not like', '%-premium')
                     ->orderByRaw(
-                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC, 
-                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC, 
+                        "CAST(SUBSTRING_INDEX(versi_hosting, '-', 1) AS UNSIGNED) DESC,
+                        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '-', -1), '.', 1) AS UNSIGNED) DESC,
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
                     )->first();
 
@@ -489,5 +483,15 @@ class Desa extends Model
     public function scopeTema($query)
     {
         return $query->whereIn('tema', ['esensi', 'natra', 'palanta'])->count();
+    }
+
+    public function scopeHostingOnline($query)
+    {
+        return $query->whereNotNull('versi_hosting')->whereNull('versi_lokal');
+    }
+
+    public function scopeHostingOffline($query)
+    {
+        return $query->whereNotNull('versi_lokal')->whereNull('versi_hosting');
     }
 }
