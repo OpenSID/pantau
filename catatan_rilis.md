@@ -7,6 +7,7 @@ Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Perbaikan Bug
 
+1. [#524](https://github.com/OpenSID/pantau/issues/524) Perbaikan ketidak sesuaian laporan berdasarkan filter wilayah.
 
 
 #### Penyesuaian Teknis
