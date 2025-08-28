@@ -13,4 +13,4 @@ Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 #### Penyesuaian Teknis
 
 1. [#521](https://github.com/OpenSID/pantau/issues/521) Tambahkan e2e testing.
-2. [#528](https://github.com/OpenSID/pantau/issues/528) workflow untuk update versi.
+2. [#526](https://github.com/OpenSID/pantau/issues/526) Upgrade packages berdasarkan temuan composer audit
