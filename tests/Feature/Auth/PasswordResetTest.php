@@ -25,7 +25,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/password/email', ['email' => $user->email]);
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class)->post('/password/email', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
@@ -36,7 +36,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/password/email', ['email' => $user->email]);
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class)->post('/password/email', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
             $response = $this->get('/password/reset/'.$notification->token);
@@ -53,7 +53,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/password/email', ['email' => $user->email]);
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class)->post('/password/email', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
             $response = $this->post('/password/reset', [
