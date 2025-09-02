@@ -1,9 +1,7 @@
-Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#513](https://github.com/OpenSID/pantau/issues/513) Penambahan CRUD provinsi dan kabupaten.
-2. [#505](https://github.com/OpenSID/pantau/issues/505) Penambahan modul pekerjaan PMI.
 
 #### Perbaikan Bug
 
@@ -14,3 +12,4 @@ Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 1. [#521](https://github.com/OpenSID/pantau/issues/521) Tambahkan e2e testing.
 2. [#526](https://github.com/OpenSID/pantau/issues/526) Upgrade packages berdasarkan temuan composer audit
+3. [#370](https://github.com/OpenSID/DukunganTeknis/issues/370) Deploy otomatis menggunakan asinble dipadukan dengan github action untuk devpantau.opendesa.id.
