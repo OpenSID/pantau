@@ -371,9 +371,7 @@ class WebsiteDashboardController extends Controller
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
-            //'pengguna_pbb' => Pbb::count(),
             'versi_pbb' => lastrelease_pbb(),
-            //'pengguna_anjungan' => Desa::anjungan()->count(),
             'latestPremiumVersion' => 'v'.lastrelease_opensid().'-premium',
             'latestUmumVersion' => 'v'.lastrelease_opensid(),
         ]);
