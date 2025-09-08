@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\TrackKelolaDesaController;
 use App\Http\Controllers\KelolaDesaDashboardController;
 use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\Api\TrackPBBController;
+use App\Http\Controllers\Api\DesaAktifOpensidController;
+use App\Http\Controllers\Api\InstallOpensidTodayController;
+use App\Http\Controllers\Api\PenggunaSelainOpensidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,4 +69,7 @@ Route::prefix('web')
         Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);
         Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
         Route::get('chart-opendk', [InstallOpenDKController::class, 'chart']);
+        Route::get('desa-aktif-opensid', DesaAktifOpensidController::class);
+        Route::get('install-hari-ini-opensid', InstallOpensidTodayController::class);
+        Route::get('pengguna-selain-opensid', PenggunaSelainOpensidController::class);
     });
