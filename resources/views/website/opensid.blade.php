@@ -264,6 +264,7 @@
             $('#block_install_baru').trigger('change')
             $('#block_pengguna_selain_opensid').trigger('change')
             $('#block_table_desa_baru').trigger('change')
+            $('#block_table_versi').trigger('change')
         }
 
         $(document).ready(function() {

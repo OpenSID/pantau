@@ -211,6 +211,7 @@ class Desa extends Model
                 ->fromSub(function ($query) use ($fillters) {
                     $query
                         ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
+                        ->filterWilayah(request())
                         ->where('versi_lokal', '<>', '')
                         ->when(session('provinsi'), function ($query, $provinsi) {
                             $query->where('kode_provinsi', $provinsi->kode_prov);
@@ -232,7 +233,7 @@ class Desa extends Model
                                 })
                                 ->when($fillters['aktif'] == '0', function ($query) {
                                     $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
-                                })
+                                })->filterWilayah(request())
                                 ->from('desa');
                         })
                         ->from('desa');

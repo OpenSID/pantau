@@ -59,7 +59,15 @@ class AppServiceProvider extends ServiceProvider
         // Macro untuk Query Builder
         Builder::macro('toBoundSql', $toRawSqlFunction);
         Builder::macro('toRawSql', $toRawSqlFunction);
-
+        Builder::macro('filterWilayah', function ($request) {
+            return $this->when($request->kode_provinsi, function ($query) use ($request) {
+                $query->where('kode_provinsi', $request->kode_provinsi);
+            })->when($request->kode_kabupaten, function ($query) use ($request) {
+                $query->where('kode_kabupaten', $request->kode_kabupaten);
+            })->when($request->kode_kecamatan, function ($query) use ($request) {
+                $query->where('kode_kecamatan', $request->kode_kecamatan);
+            });
+        });
         // Macro untuk Eloquent Builder
         EloquentBuilder::macro('toBoundSql', $toRawSqlFunction);
         EloquentBuilder::macro('toRawSql', $toRawSqlFunction);
