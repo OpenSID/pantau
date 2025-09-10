@@ -306,6 +306,10 @@ return [
                     'text' => 'Versi',
                     'url' => 'opendk/versi',
                 ],
+                [
+                    'text' => 'Kecamatan Aktif',
+                    'url' => 'opendk/kecamatan-aktif',
+                ],
             ],
         ],
         [
