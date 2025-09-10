@@ -280,6 +280,10 @@ return [
                     'text' => 'Pengguna Tema Bawaan',
                     'url' => 'laporan/tema',
                 ],
+                [
+                    'text' => 'Pengguna Tema Pro',
+                    'url' => 'laporan/tema-pro',
+                ],
             ],
         ],
         [

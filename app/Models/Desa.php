@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 class Desa extends Model
 {
     use HasFactory;
+    
+    public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
     /** {@inheritdoc} */
     protected $table = 'desa';
@@ -493,5 +495,46 @@ class Desa extends Model
     public function scopeHostingOffline($query)
     {
         return $query->whereNotNull('versi_lokal')->whereNull('versi_hosting');
+    }
+
+    public function scopeTemaPro($query)
+    {
+        return $query->where(function ($q) {
+            foreach (self::TEMA_PRO as $tema) {
+                $q->orWhere('tema', 'like', "%{$tema}%");
+            }
+        })->whereNotNull('tema')->count();
+    }
+
+    public function scopeTemaProList($query)
+    {
+        // Get data for themes that exist in database
+        $existingThemes = $query->where(function ($q) {
+            foreach (self::TEMA_PRO as $tema) {
+                $q->orWhere('tema', 'like', "%{$tema}%");
+            }
+        })
+            ->selectRaw("
+        CASE 
+            " . collect(self::TEMA_PRO)->map(function ($tema) {
+                return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
+            })->implode(' ') . "
+            ELSE tema
+        END AS tema_nama,
+        COUNT(*) as total
+    ")
+            ->groupBy('tema_nama')
+            ->pluck('total', 'tema_nama')
+            ->toArray();
+
+        // Ensure all TEMA_PRO themes are included with 0 count if not found
+        $allThemes = collect(self::TEMA_PRO)->map(function ($tema) use ($existingThemes) {
+            return (object) [
+                'tema_nama' => $tema,
+                'total' => $existingThemes[$tema] ?? 0
+            ];
+        })->sortByDesc('total')->values();
+
+        return $allThemes;
     }
 }
