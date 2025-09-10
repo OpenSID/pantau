@@ -13,6 +13,24 @@ class LaporanOpenkabController extends Controller
         if ($request->ajax()) {
             $query = Openkab::query();
 
+            // Apply filter based on request parameter
+            $filter = $request->query('filter');
+
+            if ($filter === 'provinsi') {
+                // Group by province to show only one record per province
+                $query = Openkab::select('kode_prov', 'nama_prov')
+                    ->selectRaw('COUNT(*) as jumlah_kabupaten')
+                    ->selectRaw('MAX(tgl_rekam) as tgl_rekam')
+                    ->selectRaw('MAX(url) as url')
+                    ->selectRaw('MAX(versi) as versi')
+                    ->selectRaw('"OpenKab" as nama_aplikasi')
+                    ->groupBy('kode_prov', 'nama_prov');
+            } elseif ($filter === 'terpasang') {
+                // Only show kabupaten with installed versions
+                $query->where('versi', '!=', '')->whereNotNull('versi');
+            }
+            // For 'total' or no filter, show all data
+
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->editColumn('tgl_rekam', function ($row) {
@@ -21,8 +39,11 @@ class LaporanOpenkabController extends Controller
                 ->editColumn('url', function ($row) {
                     return $row->url ? '<a href="' . $row->url . '" target="_blank">' . $row->url . '</a>' : '-';
                 })
-                ->editColumn('nama_wilayah', function ($row) {
-                    return $row->nama_wilayah;
+                ->editColumn('nama_wilayah', function ($row) use ($filter) {
+                    if ($filter === 'provinsi') {
+                        return $row->nama_prov . ' (' . $row->jumlah_kabupaten . ' kabupaten)';
+                    }
+                    return isset($row->nama_wilayah) ? $row->nama_wilayah : $row->nama_kab;
                 })
                 ->rawColumns(['url'])
                 ->make(true);

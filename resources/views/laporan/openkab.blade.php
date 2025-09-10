@@ -11,6 +11,7 @@
 @section('content')    
     @include('layouts.components.notification')
     <div class="row">
+        @if(empty(request()->query('filter')))
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
@@ -25,7 +26,7 @@
                                 <div class="icon">
                                     <i class="fas fa-map-marker-alt"></i>
                                 </div>
-                                <div class="small-box-footer" style="height: 40px;"></div>
+                                <a href="{{ url('laporan/openkab') }}?filter=provinsi" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -39,7 +40,7 @@
                                 <div class="icon">
                                     <i class="fas fa-city"></i>
                                 </div>
-                                <div class="small-box-footer" style="height: 40px;"></div>
+                                <a href="{{ url('laporan/openkab') }}?filter=total" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -53,7 +54,7 @@
                                 <div class="icon">
                                     <i class="fas fa-server"></i>
                                 </div>
-                                <div class="small-box-footer" style="height: 40px;"></div>
+                                <a href="{{ url('laporan/openkab') }}?filter=terpasang" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -61,15 +62,37 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Daftar OpenKab</h3>
+                    <h3 class="card-title">Daftar OpenKab
+                        @if(request()->query('filter') == 'provinsi')
+                            - Provinsi Terpasang
+                        @elseif(request()->query('filter') == 'total')
+                            - Total Kabupaten
+                        @elseif(request()->query('filter') == 'terpasang')
+                            - Kabupaten Terpasang
+                        @endif
+                    </h3>
                     <div class="card-tools">
                         <span data-toggle="tooltip" title="" class="badge badge-primary">
-                            {{ $totalKabupaten }}
+                            @if(request()->query('filter') == 'provinsi')
+                                {{ $jumlahProvinsi }}
+                            @elseif(request()->query('filter') == 'total')
+                                {{ $totalKabupaten }}
+                            @elseif(request()->query('filter') == 'terpasang')
+                                {{ $kabupatenTerpasang }}
+                            @else
+                                {{ $totalKabupaten }}
+                            @endif
                         </span>
+                        @if(request()->query('filter'))
+                            <a href="{{ url('laporan/openkab') }}" class="btn btn-sm btn-secondary ml-2">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
@@ -80,8 +103,13 @@
                                     <th>No</th>
                                     <th>Tgl Terpantau</th>
                                     <th>Aplikasi</th>
-                                    <th>Kabupaten</th>
-                                    <th>Provinsi</th>
+                                    @if(request()->query('filter') == 'provinsi')
+                                        <th>Provinsi</th>
+                                        <th>Jumlah Kabupaten</th>
+                                    @else
+                                        <th>Kabupaten</th>
+                                        <th>Provinsi</th>
+                                    @endif
                                     <th>Web</th>
                                     <th>Versi</th>
                                 </tr>
@@ -104,7 +132,7 @@
             autoWidth: false,
             ordering: true,
             ajax: {
-                url: `{{ url('laporan/openkab') }}`,
+                url: `{{ url('laporan/openkab') }}{{request()->query('filter') ? '?filter='.request()->query('filter') : ''}}`,
                 method: 'get'
             },
             columns: [{
@@ -120,6 +148,15 @@
                 data: 'nama_aplikasi',
                 name: 'nama_aplikasi'
             },
+            @if(request()->query('filter') == 'provinsi')
+            {
+                data: 'nama_prov'
+            },
+            {
+                data: 'jumlah_kabupaten',
+                name: 'jumlah_kabupaten'
+            },
+            @else
             {
                 data: 'nama_wilayah',
                 name: 'nama_kab'
@@ -127,6 +164,7 @@
             {
                 data: 'nama_prov'
             },
+            @endif
             {
                 data: 'url'
             },
