@@ -256,7 +256,7 @@ return [
             'can' => 'peta.view',
         ],
         [
-            'text' => 'Laporan',
+            'text' => 'OpenSID',
             'icon' => 'fas fa-file-alt',
             'can' => 'laporan.view',
             'submenu' => [
@@ -264,6 +264,11 @@ return [
                     'text' => 'Desa OpenSID',
                     'url' => 'laporan/desa',
                     'can' => 'laporan.desa.view',
+                ],
+                [
+                    'text' => 'Kecamatan OpenSID',
+                    'url' => 'laporan/kecamatan',
+                    'can' => 'laporan.kecamatan.view',
                 ],
                 [
                     'text' => 'Kabupaten OpenSID',

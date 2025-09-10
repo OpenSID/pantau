@@ -6,15 +6,7 @@ use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
-        // Create permissions based on menu structure
+    private // Create permissions based on menu structure
         $permissions = [
             // Dashboard & Main Menu
             'dashboard.view',
@@ -24,6 +16,7 @@ return new class extends Migration
             // Laporan
             'laporan.view',
             'laporan.desa.view',
+            'laporan.kecamatan.view',
             'laporan.kabupaten.view',
             'laporan.versi.view',
             'laporan.desa-aktif.view',
@@ -85,8 +78,15 @@ return new class extends Migration
             'profile.view',
             'profile.change-password.view',
         ];
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // Reset cached roles and permissions
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        foreach ($permissions as $permission) {
+        foreach ($this->permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
 
@@ -103,25 +103,16 @@ return new class extends Migration
             // Admin Wilayah gets limited permissions (mainly viewing and region-specific data)
             $adminWilayahPermissions = [
                 'dashboard.view',
-                'web.view',
                 'peta.view',
                 'laporan.view',
                 'laporan.desa.view',
-                'laporan.kabupaten.view',
-                'laporan.versi.view',
+                'laporan.kecamatan.view',
                 'laporan.desa-aktif.view',
-                'laporan.tema.view',
                 'opendk.view',
                 'opendk.kecamatan.view',
-                'opendk.kabupaten.view',
                 'opendk.versi.view',
                 'mobile.view',
                 'mobile.desa.view',
-                'wilayah.view',
-                'suku.view',
-                'marga.view',
-                'adat.view',
-                'pekerjaan-pmi.view',
                 'profile.view',
                 'profile.change-password.view',
             ];
@@ -137,26 +128,10 @@ return new class extends Migration
     {
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
-        // Remove all permissions created by this migration
-        $permissions = [
-            'dashboard.view', 'web.view', 'peta.view',
-            'laporan.view', 'laporan.desa.view', 'laporan.kabupaten.view', 'laporan.versi.view', 'laporan.desa-aktif.view', 'laporan.tema.view',
-            'opendk.view', 'opendk.kecamatan.view', 'opendk.kabupaten.view', 'opendk.versi.view',
-            'mobile.view', 'mobile.desa.view', 'mobile.pengguna.view', 'mobile.pengguna_kelola_desa.view',
-            'openkab.view', 'openkab.kerja-sama.view',
-            'pbb.view', 'pbb.kecamatan.view', 'pbb.kabupaten.view', 'pbb.versi.view',
-            'wilayah.view', 'suku.view', 'marga.view', 'adat.view', 'pekerjaan-pmi.view',
-            'review.view', 'review.non-aktif.view', 'review.desa-baru.view',
-            'akses.bersihkan.view',
-            'data-wilayah.view', 'provinsi.view', 'kabupaten.view', 'kecamatan.view', 'desa.view',
-            'pengguna.view', 'pengguna.create', 'pengguna.edit', 'pengguna.delete',
-            'pengaturan.view', 'pengaturan.aplikasi.view', 'profile.view', 'profile.change-password.view',
-        ];
-        Permission::whereIn('name', $permissions)->each(function ($permission) {
+        Permission::whereIn('name', $this->permissions)->each(function ($permission) {
             $permission->roles()->detach();
             $permission->users()->detach();
         });
-        Permission::whereIn('name', $permissions)->delete();
+        Permission::whereIn('name', $this->permissions)->delete();
     }
 };

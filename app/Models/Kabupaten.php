@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasRegionAccess;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Kabupaten extends Model
 {
-    use HasFactory, HasRegionAccess;
+    use HasFactory;
 
     /** {@inheritdoc} */
     protected $table = 'kabupaten';
