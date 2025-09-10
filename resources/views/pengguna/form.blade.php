@@ -35,10 +35,10 @@
                     <form method="post" action="{{ route('akun-pengguna.store') }}">
                         @csrf
                         <div class="form-group">
-                            <label>Group <span class="text-danger">*</span></label>
-                            <select name="id_grup" class="form-control" onchange="updateWilayahRequired()" required>
-                                <option value="" >-- Pilih Group --</option>
-                                @foreach ($groups as $id => $nama)
+                            <label>Role <span class="text-danger">*</span></label>
+                            <select name="role_id" class="form-control" onchange="updateWilayahRequired()" required>
+                                <option value="" >-- Pilih Role --</option>
+                                @foreach ($roles as $id => $nama)
                                     <option value="{{ $id }}">{{ $nama }}</option>
                                 @endforeach
                             </select>
@@ -81,14 +81,14 @@
                     @push('js')
                     <script>
                         var adminWilayahId = null;
-                        @foreach ($groups as $id => $nama)
+                        @foreach ($roles as $id => $nama)
                             @if (strtolower($nama) === 'admin wilayah')
                                 adminWilayahId = '{{ $id }}';
                             @endif
                         @endforeach
 
                 function updateWilayahRequired() {
-                    var selected = $('select[name=id_grup]').val();
+                    var selected = $('select[name=role_id]').val();
                     if (selected == adminWilayahId) {
                         $('#provinsi-akses').attr('required', true);
                         $('#kabupaten-akses').attr('required', true);

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\UserGrup;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -26,7 +26,7 @@ class PenggunaRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'id_grup' => 'required',
+            'role_id' => 'required',
             'name' => 'required|max:255',
             'username' => 'required|max:255|unique:users,username',
             'email' => 'required|max:255|email|unique:users,email',
@@ -38,9 +38,9 @@ class PenggunaRequest extends FormRequest
                 ->uncompromised(),
             'password_confirmation' => 'required_with:password|same:password',
         ];
-        // tambahkan required pada provinsi_akses dan kabupaten_akses jika grup adalah admin wilayah
-        $adminWilayah = UserGrup::where('nama', 'Admin Wilayah')->first();
-        if($adminWilayah->id == $this->input('id_grup')) {
+        // tambahkan required pada provinsi_akses dan kabupaten_akses jika role adalah admin wilayah
+        $adminWilayah = Role::where('name', 'Admin Wilayah')->first();
+        if($adminWilayah && $adminWilayah->id == $this->input('role_id')) {
             $rules['provinsi_akses'] = 'required';
             $rules['kabupaten_akses'] = 'required';
         } else {

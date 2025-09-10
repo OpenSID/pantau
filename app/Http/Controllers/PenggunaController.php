@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PenggunaRequest;
 use App\Models\User;
-use App\Models\UserGrup;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class PenggunaController extends Controller
 {
     public function show()
     {
-        return DataTables::of(User::with(['grup', 'userRegionAccess' => static fn($q) => $q->with(['kabupaten'])])->get())
+        return DataTables::of(User::with(['roles', 'userRegionAccess' => static fn($q) => $q->with(['kabupaten'])])->get())
             ->addColumn('action', function ($data) {
                 $defaultAccess = (object)['kode_provinsi' => ['id' => '', 'text' => ''], 'kode_kabupaten' => ['id' => '', 'text' => '']];
                 if($data->userRegionAccess) {
@@ -23,12 +22,13 @@ class PenggunaController extends Controller
                         $defaultAccess->kode_kabupaten = (object)['id' => $kabupaten->kode_kab, 'text' => $kabupaten->nama_kab];
                     }
                 }
-                $edit = '<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-modal" data-kode_provinsi=\''.json_encode($defaultAccess->kode_provinsi).'\' data-kode_kabupaten=\''.json_encode($defaultAccess->kode_kabupaten).'\' data-submit="'.url('akun-pengguna/'.$data->id).'" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-id_grup="'.$data->id_grup.'"><i class="fas fa-pencil-alt"></i></a>';
+                $roleId = $data->roles->first() ? $data->roles->first()->id : '';
+                $edit = '<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-modal" data-kode_provinsi=\''.json_encode($defaultAccess->kode_provinsi).'\' data-kode_kabupaten=\''.json_encode($defaultAccess->kode_kabupaten).'\' data-submit="'.url('akun-pengguna/'.$data->id).'" data-username="'.$data->username.'" data-name="'.$data->name.'" data-email="'.$data->email.'" data-role_id="'.$roleId.'"><i class="fas fa-pencil-alt"></i></a>';
                 $delete = '<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-name="'.$data->name.'"><i class="fas fa-trash"></i></a>';
 
                 return '<div class="btn btn-group">'.$edit.$delete.'</div>';
-            })->editColumn('id_grup', function($data) {
-                return $data->grup ? $data->grup->nama : '';
+            })->editColumn('role', function($data) {
+                return $data->roles->first() ? $data->roles->first()->name : '';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -36,14 +36,14 @@ class PenggunaController extends Controller
 
     public function index()
     {
-        $groups = UserGrup::pluck('nama', 'id');
-        return view('pengguna.index', compact('groups'));
+        $roles = Role::pluck('name', 'id');
+        return view('pengguna.index', compact('roles'));
     }
 
     public function create()
     {
-        $groups = UserGrup::pluck('nama', 'id');
-        return view('pengguna.form', compact('groups'));
+        $roles = Role::pluck('name', 'id');
+        return view('pengguna.form', compact('roles'));
     }
 
     public function destroy($id)
@@ -56,12 +56,19 @@ class PenggunaController extends Controller
     public function store(PenggunaRequest $request)
     {
         $simpan = new User;
-        $simpan->id_grup = $request->id_grup;
         $simpan->name = $request->name;
         $simpan->username = $request->username;
         $simpan->email = $request->email;
         $simpan->password = Hash::make($request->password);
         $simpan->save();
+
+        // Assign role ke user
+        if ($request->role_id) {
+            $role = Role::find($request->role_id);
+            if ($role) {
+                $simpan->assignRole($role->name);
+            }
+        }
 
         // Simpan akses wilayah
         $provinsiAkses = $request->input('provinsi_akses');
@@ -82,11 +89,19 @@ class PenggunaController extends Controller
     {
         $user = User::find($id);
         $user->update([
-                'id_grup' => $request->id_grup,
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
             ]);
+
+        // Update role user
+        if ($request->role_id) {
+            $role = Role::find($request->role_id);
+            if ($role) {
+                $user->syncRoles($role->name); // Sync role (hapus role lama, assign role baru)
+            }
+        }
+
         // Simpan akses wilayah
         $provinsiAkses = $request->input('provinsi_akses');
         $kabupatenAkses = $request->input('kabupaten_akses');

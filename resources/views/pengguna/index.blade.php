@@ -43,7 +43,7 @@
                                     <th>Username</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Group</th>
+                                    <th>Role</th>
                                 </tr>
                             </thead>
                         </table>
@@ -67,9 +67,9 @@
                                 @method('PUT')
                                 @csrf
                                 <div class="form-group">
-                                    <label>Group <span class="text-danger">*</span></label>
-                                    <select name="id_grup" class="form-control" id="edit-id-grup" onchange="updateWilayahRequired()" required>
-                                        @foreach ($groups as $id => $nama)
+                                    <label>Role <span class="text-danger">*</span></label>
+                                    <select name="role_id" class="form-control" id="edit-role-id" onchange="updateWilayahRequired()" required>
+                                        @foreach ($roles as $id => $nama)
                                             <option value="{{ $id }}">{{ $nama }}</option>
                                         @endforeach
                                     </select>
@@ -156,23 +156,23 @@
                     name: 'email'
                 },
                 {
-                    data: 'id_grup',
-                    name: 'id_grup'
+                    data: 'role',
+                    name: 'role'
                 },
             ]
         });
     });
 
-    // Dinamis: jika grup Admin Wilayah dipilih, provinsi/kabupaten wajib, selainnya tidak wajib
+    // Dinamis: jika role Admin Wilayah dipilih, provinsi/kabupaten wajib, selainnya tidak wajib
         var adminWilayahId = null;
-        @foreach ($groups as $id => $nama)
+        @foreach ($roles as $id => $nama)
             @if (strtolower($nama) === 'admin wilayah')
                 adminWilayahId = '{{ $id }}';
             @endif
         @endforeach
 
         window.updateWilayahRequired = function() {
-            var selected = $('#edit-id-grup').val();
+            var selected = $('#edit-role-id').val();
             if (selected == adminWilayahId) {
                 $('#edit-provinsi-akses').attr('required', true);
                 $('#edit-kabupaten-akses').attr('required', true);
@@ -191,7 +191,7 @@
         var username = button.data('username')
         var name = button.data('name')
         var email = button.data('email')
-        var id_grup = button.data('id_grup')
+        var role_id = button.data('role_id')
         var kabupaten = button.data('kode_kabupaten')
         var provinsi = button.data('kode_provinsi')
         var modal = $(this)
@@ -200,8 +200,8 @@
         modal.find('.modal-body #username').val(username)
         modal.find('.modal-body #name').val(name)
         modal.find('.modal-body #email').val(email)
-        modal.find('.modal-body #edit-id-grup').val(id_grup);
-        modal.find('.modal-body #edit-id-grup').trigger('change');
+        modal.find('.modal-body #edit-role-id').val(role_id);
+        modal.find('.modal-body #edit-role-id').trigger('change');
 
         // Set provinsi
         if (provinsi) {

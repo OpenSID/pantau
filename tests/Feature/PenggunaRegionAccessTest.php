@@ -13,9 +13,9 @@ class PenggunaRegionAccessTest extends TestCase
 
     public function test_admin_can_create_user_with_region_access()
     {
-        $this->withoutMiddleware(Authenticate::class);
+        $this->withoutMiddleware([Authenticate::class, \App\Http\Middleware\VerifyCsrfToken::class]);
         $response = $this->post(route('akun-pengguna.store'), [
-            'id_grup' => 1,
+            'role_id' => 1,
             'username' => 'testuser',
             'password' => 'Str0ngP@ssw0rd909!',
             'password_confirmation' => 'Str0ngP@ssw0rd909!',

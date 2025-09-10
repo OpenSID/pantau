@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'id_grup'
+        'password'
     ];
 
     /**
@@ -59,13 +59,5 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserRegionAccess::class, 'user_id', 'id');
     }
 
-    /**
-     * Get the grup associated with the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function grup(): HasOne
-    {
-        return $this->hasOne(UserGrup::class, 'id', 'id_grup');
-    }
+
 }
