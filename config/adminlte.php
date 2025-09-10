@@ -309,6 +309,16 @@ return [
             ],
         ],
         [
+            'text' => 'OpenKab',
+            'icon' => 'fas fa-city',
+            'submenu' => [
+                [
+                    'text' => 'Dasbor',
+                    'url' => 'laporan/openkab',
+                ],
+            ],
+        ],
+        [
             'text' => 'LayananDesa',
             'icon' => 'fas fa-file-alt',
             'submenu' => [
