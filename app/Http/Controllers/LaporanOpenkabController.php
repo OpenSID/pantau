@@ -56,4 +56,48 @@ class LaporanOpenkabController extends Controller
 
         return view('laporan.openkab', compact('jumlahProvinsi', 'totalKabupaten', 'kabupatenTerpasang'));
     }
+
+    public function pengguna(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Openkab::query()
+                ->selectRaw('openkab.*')
+                ->selectRaw('CASE 
+                    WHEN openkab.updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) 
+                    THEN "Aktif" 
+                    ELSE "Tidak Aktif" 
+                END as status_akses')
+                ->selectRaw('COALESCE(openkab.jumlah_desa, 0) as jumlah_pengguna_terdaftar')
+                ->selectRaw('openkab.tgl_rekam as login_terakhir');
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('nama_kab', function ($row) {
+                    return $row->nama_kab;
+                })
+                ->addColumn('status_akses_display', function ($row) {
+                    if ($row->status_akses === 'Aktif') {
+                        return '<span class="badge badge-success">Aktif</span>';
+                    }
+                    return '<span class="badge badge-danger">Tidak Aktif</span>';
+                })
+                ->editColumn('login_terakhir', function ($row) {
+                    return $row->login_terakhir ? date('d/m/Y H:i', strtotime($row->login_terakhir)) : '-';
+                })
+                ->editColumn('jumlah_pengguna_terdaftar', function ($row) {
+                    return number_format($row->jumlah_pengguna_terdaftar);
+                })
+                ->filterColumn('status_akses', function ($query, $keyword) {
+                    $query->whereRaw("(CASE 
+                        WHEN openkab.updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) 
+                        THEN 'Aktif' 
+                        ELSE 'Tidak Aktif' 
+                    END) like ?", ["%{$keyword}%"]);
+                })
+                ->rawColumns(['status_akses_display'])
+                ->make(true);
+        }
+
+        return view('laporan.openkab-pengguna');
+    }
 }

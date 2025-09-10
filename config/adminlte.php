@@ -316,6 +316,10 @@ return [
                     'text' => 'Dasbor',
                     'url' => 'laporan/openkab',
                 ],
+                [
+                    'text' => 'Pengguna Aktif',
+                    'url' => 'laporan/openkab/pengguna',
+                ],
             ],
         ],
         [
