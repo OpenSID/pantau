@@ -66,20 +66,20 @@ class PenggunaController extends Controller
         // Simpan akses wilayah
         $provinsiAkses = $request->input('provinsi_akses');
         $kabupatenAkses = $request->input('kabupaten_akses');
-        $userId = $simpan->id;
         // Jika tidak ada kabupaten, simpan akses provinsi saja
-
-        $simpan->userRegionAccess()->create([
+        if($kabupatenAkses) {
+            $simpan->userRegionAccess()->create([
                     'kode_provinsi' => $provinsiAkses,
                     'kode_kabupaten' => $kabupatenAkses,
                 ]);
+
+        }
 
         return redirect()->route('akun-pengguna.index')->withAlert('Pengguna baru berhasil tersimpan');
     }
 
     public function update(PenggunaRequest $request, $id)
     {
-        Log::error('Update user called for ID: ', $request->all());
         $user = User::find($id);
         $user->update([
                 'id_grup' => $request->id_grup,

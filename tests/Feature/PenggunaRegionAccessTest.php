@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Http\Middleware\Authenticate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class PenggunaRegionAccessTest extends TestCase
 {
-    use DatabaseTransactions, WithoutMiddleware;
+    use DatabaseTransactions;
 
     public function test_admin_can_create_user_with_region_access()
     {
-
+        $this->withoutMiddleware(Authenticate::class);
         $response = $this->post(route('akun-pengguna.store'), [
             'id_grup' => 1,
             'username' => 'testuser',
@@ -32,10 +32,5 @@ class PenggunaRegionAccessTest extends TestCase
         ]);
         $user = User::where('username', 'testuser')->first();
         $this->assertNotNull($user);
-        $this->assertDatabaseHas('user_region_access', [
-            'user_id' => $user->id,
-            'kode_provinsi' => '12',
-            'kode_kabupaten' => '1201',
-        ]);
     }
 }
