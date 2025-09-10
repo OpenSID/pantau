@@ -201,6 +201,48 @@ class LaporanOpenkabTest extends TestCase
 
         // Should show all kabupaten
         $this->assertCount(3, $data['data']);
+    }
+
+    /** @test */
+    public function pengguna_page_can_be_accessed()
+    {
+        $response = $this->actingAs($this->user)
+            ->get('/laporan/openkab/pengguna');
+        $response->assertStatus(200);
+        $response->assertViewIs('laporan.openkab-pengguna');
+    }
+
+    /** @test */
+    public function pengguna_page_displays_correct_statistics()
+    {
+        $response = $this->actingAs($this->user)
+            ->get('/laporan/openkab/pengguna');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('laporan.openkab-pengguna');
+    }
+
+    /** @test */
+    public function pengguna_page_returns_ajax_data()
+    {
+        $response = $this->actingAs($this->user)
+            ->ajaxGet('/laporan/openkab/pengguna');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'DT_RowIndex',
+                    'nama_kab',
+                    'status_akses_display',
+                    'jumlah_pengguna_terdaftar',
+                    'login_terakhir'
+                ]
+            ]
+        ]);
     }    /**
          * Helper method to make AJAX requests
          */
