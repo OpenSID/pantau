@@ -68,8 +68,10 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Group <span class="text-danger">*</span></label>
-                                    <select name="id_grup" class="form-control">
-                                        <option value="1">Administrator</option>
+                                    <select name="id_grup" class="form-control" id="edit-id-grup" onchange="updateWilayahRequired()" required>
+                                        @foreach ($groups as $id => $nama)
+                                            <option value="{{ $id }}">{{ $nama }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -161,6 +163,28 @@
         });
     });
 
+    // Dinamis: jika grup Admin Wilayah dipilih, provinsi/kabupaten wajib, selainnya tidak wajib
+        var adminWilayahId = null;
+        @foreach ($groups as $id => $nama)
+            @if (strtolower($nama) === 'admin wilayah')
+                adminWilayahId = '{{ $id }}';
+            @endif
+        @endforeach
+
+        window.updateWilayahRequired = function() {
+            var selected = $('#edit-id-grup').val();
+            if (selected == adminWilayahId) {
+                $('#edit-provinsi-akses').attr('required', true);
+                $('#edit-kabupaten-akses').attr('required', true);
+                $('#edit-provinsi-akses').closest('div.form-group').show();
+                $('#edit-kabupaten-akses').closest('div.form-group').show();
+            } else {
+                $('#edit-provinsi-akses').removeAttr('required');
+                $('#edit-kabupaten-akses').removeAttr('required');
+                $('#edit-provinsi-akses').closest('div.form-group').hide();
+                $('#edit-kabupaten-akses').closest('div.form-group').hide();
+            }
+        }
     $('#edit-modal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget)
         var submit = button.data('submit')
@@ -176,7 +200,9 @@
         modal.find('.modal-body #username').val(username)
         modal.find('.modal-body #name').val(name)
         modal.find('.modal-body #email').val(email)
-        modal.find('.modal-body #id_grup option[value=' + id_grup + ']').attr('selected', 'selected')
+        modal.find('.modal-body #edit-id-grup').val(id_grup);
+        modal.find('.modal-body #edit-id-grup').trigger('change');
+
         // Set provinsi
         if (provinsi) {
             let provinsiOption = new Option(provinsi.text, provinsi.id, true, true);

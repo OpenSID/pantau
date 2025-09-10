@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PenggunaRequest;
 use App\Models\User;
+use App\Models\UserGrup;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class PenggunaController extends Controller
 {
     public function show()
     {
-        return DataTables::of(User::with(['userRegionAccess' => static fn($q) => $q->with(['kabupaten'])])->get())
+        return DataTables::of(User::with(['grup', 'userRegionAccess' => static fn($q) => $q->with(['kabupaten'])])->get())
             ->addColumn('action', function ($data) {
                 $defaultAccess = (object)['kode_provinsi' => ['id' => '', 'text' => ''], 'kode_kabupaten' => ['id' => '', 'text' => '']];
                 if($data->userRegionAccess) {
@@ -25,6 +27,8 @@ class PenggunaController extends Controller
                 $delete = '<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-modal" data-submit="'.url('akun-pengguna/'.$data->id).'" data-name="'.$data->name.'"><i class="fas fa-trash"></i></a>';
 
                 return '<div class="btn btn-group">'.$edit.$delete.'</div>';
+            })->editColumn('id_grup', function($data) {
+                return $data->grup ? $data->grup->nama : '';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -32,12 +36,14 @@ class PenggunaController extends Controller
 
     public function index()
     {
-        return view('pengguna.index');
+        $groups = UserGrup::pluck('nama', 'id');
+        return view('pengguna.index', compact('groups'));
     }
 
     public function create()
     {
-        return view('pengguna.form');
+        $groups = UserGrup::pluck('nama', 'id');
+        return view('pengguna.form', compact('groups'));
     }
 
     public function destroy($id)
@@ -73,6 +79,7 @@ class PenggunaController extends Controller
 
     public function update(PenggunaRequest $request, $id)
     {
+        Log::error('Update user called for ID: ', $request->all());
         $user = User::find($id);
         $user->update([
                 'id_grup' => $request->id_grup,
@@ -83,6 +90,11 @@ class PenggunaController extends Controller
         // Simpan akses wilayah
         $provinsiAkses = $request->input('provinsi_akses');
         $kabupatenAkses = $request->input('kabupaten_akses');
+        if($provinsiAkses === null && $kabupatenAkses === null) {
+            // Jika tidak ada akses wilayah, hapus data akses wilayah yang ada
+            $user->userRegionAccess()->delete();
+            return redirect()->route('akun-pengguna.index')->withAlert('Data pengguna berhasil diperbarui');
+        }
         $user->userRegionAccess()->updateOrCreate(
             [
                 'user_id' => $id

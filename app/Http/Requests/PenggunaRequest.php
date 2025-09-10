@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\UserGrup;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
-use Tests\Feature\Auth\PasswordConfirmationTest;
 
 class PenggunaRequest extends FormRequest
 {
@@ -37,9 +37,18 @@ class PenggunaRequest extends FormRequest
                 ->mixedCase()
                 ->uncompromised(),
             'password_confirmation' => 'required_with:password|same:password',
-            'provinsi_akses' => 'required',
-            'kabupaten_akses' => 'required',
         ];
+        // tambahkan required pada provinsi_akses dan kabupaten_akses jika grup adalah admin wilayah
+        $adminWilayah = UserGrup::where('nama', 'Admin Wilayah')->first();
+        if($adminWilayah->id == $this->input('id_grup')) {
+            $rules['provinsi_akses'] = 'required';
+            $rules['kabupaten_akses'] = 'required';
+        } else {
+            $rules['provinsi_akses'] = 'nullable';
+            $rules['kabupaten_akses'] = 'nullable';
+            $this->request->remove('kabupaten_akses');
+            $this->request->remove('provinsi_akses');
+        }
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             $id = $this->route('akun_pengguna');
             $rules['username'] = 'required|max:255|unique:users,username,' . $id;

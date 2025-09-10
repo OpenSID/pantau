@@ -36,8 +36,11 @@
                         @csrf
                         <div class="form-group">
                             <label>Group <span class="text-danger">*</span></label>
-                            <select name="id_grup" class="form-control">
-                                <option value="1">Administrator</option>
+                            <select name="id_grup" class="form-control" onchange="updateWilayahRequired()" required>
+                                <option value="" >-- Pilih Group --</option>
+                                @foreach ($groups as $id => $nama)
+                                    <option value="{{ $id }}">{{ $nama }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -77,6 +80,30 @@
                         </div>
                     @push('js')
                     <script>
+                        var adminWilayahId = null;
+                        @foreach ($groups as $id => $nama)
+                            @if (strtolower($nama) === 'admin wilayah')
+                                adminWilayahId = '{{ $id }}';
+                            @endif
+                        @endforeach
+
+                function updateWilayahRequired() {
+                    var selected = $('select[name=id_grup]').val();
+                    if (selected == adminWilayahId) {
+                        $('#provinsi-akses').attr('required', true);
+                        $('#kabupaten-akses').attr('required', true);
+                        $('#provinsi-akses').closest('div.form-group').show();
+                        $('#kabupaten-akses').closest('div.form-group').show();
+                    } else {
+                        $('#provinsi-akses').removeAttr('required');
+                        $('#kabupaten-akses').removeAttr('required');
+                        $('#provinsi-akses').closest('div.form-group').hide();
+                        $('#kabupaten-akses').closest('div.form-group').hide();
+                    }
+                }
+                        $('document').ready(function() {
+                            updateWilayahRequired();
+                        });
                         $('#provinsi-akses').select2({
                             ajax: {
                                 headers: {

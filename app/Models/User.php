@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'id_grup'
     ];
 
     /**
@@ -56,5 +57,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function userRegionAccess(): HasOne
     {
         return $this->hasOne(UserRegionAccess::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the grup associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function grup(): HasOne
+    {
+        return $this->hasOne(UserGrup::class, 'id', 'id_grup');
     }
 }
