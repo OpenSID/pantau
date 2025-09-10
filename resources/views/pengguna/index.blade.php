@@ -84,6 +84,14 @@
                                     <label>Email</label>
                                     <input type="email" id="email" class="form-control" name="email">
                                 </div>
+                                <div class="form-group">
+                                    <label>Akses Wilayah (Provinsi) <span class="text-danger">*</span></label>
+                                    <select id="edit-provinsi-akses" name="provinsi_akses" required class="form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Akses Wilayah (Kabupaten) <span class="text-danger">*</span></label>
+                                    <select id="edit-kabupaten-akses" name="kabupaten_akses" class="form-control" disabled required></select>
+                                </div>
 
                                 <a type="button" class="btn btn-danger float-right ml-2" data-dismiss="modal">Batal</a>
                                 <button class="btn btn-success float-right">Perbarui</button>
@@ -118,65 +126,176 @@
         </div>
     </div>
 @endsection
+
 @section('js')
-    <script>
-        $(function() {
-            $('#datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('akun-pengguna.datatables') }}',
-                columns: [
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'username',
-                        name: 'username'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'id_grup',
-                        name: 'id_grup'
-                    },
-                ]
-            });
+<script>
+    $(function() {
+        $('#datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('akun-pengguna.datatables') }}',
+            columns: [
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'username',
+                    name: 'username'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'id_grup',
+                    name: 'id_grup'
+                },
+            ]
         });
+    });
 
-        $('#edit-modal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var submit = button.data('submit')
-            var username = button.data('username')
-            var name = button.data('name')
-            var email = button.data('email')
-            var id_grup = button.data('id_grup')
+    $('#edit-modal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var submit = button.data('submit')
+        var username = button.data('username')
+        var name = button.data('name')
+        var email = button.data('email')
+        var id_grup = button.data('id_grup')
+        var kabupaten = button.data('kode_kabupaten')
+        var provinsi = button.data('kode_provinsi')
+        var modal = $(this)
+        modal.find('.modal-title').text('Ubah: ' + name)
+        modal.find('.modal-body form').attr('action', submit)
+        modal.find('.modal-body #username').val(username)
+        modal.find('.modal-body #name').val(name)
+        modal.find('.modal-body #email').val(email)
+        modal.find('.modal-body #id_grup option[value=' + id_grup + ']').attr('selected', 'selected')
+        // Set provinsi
+        if (provinsi) {
+            let provinsiOption = new Option(provinsi.text, provinsi.id, true, true);
+            $('#edit-provinsi-akses').append(provinsiOption).trigger('change');
+            $('#edit-provinsi-akses').trigger('change');
+            // Enable kabupaten select
+            $('#edit-kabupaten-akses').prop('disabled', false);
+            if( kabupaten ) {
+                let kabupatenOption = new Option(kabupaten.text, kabupaten.id, true, true);
+                $('#edit-kabupaten-akses').append(kabupatenOption).trigger('change');
+                $('#edit-kabupaten-akses').trigger('change');
+            } else {
+                $('#edit-kabupaten-akses').val(null).trigger('change');
+            }
+        } else {
+            $('#edit-provinsi-akses').val(null).trigger('change');
+            $('#edit-kabupaten-akses').prop('disabled', true);
+            $('#edit-kabupaten-akses').val(null).trigger('change');
+        }
+    });
 
-            var modal = $(this)
-            modal.find('.modal-title').text('Ubah: ' + name)
-            modal.find('.modal-body form').attr('action', submit)
-            modal.find('.modal-body #username').val(username)
-            modal.find('.modal-body #name').val(name)
-            modal.find('.modal-body #email').val(email)
-            modal.find('.modal-body #id_grup option[value=' + id_grup + ']').attr('selected', 'selected')
-        });
+    $('#delete-modal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var name = button.data('name')
+        var submit = button.data('submit')
 
-        $('#delete-modal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var name = button.data('name')
-            var submit = button.data('submit')
+        var modal = $(this)
+        modal.find('.modal-title').text('Hapus: ' + name)
+        modal.find('.modal-footer form').attr('action', submit)
+    });
 
-            var modal = $(this)
-            modal.find('.modal-title').text('Hapus: ' + name)
-            modal.find('.modal-footer form').attr('action', submit)
-        });
-    </script>
+    // Inisialisasi Select2 wilayah pada modal edit (hanya sekali)
+    $('#edit-provinsi-akses').select2({
+        dropdownParent: $('#edit-modal'),
+        width: '100%',
+        ajax: {
+            headers: {
+                "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
+            },
+            url: "{{ url('api/v1/wilayah/provinsi') }}",
+            dataType: 'json',
+            delay: 400,
+            data: function(params) {
+                return {
+                    search: params.term,
+                    page: params.page
+                };
+            },
+            processResults: function(response, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(response.data, function(item) {
+                        return {
+                            id: item.kode_prov,
+                            text: item.nama_prov,
+                        }
+                    }),
+                    pagination: {
+                        more: params.page < response.last_page
+                    }
+                };
+            }
+        }
+    });
+    $('#edit-kabupaten-akses').select2({
+        dropdownParent: $('#edit-modal'),
+        width: '100%',
+        ajax: {
+            headers: {
+                "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
+            },
+            url: "{{ url('api/v1/wilayah/kabupaten') }}",
+            dataType: 'json',
+            delay: 400,
+            data: function(params) {
+                // Ambil provinsi terpilih
+                let provinsiIds = $('#edit-provinsi-akses').val();
+                return {
+                    search: params.term,
+                    kode_prov: provinsiIds,
+                    page: params.page
+                };
+            },
+            processResults: function(response, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(response.data, function(item) {
+                        return {
+                            id: item.kode_kab,
+                            text: item.nama_kab,
+                        }
+                    }),
+                    pagination: {
+                        more: params.page < response.last_page
+                    }
+                };
+            }
+        }
+    });
+
+
+    // Prevent bubbling on select2 select event (provinsi/kabupaten)
+    $('#edit-kabupaten-akses, #edit-provinsi-akses').on('select2:select', function(e) {
+        e.stopPropagation();
+    });
+    // disable modal closing when clicking on select2 results
+    $('#edit-modal').on('click', '.select2-results', function(e) {
+        e.stopPropagation();
+    });
+    // Enable/disable kabupaten select
+    $('#edit-provinsi-akses').on('change', function(e) {
+        let provinsiIds = $(this).val();
+        if (provinsiIds && provinsiIds.length > 0) {
+            $('#edit-kabupaten-akses').prop('disabled', false);
+            $('#edit-kabupaten-akses').val(null).trigger('change');
+        } else {
+            $('#edit-kabupaten-akses').prop('disabled', true);
+            $('#edit-kabupaten-akses').val(null).trigger('change');
+        }
+    });
+</script>
 @endsection

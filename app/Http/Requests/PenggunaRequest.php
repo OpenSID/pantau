@@ -37,6 +37,8 @@ class PenggunaRequest extends FormRequest
                 ->mixedCase()
                 ->uncompromised(),
             'password_confirmation' => 'required_with:password|same:password',
+            'provinsi_akses' => 'required',
+            'kabupaten_akses' => 'required',
         ];
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             $id = $this->route('akun_pengguna');

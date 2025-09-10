@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -45,5 +46,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adminlte_image()
     {
         return 'https://picsum.photos/300/300';
+    }
+
+    /**
+     * Get the userRegionAccess associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function userRegionAccess(): HasOne
+    {
+        return $this->hasOne(UserRegionAccess::class, 'user_id', 'id');
     }
 }
