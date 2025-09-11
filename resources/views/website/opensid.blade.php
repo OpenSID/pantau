@@ -17,8 +17,8 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-10 align-content-center">
-                                    @if(request()->has('nama_kabupaten'))
-                                        <h4>Kabupaten {{ request('nama_kabupaten') }}</h3>
+                                    @if(request()->has('nama_wilayah'))
+                                        <h4>{{ request('nama_wilayah') }}</h3>
                                     @endif
                                     <div class="d-flex">
                                         <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"

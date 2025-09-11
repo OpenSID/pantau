@@ -6,7 +6,7 @@
               <div class="d-flex justify-content-center">
                   <div class="card">
                       <div class="card-body">
-                        <a href="{{ url('web/opensid') }}?kode_provinsi={{ $item->kode_prov }}&nama_provinsi={{ $item->nama_prov }}&kode_kabupaten={{ $item->kode_kab }}&nama_kabupaten={{ $item->nama_kab }}" class="text-decoration-none">
+                        <a href="{{ url('web/opensid') }}?kode_provinsi={{ $item->kode_prov }}&nama_provinsi={{ $item->nama_prov }}&kode_kabupaten={{ $item->kode_kab }}&nama_kabupaten={{ $item->nama_kab }}&nama_wilayah={{ $item->nama_wilayah }}" class="text-decoration-none">
                           <p class="card-text m-0 text-blue">{{ $item->nama_wilayah }}</p>
                         </a>
                           <p class="card-text m-0">OpenSID</p>
