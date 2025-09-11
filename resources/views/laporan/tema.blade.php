@@ -26,7 +26,7 @@
                                         <p>Tema {{ $temaCard['name'] }}</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="fas fa-user-plus"></i>
+                                        <i class="fas fa-palette"></i>
                                     </div>
                                     <a href="{{ url('laporan/tema') }}?tema={{ $temaCard['name'] }}&total={{ $temaCard['count'] }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                                 </div>
