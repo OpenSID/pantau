@@ -47,6 +47,19 @@ Route::prefix('wilayah')
         Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
     });
 
+// API untuk laporan
+Route::get('kabupaten', function(\Illuminate\Http\Request $request) {
+    $query = \App\Models\Desa::select('kode_kabupaten', 'nama_kabupaten')
+        ->distinct()
+        ->orderBy('nama_kabupaten');
+
+    if ($request->kode_provinsi) {
+        $query->where('kode_provinsi', $request->kode_provinsi);
+    }
+
+    return $query->get();
+});
+
 Route::prefix('track')
     ->middleware('tracksid')
     ->group(function () {

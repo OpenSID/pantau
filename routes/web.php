@@ -16,6 +16,7 @@ use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LaporanKecamatanController;
 use App\Http\Controllers\OpenkabController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -140,6 +141,8 @@ Route::prefix('laporan')
         Route::get('desa', [LaporanController::class, 'desa']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
+        Route::get('kecamatan', [LaporanKecamatanController::class, 'index'])->name('laporan.kecamatan');
+        Route::get('kecamatan/{kode_kecamatan}', [LaporanKecamatanController::class, 'detail'])->name('laporan.kecamatan.detail');
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
         Route::get('tema', [LaporanTemaController::class, 'index']);
