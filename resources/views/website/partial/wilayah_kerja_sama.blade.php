@@ -6,7 +6,9 @@
               <div class="d-flex justify-content-center">
                   <div class="card">
                       <div class="card-body">
+                        <a href="{{ url('web/opensid') }}?kode_provinsi={{ $item->kode_prov }}&nama_provinsi={{ $item->nama_prov }}&kode_kabupaten={{ $item->kode_kab }}&nama_kabupaten={{ $item->nama_kab }}" class="text-decoration-none">
                           <p class="card-text m-0 text-blue">{{ $item->nama_wilayah }}</p>
+                        </a>
                           <p class="card-text m-0">OpenSID</p>
                           <p class="card-text m-0">Terpasang: {{ $item->desa_count }}</p>
                           <p class="card-text m-0">Belum Terpasang: {{ $item->wilayah_count - $item->desa_count }}</p>
@@ -22,7 +24,7 @@
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
   </div>
-  
+
 @push('js')
 <script>
     var swiperOptions = {
@@ -45,7 +47,7 @@
 };
 
 var swiper = new Swiper('.swiper-container', swiperOptions);
-  
+
     $(document).ready(function() {
       function checkScreenWidth() {
         if ($(window).width() < 768) {
@@ -56,10 +58,10 @@ var swiper = new Swiper('.swiper-container', swiperOptions);
             swiperOptions.spaceBetween = -50;
         }
       }
-  
+
       var swiper = new Swiper("#swiper", swiperOptions);
       checkScreenWidth();
-  
+
       $(window).on('resize', function() {
         checkScreenWidth();
         swiper.destroy();
