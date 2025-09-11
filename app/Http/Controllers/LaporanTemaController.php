@@ -27,7 +27,7 @@ class LaporanTemaController extends Controller
             if ($tema) {
                 $data = DataTables::of(Desa::fillter($fillters)->where('tema', $tema));
             } else {
-                $data = DataTables::of(Desa::fillter($fillters)->whereIn('tema', ['esensi', 'natra', 'palanta']));
+                $data = DataTables::of(Desa::fillter($fillters)->whereIn('tema', ['esensi', 'natra', 'palanta', 'lestari']));
             }
 
             return $data->addIndexColumn()
@@ -42,8 +42,9 @@ class LaporanTemaController extends Controller
         $palanta = Desa::TemaPalanta();
         $natra = Desa::TemaNatra();
         $esensi = Desa::TemaEsensi();
+        $lestari = Desa::whereTema('lestari')->count();
         $tema = Desa::Tema();
 
-        return view('laporan.tema', compact('fillters', 'palanta', 'natra', 'esensi', 'tema'));
+        return view('laporan.tema', compact('fillters', 'palanta', 'natra', 'esensi', 'lestari', 'tema'));
     }
 }

@@ -9,7 +9,7 @@
         </small></h1>
 @stop
 
-@section('content')    
+@section('content')
     @include('layouts.components.notification')
     <div class="row">
         @if(empty(request()->query('tema')))
@@ -17,7 +17,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <!-- small card -->
                             <div class="small-box bg-info">
                                 <div class="inner">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <!-- ./col -->
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <!-- small card -->
                             <div class="small-box bg-success">
                                 <div class="inner">
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <!-- ./col -->
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <!-- small card -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
@@ -58,11 +58,25 @@
                                 <a href="{{ url('laporan/tema') }}?tema=Palanta" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
+
+                        <div class="col-lg-3">
+                            <!-- small card -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>{{$lestari}}</h3>
+                                    <p>Tema Lestari</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <a href="{{ url('laporan/tema') }}?tema=Lestari" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         @endif
         <div class="col-lg-12">
             <div class="card">
@@ -93,7 +107,7 @@
                         <table class="table" id="table-desa">
                             <thead>
                                 <tr>
-                                    <th>No</th>                                    
+                                    <th>No</th>
                                     <th>Tanggal Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
@@ -195,7 +209,7 @@
                 },
                 {
                     data: 'url_hosting'
-                },                               
+                },
                 {
                     data: 'tema'
                 }, ],
