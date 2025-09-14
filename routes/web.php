@@ -24,6 +24,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanTemaController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
+use App\Http\Controllers\KecamatanAktifOpendkController;
 use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
@@ -169,6 +170,7 @@ Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kecamatan-aktif', [KecamatanAktifOpendkController::class, 'index']);
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
     Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');
