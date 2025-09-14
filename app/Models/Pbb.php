@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pbb extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterWilayahTrait;
 
     const ACTIVE_DAYS = 7;
 
