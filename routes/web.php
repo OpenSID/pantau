@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\Admin\SukuController;
+use App\Http\Controllers\Admin\OpenDKPetaController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -197,6 +198,11 @@ Route::middleware('auth')->group(function () {
 
     // Akses
     Route::get('akses/bersihkan', AksesController::class);
+
+    // OpenDK Admin
+    Route::prefix('opendk')->as('admin.opendk.')->group(function () {
+        Route::get('peta', [OpenDKPetaController::class, 'index'])->name('peta');
+    });
 
     // Wilayah Provinsi
     Route::resource('provinsi', ProvinsiController::class)->except('show');
