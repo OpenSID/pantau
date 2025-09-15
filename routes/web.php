@@ -25,6 +25,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanTemaController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
+use App\Http\Controllers\KecamatanAktifOpendkController;
 use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\Admin\SukuController;
+use App\Http\Controllers\Admin\OpenDKPetaController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -171,6 +173,7 @@ Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kecamatan-aktif', [KecamatanAktifOpendkController::class, 'index']);
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
     Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');
@@ -198,6 +201,11 @@ Route::middleware('auth')->group(function () {
 
     // Akses
     Route::get('akses/bersihkan', AksesController::class);
+
+    // OpenDK Admin
+    Route::prefix('opendk')->as('admin.opendk.')->group(function () {
+        Route::get('peta', [OpenDKPetaController::class, 'index'])->name('peta');
+    });
 
     // Wilayah Provinsi
     Route::resource('provinsi', ProvinsiController::class)->except('show');

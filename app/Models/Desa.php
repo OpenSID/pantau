@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasRegionAccess;
+use App\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,8 @@ use Illuminate\Support\Str;
 
 class Desa extends Model
 {
-    use HasFactory, HasRegionAccess;
+
+    use HasFactory, HasRegionAccess, FilterWilayahTrait;    
 
     /** {@inheritdoc} */
     protected $table = 'desa';
@@ -67,18 +69,28 @@ class Desa extends Model
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
         }
+        $filterWilayah = '';
+        $request = request();
+        if ($request->kode_provinsi || $request->kode_kabupaten || $request->kode_kecamatan) {
+            $filterWilayah = Desa::filterWilayah($request)->toBoundSql();
+        }
+        if ($filterWilayah) {
+            $filterWilayah = Str::replaceFirst('select * from `desa` where ', 'and ', $filterWilayah);
+            $filterWilayah = Str::replaceMatches('/\b(kode_provinsi|kode_kabupaten|kode_kecamatan)\b/', 'x.$1', $filterWilayah);
+            $filterWilayah = Str::replace('`', '', $filterWilayah);
+        }
 
         return $query
             ->selectRaw('count(id) as desa_total')
-            ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states}) desa_offline")
-            ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states}) desa_online")
+            ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states} {$filterWilayah})  desa_offline")
+            ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) desa_online")
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} ) as kabupaten_premium")
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states}) kabupaten_offline")
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states}) kabupaten_online")
-            ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states}) bukan_desa")
-            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) < now() - interval 4 month {$states}) tidak_aktif")
-            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states}) aktif")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} {$filterWilayah}) as kabupaten_premium")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states} {$filterWilayah}) kabupaten_offline")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states} {$filterWilayah}) kabupaten_online")
+            ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states} {$filterWilayah}) bukan_desa")
+            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) < now() - interval 4 month {$states} {$filterWilayah}) tidak_aktif")
+            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) aktif")
             ->when($provinsi, function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });
@@ -201,6 +213,7 @@ class Desa extends Model
                 ->fromSub(function ($query) use ($fillters) {
                     $query
                         ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
+                        ->filterWilayah(request())
                         ->where('versi_lokal', '<>', '')
                         ->when(session('provinsi'), function ($query, $provinsi) {
                             $query->where('kode_provinsi', $provinsi->kode_prov);
@@ -222,7 +235,7 @@ class Desa extends Model
                                 })
                                 ->when($fillters['aktif'] == '0', function ($query) {
                                     $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
-                                })
+                                })->filterWilayah(request())
                                 ->from('desa');
                         })
                         ->from('desa');
