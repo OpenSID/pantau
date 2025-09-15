@@ -22,10 +22,10 @@ class LayananDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'id' => $item->id,
                 'tgl_terpantau' => $item->tgl_akses,
-                'nama_desa' => $item->desa->nama_desa,
-                'nama_kecamatan' => $item->desa->nama_kecamatan,
-                'nama_kabupaten' => $item->desa->nama_kabupaten,
-                'nama_provinsi' => $item->desa->nama_provinsi,
+                'nama_desa' => $item->nama_desa,
+                'nama_kecamatan' => $item->nama_kecamatan,
+                'nama_kabupaten' => $item->nama_kabupaten,
+                'nama_provinsi' => $item->nama_provinsi,
             ];
         });
     }

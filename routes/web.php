@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\Admin\SukuController;
 use App\Http\Controllers\Admin\OpenDKPetaController;
+use App\Http\Controllers\KelolaDesaController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -164,10 +165,14 @@ Route::prefix('mobile')
     ->group(function () {
         Route::get('/', [MobileController::class, 'index']);
         Route::get('pengguna', [MobileController::class, 'pengguna']);
-        Route::get('pengguna_kelola_desa', [MobileController::class, 'penggunaKelolaDesa']);
         Route::get('desa', [MobileController::class, 'desa']);
     });
-
+Route::prefix('kelola_desa')
+    ->group(function () {
+        Route::get('/', [KelolaDesaController::class, 'index']);
+        Route::get('pengguna', [KelolaDesaController::class, 'pengguna']);
+        Route::get('desa', [KelolaDesaController::class, 'desa']);
+    });
 //opendk
 Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);

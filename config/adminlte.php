@@ -347,12 +347,29 @@ return [
                     'text' => 'Pengguna',
                     'url' => 'mobile/pengguna',
                 ],
-                [
-                    'can' => 'mobile.pengguna_kelola_desa.view',
-                    'text' => 'Pengguna Kelola Desa',
-                    'url' => 'mobile/pengguna_kelola_desa',
-                ],
             ],
+        ],
+        [
+            'text' => 'KelolaDesa',
+            'icon' => 'fas fa-file-alt',
+            'can' => 'mobile.view',
+            'submenu' => [
+                [
+                    'text' => 'Dasbor',
+                    'url' => 'kelola_desa',
+                    'can' => 'mobile.view',
+                ],
+                [
+                    'can' => 'mobile.desa.view',
+                    'text' => 'Desa',
+                    'url' => 'kelola_desa/desa',
+                ],
+                [
+                    'can' => 'mobile.pengguna.view',
+                    'text' => 'Pengguna',
+                    'url' => 'kelola_desa/pengguna',
+                ],
+            ]
         ],
         [
             'text' => 'OpenKab',
