@@ -290,10 +290,10 @@ return [
                     'text' => 'Dasbor',
                     'url' => 'opendk',
                 ],
-                // [
-                //     'text' => 'Peta',
-                //     'url'  => 'opendk/peta',
-                // ],
+                [
+                    'text' => 'Peta Sebaran',
+                    'url' => 'opendk/peta',
+                ],
                 [
                     'text' => 'Kecamatan',
                     'url' => 'opendk/kecamatan',
@@ -305,6 +305,10 @@ return [
                 [
                     'text' => 'Versi',
                     'url' => 'opendk/versi',
+                ],
+                [
+                    'text' => 'Kecamatan Aktif',
+                    'url' => 'opendk/kecamatan-aktif',
                 ],
             ],
         ],
