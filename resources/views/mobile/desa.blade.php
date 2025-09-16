@@ -104,7 +104,7 @@
                 name: 'mobile_count',
                 data: function (data) {
                         @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.mobile_count}</a>`
+                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_desa=${data.kode_desa}">${data.mobile_count}</a>`
                         @else
                             return data.mobile_count
                         @endauth

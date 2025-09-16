@@ -39,7 +39,7 @@ return new class extends Migration
                 tkd.tgl_akses,
                 tkd.created_at,
                 tkd.updated_at,
-                d.nama_desa as nama_desa_lengkap,
+                d.nama_desa,
                 d.kode_kecamatan,
                 d.nama_kecamatan,
                 d.kode_kabupaten,

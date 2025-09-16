@@ -64,11 +64,13 @@ class KelolaDesaController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
             'akses_mobile' => $request->akses_mobile,
         ];
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(TrackMobileView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
+            $query = DataTables::of(TrackKelolaDesaView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
             if ($request->excel) {
                 $query->filtering();
 
@@ -87,6 +89,8 @@ class KelolaDesaController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
             'akses_mobile' => $request->akses_mobile,
         ];
         if ($request->ajax()) {

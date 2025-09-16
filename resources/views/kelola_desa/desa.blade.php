@@ -104,7 +104,7 @@
                 name: 'kelola_desa_count',
                 data: function (data) {
                         @auth
-                            return `<a target="_blank" href="{{ url('kelola_desa/pengguna') }}?kode_provinsi=${data.kode_provinsi}&kode_kabupaten=${data.kode_kabupaten}&kode_kecamatan=${data.kode_kecamatan}&kode_desa=${data.kode_desa}">${data.kelola_desa_count}</a>`
+                            return `<a target="_blank" href="{{ url('kelola_desa/pengguna') }}?kode_desa=${data.kode_desa}">${data.kelola_desa_count}</a>`
                         @else
                             return data.kelola_desa_count
                         @endauth
