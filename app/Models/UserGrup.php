@@ -10,4 +10,8 @@ class UserGrup extends Model
     use HasFactory;
 
     protected $table = 'user_grup';
+
+    protected $fillable = [
+        'nama',
+    ];
 }

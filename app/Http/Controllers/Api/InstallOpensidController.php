@@ -11,21 +11,9 @@ class InstallOpensidController extends Controller
 {
     public function chart(Request $request)
     {
-        $provinsi = $request->get('provinsi');
-        $kabupaten = $request->get('kabupaten');
-        $kecamatan = $request->get('kecamatan');
         $minCreatedAt = Carbon::now()->subYears(2)->format('Y-m-d');
-        $opensid = Desa::selectRaw("DATE_FORMAT(created_at, '%m-%Y') month_year, count(*) as total")
+        $opensid = Desa::filterWilayah($request)->selectRaw("DATE_FORMAT(created_at, '%m-%Y') month_year, count(*) as total")
             ->groupBy('month_year')->orderBy('created_at')->whereDate('created_at', '>', $minCreatedAt);
-        if ($provinsi) {
-            $opensid->where('kode_provinsi', $provinsi);
-        }
-        if ($kabupaten) {
-            $opensid->where('kode_kabupaten', $kabupaten);
-        }
-        if ($kecamatan) {
-            $opensid->where('kode_kecamatan', $kecamatan);
-        }
 
         $opensidData = $opensid->get();
         $labels = [];
