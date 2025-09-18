@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasRegionAccess;
 use App\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,8 @@ use Illuminate\Support\Str;
 
 class Desa extends Model
 {
-    use HasFactory, FilterWilayahTrait;
+
+    use HasFactory, HasRegionAccess, FilterWilayahTrait;    
 
     /** {@inheritdoc} */
     protected $table = 'desa';
