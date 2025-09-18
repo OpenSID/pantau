@@ -6,6 +6,7 @@ Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 2. [#543](https://github.com/OpenSID/pantau/issues/543) Penambahan peta sebaran OpenDK di panel admin.
 3. [#544](https://github.com/OpenSID/pantau/issues/544) Penambahan halaman khusus kecamatan aktif.
 4. [#538](https://github.com/OpenSID/pantau/issues/538) Penambahan role group "Wilayah".
+5. [#539](https://github.com/OpenSID/pantau/issues/539) Penambahan halaman laporan khusus Kecamatan OpenSID.
 
 #### Perbaikan Bug
 

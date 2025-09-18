@@ -332,15 +332,23 @@ class Desa extends Model
      */
     public function scopeFillter($query, array $fillters)
     {
+        $fillters = array_merge([
+            'akses' => null,
+            'status' => null,
+            'versi_lokal' => null,
+            'versi_hosting' => null,
+            'tte' => null,
+        ], $fillters);
+
         return $query->select(['*'])
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-                $query->where('kode_provinsi', $kode_provinsi);
+                $query->where($this->getTable().'.kode_provinsi', $kode_provinsi);
             })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-                $query->where('kode_kabupaten', $kode_kabupaten);
+                $query->where($this->getTable().'.kode_kabupaten', $kode_kabupaten);
             })
             ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-                $query->where('kode_kecamatan', $kode_kecamatan);
+                $query->where($this->getTable().'.kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
                 $query->hostingOnline();
@@ -351,8 +359,8 @@ class Desa extends Model
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
                     $version = lastrelease_opensid();
-                    $query_versi->where('versi_hosting', 'LIKE', $version.'-premium%')
-                    ->orWhere('versi_lokal', 'LIKE', $version.'-premium%');
+                    $query_versi->where($this->getTable().'.versi_hosting', 'LIKE', $version.'-premium%')
+                    ->orWhere($this->getTable().'.versi_lokal', 'LIKE', $version.'-premium%');
                 });
             })
             ->when($fillters['akses'] == 1, function ($query) {
@@ -501,11 +509,35 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull('versi_hosting')->whereNull('versi_lokal');
+        return $query->whereNotNull($this->getTable().'.versi_hosting')->whereNull($this->getTable().'.versi_lokal');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull('versi_lokal')->whereNull('versi_hosting');
+        return $query->whereNotNull($this->getTable().'.versi_lokal')->whereNull($this->getTable().'.versi_hosting');
+    }
+
+    /**
+     * Scope a query kecamatan OpenSID.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKecamatanOpenSID($query, $fillters = [])
+    {
+        $subQuery = Desa::fillter($fillters)->toBoundSql();
+        return $query
+            ->selectRaw('sub.kode_kecamatan')
+            ->selectRaw('sub.nama_kecamatan')
+            ->selectRaw('sub.kode_kabupaten')
+            ->selectRaw('sub.nama_kabupaten')
+            ->selectRaw('sub.kode_provinsi')
+            ->selectRaw('sub.nama_provinsi')
+            ->selectRaw("count(case when versi_lokal <> '' and versi_hosting is null then 1 else null end) as 'offline'")
+            ->selectRaw("count(case when versi_hosting <> '' and versi_lokal is null then 1 else null end) as 'online'")
+            ->selectRaw("count(*) as 'total_desa'")
+            ->fromRaw("({$subQuery}) as sub")
+            ->groupBy(['sub.kode_kecamatan', 'sub.nama_kecamatan', 'sub.kode_kabupaten', 'sub.nama_kabupaten', 'sub.kode_provinsi', 'sub.nama_provinsi'])
+            ->orderBy('sub.nama_kecamatan');
     }
 }

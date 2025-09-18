@@ -34,8 +34,7 @@ class RegionAccessScope implements Scope
             $builder->whereRaw('1 = 0');
             return;
         }
-
-        // Apply kabupaten restriction
+        // Apply kabupaten restriction (without table prefix to avoid issues with complex queries)
         if ($regionAccess->kode_kabupaten) {
             $builder->where('kode_kabupaten', $regionAccess->kode_kabupaten);
         } elseif ($regionAccess->kode_provinsi) {
