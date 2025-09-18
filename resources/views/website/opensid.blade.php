@@ -17,6 +17,9 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-10 align-content-center">
+                                    @if(request()->has('nama_wilayah'))
+                                        <h4>{{ request('nama_wilayah') }}</h3>
+                                    @endif
                                     <div class="d-flex">
                                         <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"
                                             href="#collapse-filter" role="button" aria-expanded="false"
@@ -187,10 +190,33 @@
 
 @push('js')
     <script>
-        $('.datepicker').each(function() {
-            const _options = $(this).data('option')
-            $(this).daterangepicker(_options)
-        })
+
+            const filters = {!! json_encode(request()->all()) !!};
+
+            // Tunggu select2 selesai diinisialisasi
+            setTimeout(function() {
+                if (filters.kode_provinsi) {
+                    let option = new Option(filters.nama_provinsi, filters.kode_provinsi, true, true);
+                    $('#provinsi').append(option).trigger('change');
+
+                    // Set kabupaten setelah delay
+                    if (filters.kode_kabupaten) {
+                        let optionKab = new Option(filters.nama_kabupaten, filters.kode_kabupaten, true, true);
+                        $('#kabupaten').attr('disabled', false);
+                        $('#kabupaten').append(optionKab).trigger('change');
+                    }
+
+                    $('#filter').trigger('click');
+                }
+            }, 1000);
+
+            $('.datepicker').each(function() {
+                const _options = $(this).data('option')
+                $(this).daterangepicker(_options)
+            })
+
+
+
 
         function updateData() {
             const params = {

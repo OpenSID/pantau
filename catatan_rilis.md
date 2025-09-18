@@ -7,6 +7,7 @@ Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 3. [#544](https://github.com/OpenSID/pantau/issues/544) Penambahan halaman khusus kecamatan aktif.
 4. [#538](https://github.com/OpenSID/pantau/issues/538) Penambahan role group "Wilayah".
 5. [#539](https://github.com/OpenSID/pantau/issues/539) Penambahan halaman laporan khusus Kecamatan OpenSID.
+6. [#537](https://github.com/OpenSID/pantau/issues/537) Penambahan halaman khusus kabupaten untuk melihat kondisi aplikasi terpasang dan update.
 
 #### Perbaikan Bug
 
