@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Desa Pengguna Aplikasi LayananDesa<small class="font-weight-light ml-1 text-md font-weight-bold"> @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Desa Pengguna Aplikasi KelolaDesa<small class="font-weight-light ml-1 text-md font-weight-bold"> @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -68,7 +68,7 @@
         autoWidth: false,
         ordering: true,
         ajax: {
-            url: `{{ url('mobile/desa') }}`,
+            url: `{{ url('kelola_desa/desa') }}`,
             method: 'get',
             data: function(data) {
                     data.kode_provinsi = $('#provinsi').val();
@@ -101,12 +101,12 @@
             {
                 orderable: true,
                 searchable: false,
-                name: 'mobile_count',
+                name: 'kelola_desa_count',
                 data: function (data) {
                         @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_desa=${data.kode_desa}">${data.mobile_count}</a>`
+                            return `<a target="_blank" href="{{ url('kelola_desa/pengguna') }}?kode_desa=${data.kode_desa}">${data.kelola_desa_count}</a>`
                         @else
-                            return data.mobile_count
+                            return data.kelola_desa_count
                         @endauth
 
                     },

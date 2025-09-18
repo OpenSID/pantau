@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class Desa extends Model
 {
 
-    use HasFactory, HasRegionAccess, FilterWilayahTrait;    
+    use HasFactory, HasRegionAccess, FilterWilayahTrait;
 
     /** {@inheritdoc} */
     protected $table = 'desa';
@@ -406,6 +406,16 @@ class Desa extends Model
     public function mobile()
     {
         return $this->hasMany(TrackMobile::class, 'kode_desa', 'kode_desa');
+    }
+
+    /**
+     * Get all of the kelolaDesa for the Desa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function kelolaDesa()
+    {
+        return $this->hasMany(TrackKeloladesa::class, 'kode_desa', 'kode_desa');
     }
 
     public function scopeWilayahKhusus($query)

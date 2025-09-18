@@ -244,39 +244,39 @@ return [
             'can' => 'web.view',
         ],
         [
-            'text' => 'Dasbor',
-            'url' => '/dashboard',
-            'icon' => 'fas fa-tachometer-alt',
-            'can' => 'dashboard.view',
-        ],
-        [
-            'text' => 'Peta OpenSID',
-            'url' => 'peta',
-            'icon' => 'fas fa-map-marked-alt',
-            'can' => 'peta.view',
-        ],
-        [
             'text' => 'OpenSID',
             'icon' => 'fas fa-file-alt',
             'can' => 'laporan.view',
             'submenu' => [
+                        [
+                    'text' => 'Dasbor',
+                    'url' => '/dashboard',
+                    'icon' => 'fas fa-tachometer-alt',
+                    'can' => 'dashboard.view',
+                ],
                 [
-                    'text' => 'Desa OpenSID',
+                    'text' => 'Peta Sebaran',
+                    'url' => 'peta',
+                    'icon' => 'fas fa-map-marked-alt',
+                    'can' => 'peta.view',
+                ],
+                [
+                    'text' => 'Desa',
                     'url' => 'laporan/desa',
                     'can' => 'laporan.desa.view',
                 ],
                 [
-                    'text' => 'Kecamatan OpenSID',
+                    'text' => 'Kecamatan',
                     'url' => 'laporan/kecamatan',
                     'can' => 'laporan.kecamatan.view',
                 ],
                 [
-                    'text' => 'Kabupaten OpenSID',
+                    'text' => 'Kabupaten',
                     'url' => 'laporan/kabupaten',
                     'can' => 'laporan.kabupaten.view',
                 ],
                 [
-                    'text' => 'Versi OpenSID',
+                    'text' => 'Versi',
                     'url' => 'laporan/versi',
                     'can' => 'laporan.versi.view',
                 ],
@@ -286,10 +286,21 @@ return [
                     'can' => 'laporan.desa-aktif.view',
                 ],
                 [
-                    'text' => 'Pengguna Tema Bawaan',
-                    'url' => 'laporan/tema',
-                    'can' => 'laporan.tema.view',
+                    'can' => 'review.non-aktif.view',
+                    'text' => 'Desa Tidak Aktif',
+                    'url' => 'review/non-aktif',
                 ],
+                [
+                    'can' => 'review.desa-baru.view',
+                    'text' => 'Desa Baru',
+                    'url' => 'review/desa-baru',
+                ],
+                [
+                    'text' => 'API OpenSID Terpasang',
+                    'url' => 'laporan/desa-aktif',
+                    'can' => 'laporan.desa-aktif.view',
+                ],
+
             ],
         ],
         [
@@ -347,33 +358,55 @@ return [
                     'text' => 'Pengguna',
                     'url' => 'mobile/pengguna',
                 ],
-                [
-                    'can' => 'mobile.pengguna_kelola_desa.view',
-                    'text' => 'Pengguna Kelola Desa',
-                    'url' => 'mobile/pengguna_kelola_desa',
-                ],
             ],
+        ],
+        [
+            'text' => 'KelolaDesa',
+            'icon' => 'fas fa-file-alt',
+            'can' => 'mobile.view',
+            'submenu' => [
+                [
+                    'text' => 'Dasbor',
+                    'url' => 'kelola_desa',
+                    'can' => 'mobile.view',
+                ],
+                [
+                    'can' => 'mobile.desa.view',
+                    'text' => 'Desa',
+                    'url' => 'kelola_desa/desa',
+                ],
+                [
+                    'can' => 'mobile.pengguna.view',
+                    'text' => 'Pengguna',
+                    'url' => 'kelola_desa/pengguna',
+                ],
+            ]
         ],
         [
             'text' => 'OpenKab',
             'icon' => 'fas fa-file-alt',
             'can' => 'openkab.view',
             'submenu' => [
-                [
+                /*[
                     'text' => 'Wilayah Kerja Sama',
                     'url' => 'openkab/kerja-sama',
                     'can' => 'openkab.kerja-sama.view',
-                ],
-            ],
-        ],
-        [
-            'key' => 'khusus',
-            'text' => 'Wilayah',
-            'topnav_right' => true,
-            'submenu' => [
+                ],*/
                 [
-                    'text' => 'Semua',
-                    'url' => 'sesi/hapus',
+                    'text' => 'Dasbor',
+                    'url' => 'openkab/dashboard',
+                ],
+                [
+                    'text' => 'Pengguna',
+                    'url' => 'openkab/pengguna',
+                ],
+                [
+                    'text' => 'Pengguna Aktif',
+                    'url' => 'openkab/pengguna',
+                ],
+                [
+                    'text' => 'API Satu Data',
+                    'url' => 'openkab/pengguna',
                 ],
             ],
         ],
@@ -397,8 +430,76 @@ return [
                     'url' => 'pbb/versi',
                     'can' => 'pbb.versi.view',
                 ],
+                [
+                    'text' => 'Pengguna Aktif',
+                    'url' => 'pbb/pengguna-aktif',
+                ],
             ],
         ],
+        [
+            'text' => 'Pengguna Tema',
+            'icon' => 'fas fa-file-alt',
+            'submenu' => [
+                [
+                    'text' => 'Pengguna Tema Pro',
+                    'url' => 'laporan/tema-pro',
+                ],
+                [
+                    'text' => 'Pengguna Tema Bawaan',
+                    'url' => 'laporan/tema',
+                    'can' => 'laporan.tema.view',
+                ],
+            ]
+        ],
+        [
+            'text' => 'Data Master',
+            'icon' => 'fas fa-file-alt',
+            'submenu' => [
+                [
+                    'text' => 'Data Suku',
+                    'url' => 'suku',
+                    'icon' => 'fas fa-users',
+                    'can' => 'suku.view',
+                ],
+                [
+                    'text' => 'Data Marga',
+                    'url' => 'marga',
+                    'icon' => 'fas fa-users',
+                    'can' => 'marga.view',
+                ],
+                [
+                    'text' => 'Data Adat',
+                    'url' => 'adat',
+                    'icon' => 'fas fa-landmark',
+                    'can' => 'adat.view',
+                ],
+                [
+                    'text' => 'Wilayah Administratif',
+                    'url' => 'wilayah',
+                    'icon' => 'fas fa-map',
+                    'can' => 'wilayah.view',
+                ],
+
+                [
+                    'text' => 'Data Pekerjaan PMI',
+                    'url' => 'pekerjaan-pmi',
+                    'icon' => 'fas fa-briefcase',
+                    'can' => 'pekerjaan-pmi.view',
+                ],
+            ]
+        ],
+        [
+            'key' => 'khusus',
+            'text' => 'Wilayah',
+            'topnav_right' => true,
+            'submenu' => [
+                [
+                    'text' => 'Semua',
+                    'url' => 'sesi/hapus',
+                ],
+            ],
+        ],
+
         [
             'text' => '',
             'url' => '#',
@@ -406,59 +507,12 @@ return [
             'topnav_right' => true,
             'id' => 'releaseNotesButton',
         ],
-        [
-            'text' => 'Wilayah Administratif',
-            'url' => 'wilayah',
-            'icon' => 'fas fa-map',
-            'can' => 'wilayah.view',
-        ],
-        [
-            'text' => 'Data Suku',
-            'url' => 'suku',
-            'icon' => 'fas fa-users',
-            'can' => 'suku.view',
-        ],
-        [
-            'text' => 'Data Marga',
-            'url' => 'marga',
-            'icon' => 'fas fa-users',
-            'can' => 'marga.view',
-        ],
-        [
-            'text' => 'Data Adat',
-            'url' => 'adat',
-            'icon' => 'fas fa-landmark',
-            'can' => 'adat.view',
-        ],
-        [
-            'text' => 'Data Pekerjaan PMI',
-            'url' => 'pekerjaan-pmi',
-            'icon' => 'fas fa-briefcase',
-            'can' => 'pekerjaan-pmi.view',
-        ],
-        [
-            'can' => 'review.view',
-            'text' => 'Review Desa',
-            'icon' => 'fas fa-file-alt',
-            'submenu' => [
-                [
-                    'can' => 'review.non-aktif.view',
-                    'text' => 'Desa Tidak Aktif',
-                    'url' => 'review/non-aktif',
-                ],
-                [
-                    'can' => 'review.desa-baru.view',
-                    'text' => 'Desa Baru',
-                    'url' => 'review/desa-baru',
-                ],
-            ],
-        ],
-        [
+        /*[
             'can' => 'akses.bersihkan.view',
             'text' => 'Bersihkan Data Akses',
             'url' => 'akses/bersihkan',
             'icon' => 'fas fa-recycle',
-        ],
+        ],*/
 
         // Data Wilayah
         [
@@ -503,26 +557,29 @@ return [
 
         // Settings
         [
-            'header' => 'pengaturan',
+            'text' => 'Pengaturan',
+            'icon' => 'fas fa-file-alt',
             'can' => 'pengaturan.view',
-        ],
-        [
-            'can' => 'pengaturan.aplikasi.view',
-            'text' => 'aplikasi',
-            'url' => 'pengaturan/aplikasi',
-            'icon' => 'fas fa-fw fa-newspaper',
-        ],
-        [
-            'can' => 'profile.view',
-            'text' => 'profile',
-            'url' => 'profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'can' => 'profile.change-password.view',
-            'text' => 'change_password',
-            'url' => 'profile/reset-password',
-            'icon' => 'fas fa-fw fa-lock',
+            'submenu' => [
+                [
+                    'can' => 'pengaturan.aplikasi.view',
+                    'text' => 'aplikasi',
+                    'url' => 'pengaturan/aplikasi',
+                    'icon' => 'fas fa-fw fa-newspaper',
+                ],
+                [
+                    'can' => 'profile.view',
+                    'text' => 'profile',
+                    'url' => 'profile',
+                    'icon' => 'fas fa-fw fa-user',
+                ],
+                [
+                    'can' => 'profile.change-password.view',
+                    'text' => 'change_password',
+                    'url' => 'profile/reset-password',
+                    'icon' => 'fas fa-fw fa-lock',
+                ],
+            ]
         ],
     ],
 

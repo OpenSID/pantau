@@ -5,7 +5,7 @@
     <!-- /.card-header -->
     <div class="card-body">
         <div class="row">
-            @foreach ($desaWidgetsKelolaDesa as $widget)
+            @foreach ($desaWidgets as $widget)
                 @include('widget.card', $widget)
             @endforeach
         </div>
@@ -14,8 +14,8 @@
             <div class="card-header">
                 <h3 class="card-title">Pengguna baru dalam 7 hari terakhir</h3>
                 <div class="card-tools">
-                    <span data-toggle="tooltip" title="{{ count($daftar_baruKelolaDesa) }} Desa Baru"
-                        class="badge badge-primary">{{ count($daftar_baruKelolaDesa) }}</span>
+                    <span data-toggle="tooltip" title="{{ count($daftar_baru) }} Desa Baru"
+                        class="badge badge-primary">{{ count($daftar_baru) }}</span>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -24,7 +24,7 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table" id="table-mobile-baru-kelola-desa">
+                    <table class="table" id="table-mobile-baru">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -36,13 +36,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($daftar_baruKelolaDesa as $key => $item)
+                            @foreach ($daftar_baru as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->kode_desa }}</td>
-                                    <td>{{ $item->desa->nama_desa }}</td>
-                                    <td>{{ $item->desa->nama_kecamatan }}</td>
-                                    <td>{{ $item->desa->nama_kabupaten }}</td>
+                                    <td>{{ $item->nama_desa }}</td>
+                                    <td>{{ $item->nama_kecamatan }}</td>
+                                    <td>{{ $item->nama_kabupaten }}</td>
                                     <td>{{ $item->jumlah }}</td>
                                 </tr>
                             @endforeach
@@ -59,6 +59,7 @@
 
 @section('js')
     <script>
-        $('#table-mobile-baru-kelola-desa').DataTable();
+        $('#table-mobile-baru').DataTable();
+
     </script>
 @stop
