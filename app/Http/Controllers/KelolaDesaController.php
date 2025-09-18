@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\KelolaDesaExport;
 use App\Exports\LayananDesaExport;
 use App\Models\Desa;
 use App\Models\TrackKeloladesa;
-use App\Models\TrackMobile;
+use App\Models\TrackKelolaDesaView;
 use App\Models\TrackMobileView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,17 +13,17 @@ use Illuminate\Support\Facades\Config;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
-class MobileController extends Controller
+class KelolaDesaController extends Controller
 {
     private $mobile;
 
-    protected $baseRoute = 'mobile';
+    protected $baseRoute = 'kelola_desa';
 
-    protected $baseView = 'mobile';
+    protected $baseView = 'kelola_desa';
 
     public function __construct()
     {
-        $this->mobile = new TrackMobileView();
+        $this->mobile = new TrackKelolaDesaView();
         Config::set('title', $this->baseView.'');
     }
 
@@ -65,15 +64,17 @@ class MobileController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
             'akses_mobile' => $request->akses_mobile,
         ];
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(TrackMobileView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
+            $query = DataTables::of(TrackKelolaDesaView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
             if ($request->excel) {
                 $query->filtering();
 
-                return Excel::download(new LayananDesaExport($query->results()), 'Desa-yang-memasang-Layanan-Desa.xlsx');
+                return Excel::download(new LayananDesaExport($query->results()), 'Desa-yang-memasang-Kelola-Desa.xlsx');
             }
 
             return $query->addIndexColumn()
@@ -88,16 +89,18 @@ class MobileController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
             'akses_mobile' => $request->akses_mobile,
         ];
         if ($request->ajax()) {
-            return DataTables::of(Desa::filterWilayah($request)->withCount('mobile')->whereHas('mobile', function ($q) use ($request){
+            return DataTables::of(Desa::filterWilayah($request)->withCount('kelolaDesa')->whereHas('kelolaDesa', function ($q) use ($request){
                 $q->when(! empty($request['akses_mobile']), function ($query) use ($request) {
-                    $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
+                    $interval = 'interval '.TrackKeloladesa::ACTIVE_DAYS.' day';
                     $sign = '>=';
                     switch ($request['akses_mobile']) {
                         case '1':
-                            $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
+                            $interval = 'interval '.TrackKeloladesa::ACTIVE_DAYS.' day';
                             break;
                         case '2':
                             $interval = 'interval 2 month';

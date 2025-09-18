@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class LayananDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
+class KecamatanExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $data;
 
@@ -20,12 +20,12 @@ class LayananDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
         return $this->data->map(function ($item, $index) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
-                'id' => $item->id,
-                'tgl_terpantau' => $item->tgl_akses,
-                'nama_desa' => $item->nama_desa,
                 'nama_kecamatan' => $item->nama_kecamatan,
                 'nama_kabupaten' => $item->nama_kabupaten,
                 'nama_provinsi' => $item->nama_provinsi,
+                'total_desa' => $item->total_desa,
+                'offline' => $item->offline ?: 0,
+                'online' => $item->online ?: 0
             ];
         });
     }
@@ -34,12 +34,22 @@ class LayananDesaExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         return [
             'No',
-            'Id',
-            'Tgl Terpantau',
-            'Desa',
             'Kecamatan',
             'Kabupaten',
             'Provinsi',
+            'Total Desa',
+            'Server Offline',
+            'Server Online',
+        ];
+    }
+
+    // format angka untuk kolom total_desa, offline, online
+    public function columnFormats(): array
+    {
+        return [
+            'D' => '#,##0',
+            'E' => '#,##0',
+            'F' => '#,##0',
         ];
     }
 }

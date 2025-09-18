@@ -16,6 +16,7 @@ use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LaporanKecamatanController;
 use App\Http\Controllers\OpenkabController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\Admin\SukuController;
 use App\Http\Controllers\Admin\OpenDKPetaController;
+use App\Http\Controllers\KelolaDesaController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -142,6 +144,8 @@ Route::prefix('laporan')
         Route::get('desa', [LaporanController::class, 'desa']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
+        Route::get('kecamatan', [LaporanKecamatanController::class, 'index'])->name('laporan.kecamatan');
+        Route::get('kecamatan/{kode_kecamatan}', [LaporanKecamatanController::class, 'detail'])->name('laporan.kecamatan.detail');
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
         Route::get('tema', [LaporanTemaController::class, 'index']);
@@ -161,10 +165,14 @@ Route::prefix('mobile')
     ->group(function () {
         Route::get('/', [MobileController::class, 'index']);
         Route::get('pengguna', [MobileController::class, 'pengguna']);
-        Route::get('pengguna_kelola_desa', [MobileController::class, 'penggunaKelolaDesa']);
         Route::get('desa', [MobileController::class, 'desa']);
     });
-
+Route::prefix('kelola_desa')
+    ->group(function () {
+        Route::get('/', [KelolaDesaController::class, 'index']);
+        Route::get('pengguna', [KelolaDesaController::class, 'pengguna']);
+        Route::get('desa', [KelolaDesaController::class, 'desa']);
+    });
 //opendk
 Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);

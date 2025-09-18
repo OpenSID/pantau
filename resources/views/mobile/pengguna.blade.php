@@ -92,20 +92,20 @@
                 orderable: true
             },
             {
-                data: 'desa.nama_desa',
-                orderable: false
+                data: 'nama_desa',
+                orderable: true
             },
             {
-                data: 'desa.nama_kecamatan',
-                orderable: false
+                data: 'nama_kecamatan',
+                orderable: true
             },
             {
-                data: 'desa.nama_kabupaten',
-                orderable: false
+                data: 'nama_kabupaten',
+                orderable: true
             },
             {
-                data: 'desa.nama_provinsi',
-                orderable: false
+                data: 'nama_provinsi',
+                orderable: true
             },
         ],
         orders: [2, 'desc']
