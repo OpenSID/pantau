@@ -14,6 +14,8 @@ Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Perbaikan Bug
 
+1. [#554](https://github.com/OpenSID/pantau/issues/554) Perbaiki pengguna OpenSID yang tidak tercatata pada pantau.
+
 #### Penyesuaian Teknis
 
 1. [#530](https://github.com/OpenSID/pantau/issues/530) Update Jquery ke versi 3.5.0 atau lebih terbaru.
