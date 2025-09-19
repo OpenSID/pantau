@@ -345,6 +345,7 @@ return [
                 [
                     'text' => 'Dasbor',
                     'url' => 'laporan/openkab',
+                    'can' => 'laporan.openkab.view',
                 ],
             ],
         ],
