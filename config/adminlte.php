@@ -291,10 +291,6 @@ return [
                     'url' => 'review/non-aktif',
                 ],
                 [
-                    'text' => 'Pengguna Tema Pro',
-                    'url' => 'laporan/tema-pro',
-                ],
-                [
                     'can' => 'review.desa-baru.view',
                     'text' => 'Desa Baru',
                     'url' => 'review/desa-baru',
@@ -303,7 +299,7 @@ return [
                     'text' => 'API OpenSID Terpasang',
                     'url' => 'laporan/desa-aktif',
                     'can' => 'laporan.desa-aktif.view',
-                ],]
+                ],
             ],
         ],
         [
@@ -446,6 +442,7 @@ return [
                 [
                     'text' => 'Pengguna Tema Pro',
                     'url' => 'laporan/tema-pro',
+                    'can' => 'laporan.tema-pro.view',
                 ],
                 [
                     'text' => 'Pengguna Tema Bawaan',
