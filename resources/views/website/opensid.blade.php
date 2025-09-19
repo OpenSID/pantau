@@ -17,6 +17,9 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-10 align-content-center">
+                                    @if(request()->has('nama_wilayah'))
+                                        <h4>{{ request('nama_wilayah') }}</h3>
+                                    @endif
                                     <div class="d-flex">
                                         <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"
                                             href="#collapse-filter" role="button" aria-expanded="false"
@@ -67,10 +70,10 @@
                         <div class="col-lg-2 box-provinsi">
                             <p>Desa / Kelurahan Aktif</p>
                             <div class="col-xs-12">
-                                <div class="small-box bg-white">
+                                <div class="small-box bg-white block_desa_aktif">
                                     <div class="inner text-center">
-                                        <h3 class="text-blue">{{ $statistikDesa->aktif }}</h3>
-                                        <p class="text-black">Total Desa: {{ $statistikDesa->desa_total }}</p>
+                                        <h3 class="text-blue" id="desa_aktif">0</h3>
+                                        <p class="text-black">Total Desa: <span id="total_desa"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +109,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row" id="block_pengguna_selain_opensid">
                         <div class="col-xl-6">
                             <div class="small-box bg-blue rounded-lg">
                                 <div class="row p-3">
@@ -115,7 +118,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4>Aplikasi PBB</h4>
-                                        <div class="display-4 text-bold mt-n3">{{ $pengguna_pbb }}</div>
+                                        <div class="display-4 text-bold mt-n3" id="pengguna_pbb">0</div>
                                         <div class="text-bold mt-n2">Pengguna Terpasang</div>
                                     </div>
                                     <div class="col-md-4 text-right">
@@ -133,7 +136,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4>Anjungan Mandiri</h4>
-                                        <div class="display-4 text-bold mt-n3">{{ $pengguna_anjungan }}</div>
+                                        <div class="display-4 text-bold mt-n3" id="pengguna_anjungan">0</div>
                                         <div class="text-bold mt-n2">Pengguna Terpasang</div>
                                     </div>
                                 </div>
@@ -187,10 +190,33 @@
 
 @push('js')
     <script>
-        $('.datepicker').each(function() {
-            const _options = $(this).data('option')
-            $(this).daterangepicker(_options)
-        })
+
+            const filters = {!! json_encode(request()->all()) !!};
+
+            // Tunggu select2 selesai diinisialisasi
+            setTimeout(function() {
+                if (filters.kode_provinsi) {
+                    let option = new Option(filters.nama_provinsi, filters.kode_provinsi, true, true);
+                    $('#provinsi').append(option).trigger('change');
+
+                    // Set kabupaten setelah delay
+                    if (filters.kode_kabupaten) {
+                        let optionKab = new Option(filters.nama_kabupaten, filters.kode_kabupaten, true, true);
+                        $('#kabupaten').attr('disabled', false);
+                        $('#kabupaten').append(optionKab).trigger('change');
+                    }
+
+                    $('#filter').trigger('click');
+                }
+            }, 1000);
+
+            $('.datepicker').each(function() {
+                const _options = $(this).data('option')
+                $(this).daterangepicker(_options)
+            })
+
+
+
 
         function updateData() {
             const params = {
@@ -245,7 +271,12 @@
 
                     $.ajax({
                         url: "{{ url('api/web/chart-opensid') }}",
-                        data: params,
+                        data: {
+                            period: $('input[name=periods]').val(),
+                            kode_provinsi: $('select[name=provinsi]').val(),
+                            kode_kabupaten: $('select[name=kabupaten]').val(),
+                            kode_kecamatan: $('select[name=kecamatan]').val(),
+                        },
                         type: "GET",
                         success: function(data) {
                             myChart.data = data;
@@ -254,6 +285,12 @@
                     }, 'json')
                 }
             }, 'json')
+
+            $('.block_desa_aktif').trigger('change')
+            $('#block_install_baru').trigger('change')
+            $('#block_pengguna_selain_opensid').trigger('change')
+            $('#block_table_desa_baru').trigger('change')
+            $('#block_table_versi').trigger('change')
         }
 
         $(document).ready(function() {
@@ -265,6 +302,31 @@
             })
             $('#reset').click(function() {
                 $('#collapse-filter select').val('')
+            })
+
+            $('.block_desa_aktif').change(function() {
+                const params = {
+                    kode_provinsi: $('select[name=provinsi]').val(),
+                    kode_kabupaten: $('select[name=kabupaten]').val(),
+                    kode_kecamatan: $('select[name=kecamatan]').val(),
+                }
+                $.get("{{ url('api/web/desa-aktif-opensid') }}", params, function(data) {
+                    $('#desa_aktif').text(data.aktif)
+                    $('#total_desa').text(data.desa_total)
+                }, 'json')
+            })
+
+            $('#block_pengguna_selain_opensid').change(function() {
+                const params = {
+                    kode_provinsi: $('select[name=provinsi]').val(),
+                    kode_kabupaten: $('select[name=kabupaten]').val(),
+                    kode_kecamatan: $('select[name=kecamatan]').val(),
+                }
+
+                $.get("{{ url('api/web/pengguna-selain-opensid') }}", params, function(data) {
+                    $('#block_pengguna_selain_opensid').find('#pengguna_pbb').text(data.pbb)
+                    $('#block_pengguna_selain_opensid').find('#pengguna_anjungan').text(data.anjungan)
+                }, 'json')
             })
         })
     </script>

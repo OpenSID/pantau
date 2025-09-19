@@ -37,8 +37,7 @@
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
-                                    <th>LayananDesa</th>
-                                    <th>KelolaDesa</th>
+                                    <th>Jumlah</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -81,44 +80,33 @@
         columns: [
             {
                 data: 'kode_desa',
-                orderable: false
+                orderable: true
             },
             {
                 data: 'nama_desa',
-                orderable: false
+                orderable: true
             },
             {
                 data: 'nama_kecamatan',
-                orderable: false
+                orderable: true
             },
             {
                 data: 'nama_kabupaten',
-                orderable: false
+                orderable: true
             },
             {
                 data: 'nama_provinsi',
-                orderable: false
+                orderable: true
             },
             {
-                orderable: false,
+                orderable: true,
                 searchable: false,
+                name: 'mobile_count',
                 data: function (data) {
                         @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_mobile}</a>`
+                            return `<a target="_blank" href="{{ url('mobile/pengguna') }}?kode_desa=${data.kode_desa}">${data.mobile_count}</a>`
                         @else
-                            return data.count_track_mobile
-                        @endauth
-
-                    },
-            },
-            {
-                orderable: false,
-                searchable: false,
-                data: function (data) {
-                        @auth
-                            return `<a target="_blank" href="{{ url('mobile/pengguna_kelola_desa') }}?kode_provinsi=${data.kode_desa.substring(0,2)}&kode_kabupaten=${data.kode_desa.substring(0,5)}&kode_kecamatan=${data.kode_desa.substring(0,8)}&kode_desa=${data.kode_desa}">${data.count_track_keloladesa}</a>`
-                        @else
-                            return data.count_track_keloladesa
+                            return data.mobile_count
                         @endauth
 
                     },
@@ -137,7 +125,7 @@
         $('#kabupaten').val('').change();
         $('#akses_mobile').val('0').change();
 
-        kabupaten.ajax.reload();
+        desa.ajax.reload();
     });
 
 </script>
