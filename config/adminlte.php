@@ -341,14 +341,17 @@ return [
         [
             'text' => 'OpenKab',
             'icon' => 'fas fa-city',
+            'can' => 'laporan.openkab.view',
             'submenu' => [
                 [
                     'text' => 'Dasbor',
                     'url' => 'laporan/openkab',
+                    'can' => 'laporan.openkab.view',
                 ],
                 [
                     'text' => 'Pengguna Aktif',
                     'url' => 'laporan/openkab/pengguna',
+                    'can' => 'laporan.openkab-pengguna.view',
                 ],
             ],
         ],
