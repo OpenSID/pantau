@@ -120,8 +120,9 @@
                     },
                     {
                         data: 'tanggal',
+                        name: 'updated_at',
                         searchable: false,
-                        orderable: false
+                        orderable: true
                     },
                 ]
             })
