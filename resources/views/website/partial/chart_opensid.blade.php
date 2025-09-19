@@ -10,7 +10,7 @@
 @push('js')
 <script src="{{ asset('vendor/chartjs/js/chart.min.js') }}"></script>
 <script src="{{ asset('vendor/chartjs/plugin/chartjs-plugin-annotation.min.js') }}"></script>
-<script>    
+<script>
     const ctx = document.getElementById('myChart');
     const annotation1 = {
         type: 'line',
@@ -48,7 +48,7 @@
         scaleID: 'x',
         value: `Jan-{{date('y') - 1}}`
     };
-    
+
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {},
@@ -76,20 +76,14 @@
                 annotation: {
                     annotations: {
                         annotation1,
-                        annotation2                        
+                        annotation2
                     }
-                },                    
+                },
                 tooltip: {
                     enabled: false,
                 },
             },
-
-
-
-
         }
-
-
     });
 </script>
 @endpush

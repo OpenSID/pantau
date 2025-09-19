@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Exports\LayananDesaExport;
+use App\Models\Desa;
+use App\Models\TrackKeloladesa;
+use App\Models\TrackKelolaDesaView;
+use App\Models\TrackMobileView;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
+
+class KelolaDesaController extends Controller
+{
+    private $mobile;
+
+    protected $baseRoute = 'kelola_desa';
+
+    protected $baseView = 'kelola_desa';
+
+    public function __construct()
+    {
+        $this->mobile = new TrackKelolaDesaView();
+        Config::set('title', $this->baseView.'');
+    }
+
+    public function index()
+    {
+
+        $totalPengguna = $this->mobile->wilayahKhusus()->count();
+        $totalDesaPengguna = $this->mobile->wilayahKhusus()->select(['kode_desa'])->distinct('kode_desa')->count();
+        $totalDesaPenggunaAktif = $this->mobile->wilayahKhusus()->select(['kode_desa'])->distinct('kode_desa')->active()->count();
+        $totalPenggunaAktif = $this->mobile->wilayahKhusus()->active()->count();
+
+        $desaWidgets = [
+            'semua' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna') : ''), 'titleWidget' => 'Total Pengguna', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-info', 'totalWidget' => $totalPengguna, 'iconWidget' => 'fa-user'],
+            'aktif' => ['urlWidget' => (Auth::check() ? url($this->baseRoute.'/pengguna?akses_mobile=1') : ''), 'titleWidget' => 'Pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-success', 'totalWidget' => $totalPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
+            'desa' => ['urlWidget' => url($this->baseRoute.'/desa'), 'titleWidget' => 'Total Desa', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-primary', 'totalWidget' => $totalDesaPengguna, 'iconWidget' => 'fa-user'],
+            'desa_aktif' => ['urlWidget' => url($this->baseRoute.'/desa?akses_mobile=1'), 'titleWidget' => 'Desa pengguna Aktif', 'classWidget' => 'col-lg-3', 'classBackgroundWidget' => 'bg-warning', 'totalWidget' => $totalDesaPenggunaAktif, 'iconWidget' => 'fa-shopping-cart'],
+        ];
+
+        $penggunaBaru = $this->mobile->wilayahKhusus()->selectRaw('kode_desa, count(kode_desa) as jumlah')
+            ->groupBy('kode_desa')
+            ->where('created_at', '>=', now()->subDay(7))->get();
+
+        return view($this->baseView.'.dashboard', [
+            'baseRoute' => $this->baseRoute,
+            'baseView' => $this->baseView,
+            'desaWidgets' => $desaWidgets,
+            'daftar_baru' => $penggunaBaru
+        ]);
+    }
+
+    public function pengguna(Request $request)
+    {
+        if ($request->excel) {
+            $paramDatatable = json_decode($request->get('params'), 1);
+            $request->merge($paramDatatable);
+        }
+
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
+            'akses_mobile' => $request->akses_mobile,
+        ];
+
+        if ($request->ajax() || $request->excel) {
+            $query = DataTables::of(TrackKelolaDesaView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
+            if ($request->excel) {
+                $query->filtering();
+
+                return Excel::download(new LayananDesaExport($query->results()), 'Desa-yang-memasang-Kelola-Desa.xlsx');
+            }
+
+            return $query->addIndexColumn()
+                ->make(true);
+        }
+
+        return view($this->baseView.'.pengguna', compact('fillters'));
+    }
+
+    public function desa(Request $request)
+    {
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_desa' => $request->kode_desa,
+            'akses_mobile' => $request->akses_mobile,
+        ];
+        if ($request->ajax()) {
+            return DataTables::of(Desa::filterWilayah($request)->withCount('kelolaDesa')->whereHas('kelolaDesa', function ($q) use ($request){
+                $q->when(! empty($request['akses_mobile']), function ($query) use ($request) {
+                    $interval = 'interval '.TrackKeloladesa::ACTIVE_DAYS.' day';
+                    $sign = '>=';
+                    switch ($request['akses_mobile']) {
+                        case '1':
+                            $interval = 'interval '.TrackKeloladesa::ACTIVE_DAYS.' day';
+                            break;
+                        case '2':
+                            $interval = 'interval 2 month';
+                            break;
+                        case '3':
+                            $interval = 'interval 2 month';
+                            $sign = '<=';
+                            break;
+                    }
+
+                    return $query->whereRaw('tgl_akses '.$sign.' now() - '.$interval);
+                });
+            })
+                ->wilayahKhusus())
+                ->make(true);
+        }
+
+        return view($this->baseView.'.desa', compact('fillters'));
+    }
+}
