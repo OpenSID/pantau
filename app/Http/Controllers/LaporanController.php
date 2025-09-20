@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\DesaExport;
 use App\Models\Desa;
+use App\Models\Scopes\RegionAccessScope;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -96,7 +97,7 @@ class LaporanController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of($this->desa->versiOpenSID($fillters))
+            return DataTables::of($this->desa->newQueryWithoutScope(RegionAccessScope::class)->versiOpenSID($fillters))
                 ->orderColumn('x.versi', function ($query, $order) {
                     $query
                         ->orderByRaw("cast(versi as signed) {$order}")
