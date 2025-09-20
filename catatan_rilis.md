@@ -11,6 +11,7 @@ Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 7. [#540](https://github.com/OpenSID/pantau/issues/540) Penambahan tema Lestari pada laporan Pengguna Tema bawaan.
 8. [#541](https://github.com/OpenSID/pantau/issues/541) Penambahan halaman KelolaDesa.
 9. [#551](https://github.com/OpenSID/pantau/issues/551) Susun menu & urutan pada pantau.
+10. [#545](https://github.com/OpenSID/pantau/issues/545) Penambahan Dasbor Tema Pro.
 
 #### Perbaikan Bug
 
