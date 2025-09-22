@@ -385,7 +385,7 @@ return [
         [
             'text' => 'OpenKab',
             'icon' => 'fas fa-file-alt',
-            'can' => 'openkab.view',
+            'can' => ['openkab.view', 'laporan.openkab.view'],
             'submenu' => [
                 [
                     'text' => 'Dasbor',
@@ -400,14 +400,17 @@ return [
                 [
                     'text' => 'Pengguna',
                     'url' => 'openkab/pengguna',
+                    'can' => 'openkab.pengguna.view',
                 ],
                 [
                     'text' => 'Pengguna Aktif',
                     'url' => 'openkab/pengguna',
+                    'can' => 'openkab.pengguna.view',
                 ],
                 [
                     'text' => 'API Satu Data',
                     'url' => 'openkab/pengguna',
+                    'can' => 'openkab.pengguna.view',
                 ],
             ],
         ],
