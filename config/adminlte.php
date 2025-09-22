@@ -339,17 +339,6 @@ return [
             ],
         ],
         [
-            'text' => 'OpenKab',
-            'icon' => 'fas fa-city',
-            'submenu' => [
-                [
-                    'text' => 'Dasbor',
-                    'url' => 'laporan/openkab',
-                    'can' => 'laporan.openkab.view',
-                ],
-            ],
-        ],
-        [
             'text' => 'LayananDesa',
             'icon' => 'fas fa-file-alt',
             'can' => 'mobile.view',
@@ -398,15 +387,16 @@ return [
             'icon' => 'fas fa-file-alt',
             'can' => 'openkab.view',
             'submenu' => [
+                [
+                    'text' => 'Dasbor',
+                    'url' => 'laporan/openkab',
+                    'can' => 'laporan.openkab.view'
+                ],
                 /*[
                     'text' => 'Wilayah Kerja Sama',
                     'url' => 'openkab/kerja-sama',
                     'can' => 'openkab.kerja-sama.view',
                 ],*/
-                [
-                    'text' => 'Dasbor',
-                    'url' => 'openkab/dashboard',
-                ],
                 [
                     'text' => 'Pengguna',
                     'url' => 'openkab/pengguna',
