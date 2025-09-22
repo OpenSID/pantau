@@ -300,7 +300,6 @@ return [
                     'url' => 'laporan/desa-aktif',
                     'can' => 'laporan.desa-aktif.view',
                 ],
-
             ],
         ],
         [
@@ -447,6 +446,7 @@ return [
                 [
                     'text' => 'Pengguna Tema Pro',
                     'url' => 'laporan/tema-pro',
+                    'can' => 'laporan.tema-pro.view',
                 ],
                 [
                     'text' => 'Pengguna Tema Bawaan',
