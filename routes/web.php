@@ -24,6 +24,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanTemaController;
 use App\Http\Controllers\LaporanOpenkabController;
+use App\Http\Controllers\LaporanTemaProController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\KecamatanAktifOpendkController;
@@ -152,6 +153,7 @@ Route::prefix('laporan')
         Route::get('tema', [LaporanTemaController::class, 'index']);
         Route::get('openkab', [LaporanOpenkabController::class, 'index']);
         Route::get('openkab/pengguna', [LaporanOpenkabController::class, 'pengguna'])->name('laporan.openkab.pengguna');
+        Route::get('tema-pro', [LaporanTemaProController::class, 'index']);
     });
 
 // PBB

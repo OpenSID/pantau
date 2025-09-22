@@ -41,6 +41,7 @@ class DesaFactory extends Factory
             'jml_surat_tte' => $this->faker->numberBetween(0, 100),
             'modul_tte' => $this->faker->boolean(),
             'jml_keluarga' => $this->faker->numberBetween(0, 1000),
+            'tema' => $this->faker->randomElement(['esensi', 'natra', 'palanta', 'batuah', 'denatra']),
         ];
     }
 }
