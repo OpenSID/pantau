@@ -338,23 +338,6 @@ return [
             ],
         ],
         [
-            'text' => 'OpenKab',
-            'icon' => 'fas fa-city',
-            'can' => 'laporan.openkab.view',
-            'submenu' => [
-                [
-                    'text' => 'Dasbor',
-                    'url' => 'laporan/openkab',
-                    'can' => 'laporan.openkab.view',
-                ],
-                [
-                    'text' => 'Pengguna Aktif',
-                    'url' => 'laporan/openkab/pengguna',
-                    'can' => 'laporan.openkab-pengguna.view',
-                ],
-            ],
-        ],
-        [
             'text' => 'LayananDesa',
             'icon' => 'fas fa-file-alt',
             'can' => 'mobile.view',
@@ -413,12 +396,14 @@ return [
                     'url' => 'openkab/dashboard',
                 ],
                 [
-                    'text' => 'Pengguna',
-                    'url' => 'openkab/pengguna',
+                    'text' => 'Dasbor',
+                    'url' => 'laporan/openkab',
+                    'can' => 'laporan.openkab.view',
                 ],
                 [
                     'text' => 'Pengguna Aktif',
-                    'url' => 'openkab/pengguna',
+                    'url' => 'laporan/openkab/pengguna',
+                    'can' => 'laporan.openkab-pengguna.view',
                 ],
                 [
                     'text' => 'API Satu Data',

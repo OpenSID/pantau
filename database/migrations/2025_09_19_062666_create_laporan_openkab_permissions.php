@@ -19,7 +19,7 @@ return new class extends Migration {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         foreach ($this->permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Assign permissions to roles
@@ -29,7 +29,7 @@ return new class extends Migration {
 
         if ($adminRole) {
             // Admin gets all permissions
-            $adminRole->givePermissionTo(Permission::all());
+            $adminRole->givePermissionTo($this->permissions);
         }
 
         if ($adminWilayahRole) {
