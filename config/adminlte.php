@@ -384,17 +384,13 @@ return [
         [
             'text' => 'OpenKab',
             'icon' => 'fas fa-file-alt',
-            'can' => 'openkab.view',
+            'can' => ['openkab.view', 'laporan.openkab.view'],
             'submenu' => [
                 /*[
                     'text' => 'Wilayah Kerja Sama',
                     'url' => 'openkab/kerja-sama',
                     'can' => 'openkab.kerja-sama.view',
                 ],*/
-                [
-                    'text' => 'Dasbor',
-                    'url' => 'openkab/dashboard',
-                ],
                 [
                     'text' => 'Dasbor',
                     'url' => 'laporan/openkab',
@@ -408,6 +404,7 @@ return [
                 [
                     'text' => 'API Satu Data',
                     'url' => 'openkab/pengguna',
+                    'can' => 'openkab.pengguna.view',
                 ],
             ],
         ],
