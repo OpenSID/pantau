@@ -23,6 +23,7 @@ use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanTemaController;
+use App\Http\Controllers\LaporanOpenkabController;
 use App\Http\Controllers\LaporanTemaProController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
@@ -150,6 +151,7 @@ Route::prefix('laporan')
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
         Route::get('tema', [LaporanTemaController::class, 'index']);
+        Route::get('openkab', [LaporanOpenkabController::class, 'index']);
         Route::get('tema-pro', [LaporanTemaProController::class, 'index']);
     });
 
