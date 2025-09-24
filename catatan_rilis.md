@@ -13,6 +13,7 @@ Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 9. [#551](https://github.com/OpenSID/pantau/issues/551) Penambahan susun menu & urutan pada pantau.
 10. [#545](https://github.com/OpenSID/pantau/issues/545) Penambahan Dasbor Tema Pro.
 11. [#546](https://github.com/OpenSID/pantau/issues/546) Penambahan Dasbor OpenKab.
+12. [#547](https://github.com/OpenSID/pantau/issues/547) Penambahan halaman pengguna aktif khusus untuk OpenKab.
 
 #### Perbaikan Bug
 

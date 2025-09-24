@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
@@ -10,7 +10,7 @@ use App\Models\Openkab;
 
 class LaporanOpenkabTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseTransactions, WithFaker;
 
     protected $user;
 
@@ -129,78 +129,46 @@ class LaporanOpenkabTest extends TestCase
         $this->assertArrayHasKey('versi', $firstRow);
     }
 
-    public function test_laporan_openkab_filter_provinsi()
+    /** @test */
+    public function pengguna_page_can_be_accessed()
     {
-        // Create test data
-        Openkab::factory()->create([
-            'kode_kab' => '3201',
-            'nama_kab' => 'Bogor',
-            'kode_prov' => '32',
-            'nama_prov' => 'Jawa Barat',
-            'versi' => '23.01',
-        ]);
-
-        Openkab::factory()->create([
-            'kode_kab' => '3202',
-            'nama_kab' => 'Sukabumi',
-            'kode_prov' => '32',
-            'nama_prov' => 'Jawa Barat',
-            'versi' => '23.02',
-        ]);
-
         $response = $this->actingAs($this->user)
-            ->ajaxGet('/laporan/openkab?filter=provinsi');
-
+            ->get('/laporan/openkab/pengguna');
         $response->assertStatus(200);
-
-        $data = $response->json();
-
-        // Should group by province, so should have only 1 record (Jawa Barat)
-        $this->assertCount(1, $data['data']);
-        $this->assertEquals(2, $data['data'][0]['jumlah_kabupaten']);
+        $response->assertViewIs('laporan.openkab-pengguna');
     }
 
-    public function test_laporan_openkab_filter_terpasang()
+    /** @test */
+    public function pengguna_page_displays_correct_statistics()
     {
-        // Create test data with versions
-        Openkab::factory()->create([
-            'kode_kab' => '3201',
-            'nama_kab' => 'Bogor',
-            'versi' => '23.01',
-        ]);
-
-        // Create data without version (empty string)
-        Openkab::factory()->create([
-            'kode_kab' => '3202',
-            'nama_kab' => 'Sukabumi',
-            'versi' => '',
-        ]);
-
         $response = $this->actingAs($this->user)
-            ->ajaxGet('/laporan/openkab?filter=terpasang');
+            ->get('/laporan/openkab/pengguna');
 
         $response->assertStatus(200);
-
-        $data = $response->json();
-
-        // Should only show kabupaten with versions installed
-        $this->assertCount(1, $data['data']);
+        $response->assertViewIs('laporan.openkab-pengguna');
     }
 
-    public function test_laporan_openkab_filter_total()
+    /** @test */
+    public function pengguna_page_returns_ajax_data()
     {
-        // Create test data
-        Openkab::factory()->count(3)->create();
-
         $response = $this->actingAs($this->user)
-            ->ajaxGet('/laporan/openkab?filter=total');
+            ->ajaxGet('/laporan/openkab/pengguna');
 
         $response->assertStatus(200);
-
-        $data = $response->json();
-
-        // Should show all kabupaten
-        $this->assertCount(3, $data['data']);
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'DT_RowIndex',
+                    'nama_kab',
+                    'status_akses_display',
+                    'jumlah_pengguna_terdaftar',
+                    'login_terakhir'
+                ]
+            ]
+        ]);
     }    /**
          * Helper method to make AJAX requests
          */

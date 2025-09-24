@@ -152,6 +152,7 @@ Route::prefix('laporan')
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
         Route::get('tema', [LaporanTemaController::class, 'index']);
         Route::get('openkab', [LaporanOpenkabController::class, 'index']);
+        Route::get('openkab/pengguna', [LaporanOpenkabController::class, 'pengguna'])->name('laporan.openkab.pengguna');
         Route::get('tema-pro', [LaporanTemaProController::class, 'index']);
     });
 

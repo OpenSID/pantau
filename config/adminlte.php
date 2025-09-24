@@ -386,25 +386,20 @@ return [
             'icon' => 'fas fa-file-alt',
             'can' => ['openkab.view', 'laporan.openkab.view'],
             'submenu' => [
-                [
-                    'text' => 'Dasbor',
-                    'url' => 'laporan/openkab',
-                    'can' => 'laporan.openkab.view'
-                ],
                 /*[
                     'text' => 'Wilayah Kerja Sama',
                     'url' => 'openkab/kerja-sama',
                     'can' => 'openkab.kerja-sama.view',
                 ],*/
                 [
-                    'text' => 'Pengguna',
-                    'url' => 'openkab/pengguna',
-                    'can' => 'openkab.pengguna.view',
+                    'text' => 'Dasbor',
+                    'url' => 'laporan/openkab',
+                    'can' => 'laporan.openkab.view',
                 ],
                 [
                     'text' => 'Pengguna Aktif',
-                    'url' => 'openkab/pengguna',
-                    'can' => 'openkab.pengguna.view',
+                    'url' => 'laporan/openkab/pengguna',
+                    'can' => 'laporan.openkab-pengguna.view',
                 ],
                 [
                     'text' => 'API Satu Data',
