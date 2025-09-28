@@ -87,7 +87,9 @@ return new class extends Migration
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         foreach ($this->permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            if (!Permission::where('name', $permission)->exists()) {
+                Permission::create(['name' => $permission]);
+            }
         }
 
         // Assign permissions to roles
