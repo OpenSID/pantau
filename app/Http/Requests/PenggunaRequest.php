@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
-use Tests\Feature\Auth\PasswordConfirmationTest;
 
 class PenggunaRequest extends FormRequest
 {
@@ -26,7 +26,7 @@ class PenggunaRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'id_grup' => 'required',
+            'role_id' => 'required',
             'name' => 'required|max:255',
             'username' => 'required|max:255|unique:users,username',
             'email' => 'required|max:255|email|unique:users,email',
@@ -38,6 +38,17 @@ class PenggunaRequest extends FormRequest
                 ->uncompromised(),
             'password_confirmation' => 'required_with:password|same:password',
         ];
+        // tambahkan required pada provinsi_akses dan kabupaten_akses jika role adalah admin wilayah
+        $adminWilayah = Role::where('name', 'Admin Wilayah')->first();
+        if($adminWilayah && $adminWilayah->id == $this->input('role_id')) {
+            $rules['provinsi_akses'] = 'required';
+            $rules['kabupaten_akses'] = 'required';
+        } else {
+            $rules['provinsi_akses'] = 'nullable';
+            $rules['kabupaten_akses'] = 'nullable';
+            $this->request->remove('kabupaten_akses');
+            $this->request->remove('provinsi_akses');
+        }
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             $id = $this->route('akun_pengguna');
             $rules['username'] = 'required|max:255|unique:users,username,' . $id;

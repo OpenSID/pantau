@@ -10,13 +10,13 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      *
+     * id_grup dihapus pada database/migrations/2025_09_11_060000_migrate_user_grup_to_roles.php
      * @return void
      */
     public function run()
     {
         $users = [
             [
-                "id_grup" => 1,
                 "name" => "Eddie Ridwan",
                 "username" => "eddieridwan",
                 "email" => "eddie.ridwan@gmail.com",
@@ -26,7 +26,6 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
                 "name" => "Herry Wanda",
                 "username" => "herrywanda",
                 "email" => "herrywanda@gmail.com	",
@@ -36,7 +35,7 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
+
                 "name" => "Rudi Purwanto",
                 "username" => "roaddee",
                 "email" => "rudi.purwanto@opendesa.id",
@@ -46,7 +45,7 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
+
                 "name" => "Muhammad Ihsan",
                 "username" => "muhammadihsan",
                 "email" => "ihsan2857@gmail.com	",
@@ -56,7 +55,7 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
+
                 "name" => "Muhammad AI",
                 "username" => "aiskematik",
                 "email" => "mohhammadaidin@gmail.com",
@@ -66,7 +65,6 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
                 "name" => "Agung Sugiarto",
                 "username" => "agungsugiarto",
                 "email" => "me.agungsugiarto@gmail.com",
@@ -76,7 +74,7 @@ class UserSeeder extends Seeder
                 "created_at" => now(),
             ],
             [
-                "id_grup" => 1,
+
                 "name" => "Andi Fahruddin Akas",
                 "username" => "andifahruddinakas",
                 "email" => "andifahruddinakas@gmail.com",
@@ -88,5 +86,15 @@ class UserSeeder extends Seeder
         ];
 
         DB::table('users')->insert($users);
+        $firstRole = \Spatie\Permission\Models\Role::first();
+        if ($firstRole) {
+            $userIds = DB::table('users')->pluck('id');
+            foreach ($userIds as $userId) {
+                $user = \App\Models\User::find($userId);
+                if ($user) {
+                    $user->assignRole($firstRole);
+                }
+            }
+        }
     }
 }

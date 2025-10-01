@@ -89,7 +89,7 @@ class TrackKeloladesa extends Model
             });
         }
 
-        if (isset($request['kode_kecamatan'])) {
+        if (isset($request['akses_mobile'])) {
             $query->when(!empty($request['akses_mobile']), function ($query) use ($request) {
                 $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
                 $sign = '>=';
