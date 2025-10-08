@@ -558,7 +558,7 @@ return [
         [
             'text' => 'Pengaturan',
             'icon' => 'fas fa-file-alt',
-            'can' => 'pengaturan.view',
+            'can' => ['pengaturan.view', 'profile.view', 'profile.change-password.view'],
             'submenu' => [
                 [
                     'can' => 'pengaturan.aplikasi.view',
