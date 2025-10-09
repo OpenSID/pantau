@@ -59,5 +59,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserRegionAccess::class, 'user_id', 'id');
     }
 
-
+    public function IsAdminWilayah()
+    {
+        return $this->hasRole('Admin Wilayah');
+    }
 }
