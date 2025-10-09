@@ -4,7 +4,7 @@ Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 1. [#570](https://github.com/OpenSID/pantau/issues/570) Sesuaikan data dasboard jika user role admin wilayah.
 2. [#575](https://github.com/OpenSID/pantau/issues/575) Sesuaikan fungsi profil dan ubah password di user role admin wilayah.
-3. [#571](https://github.com/OpenSID/pantau/issues/571) Sesuaikan data desa sesuai pada akses wilayah.
+3. [#571](https://github.com/OpenSID/pantau/issues/571) Sesuaikan data desa sesuai pada akses wilayah. 
 
 #### Perbaikan Bug
 
