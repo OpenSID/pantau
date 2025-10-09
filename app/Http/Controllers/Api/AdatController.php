@@ -13,8 +13,8 @@ class AdatController extends Controller
         $kodeProv = $request->get('kode_prov');
         $search = $request->get('q');
         $suku = WilayahAdat::selectRaw('id, name, name as text')
-            ->when($kodeProv, static fn($q) => $q->whereRelation('region', 'region_code', $kodeProv))
-            ->when($search, static fn($q) => $q->where('name', 'like', "%{$search}%"))
+            ->when($kodeProv, static fn ($q) => $q->whereRelation('region', 'region_code', $kodeProv))
+            ->when($search, static fn ($q) => $q->where('name', 'like', "%{$search}%"))
             ->paginate();
 
         return response()->json([

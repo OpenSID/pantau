@@ -15,23 +15,24 @@ class OpenKabAccessScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         // Check if user is authenticated
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return;
         }
 
         $user = Auth::user();
 
         // Only apply scope if user has "Admin Wilayah" role
-        if (!$user->hasRole('Admin Wilayah')) {
+        if (! $user->hasRole('Admin Wilayah')) {
             return;
         }
 
         // Get user's region access
         $regionAccess = $user->userRegionAccess;
 
-        if (!$regionAccess) {
+        if (! $regionAccess) {
             // If no region access is defined for Admin Wilayah, restrict to no results
             $builder->whereRaw('1 = 0');
+
             return;
         }
         // Apply kabupaten restriction (without table prefix to avoid issues with complex queries)

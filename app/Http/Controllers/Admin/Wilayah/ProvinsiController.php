@@ -29,10 +29,10 @@ class ProvinsiController extends Controller
 
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $edit = '<a href="' . url('provinsi/' . $data->id . '/edit') . '" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
-                    $delete = '<button data-href="' . url('provinsi/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $edit = '<a href="'.url('provinsi/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
+                    $delete = '<button data-href="'.url('provinsi/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $edit . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$edit.$delete.'</div>';
                 })
                 ->editColumn('nama_provinsi', function ($data) {
                     return $data->nama_provinsi_baru ?? $data->nama_provinsi;
@@ -114,7 +114,7 @@ class ProvinsiController extends Controller
         $region = Region::with(['child'])->find($id);
 
         if ($region->child->count()) {
-            return redirect('provinsi')->with('error', 'Data gagal dihapus karena data ini menjadi induk dari kabupaten ' . $region->child->pluck('region_name')->join(', '));
+            return redirect('provinsi')->with('error', 'Data gagal dihapus karena data ini menjadi induk dari kabupaten '.$region->child->pluck('region_name')->join(', '));
         }
 
         if (Region::destroy($id)) {

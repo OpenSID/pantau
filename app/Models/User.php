@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
     ];
 
     /**
@@ -52,12 +52,15 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get the userRegionAccess associated with the User
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function userRegionAccess(): HasOne
     {
         return $this->hasOne(UserRegionAccess::class, 'user_id', 'id');
     }
 
-
+    public function isAdminWilayah()
+    {
+        return $this->hasRole('Admin Wilayah');
+    }
 }

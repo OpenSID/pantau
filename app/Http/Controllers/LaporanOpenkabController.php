@@ -37,12 +37,13 @@ class LaporanOpenkabController extends Controller
                     return $row->tgl_rekam ? date('d/m/Y H:i', strtotime($row->tgl_rekam)) : '-';
                 })
                 ->editColumn('url', function ($row) {
-                    return $row->url ? '<a href="' . $row->url . '" target="_blank">' . $row->url . '</a>' : '-';
+                    return $row->url ? '<a href="'.$row->url.'" target="_blank">'.$row->url.'</a>' : '-';
                 })
                 ->editColumn('nama_wilayah', function ($row) use ($filter) {
                     if ($filter === 'provinsi') {
-                        return $row->nama_prov . ' (' . $row->jumlah_kabupaten . ' kabupaten)';
+                        return $row->nama_prov.' ('.$row->jumlah_kabupaten.' kabupaten)';
                     }
+
                     return isset($row->nama_wilayah) ? $row->nama_wilayah : $row->nama_kab;
                 })
                 ->rawColumns(['url'])
@@ -79,6 +80,7 @@ class LaporanOpenkabController extends Controller
                     if ($row->status_akses === 'Aktif') {
                         return '<span class="badge badge-success">Aktif</span>';
                     }
+
                     return '<span class="badge badge-danger">Tidak Aktif</span>';
                 })
                 ->editColumn('login_terakhir', function ($row) {

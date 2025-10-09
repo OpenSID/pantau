@@ -9,10 +9,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $data;
-
-    public function __construct($data)
+    private $hiddenColumns;
+    public function __construct($data, $hiddenColumns = [])
     {
         $this->data = $data;
+        $this->hiddenColumns = $hiddenColumns;
     }
 
     public function collection()
@@ -24,7 +25,7 @@ class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'nama_kecamatan' => $item->nama_kecamatan,
                 'nama_kabupaten' => $item->nama_kabupaten,
                 'nama_provinsi' => $item->nama_provinsi,
-                'kontak' => ($item->kontak['nama'] ?? '').' '.($item->kontak['hp'] ?? ''),
+                'kontak' => in_array('kontak', $this->hiddenColumns) ? '' : ($item->kontak['nama'] ?? '').' '.($item->kontak['hp'] ?? ''),
                 'url_hosting' => $item->url_hosting,
                 'versi_lokal' => $item->versi_lokal,
                 'versi_hosting' => $item->versi_hosting,
