@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasRegionAccess;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Opendk extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRegionAccess;
 
     const ACTIVE_DAYS = 7;
 
