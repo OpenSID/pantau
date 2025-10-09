@@ -36,13 +36,21 @@ class LaporanController extends Controller
             'versi_hosting' => $request->versi_hosting,
             'tte' => $request->tte,
         ];
+        $hiddenColumns = [];
+        $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
+        if ($adminWilayah) {
+            $hiddenColumns[] = 'aksi';
+            $hiddenColumns[] = 'kontak';            
+        }
 
         if ($request->ajax() || $request->excel) {
             $query = DataTables::of($this->desa->fillter($fillters)->laporan());
             if ($request->excel) {
                 $query->filtering();
-
-                return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
+                if(in_array('aksi', $hiddenColumns)){
+                    unset($hiddenColumns['aksi']);
+                }                
+                return Excel::download(new DesaExport($query->results(), $hiddenColumns), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
             return $query->addIndexColumn()
@@ -63,7 +71,7 @@ class LaporanController extends Controller
                 ->make(true);
         }
 
-        return view('laporan.desa', compact('fillters'));
+        return view('laporan.desa', compact('fillters', 'hiddenColumns'));
     }
 
     public function deleteDesa(Desa $desa)

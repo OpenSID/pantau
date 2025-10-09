@@ -17,7 +17,7 @@ class LayananDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        
+
         $versiTerakhir = lastrelease_api_layanandesa();
         $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 
@@ -26,7 +26,7 @@ class LayananDesaDashboardController extends Controller
             'total_desa' => format_angka(Desa::count()),
             'pengguna_layanan_desa' => TrackMobile::distinct('kode_desa')->count(),
             'versi_terakhir' => $versiTerakhir,
-            'info_rilis' => 'Rilis LayananDesa ' . $versiTerakhir,
+            'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir,
             'total_versi' => TrackMobile::distinct('versi')->count(),
             'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),
             'installHariIni' => $installHariIni,
@@ -72,7 +72,7 @@ class LayananDesaDashboardController extends Controller
         if ($request->ajax()) {
             $versi = $request->versi;
 
-            return DataTables::of(TrackMobile::filter($fillters)->when($versi, static fn($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
+            return DataTables::of(TrackMobile::filter($fillters)->when($versi, static fn ($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -83,17 +83,18 @@ class LayananDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d') . ' - ' . Carbon::now()->format('Y-m-d');
+            $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
                 'kode_kecamatan' => $request->kode_kecamatan,
             ];
             $tanggalPeriod = explode(' - ', $period);
-            $tanggalAwal = $tanggalPeriod[0] . ' 00:00:00';
-            $tanggalAkhir = $tanggalPeriod[1] . ' 23:59:59';
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
+
             return DataTables::of(TrackMobile::filter($fillters)->with('desa')->whereBetween('track_mobile.created_at', [$tanggalAwal, $tanggalAkhir]))
-                ->editColumn('updated_at', static fn($q) => $q->updated_at->translatedFormat('j F Y H:i'))
+                ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -102,23 +103,23 @@ class LayananDesaDashboardController extends Controller
     public function summary(Request $request)
     {
         $periodUser = $request->get('period');
-        $period = $request->get('period') ?? '1970-01-01' . ' - ' . Carbon::now()->format('Y-m-d');
+        $period = $request->get('period') ?? '1970-01-01'.' - '.Carbon::now()->format('Y-m-d');
         $provinsi = $request->get('provinsi');
         $kabupaten = $request->get('kabupaten');
         $kecamatan = $request->get('kecamatan');
         $tanggalPeriod = explode(' - ', $period);
-        $tanggalAwal = $tanggalPeriod[0] . ' 00:00:00';
-        $tanggalAkhir = $tanggalPeriod[1] . ' 23:59:59';
+        $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+        $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
         $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use ($tanggalAwal, $tanggalAkhir) {
             return $q->selectRaw('distinct kode_desa')->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->from('track_mobile');
         });
-        if (!$periodUser) {
+        if (! $periodUser) {
             $tanggalAwalSebelumnya = $tanggalAwal;
-            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d') . ' 23:59:59';
+            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d').' 23:59:59';
         } else {
             $intervalDay = Carbon::parse($tanggalAkhir)->diffInDays(Carbon::parse($tanggalAwal));
-            $tanggalAwalSebelumnya = Carbon::parse($tanggalAwal)->subDays($intervalDay)->format('Y-m-d') . ' 00:00:00';
-            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAwal)->subDay()->format('Y-m-d') . ' 23:59:59';
+            $tanggalAwalSebelumnya = Carbon::parse($tanggalAwal)->subDays($intervalDay)->format('Y-m-d').' 00:00:00';
+            $tanggalAkhirSebelumnya = Carbon::parse($tanggalAwal)->subDay()->format('Y-m-d').' 23:59:59';
         }
 
         $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi')->whereIn('kode_desa', function ($q) use ($tanggalAwalSebelumnya, $tanggalAkhirSebelumnya) {
@@ -155,10 +156,10 @@ class LayananDesaDashboardController extends Controller
     public function peta(Request $request)
     {
         if ($request->ajax()) {
-            $period = $request->get('period') ?? '1970-01-01' . ' - ' . Carbon::now()->format('Y-m-d');
+            $period = $request->get('period') ?? '1970-01-01'.' - '.Carbon::now()->format('Y-m-d');
             $tanggalPeriod = explode(' - ', $period);
-            $tanggalAwal = $tanggalPeriod[0] . ' 00:00:00';
-            $tanggalAkhir = $tanggalPeriod[1] . ' 23:59:59';
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
@@ -208,30 +209,30 @@ class LayananDesaDashboardController extends Controller
     {
         $link = '';
         if (auth()->check()) {
-            $link = '<tr><td>Website</td><td> : <a href="http://' . strtolower($desa->url_hosting) . '" target="_blank">' . strtolower($desa->url_hosting) . '</a></b></td></tr>';
+            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($desa->url_hosting).'" target="_blank">'.strtolower($desa->url_hosting).'</a></b></td></tr>';
         }
 
         return [
             'logo' => null,
             'popupContent' => '
-                <h6 class="text-center"><b style="color:red">' . strtoupper($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></h6>
+                <h6 class="text-center"><b style="color:red">'.strtoupper($desa->sebutan_desa.' '.$desa->nama_desa).'</b></h6>
                 <b><table width="100%">
                     <tr>
-                        <td>' . ucwords($desa->sebutan_desa) . '</td><td> : ' . ucwords($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></td>
+                        <td>'.ucwords($desa->sebutan_desa).'</td><td> : '.ucwords($desa->sebutan_desa.' '.$desa->nama_desa).'</b></td>
                     </tr>
                     <tr>
-                        <td>Kecamatan</td><td> : ' . ucwords($desa->nama_kecamatan) . '</b></td>
+                        <td>Kecamatan</td><td> : '.ucwords($desa->nama_kecamatan).'</b></td>
                     </tr>
                     <tr>
-                    <td>Kab/Kota</td><td> : ' . ucwords($desa->nama_kabupaten) . '</b></td>
+                    <td>Kab/Kota</td><td> : '.ucwords($desa->nama_kabupaten).'</b></td>
                     </tr>
                     <tr>
-                        <td>Provinsi</td><td> : ' . ucwords($desa->nama_provinsi) . '</b></td>
+                        <td>Provinsi</td><td> : '.ucwords($desa->nama_provinsi).'</b></td>
                     </tr>
                     <tr>
-                        <td>Alamat</td><td> : ' . $desa->alamat_kantor . '</b></td>
+                        <td>Alamat</td><td> : '.$desa->alamat_kantor.'</b></td>
                     </tr>
-                    ' . $link . '
+                    '.$link.'
                 </table></b>',
         ];
     }

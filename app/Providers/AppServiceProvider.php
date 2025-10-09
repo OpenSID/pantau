@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
             foreach ($bindings as $binding) {
                 if (is_string($binding)) {
-                    $binding = "'" . str_replace("'", "''", $binding) . "'";
+                    $binding = "'".str_replace("'", "''", $binding)."'";
                 } elseif (is_bool($binding)) {
                     $binding = $binding ? '1' : '0';
                 } elseif (is_null($binding)) {

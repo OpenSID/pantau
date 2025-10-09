@@ -9,6 +9,7 @@ use Yajra\DataTables\Facades\DataTables;
 class LaporanTemaController extends Controller
 {
     private $temaBawaan = ['esensi', 'natra', 'palanta', 'lestari'];
+
     public function index(Request $request)
     {
         $fillters = [
@@ -41,12 +42,12 @@ class LaporanTemaController extends Controller
         }
         $listTemaCard = [];
         // Hitung jumlah pengguna untuk setiap tema
-        foreach( $this->temaBawaan as $tema) {
+        foreach ($this->temaBawaan as $tema) {
             $countVarName = strtolower($tema);
             $listTemaCard[$countVarName] = [
                 'name' => ucfirst($tema),
                 'count' => Desa::whereTema(ucfirst($tema))->count(),
-                'color' => match(strtolower($tema)) {
+                'color' => match (strtolower($tema)) {
                     'esensi' => 'bg-success',
                     'natra' => 'bg-warning',
                     'palanta' => 'bg-info',

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Opendk;
 use App\Models\Desa;
+use App\Models\Opendk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\DB;
 
 class KecamatanAktifOpendkController extends Controller
 {
@@ -33,7 +32,7 @@ class KecamatanAktifOpendkController extends Controller
                     'nama_kecamatan',
                     'nama_kabupaten',
                     'nama_provinsi',
-                    'updated_at'
+                    'updated_at',
                 ]);
 
             return DataTables::of($query)
@@ -47,8 +46,8 @@ class KecamatanAktifOpendkController extends Controller
                     return Desa::where('kode_kecamatan', $data->kode_kecamatan)
                         ->withCount([
                             'akses' => function ($q) use ($_30HariLalu) {
-                            $q->where('created_at', '>=', $_30HariLalu);
-                        }
+                                $q->where('created_at', '>=', $_30HariLalu);
+                            },
                         ])
                         ->get()
                         ->sum('akses_count');
@@ -59,8 +58,8 @@ class KecamatanAktifOpendkController extends Controller
                     return Desa::where('kode_kecamatan', $data->kode_kecamatan)
                         ->withCount([
                             'akses' => function ($q) use ($_30HariLalu) {
-                            $q->where('created_at', '>=', $_30HariLalu);
-                        }
+                                $q->where('created_at', '>=', $_30HariLalu);
+                            },
                         ])
                         ->get()
                         ->sum('akses_count');

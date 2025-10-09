@@ -1,23 +1,14 @@
-Di rilis v2509.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#534](https://github.com/OpenSID/pantau/issues/534) Penambahan filter wilayah terpengaruh ke data-data yang ada pada OpenSID.
-2. [#543](https://github.com/OpenSID/pantau/issues/543) Penambahan peta sebaran OpenDK di panel admin.
-3. [#544](https://github.com/OpenSID/pantau/issues/544) Penambahan halaman khusus kecamatan aktif.
-4. [#538](https://github.com/OpenSID/pantau/issues/538) Penambahan role group "Wilayah".
-5. [#539](https://github.com/OpenSID/pantau/issues/539) Penambahan halaman laporan khusus Kecamatan OpenSID.
-6. [#537](https://github.com/OpenSID/pantau/issues/537) Penambahan halaman khusus kabupaten untuk melihat kondisi aplikasi terpasang dan update.
-7. [#540](https://github.com/OpenSID/pantau/issues/540) Penambahan tema Lestari pada laporan Pengguna Tema bawaan.
-8. [#541](https://github.com/OpenSID/pantau/issues/541) Penambahan halaman KelolaDesa.
-9. [#551](https://github.com/OpenSID/pantau/issues/551) Penambahan susun menu & urutan pada pantau.
-10. [#545](https://github.com/OpenSID/pantau/issues/545) Penambahan Dasbor Tema Pro.
-11. [#546](https://github.com/OpenSID/pantau/issues/546) Penambahan Dasbor OpenKab.
-12. [#547](https://github.com/OpenSID/pantau/issues/547) Penambahan halaman pengguna aktif khusus untuk OpenKab.
+1. [#570](https://github.com/OpenSID/pantau/issues/570) Sesuaikan data dasboard jika user role admin wilayah.
+2. [#575](https://github.com/OpenSID/pantau/issues/575) Sesuaikan fungsi profil dan ubah password di user role admin wilayah.
+3. [#571](https://github.com/OpenSID/pantau/issues/571) Sesuaikan data desa sesuai pada akses wilayah. 
 
 #### Perbaikan Bug
 
-1. [#554](https://github.com/OpenSID/pantau/issues/554) Perbaiki pengguna OpenSID yang tidak tercatata pada pantau.
+1. [#569](https://github.com/OpenSID/pantau/issues/569) Perbaikan install awal.
 
 #### Penyesuaian Teknis
 
