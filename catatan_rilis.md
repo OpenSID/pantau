@@ -10,3 +10,4 @@ Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#572](https://github.com/OpenSID/pantau/issues/572) Sesuaikan menu API OpenSID terpasang dengan desa aktif.
