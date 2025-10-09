@@ -294,12 +294,7 @@ return [
                     'can' => 'review.desa-baru.view',
                     'text' => 'Desa Baru',
                     'url' => 'review/desa-baru',
-                ],
-                [
-                    'text' => 'API OpenSID Terpasang',
-                    'url' => 'laporan/desa-aktif',
-                    'can' => 'laporan.desa-aktif.view',
-                ],
+                ],                
             ],
         ],
         [
