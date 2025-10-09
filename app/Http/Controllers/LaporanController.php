@@ -37,7 +37,7 @@ class LaporanController extends Controller
             'tte' => $request->tte,
         ];
         $hiddenColumns = [];
-        $adminWilayah = auth()->check() && auth()->user()->IsAdminWilayah();
+        $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
         if ($adminWilayah) {
             $hiddenColumns[] = 'aksi';
             $hiddenColumns[] = 'kontak';            
