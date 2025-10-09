@@ -39,17 +39,11 @@
                         <table class="table" id="table-desa">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    @auth
-                                        <th>Aksi</th>
-                                    @endauth
+                                    <th>No</th>                                    
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
-                                    <th>Provinsi</th>
-                                    @auth
-                                        <th>Kontak</th>
-                                    @endauth
+                                    <th>Provinsi</th>                                    
                                     <th>Web</th>
                                     <th>Versi Offline</th>
                                     <th>Versi Online</th>
@@ -145,13 +139,7 @@
                         searchable: false,
                         orderable: false
                     },
-                    @auth {
-                        data: 'action',
-                        name: 'action',
-                        searchable: false,
-                        orderable: false
-                    },
-                @endauth {
+                    {
                     data: 'nama_desa'
                 },
                 {
@@ -162,14 +150,7 @@
                 },
                 {
                     data: 'nama_provinsi'
-                },
-                @auth {
-                        data: 'kontak',
-                        name: 'kontak',
-                        searchable: false,
-                        orderable: false
-                    },
-                @endauth
+                },                
                 {
                     data: function(data) {
                         if (data.url_hosting) {
@@ -252,11 +233,11 @@
             }, ],
             @auth
         order: [
-                [21, 'desc']
+                [19, 'desc']
             ],
         @else
             order: [
-                [10, 'desc']
+                [8, 'desc']
             ],
         @endauth
         });

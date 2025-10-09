@@ -45,21 +45,8 @@ class LaporanController extends Controller
                 return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
-            return $query->addIndexColumn()
-                ->editColumn('kontak', function ($q) {
-                    $identitas = $q->kontak;
-                    if ($identitas) {
-                        return '<div><div>'.$identitas['nama'].'</div><div>'.$identitas['hp'].'</div></div>';
-                    }
-
-                    return '';
-                })
-                ->addColumn('action', function ($data) {
-                    $delete = '<button data-href="'.url('laporan/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
-
-                    return '<div class="btn btn-group">'.$delete.'</div>';
-                })
-                ->rawColumns(['action', 'kontak'])
+            return $query->addIndexColumn()                                
+                ->rawColumns([])
                 ->make(true);
         }
 
