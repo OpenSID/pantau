@@ -25,7 +25,7 @@ class KecamatanExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'nama_provinsi' => $item->nama_provinsi,
                 'total_desa' => $item->total_desa,
                 'offline' => $item->offline ?: 0,
-                'online' => $item->online ?: 0
+                'online' => $item->online ?: 0,
             ];
         });
     }

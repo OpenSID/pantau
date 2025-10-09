@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Faker\Provider\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TrackMobile extends BaseModel

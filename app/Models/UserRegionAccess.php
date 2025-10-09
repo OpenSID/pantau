@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class UserRegionAccess extends Model
 {
     use HasFactory;
+
     protected $table = 'user_region_access';
+
     protected $fillable = [
         'user_id',
         'kode_provinsi',
@@ -19,7 +21,7 @@ class UserRegionAccess extends Model
     /**
      * Get the kabupaten associated with the UserRegionAccess
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function kabupaten(): HasOne
     {

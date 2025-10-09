@@ -36,6 +36,7 @@ class LaporanKecamatanController extends Controller
 
                 return Excel::download(new KecamatanExport($query->results()), 'Kecamatan-yang-memasang-OpenSID.xlsx');
             }
+
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
                     $view = '<a href="'.route('laporan.kecamatan.detail', $data->kode_kecamatan).'" class="btn btn-sm btn-info" title="Lihat Detail"><i class="fas fa-eye"></i></a>';

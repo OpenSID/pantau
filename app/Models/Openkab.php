@@ -58,7 +58,7 @@ class Openkab extends Model
         if (Str::contains($namaKab, $sebutanKab)) {
             return $namaKab;
         } else {
-            return $sebutanKab . ' ' . $namaKab;
+            return $sebutanKab.' '.$namaKab;
         }
     }
 

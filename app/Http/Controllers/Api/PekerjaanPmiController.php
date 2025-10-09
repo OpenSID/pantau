@@ -12,7 +12,7 @@ class PekerjaanPmiController extends Controller
     {
         $search = $request->get('q');
         $pekerjaanPmi = PekerjaanPmi::selectRaw('id, nama, nama as text')
-            ->when($search, static fn($q) => $q->where('nama', 'like', "%{$search}%"))
+            ->when($search, static fn ($q) => $q->where('nama', 'like', "%{$search}%"))
             ->paginate();
 
         return response()->json([

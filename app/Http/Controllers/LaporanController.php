@@ -45,7 +45,7 @@ class LaporanController extends Controller
                 return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
-            return $query->addIndexColumn()                                
+            return $query->addIndexColumn()
                 ->rawColumns([])
                 ->make(true);
         }
