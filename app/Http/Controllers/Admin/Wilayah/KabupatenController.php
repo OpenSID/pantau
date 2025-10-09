@@ -29,10 +29,10 @@ class KabupatenController extends Controller
 
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $edit = '<a href="' . url('kabupaten/' . $data->id . '/edit') . '" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
-                    $delete = '<button data-href="' . url('kabupaten/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $edit = '<a href="'.url('kabupaten/'.$data->id.'/edit').'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
+                    $delete = '<button data-href="'.url('kabupaten/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $edit . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$edit.$delete.'</div>';
                 })
                 ->editColumn('nama_kabupaten', function ($data) {
                     return $data->nama_kabupaten_baru ?? $data->nama_kabupaten;
@@ -77,7 +77,7 @@ class KabupatenController extends Controller
 
         if (Region::create($input)) {
             $inputchild = [
-                'region_code' => $input['region_code'] . '.00',
+                'region_code' => $input['region_code'].'.00',
                 'parent_code' => $input['region_code'],
                 'deleted_at' => date('Y-m-d H:i:s'),
             ];
@@ -120,7 +120,7 @@ class KabupatenController extends Controller
         $region = Region::with(['child'])->find($id);
 
         if ($region->child->count()) {
-            return redirect('kabupaten')->with('error', 'Data gagal dihapus karena data ini menjadi induk dari kecamatan ' . $region->child->pluck('region_name')->join(', '));
+            return redirect('kabupaten')->with('error', 'Data gagal dihapus karena data ini menjadi induk dari kecamatan '.$region->child->pluck('region_name')->join(', '));
         }
 
         if (Region::destroy($id)) {

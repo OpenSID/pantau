@@ -43,7 +43,7 @@ class LaporanTemaProController extends Controller
                     return $row->updated_at ? $row->updated_at->format('d/m/Y H:i') : '-';
                 })
                 ->editColumn('url_hosting', function ($row) {
-                    return $row->url_hosting ? '<a href="' . $row->url_hosting . '" target="_blank">' . $row->url_hosting . '</a>' : '-';
+                    return $row->url_hosting ? '<a href="'.$row->url_hosting.'" target="_blank">'.$row->url_hosting.'</a>' : '-';
                 })
                 ->rawColumns(['url_hosting'])
                 ->make(true);

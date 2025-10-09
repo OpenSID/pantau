@@ -21,6 +21,7 @@ class SukuExport implements FromCollection, WithHeadings, ShouldAutoSize, WithCo
     {
         return $this->data->map(function ($item, $index) {
             $jumlahMarga = $item->marga_count ?? 0;
+
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'nama_suku' => $item->name,

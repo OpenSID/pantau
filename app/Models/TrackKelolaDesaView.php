@@ -8,7 +8,9 @@ use App\Traits\FilterWilayahTrait;
 class TrackKelolaDesaView extends BaseModel
 {
     use HasRegionAccess, FilterWilayahTrait;
+
     const ACTIVE_DAYS = 7;
+
     /** {@inheritdoc} */
     protected $table = 'track_kelola_desa_view';
 

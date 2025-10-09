@@ -29,7 +29,7 @@ class WilayahAdat extends Model
     /**
      * Get all of the suku for the WilayahAdat
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function suku(): HasMany
     {

@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Desa extends Model
-{    
+{
     use HasFactory, HasRegionAccess, FilterWilayahTrait;
-    public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
+    public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
     /** {@inheritdoc} */
     protected $table = 'desa';
@@ -537,6 +537,7 @@ class Desa extends Model
     public function scopeKecamatanOpenSID($query, $fillters = [])
     {
         $subQuery = Desa::fillter($fillters)->toBoundSql();
+
         return $query
             ->selectRaw('sub.kode_kecamatan')
             ->selectRaw('sub.nama_kecamatan')
@@ -569,15 +570,15 @@ class Desa extends Model
                 $q->orWhere('tema', 'like', "%{$tema}%");
             }
         })
-            ->selectRaw("
+            ->selectRaw('
         CASE 
-            " . collect(self::TEMA_PRO)->map(function ($tema) {
+            '.collect(self::TEMA_PRO)->map(function ($tema) {
                 return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
-            })->implode(' ') . "
+            })->implode(' ').'
             ELSE tema
         END AS tema_nama,
         COUNT(*) as total
-    ")
+    ')
             ->groupBy('tema_nama')
             ->pluck('total', 'tema_nama')
             ->toArray();
@@ -586,7 +587,7 @@ class Desa extends Model
         $allThemes = collect(self::TEMA_PRO)->map(function ($tema) use ($existingThemes) {
             return (object) [
                 'tema_nama' => $tema,
-                'total' => $existingThemes[$tema] ?? 0
+                'total' => $existingThemes[$tema] ?? 0,
             ];
         })->sortByDesc('total')->values();
 

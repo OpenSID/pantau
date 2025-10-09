@@ -61,30 +61,30 @@ class OpenDKPetaController extends Controller
     {
         $link = '';
         if (auth()->check()) {
-            $link = '<tr><td>Website</td><td> : <a href="http://' . strtolower($kecamatan->url) . '" target="_blank">' . strtolower($kecamatan->url) . '</a></b></td></tr>';
+            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($kecamatan->url).'" target="_blank">'.strtolower($kecamatan->url).'</a></b></td></tr>';
         }
 
         return [
             'logo' => null,
             'popupContent' => '
-                <h6 class="text-center"><b style="color:red">' . strtoupper($kecamatan->sebutan_wilayah . ' ' . $kecamatan->nama_kecamatan) . '</b></h6>
+                <h6 class="text-center"><b style="color:red">'.strtoupper($kecamatan->sebutan_wilayah.' '.$kecamatan->nama_kecamatan).'</b></h6>
                 <b><table width="100%">
                     <tr>
-                        <td>' . ucwords($kecamatan->sebutan_wilayah) . '</td><td> : ' . ucwords($kecamatan->sebutan_wilayah . ' ' . $kecamatan->nama_kecamatan) . '</b></td>
+                        <td>'.ucwords($kecamatan->sebutan_wilayah).'</td><td> : '.ucwords($kecamatan->sebutan_wilayah.' '.$kecamatan->nama_kecamatan).'</b></td>
                     </tr>
                     <tr>
-                        <td>Kecamatan</td><td> : ' . ucwords($kecamatan->nama_kecamatan) . '</b></td>
+                        <td>Kecamatan</td><td> : '.ucwords($kecamatan->nama_kecamatan).'</b></td>
                     </tr>
                     <tr>
-                    <td>Kab/Kota</td><td> : ' . ucwords($kecamatan->nama_kabupaten) . '</b></td>
+                    <td>Kab/Kota</td><td> : '.ucwords($kecamatan->nama_kabupaten).'</b></td>
                     </tr>
                     <tr>
-                        <td>Provinsi</td><td> : ' . ucwords($kecamatan->nama_provinsi) . '</b></td>
+                        <td>Provinsi</td><td> : '.ucwords($kecamatan->nama_provinsi).'</b></td>
                     </tr>
                     <tr>
-                        <td>Alamat</td><td> : ' . $kecamatan->alamat . '</b></td>
+                        <td>Alamat</td><td> : '.$kecamatan->alamat.'</b></td>
                     </tr>
-                    ' . $link . '
+                    '.$link.'
                 </table></b>',
         ];
     }

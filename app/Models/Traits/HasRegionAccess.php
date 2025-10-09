@@ -24,17 +24,17 @@ trait HasRegionAccess
      */
     public function scopeByUserRegionAccess($query, $user = null)
     {
-        if (!$user) {
+        if (! $user) {
             $user = auth()->user();
         }
 
-        if (!$user || !$user->hasRole('Admin Wilayah')) {
+        if (! $user || ! $user->hasRole('Admin Wilayah')) {
             return $query;
         }
 
         $regionAccess = $user->userRegionAccess;
 
-        if (!$regionAccess) {
+        if (! $regionAccess) {
             return $query->whereRaw('1 = 0');
         }
 

@@ -17,6 +17,7 @@ class InstallOpensidTodayController extends Controller
         $totalInstall = Desa::filterWilayah($request)->count();
         $totalInstallOnline = Desa::filterWilayah($request)->online()->count();
         $installHariIni = Desa::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
+
         return [
             'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
             'installHariIni' => $installHariIni,

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use Spatie\Permission\Models\Role;
 
 class PenggunaRequest extends FormRequest
 {
@@ -40,7 +40,7 @@ class PenggunaRequest extends FormRequest
         ];
         // tambahkan required pada provinsi_akses dan kabupaten_akses jika role adalah admin wilayah
         $adminWilayah = Role::where('name', 'Admin Wilayah')->first();
-        if($adminWilayah && $adminWilayah->id == $this->input('role_id')) {
+        if ($adminWilayah && $adminWilayah->id == $this->input('role_id')) {
             $rules['provinsi_akses'] = 'required';
             $rules['kabupaten_akses'] = 'required';
         } else {
@@ -51,11 +51,12 @@ class PenggunaRequest extends FormRequest
         }
         if ($this->isMethod('put') || $this->isMethod('patch')) {
             $id = $this->route('akun_pengguna');
-            $rules['username'] = 'required|max:255|unique:users,username,' . $id;
-            $rules['email'] = 'required|max:255|email|unique:users,email,' . $id;
+            $rules['username'] = 'required|max:255|unique:users,username,'.$id;
+            $rules['email'] = 'required|max:255|email|unique:users,email,'.$id;
             unset($rules['password_confirmation']);
             unset($rules['password']);
         }
+
         return $rules;
     }
 
