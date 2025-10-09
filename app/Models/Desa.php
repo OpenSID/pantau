@@ -67,9 +67,22 @@ class Desa extends Model
         $states = '';
         $version = lastrelease_opensid();
 
+        $user = auth()->user();
+
+        if ($user && $user->hasRole('Admin Wilayah')) {
+            $regionAccess = $user->userRegionAccess;
+            if($regionAccess->kode_kabupaten) {
+                $states = "and x.kode_kabupaten='{$regionAccess->kode_kabupaten}'";
+            } else if($regionAccess->kode_provinsi) {
+                $states = "and x.kode_provinsi='{$regionAccess->kode_provinsi}'";
+            }
+        }
+
+
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
         }
+
         $filterWilayah = '';
         $request = request();
         if ($request->kode_provinsi || $request->kode_kabupaten || $request->kode_kecamatan) {
@@ -151,7 +164,20 @@ class Desa extends Model
      */
     public function scopeKabupatenKosong($query)
     {
-        return DB::select("select a.region_code, a.region_name as nama_kabupaten, c.region_name as nama_provinsi, b.jml_desa from (select region_code, region_name from `tbl_regions` t left join desa d on t.region_name = d.nama_kabupaten where length(region_code) = 5 and region_name not like 'kota %' and d.id is null ) a left join (select left(region_code, 5) as kabupaten_code, left(region_code, 2) as provinsi_code, count(*) as jml_desa from tbl_regions where char_length(region_code) = 13 group by kabupaten_code, provinsi_code ) b on a.region_code = b.kabupaten_code left join tbl_regions c on c.region_code = b.provinsi_code order by a.region_code");
+        $user = auth()->user();
+
+        $regionFilter = '';
+        
+        if ($user && $user->hasRole('Admin Wilayah')) {
+            $regionAccess = $user->userRegionAccess;
+            if ($regionAccess->kode_kabupaten) {
+                $regionFilter = "and t.region_code = '{$regionAccess->kode_kabupaten}'";
+            } elseif ($regionAccess->kode_provinsi) {
+                $regionFilter = "and left(t.region_code, 2) = '{$regionAccess->kode_provinsi}'";
+            }
+        }
+        
+        return DB::select("select a.region_code, a.region_name as nama_kabupaten, c.region_name as nama_provinsi, b.jml_desa from (select region_code, region_name from `tbl_regions` t left join desa d on t.region_name = d.nama_kabupaten where length(region_code) = 5 and region_name not like 'kota %' and d.id is null {$regionFilter}) a left join (select left(region_code, 5) as kabupaten_code, left(region_code, 2) as provinsi_code, count(*) as jml_desa from tbl_regions where char_length(region_code) = 13 group by kabupaten_code, provinsi_code ) b on a.region_code = b.kabupaten_code left join tbl_regions c on c.region_code = b.provinsi_code order by a.region_code");
     }
 
     /**

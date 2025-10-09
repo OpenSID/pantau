@@ -294,12 +294,7 @@ return [
                     'can' => 'review.desa-baru.view',
                     'text' => 'Desa Baru',
                     'url' => 'review/desa-baru',
-                ],
-                [
-                    'text' => 'API OpenSID Terpasang',
-                    'url' => 'laporan/desa-aktif',
-                    'can' => 'laporan.desa-aktif.view',
-                ],
+                ],                
             ],
         ],
         [
@@ -558,7 +553,7 @@ return [
         [
             'text' => 'Pengaturan',
             'icon' => 'fas fa-file-alt',
-            'can' => 'pengaturan.view',
+            'can' => ['pengaturan.view', 'profile.view', 'profile.change-password.view'],
             'submenu' => [
                 [
                     'can' => 'pengaturan.aplikasi.view',
