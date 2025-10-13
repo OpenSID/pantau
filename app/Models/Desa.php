@@ -83,11 +83,12 @@ class Desa extends Model
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
         }
 
-        $filterWilayah = '';
+        $filterWilayah = Desa::desaValid();
         $request = request();
         if ($request->kode_provinsi || $request->kode_kabupaten || $request->kode_kecamatan) {
-            $filterWilayah = Desa::filterWilayah($request)->toBoundSql();
+            $filterWilayah = $filterWilayah->filterWilayah($request);
         }
+        $filterWilayah = $filterWilayah->toBoundSql();
         if ($filterWilayah) {
             $filterWilayah = Str::replaceFirst('select * from `desa` where ', 'and ', $filterWilayah);
             $filterWilayah = Str::replaceMatches('/\b(kode_provinsi|kode_kabupaten|kode_kecamatan)\b/', 'x.$1', $filterWilayah);
@@ -107,7 +108,7 @@ class Desa extends Model
             ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) aktif")
             ->when($provinsi, function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
-            });
+            })->desaValid();
     }
 
     /**
@@ -139,6 +140,12 @@ class Desa extends Model
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });
+    }
+
+    public function scopeDesaValid($query)
+    {
+        return $query->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1"); // 0 = i local;
+        
     }
 
     /**
