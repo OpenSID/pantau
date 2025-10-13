@@ -311,7 +311,12 @@
                     kode_kecamatan: $('select[name=kecamatan]').val(),
                 }
                 $.get("{{ url('api/web/desa-aktif-opensid') }}", params, function(data) {
-                    $('#desa_aktif').text(data.aktif)
+                    params.akses = 4;// status desa aktif
+                    params.nama_provinsi = $('#provinsi option:selected').text();
+                    params.nama_kabupaten = $('#kabupaten option:selected').text();
+                    params.nama_kecamatan = $('#kecamatan option:selected').text();
+                    const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params).toString();
+                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
                     $('#total_desa').text(data.desa_total)
                 }, 'json')
             })
