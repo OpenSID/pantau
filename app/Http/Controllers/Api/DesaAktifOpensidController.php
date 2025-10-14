@@ -13,7 +13,6 @@ class DesaAktifOpensidController extends Controller
      */
     public function __invoke(Request $request)
     {                 
-        return Desa::jumlahDesa()->filterWilayah($request)->first();
-        // return Desa::jumlahDesa()->fillter($filters)->first();
+        return Desa::jumlahDesa()->filterWilayah($request)->first();        
     }
 }

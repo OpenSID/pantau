@@ -67,6 +67,33 @@
 @push('js')
 <script>
     $(document).ready(function() {
+        const filters = {!! json_encode(request()->all()) !!};
+
+            // Tunggu select2 selesai diinisialisasi
+            setTimeout(function() {
+                if (filters.kode_provinsi) {
+                    let option = new Option(filters.nama_provinsi, filters.kode_provinsi, true, true);
+                    $('#provinsi').append(option).trigger('change');
+
+                    // Set kabupaten setelah delay
+                    if (filters.kode_kabupaten) {
+                        let optionKab = new Option(filters.nama_kabupaten, filters.kode_kabupaten, true, true);
+                        $('#kabupaten').attr('disabled', false);
+                        $('#kabupaten').append(optionKab).trigger('change');
+                    }
+
+                    if (filters.kode_kecamatan) {
+                        let optionKec = new Option(filters.nama_kecamatan, filters.kode_kecamatan, true, true);
+                        $('#kecamatan').attr('disabled', false);
+                        $('#kecamatan').append(optionKec).trigger('change');
+                    }                                        
+                }
+                if(filters.akses){
+                    $('#akses').val(filters.akses).trigger('change');
+                }
+                $('#filter').trigger('click');
+            }, 1000);
+
         $('#table-pengguna-opendk').DataTable({
             processing: true,
             serverSide: true,
@@ -79,6 +106,7 @@
                     data.kode_provinsi = $('#provinsi').val();
                     data.kode_kabupaten = $('#kabupaten').val();
                     data.kode_kecamatan = $('#kecamatan').val();
+                    data.akses = $('#akses').val();
                 }
             },
             columns: [{

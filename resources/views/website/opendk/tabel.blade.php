@@ -1,5 +1,5 @@
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" id="block_table_opendk_baru">
         <div class="table-responsive">
             <table class="table" id="table-desa-baru">
                 <thead>
@@ -32,12 +32,13 @@
             ajax: {
                 url: `{{ url('web/opendk/install_baru') }}`,
                 method: 'get',
-                data: function() {
-                    let period = $('input[name=periods]').val() || '';
-                    return {
-                        period,
-                    };
-                },
+                // add data parameter for filtering
+                data: function(d) {
+                    d.kode_provinsi = $('select[name=provinsi]').val()
+                    d.kode_kabupaten = $('select[name=kabupaten]').val()
+                    d.kode_kecamatan = $('select[name=kecamatan]').val()
+                    d.period = $('input[name=periods]').val() || '';
+                },                
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -68,13 +69,8 @@
             ],
         })      
         
-        $(document).ready(function () {
-            // Deteksi perubahan nilai pada input periods
-            $('input[name=periods]').on('change', function () {
+           $('#block_table_opendk_baru').change(function() {
                 desaBaru.ajax.reload();
-            });
-            
-            
-        })
+            })                                            
     </script>
 @endpush
