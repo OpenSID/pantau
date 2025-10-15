@@ -16,3 +16,11 @@ yarn-error.log
 /.idea
 /.vscode
 /backup
+
+# E2E Testing
+/test-results/
+/playwright-report/
+.env.e2e
+
+# Ignore AI files
+QWEN.md

@@ -4,7 +4,7 @@
 @section('title', 'Desa OpenSID')
 
 @section('content_header')
-    <h1>Pengguna Aplikasi LayananDesa<small class="font-weight-light ml-1 text-md font-weight-bold">@if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
+    <h1>Pengguna Aplikasi KelolaDesa<small class="font-weight-light ml-1 text-md font-weight-bold">@if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small></h1>
 @stop
 
 @section('content')
@@ -19,7 +19,7 @@
                                 aria-expanded="false" aria-controls="collapse-filter">
                                 <i class="fas fa-filter"></i>
                             </a>
-                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('mobile/pengguna_kelola_desa') }}"><i class="fas fa-file-excel"></i> Excels<a>
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('kelola_desa/pengguna') }}"><i class="fas fa-file-excel"></i> Excels<a>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         <table class="table" id="table-pengguna">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>No</th>
                                     <th>Tgl Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
@@ -70,7 +70,7 @@
         autoWidth: false,
         ordering: true,
         ajax: {
-            url: `{{ url('mobile/pengguna_kelola_desa') }}`,
+            url: `{{ url('kelola_desa/pengguna') }}`,
             method: 'get',
             data: function(data) {
                     data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get('kode_provinsi');
@@ -82,7 +82,9 @@
         },
         columns: [
             {
-                data: 'id_device',
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                searchable: false,
                 orderable: false
             },
             {
@@ -90,20 +92,20 @@
                 orderable: true
             },
             {
-                data: 'desa.nama_desa',
-                orderable: false
+                data: 'nama_desa',
+                orderable: true
             },
             {
-                data: 'desa.nama_kecamatan',
-                orderable: false
+                data: 'nama_kecamatan',
+                orderable: true
             },
             {
-                data: 'desa.nama_kabupaten',
-                orderable: false
+                data: 'nama_kabupaten',
+                orderable: true
             },
             {
-                data: 'desa.nama_provinsi',
-                orderable: false
+                data: 'nama_provinsi',
+                orderable: true
             },
         ],
         orders: [2, 'desc']

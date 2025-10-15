@@ -38,9 +38,10 @@ class DesaFactory extends Factory
             'opensid_valid' => $this->faker->boolean(),
             'email_desa' => $this->faker->unique()->safeEmail(),
             'telepon' => $this->faker->phoneNumber(),
-            'jml_surat_tte' => $this->faker->numberBetween(0    , 100),
+            'jml_surat_tte' => $this->faker->numberBetween(0, 100),
             'modul_tte' => $this->faker->boolean(),
-            'jml_keluarga' => $this->faker->numberBetween(0,    1000),
+            'jml_keluarga' => $this->faker->numberBetween(0, 1000),
+            'tema' => $this->faker->randomElement(['esensi', 'natra', 'palanta', 'batuah', 'denatra']),
         ];
     }
 }

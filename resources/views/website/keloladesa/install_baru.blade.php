@@ -1,27 +1,10 @@
 <img src="{{ asset('assets/img/opensid_logo.png') }}" width="20" alt="Logo">
 <span class="text-black">Daftar Desa Baru Install</span>
-<div class="container">
-    <div class="marquee">
+<div id="block_install_baru">
+    <div class="container marquee">
         <div class="track-vertical w-100">
-            <div class="flex-vertical marquee-fix">
-                @forelse($installHariIni as $item)
-                <div class="mt-3 w-100 block-info">
-                    <div class="d-flex justify-content-between">
-                        <div class="text-wrap">
-                            <p class="m-0">{{ $item->desa->nama_desa }}</p>
-                            <p class="m-0">{{ $item->desa->nama_provinsi }}, {{ $item->desa->nama_kabupaten }}
-                            </p>
-                            <p class="m-0">INSTALL {{ $item->created_at->format('H:i') }} | versi {{ $item->versi}}</p>
-                        </div>
-                        <div class="p-0"><span
-                                class="badge badge-success text-wrap">{{ formatDateTimeForHuman($item->created_at) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                @empty
+            <div class="flex-vertical marquee-fix" id="list_install_baru">
                 <div class="text-wrap text-center mt-5">Tidak ada desa yang memasang KelolaDesa hari ini</div>
-                @endforelse
             </div>
         </div>
     </div>
@@ -80,4 +63,44 @@
         }
     }
 </style>
+@endpush
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            $('#block_install_baru').change(function() {
+                const params = {
+                    kode_provinsi: $('select[name=provinsi]').val(),
+                    kode_kabupaten: $('select[name=kabupaten]').val(),
+                    kode_kecamatan: $('select[name=kecamatan]').val(),
+                }
+                $.get("{{ url('api/web/install-hari-ini-keloladesa') }}", params, function(data) {
+
+                    let list_install_baru = ''
+                    if (data.installHariIni.length > 0) {
+                        data.installHariIni.forEach(function(desa) {
+                            list_install_baru += `<div class="mt-3 w-100 block-info">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="text-wrap">
+                                                            <p class="m-0">${desa.nama_desa}</p>
+                                                            <p class="m-0">${desa.nama_provinsi}, ${desa.nama_kabupaten}
+                                                            </p>
+                                                            <p class="m-0">INSTALL ${desa.created_at ? moment(desa.created_at).format('HH:mm:ss') : ''} | versi ${desa.versi}</p>
+                                                        </div>
+                                                        <div class="p-0"><span
+                                                                class="badge badge-success text-wrap">${desa.created_at_format_human}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <hr>`
+                        })
+                    } else {
+                        list_install_baru =
+                            '<div class="text-wrap text-center">Tidak ada desa baru yang memasang KelolaDesa hari ini</div>'
+                    }
+                    $('#list_install_baru').html(list_install_baru)
+                }, 'json')
+            })
+        })
+    </script>
 @endpush

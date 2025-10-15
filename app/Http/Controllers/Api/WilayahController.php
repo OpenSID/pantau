@@ -7,6 +7,7 @@ use App\Models\Desa;
 use App\Models\Region;
 use App\Models\Wilayah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WilayahController extends Controller
 {
@@ -117,20 +118,77 @@ class WilayahController extends Controller
         $kabupaten = substr($request->kode, 0, 5);
         $kecamatan = $request->kode;
 
-        $desa = $this->wilayah
-            ->when(strlen($request->kode) == 8, function ($query) use ($request, $provinsi, $kabupaten, $kecamatan) {
-                $query->listDesa($request, $provinsi, $kabupaten, $kecamatan);
-            })
-            ->when(strlen($request->kode) == 5, function ($query) use ($request, $provinsi, $kabupaten) {
-                $query->listKecamatan($request, $provinsi, $kabupaten);
-            })
-            ->when(strlen($request->kode) == 2, function ($query) use ($request, $provinsi) {
-                $query->listKabupaten($request, $provinsi);
-            })
-            ->unless($request->kode, function ($query) use ($request) {
-                $query->listProvinsi($request);
-            })
-            ->paginate();
+        // For provinces, kabupaten, and kecamatan, use Region model (tbl_regions)
+        // For desa, use Wilayah model (kode_wilayah)
+
+        $kodeDesa = strlen($request->kode);
+
+        if ($kodeDesa == 8) {
+            // List desa - use Wilayah model
+            $desa = $this->wilayah->listDesa($request, $provinsi, $kabupaten, $kecamatan)->paginate();
+        } elseif ($kodeDesa == 5) {
+            // List kecamatan - use Region model
+            $query = Region::select(
+                'tbl_regions.id',
+                'tbl_regions.region_code as kode_kec',
+                DB::raw('COALESCE(tbl_regions.new_region_name, tbl_regions.region_name) as nama_kec'),
+                'kab.region_code as kode_kab',
+                'kab.region_name as nama_kab',
+                'prov.region_code as kode_prov',
+                'prov.region_name as nama_prov'
+            )
+                ->join('tbl_regions as kab', 'tbl_regions.parent_code', '=', 'kab.region_code')
+                ->join('tbl_regions as prov', 'kab.parent_code', '=', 'prov.region_code')
+                ->where('kab.region_code', $kabupaten)
+                ->whereRaw('LENGTH(tbl_regions.parent_code) = 5')
+                ->when($request->filled('cari'), function ($query) use ($request) {
+                    $query->where(function ($q) use ($request) {
+                        $q->where('tbl_regions.region_name', 'like', "%{$request->cari}%")
+                          ->orWhere('tbl_regions.new_region_name', 'like', "%{$request->cari}%");
+                    });
+                })
+                ->orderBy('nama_kec', 'asc');
+
+            $desa = $query->paginate();
+        } elseif ($kodeDesa == 2) {
+            // List kabupaten - use Region model
+            $query = Region::select(
+                'tbl_regions.id',
+                'tbl_regions.region_code as kode_kab',
+                DB::raw('COALESCE(tbl_regions.new_region_name, tbl_regions.region_name) as nama_kab'),
+                'prov.region_code as kode_prov',
+                'prov.region_name as nama_prov'
+            )
+                ->leftJoin('tbl_regions as prov', 'tbl_regions.parent_code', '=', 'prov.region_code')
+                ->where('prov.region_code', $provinsi)
+                ->whereRaw('LENGTH(tbl_regions.parent_code) = 2')
+                ->when($request->filled('cari'), function ($query) use ($request) {
+                    $query->where(function ($q) use ($request) {
+                        $q->where('tbl_regions.region_name', 'like', "%{$request->cari}%")
+                          ->orWhere('tbl_regions.new_region_name', 'like', "%{$request->cari}%");
+                    });
+                })
+                ->orderBy('nama_kab', 'asc');
+
+            $desa = $query->paginate();
+        } else {
+            // List provinsi - use Region model
+            $query = Region::select(
+                'id',
+                'region_code as kode_prov',
+                DB::raw('COALESCE(new_region_name, region_name) as nama_prov')
+            )
+                ->where('parent_code', 0)
+                ->when($request->filled('cari'), function ($query) use ($request) {
+                    $query->where(function ($q) use ($request) {
+                        $q->where('region_name', 'like', "%{$request->cari}%")
+                          ->orWhere('new_region_name', 'like', "%{$request->cari}%");
+                    });
+                })
+                ->orderBy('nama_prov', 'asc');
+
+            $desa = $query->paginate();
+        }
 
         return response()->json([
             'results' => $desa->items(),

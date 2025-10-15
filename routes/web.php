@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdatController;
 use App\Http\Controllers\Admin\MargaController;
+use App\Http\Controllers\Admin\PekerjaanPmiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PbbController;
@@ -15,14 +16,18 @@ use App\Http\Controllers\PantauController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\WilayahMiddleware;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LaporanKecamatanController;
 use App\Http\Controllers\OpenkabController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanTemaController;
+use App\Http\Controllers\LaporanOpenkabController;
+use App\Http\Controllers\LaporanTemaProController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
+use App\Http\Controllers\KecamatanAktifOpendkController;
 use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
@@ -33,6 +38,8 @@ use App\Http\Controllers\Admin\Wilayah\KabupatenController;
 use App\Http\Controllers\Admin\Wilayah\KecamatanController;
 use App\Http\Controllers\Admin\Pengaturan\PengaturanAplikasiController;
 use App\Http\Controllers\Admin\SukuController;
+use App\Http\Controllers\Admin\OpenDKPetaController;
+use App\Http\Controllers\KelolaDesaController;
 use App\Http\Controllers\PetaPeriodController;
 
 /*
@@ -61,8 +68,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);
+        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);        
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
@@ -139,9 +145,14 @@ Route::prefix('laporan')
         Route::get('desa', [LaporanController::class, 'desa']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
+        Route::get('kecamatan', [LaporanKecamatanController::class, 'index'])->name('laporan.kecamatan');
+        Route::get('kecamatan/{kode_kecamatan}', [LaporanKecamatanController::class, 'detail'])->name('laporan.kecamatan.detail');
         Route::get('versi', [LaporanController::class, 'versi']);
         Route::get('desa-aktif', [LaporanDesaAktifController::class, 'index']);
         Route::get('tema', [LaporanTemaController::class, 'index']);
+        Route::get('openkab', [LaporanOpenkabController::class, 'index']);
+        Route::get('openkab/pengguna', [LaporanOpenkabController::class, 'pengguna'])->name('laporan.openkab.pengguna');
+        Route::get('tema-pro', [LaporanTemaProController::class, 'index']);
     });
 
 // PBB
@@ -158,15 +169,20 @@ Route::prefix('mobile')
     ->group(function () {
         Route::get('/', [MobileController::class, 'index']);
         Route::get('pengguna', [MobileController::class, 'pengguna']);
-        Route::get('pengguna_kelola_desa', [MobileController::class, 'penggunaKelolaDesa']);
         Route::get('desa', [MobileController::class, 'desa']);
     });
-
+Route::prefix('kelola_desa')
+    ->group(function () {
+        Route::get('/', [KelolaDesaController::class, 'index']);
+        Route::get('pengguna', [KelolaDesaController::class, 'pengguna']);
+        Route::get('desa', [KelolaDesaController::class, 'desa']);
+    });
 //opendk
 Route::prefix('opendk')->group(function () {
     Route::get('/', [OpendkController::class, 'index']);
     Route::get('versi', [OpendkController::class, 'versi']);
     Route::get('kecamatan', [OpendkController::class, 'kecamatan']);
+    Route::get('kecamatan-aktif', [KecamatanAktifOpendkController::class, 'index']);
     Route::get('kabupaten', [OpendkController::class, 'kabupaten']);
     Route::get('peta', [OpendkController::class, 'peta']);
     Route::get('kabupaten-kosong', [OpendkController::class, 'kabupatenkosong'])->name('opendk.kabupatenkosong');
@@ -195,17 +211,17 @@ Route::middleware('auth')->group(function () {
     // Akses
     Route::get('akses/bersihkan', AksesController::class);
 
-    // Wilayah Provinsi
-    Route::prefix('provinsi')->group(function () {
-        Route::get('/', [ProvinsiController::class, 'index']);
-        Route::get('/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
+    // OpenDK Admin
+    Route::prefix('opendk')->as('admin.opendk.')->group(function () {
+        Route::get('peta', [OpenDKPetaController::class, 'index'])->name('peta');
     });
 
+    // Wilayah Provinsi
+    Route::resource('provinsi', ProvinsiController::class)->except('show');
+    Route::get('provinsi/datatables', [ProvinsiController::class, 'datatables'])->name('provinsi.datatables');
+
     // Wilayah Kabupaten
-    Route::prefix('kabupaten')->group(function () {
-        Route::get('/', [KabupatenController::class, 'index']);
-        Route::get('/datatables', [KabupatenController::class, 'datatables'])->name('kabupaten.datatables');
-    });
+    Route::resource('kabupaten', KabupatenController::class)->except('show');
 
     // Wilayah Kecamatan
     Route::resource('kecamatan', KecamatanController::class)->except('show');
@@ -224,6 +240,11 @@ Route::middleware('auth')->group(function () {
     Route::get('adat/import', [AdatController::class, 'import'])->name('adat.import');
     Route::post('adat/proses-import', [AdatController::class, 'prosesImport'])->name('adat.proses-import');
     Route::get('adat/contoh-import', [AdatController::class, 'contohImport'])->name('adat.contoh-import');
+
+    Route::resource('pekerjaan-pmi', PekerjaanPmiController::class)->except('show');
+    Route::get('pekerjaan-pmi/import', [PekerjaanPmiController::class, 'import'])->name('pekerjaan-pmi.import');
+    Route::post('pekerjaan-pmi/proses-import', [PekerjaanPmiController::class, 'prosesImport'])->name('pekerjaan-pmi.proses-import');
+    Route::get('pekerjaan-pmi/contoh-import', [PekerjaanPmiController::class, 'contohImport'])->name('pekerjaan-pmi.contoh-import');
 
     // Wilayah Desa / Keluarahan
     Route::resource('desa', DesaController::class)->except('show');

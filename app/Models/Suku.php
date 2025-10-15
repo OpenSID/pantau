@@ -31,7 +31,7 @@ class Suku extends Model
     /**
      * Get all of the marga for the Suku
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function marga(): HasMany
     {

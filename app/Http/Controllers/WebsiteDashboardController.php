@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
-use App\Models\Pbb;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use App\Models\Wilayah;
@@ -253,11 +252,6 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
-    public function layanandesa(Request $request)
-    {
-        return view('website.layanandesa');
-    }
-
     public function openkab(Request $request)
     {
         if ($request->ajax()) {
@@ -322,16 +316,20 @@ class WebsiteDashboardController extends Controller
     public function openkabData(Request $request)
     {
         return view('website.openkab_data');
-    }
-
-    public function keloladesa(Request $request)
-    {
-        return view('website.keloladesa');
-    }
+    }    
 
     public function opensidData(Request $request)
     {
-        return view('website.opensid_data');
+        $fillters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+        ];
+
+        return view('website.opensid_data', compact('fillters'));
     }
 
     public function pbbData(Request $request)
@@ -341,7 +339,6 @@ class WebsiteDashboardController extends Controller
 
     public function opensid(Request $request)
     {
-        
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -357,24 +354,15 @@ class WebsiteDashboardController extends Controller
             'tte' => $request->tte,
         ];
 
-        $totalInstall = Desa::count();
-        $totalInstallOnline = Desa::online()->count();
-        $installHariIni = Desa::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
-
         return view('website.opensid', [
             'fillters' => $fillters,
             'fillterModals' => $fillterModals,
-            'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
-            'installHariIni' => $installHariIni,
             'total_versi' => Desa::distinct('versi_hosting')->whereNotNull('versi_hosting')->count(),
             'versi_terakhir' => lastrelease_opensid(),
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
-            'pengguna_pbb' => Pbb::count(),
             'versi_pbb' => lastrelease_pbb(),
-            'pengguna_anjungan' => Desa::anjungan()->count(),
             'latestPremiumVersion' => 'v'.lastrelease_opensid().'-premium',
             'latestUmumVersion' => 'v'.lastrelease_opensid(),
-            'statistikDesa' => Desa::jumlahDesa()->get()->first(),
         ]);
     }
 

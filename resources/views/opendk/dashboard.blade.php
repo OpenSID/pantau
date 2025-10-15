@@ -12,8 +12,7 @@
 
 @section('content')
     @include($baseView.'.summary.kecamatan')
-    @include($baseView.'.summary.kabupaten')
-
+    @includeIf(! auth()->user()->isAdminWilayah(), $baseView.'.summary.kabupaten')    
     <div class="row">
         <div class="col-lg-12">
             <div class="card collapsed-card">

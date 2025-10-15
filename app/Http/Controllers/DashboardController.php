@@ -11,7 +11,6 @@ use App\Models\PengaturanAplikasi;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -29,7 +28,7 @@ class DashboardController extends Controller
     public function index()
     {
         $pengaturanAplikasi = PengaturanAplikasi::get_pengaturan();
-        $pengaturanAplikasi['akhir_backup'] = !empty($pengaturanAplikasi['akhir_backup']) ? $pengaturanAplikasi['akhir_backup'] : Carbon::now()->startOfMonth()->format('Y-m-d');
+        $pengaturanAplikasi['akhir_backup'] = ! empty($pengaturanAplikasi['akhir_backup']) ? $pengaturanAplikasi['akhir_backup'] : Carbon::now()->startOfMonth()->format('Y-m-d');
 
         return view('dashboard', [
             'jumlahDesa' => $this->desa->jumlahDesa()->get()->first(),
@@ -40,7 +39,7 @@ class DashboardController extends Controller
                 'akhir_backup' => $pengaturanAplikasi['akhir_backup'],
                 'waktu_backup' => $pengaturanAplikasi['waktu_backup'],
                 'info' => 'Peringatan !!!',
-                'isi' => 'Gagal Backup Otomatis ke Cloud Storage pada tanggal ' . Carbon::createFromFormat('Y-m-d', $pengaturanAplikasi['akhir_backup'])->addDays($pengaturanAplikasi['waktu_backup'])->format('Y-m-d'),
+                'isi' => 'Gagal Backup Otomatis ke Cloud Storage pada tanggal '.Carbon::createFromFormat('Y-m-d', $pengaturanAplikasi['akhir_backup'])->addDays($pengaturanAplikasi['waktu_backup'])->format('Y-m-d'),
             ],
         ]);
     }
@@ -48,8 +47,7 @@ class DashboardController extends Controller
     public function datatableDesaBaru(Request $request)
     {
         if ($request->ajax()) {
-
-            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa){
+            return DataTables::of($this->desa->filterWilayah($request)->desaBaru()->get()->map(function ($desa) {
                 if (auth()->check() == false) {
                     unset($desa['url_hosting']);
                 }
@@ -80,14 +78,14 @@ class DashboardController extends Controller
         ];
 
         if ($request->ajax() || $request->excel) {
-
             $query = DataTables::of($this->desa->fillter($filters)->semuaDesa());
-    
+
             if ($request->excel) {
                 $query->filtering();
+
                 return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
             }
-    
+
             return $query
                 ->addIndexColumn()
                 ->make(true);
@@ -95,7 +93,6 @@ class DashboardController extends Controller
 
         abort(404);
     }
-
 
     public function datatableKabupatenKosong(Request $request)
     {
@@ -112,8 +109,8 @@ class DashboardController extends Controller
             $desa = Opendk::select('nama_kecamatan as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -132,8 +129,8 @@ class DashboardController extends Controller
             $desa = Openkab::select('nama_kab as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -152,8 +149,8 @@ class DashboardController extends Controller
             $desa = Desa::select('nama_desa as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -176,8 +173,8 @@ class DashboardController extends Controller
                 ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -200,8 +197,8 @@ class DashboardController extends Controller
                 ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -220,8 +217,8 @@ class DashboardController extends Controller
             $desa = Pbb::select('nama_desa as region', 'created_at as tanggal')->orderBY('created_at', 'desc')->limit(7)->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->tanggal); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -240,6 +237,7 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
@@ -248,8 +246,8 @@ class DashboardController extends Controller
                 ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -268,19 +266,20 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
             $desa = Opendk::filter($fillters)->orderBY('created_at', 'desc')->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
             return DataTables::of($desa)
-                ->editColumn('updated_at', static fn($q) => $q->updated_at->format('Y-m-d H:i:s'))
+                ->editColumn('updated_at', static fn ($q) => $q->updated_at->format('Y-m-d H:i:s'))
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns([])
                 ->make(true);
@@ -295,8 +294,8 @@ class DashboardController extends Controller
             $desa = Pbb::orderBY('created_at', 'desc')->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -315,6 +314,7 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
@@ -323,8 +323,8 @@ class DashboardController extends Controller
                 ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -372,15 +372,14 @@ class DashboardController extends Controller
             'type' => 'FeatureCollection',
             'features' => $markers,
         ]);
-
     }
 
     public function properties(Desa $desa)
     {
+        $alamat = $desa->alamat_kantor;
 
-        $alamat = $desa->alamat_kantor; 
         return [
-            'popupContent' => "{$alamat}"
+            'popupContent' => "{$alamat}",
         ];
     }
 
@@ -390,8 +389,8 @@ class DashboardController extends Controller
             $desa = Openkab::orderBY('created_at', 'desc')->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
-                    $item->tanggal = '<span class="text-nowrap text-muted">' . $item->tanggal . '</span>'; // Menambahkan kelas Bootstrap
-    
+                    $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
+
                     return $item;
                 });
 
@@ -406,15 +405,26 @@ class DashboardController extends Controller
 
     public function datatablePenggunaOpensid(Request $request)
     {
+        $filters = [
+            'kode_provinsi' => $request->kode_provinsi,
+            'kode_kabupaten' => $request->kode_kabupaten,
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'status' => $request->status,
+            'akses' => $request->akses,
+            'tte' => $request->tte,
+            'versi_lokal' => '',
+            'versi_hosting' => '',
+        ];
+
         if ($request->ajax()) {
-            return DataTables::of(Desa::orderBy('created_at', 'desc'))
+            return DataTables::of($this->desa->fillter($filters)->semuaDesa()->orderBy('created_at', 'desc'))
                 ->editColumn('modul_tte', function ($item) {
                     if ($item->modul_tte == 0) {
                         return '<span class="badge badge-secondary">Tidak Aktif</span>';
                     } elseif ($item->modul_tte == 1) {
                         return '<span class="badge badge-success">Aktif</span>';
                     }
-                })->editColumn('tanggal', static fn($item) => '<span class="text-nowrap text-muted">' . formatDateTimeForHuman($item->created_at) . '</span>')
+                })->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns()
                 ->rawColumns(['modul_tte', 'tanggal'])

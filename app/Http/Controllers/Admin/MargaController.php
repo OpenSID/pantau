@@ -25,10 +25,10 @@ class MargaController extends Controller
         if ($request->ajax() || $request->excel) {
             $provinsi = $request->kode_provinsi;
             $suku = $request->suku;
-            $query = DataTables::of(Marga::with(['suku' => static fn($q) => $q->with('region')])
-                    ->when($provinsi, static fn($q) => $q->whereHas('suku.region', static fn($q) => $q->where('region_code', $provinsi)))
-                    ->when($suku, static fn($q) => $q->where('ethnic_group_id', $suku))
-                );
+            $query = DataTables::of(Marga::with(['suku' => static fn ($q) => $q->with('region')])
+                    ->when($provinsi, static fn ($q) => $q->whereHas('suku.region', static fn ($q) => $q->where('region_code', $provinsi)))
+                    ->when($suku, static fn ($q) => $q->where('ethnic_group_id', $suku))
+            );
             if ($request->excel) {
                 $query->filtering();
 
@@ -46,10 +46,10 @@ class MargaController extends Controller
                 ->make(true);
         }
         $fillters = [
-                'kode_provinsi' => [],
-                'suku' => [],
-            ];
-        if($request->suku){
+            'kode_provinsi' => [],
+            'suku' => [],
+        ];
+        if ($request->suku) {
             $suku = Suku::with('region')->findOrFail($request->suku);
             $fillters = [
                 'kode_provinsi' => ['id' => $suku->region->region_code, 'name' => $suku->region->region_name],
@@ -78,7 +78,7 @@ class MargaController extends Controller
     public function edit($id)
     {
         return view('admin.marga.edit', [
-            'marga' => Marga::with(['suku' => static fn($q) => $q->with('region')])->findOrFail($id),
+            'marga' => Marga::with(['suku' => static fn ($q) => $q->with('region')])->findOrFail($id),
         ]);
     }
 

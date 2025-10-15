@@ -7,187 +7,215 @@
 @stop
 
 @section('content')
-@include('layouts.components.daterangepicker')
-<div class="row">
-    <div class="col-12">
-        <div class="card bg-gray-light">
-            <!-- /.card-header -->
-            <div class="card-header header-bg">
-                <div class="row p-1">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-10 align-content-center">
-                                <div class="d-flex">
-                                    <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"
-                                        href="#collapse-filter" role="button" aria-expanded="false"
-                                        aria-controls="collapse-filter">
-                                        <i class="fas fa-filter"></i>
-                                    </a>
-                                    <div class="bg-blue p-1 ml-1" style="width: 100%">
-                                        <p class="m-0 text-white">
-                                            <marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    </div>
-                                    <input type="text" name="periods" class="form-control datepicker"
-                                        data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
-                                        autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <form name="filter" method="GET">
+    @include('layouts.components.daterangepicker')
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-gray-light">
+                <!-- /.card-header -->
+                <div class="card-header header-bg">
+                    <div class="row p-1">
+                        <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-12">
-                                    @include('layouts.components.form_filter')
+                                <div class="col-md-10 align-content-center">
+                                    <div class="d-flex">
+                                        <a class="btn btn-sm btn-secondary align-content-center" data-toggle="collapse"
+                                            href="#collapse-filter" role="button" aria-expanded="false"
+                                            aria-controls="collapse-filter">
+                                            <i class="fas fa-filter"></i>
+                                        </a>
+                                        <div class="bg-blue p-1 ml-1" style="width: 100%">
+                                            <p class="m-0 text-white">
+                                                <marquee>Info Rilis Terbaru: {{ $info_rilis }}</marquee>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" name="periods" class="form-control datepicker"
+                                            data-option='{!! json_encode(
+                                                array_merge(config('local.daterangepicker'), config('local.daterangepicker_range'), [
+                                                    'autoApply' => false,
+                                                    'singleDatePicker' => false,
+                                                ]),
+                                            ) !!}' autocomplete="off">
+                                    </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-lg-10">
-                        @include('website.keloladesa.peta')
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form name="filter" method="GET">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('layouts.components.form_filter')
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-lg-2 box-provinsi">
-                        <p>Desa / Kelurahan Aktif</p>
-                        <div class="col-xs-12">
-                            <div class="small-box bg-white">
-                                <div class="inner text-center">
-                                    <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
-                                    <p class="text-black">Total Desa: {{ $total_desa }}</p>
+                    <div class="row mt-3">
+                        <div class="col-lg-10">
+                            @include('website.keloladesa.peta')
+                        </div>
+                        <div class="col-lg-2 box-provinsi">
+                            <p>Pengguna Aktif</p>
+                            <div class="col-xs-12">
+                                <div class="small-box bg-white block_desa_aktif">
+                                    <div class="inner text-center">
+                                        <h3 class="text-blue" id="desa_aktif">0</h3>
+                                        <p class="text-black">Total Desa: <span id="total_desa"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="small-box bg-white">
+                                    <div class="inner text-left">
+                                        @include('website.keloladesa.install_baru')
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12">
-                            <div class="small-box bg-white">
-                                <div class="inner text-left">
-                                    @include('website.keloladesa.install_baru')
-                                </div>
+                    </div>
+                    <div class="row g-0 text-center mt-2">
+                        <div class="col-8">
+                            <div class="p-2 bg-white rounded-lg">
+                                @include('website.partial.summary', ['barisTambahan' => true])
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row g-0 text-center mt-2">
-                    <div class="col-8">
-                        <div class="p-2 bg-white rounded-lg">
-                            @include('website.partial.summary', ['barisTambahan' => true])
+                        <div class="col-2">
+                            <div class="p-2 bg-green rounded-lg">
+                                <div class="display-4 text-bold total">{{ $total_versi }}</div>
+                                <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi KelolaDesa</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="p-2 bg-green rounded-lg">
-                            <div class="display-4 text-bold total">{{ $total_versi }}</div>
-                            <div class="text-bold" style="margin-top:-10px">&nbsp;<br>Jumlah Versi KelolaDesa</div>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="p-2 bg-blue rounded-lg" id="box-install_versi_terakhir">
-                            <div class="display-4 text-bold total">{{ $pengguna_versi_terakhir }}</div>
-                            <div class="text-bold" style="margin-top:-10px">Terpasang <br>Versi Terakhir
-                                {{ $versi_terakhir }}</div>
+                        <div class="col-2">
+                            <div class="p-2 bg-blue rounded-lg" id="box-install_versi_terakhir">
+                                <div class="display-4 text-bold total">{{ $pengguna_versi_terakhir }}</div>
+                                <div class="text-bold" style="margin-top:-10px">Terpasang <br>Versi Terakhir
+                                    {{ $versi_terakhir }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-body">
-        <div class="row mt-3">
-            <div class="col-lg-8">
-                <b>
-                    Daftar Pengguna KelolaDesa 7 Hari Terakhir
-                </b>
-                <a href="{{ route('web.keloladesa.detail') }}" class="btn btn-sm btn-primary">Data Selengkapnya</a>
-                @include('website.keloladesa.tabel')
-            </div>
-            <div class="col-lg-4">
-                <b>
-                    Daftar Versi Aplikasi KelolaDesa
-                </b>
-                @include('website.keloladesa.versi')
+        <div class="card-body">
+            <div class="row mt-3">
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <b>
+                            Daftar Pengguna KelolaDesa 7 Hari Terakhir
+                        </b>
+                        <a href="{{ route('web.keloladesa.detail') }}" class="btn btn-sm btn-primary">Data Selengkapnya</a>
+                    </div>
+                    @include('website.keloladesa.tabel')
+                </div>
+                <div class="col-lg-4">
+                    <b>
+                        Daftar Versi Aplikasi KelolaDesa
+                    </b>
+                    @include('website.keloladesa.versi')
+                </div>
             </div>
         </div>
+        <!-- /.card-body -->
     </div>
-    <!-- /.card-body -->
-</div>
-<!-- /.card -->
-</div>
-</div>
+    <!-- /.card -->
+    </div>
+    </div>
 @stop
 
 @push('js')
-<script>
-    $('.datepicker').each(function () {
-        const _options = $(this).data('option')
-        $(this).daterangepicker(_options)
-    })
+    <script>
+        $('.datepicker').each(function() {
+            const _options = $(this).data('option')
+            $(this).daterangepicker(_options)
+        })
 
-    function updateData() {
-        const params = {
-            period: $('input[name=periods]').val(),
-            provinsi: $('select[name=provinsi]').val(),
-            kabupaten: $('select[name=kabupaten]').val(),
-            kecamatan: $('select[name=kecamatan]').val()
-        }
+        function updateData() {
+            const params = {
+                period: $('input[name=periods]').val(),
+                provinsi: $('select[name=provinsi]').val(),
+                kabupaten: $('select[name=kabupaten]').val(),
+                kecamatan: $('select[name=kecamatan]').val()
+            }
 
-        $.ajax({
-            url: "{{ url('api/web/summary-keloladesa') }}",
-            data: params,
-            type: "GET",
-            beforeSend: function () {
-                $('#box-provinsi>.total').text('..')
-                $('#box-kabupaten>.total').text('..')
-                $('#box-kecamatan>.total').text('..')
-                $('#box-desa>.total').text('..')
-            },
-            success: function (data) {
-                const total = data.total
-                const detail = data.detail
-                $('#box-provinsi>.total').text(total.provinsi.total)
-                $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+            $.ajax({
+                url: "{{ url('api/web/summary-keloladesa') }}",
+                data: params,
+                type: "GET",
+                beforeSend: function() {
+                    $('#box-provinsi>.total').text('..')
+                    $('#box-kabupaten>.total').text('..')
+                    $('#box-kecamatan>.total').text('..')
+                    $('#box-desa>.total').text('..')
+                },
+                success: function(data) {
+                    const total = data.total
+                    const detail = data.detail
+                    $('#box-provinsi>.total').text(total.provinsi.total)
+                    $('#box-provinsi span.pertumbuhan').html(`<a href="#" class="${total.provinsi.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.provinsi.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 ${total.provinsi.pertumbuhan}</span></a>`)
-                $('#box-kabupaten>.total').text(total.kabupaten.total)
-                $('#box-kabupaten span.pertumbuhan').html(`<a href="#" class="${total.kabupaten.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                    $('#box-kabupaten>.total').text(total.kabupaten.total)
+                    $('#box-kabupaten span.pertumbuhan').html(`<a href="#" class="${total.kabupaten.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.kabupaten.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 ${total.kabupaten.pertumbuhan}</span></a>`)
-                $('#box-kecamatan>.total').text(total.kecamatan.total)
-                $('#box-kecamatan span.pertumbuhan').html(`<a href="#" class="${total.kecamatan.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                    $('#box-kecamatan>.total').text(total.kecamatan.total)
+                    $('#box-kecamatan span.pertumbuhan').html(`<a href="#" class="${total.kecamatan.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.kecamatan.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
                                 ${total.kecamatan.pertumbuhan}</span></a>`)
-                $('#box-desa>.total').text(total.desa.total)
-                $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
+                    $('#box-desa>.total').text(total.desa.total)
+                    $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                ${total.desa.pertumbuhan}</span></a>`)                
-            }
-        }, 'json')
-    }
+                                ${total.desa.pertumbuhan}</span></a>`)
+                }
+            }, 'json')
 
-    $(document).ready(function () {
+            $('.block_desa_aktif').trigger('change');
+            $('#block_install_baru').trigger('change')
+            $('#block_table_keloladesa_baru').trigger('change')
+            $('#block_table_versi').trigger('change')
+        }
 
-        // set default kosongkan datepicker
-        $('input[name=periods]').val('');
+        $(document).ready(function() {
 
-        $('#filter').click(function () {
+            // set default kosongkan datepicker
+            $('input[name=periods]').val('');
+
+            $('#filter').click(function() {
+                updateData()
+            })
+            $('input[name=periods]').change(function() {
+                updateData()
+            })
+            $('#reset').click(function() {
+                $('#collapse-filter select').val('')
+            })
+
+            $('.block_desa_aktif').change(function() {
+                const params = {
+                    kode_provinsi: $('select[name=provinsi]').val(),
+                    kode_kabupaten: $('select[name=kabupaten]').val(),
+                    kode_kecamatan: $('select[name=kecamatan]').val(),
+                }
+                $.get("{{ url('api/web/aktif-keloladesa') }}", params, function(data) {
+                    params.nama_provinsi = $('#provinsi option:selected').text();
+                    params.nama_kabupaten = $('#kabupaten option:selected').text();
+                    params.nama_kecamatan = $('#kecamatan option:selected').text();
+                    params.akses = 4;
+                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(params).toString();
+                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
+                    $('#total_desa').text(data.desa_total)
+                }, 'json')
+            })
+
             updateData()
         })
-        $('input[name=periods]').change(function () {
-            updateData()
-        })
-        $('#reset').click(function () {
-            $('#collapse-filter select').val('')
-        })
-
-        updateData()
-    })
-</script>
+    </script>
 @endpush

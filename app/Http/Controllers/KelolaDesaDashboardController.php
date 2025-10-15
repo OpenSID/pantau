@@ -17,19 +17,14 @@ class KelolaDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackKeloladesa::whereHas('desa')->with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+        $versiTerakhir = lastrelease_api_layanandesa();        
 
         return view('website.keloladesa.index', [
-            'fillters' => $fillters,
-            'total_versi' => 2,
-            'total_desa' => format_angka(Desa::count()),
-            'pengguna_layanan_desa' => TrackKeloladesa::distinct('kode_desa')->count(),
+            'fillters' => $fillters,                                    
             'versi_terakhir' => $versiTerakhir,
-            'info_rilis' => 'Rilis KelolaDesa ' . $versiTerakhir,
+            'info_rilis' => 'Rilis KelolaDesa '.$versiTerakhir,
             'total_versi' => TrackKeloladesa::distinct('versi')->count(),
-            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),
-            'installHariIni' => $installHariIni,
+            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),            
         ]);
     }
 
@@ -39,6 +34,7 @@ class KelolaDesaDashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         return view('website.keloladesa.detail', compact('fillters'));
@@ -53,7 +49,7 @@ class KelolaDesaDashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
+            return DataTables::of(TrackKeloladesa::filter($fillters)->groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -72,7 +68,7 @@ class KelolaDesaDashboardController extends Controller
         if ($request->ajax()) {
             $versi = $request->versi;
 
-            return DataTables::of(TrackKeloladesa::filter($fillters)->when($versi, static fn($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
+            return DataTables::of(TrackKeloladesa::filter($fillters)->when($versi, static fn ($q) => $q->where('versi', $versi))->with(['desa'])->groupBy(['versi', 'kode_desa'])->selectRaw('kode_desa, versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -83,8 +79,18 @@ class KelolaDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::with('desa')->filter($request))
-                ->editColumn('updated_at', static fn($q) => $q->updated_at->translatedFormat('j F Y H:i'))
+             $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+            $fillters = [
+                'kode_provinsi' => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+            ];
+            $tanggalPeriod = explode(' - ', $period);
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
+
+            return DataTables::of(TrackKeloladesa::with('desa')->filter($request)->whereBetween('track_keloladesa.created_at', [$tanggalAwal, $tanggalAkhir]))
+                ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -230,30 +236,30 @@ class KelolaDesaDashboardController extends Controller
     {
         $link = '';
         if (auth()->check()) {
-            $link = '<tr><td>Website</td><td> : <a href="http://' . strtolower($desa->url_hosting) . '" target="_blank">' . strtolower($desa->url_hosting) . '</a></b></td></tr>';
+            $link = '<tr><td>Website</td><td> : <a href="http://'.strtolower($desa->url_hosting).'" target="_blank">'.strtolower($desa->url_hosting).'</a></b></td></tr>';
         }
 
         return [
             'logo' => null,
             'popupContent' => '
-                <h6 class="text-center"><b style="color:red">' . strtoupper($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></h6>
+                <h6 class="text-center"><b style="color:red">'.strtoupper($desa->sebutan_desa.' '.$desa->nama_desa).'</b></h6>
                 <b><table width="100%">
                     <tr>
-                        <td>' . ucwords($desa->sebutan_desa) . '</td><td> : ' . ucwords($desa->sebutan_desa . ' ' . $desa->nama_desa) . '</b></td>
+                        <td>'.ucwords($desa->sebutan_desa).'</td><td> : '.ucwords($desa->sebutan_desa.' '.$desa->nama_desa).'</b></td>
                     </tr>
                     <tr>
-                        <td>Kecamatan</td><td> : ' . ucwords($desa->nama_kecamatan) . '</b></td>
+                        <td>Kecamatan</td><td> : '.ucwords($desa->nama_kecamatan).'</b></td>
                     </tr>
                     <tr>
-                    <td>Kab/Kota</td><td> : ' . ucwords($desa->nama_kabupaten) . '</b></td>
+                    <td>Kab/Kota</td><td> : '.ucwords($desa->nama_kabupaten).'</b></td>
                     </tr>
                     <tr>
-                        <td>Provinsi</td><td> : ' . ucwords($desa->nama_provinsi) . '</b></td>
+                        <td>Provinsi</td><td> : '.ucwords($desa->nama_provinsi).'</b></td>
                     </tr>
                     <tr>
-                        <td>Alamat</td><td> : ' . $desa->alamat_kantor . '</b></td>
+                        <td>Alamat</td><td> : '.$desa->alamat_kantor.'</b></td>
                     </tr>
-                    ' . $link . '
+                    '.$link.'
                 </table></b>',
         ];
     }
