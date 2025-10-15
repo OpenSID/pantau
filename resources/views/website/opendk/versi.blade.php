@@ -1,5 +1,5 @@
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" id="block_table_versi">
         <div class="table-responsive">
             <table class="table" id="table-versi">
                 <thead>
@@ -30,7 +30,10 @@
             ajax: {
                 url: `{{ url('web/opendk/versi') }}`,
                 method: 'get',
-                data: function(data) {                     
+               data: function(data) {
+                    data.kode_provinsi = $('select[name=provinsi]').val()
+                    data.kode_kabupaten = $('select[name=kabupaten]').val()
+                    data.kode_kecamatan = $('select[name=kecamatan]').val()
                 }
             },            
             columns: [{
@@ -52,6 +55,9 @@
                     orderable: false
                 },                
             ]
-        })        
+        })   
+        $('#block_table_versi').change(function() {
+             desaVersi.ajax.reload();
+         })
     </script>
 @endpush

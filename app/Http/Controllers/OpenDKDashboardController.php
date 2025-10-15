@@ -15,15 +15,13 @@ class OpenDKDashboardController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
-            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_kecamatan' => $request->kode_kecamatan,            
         ];
         $versiTerakhir = lastrelease_opendk();
         $installHariIni = Opendk::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 
         return view('website.opendk.index', [
             'fillters' => $fillters,
-            'total_desa' => format_angka(Desa::count()),
-            'pengguna_opendk' => Opendk::count(),
             'info_rilis' => 'Rilis OpenDK '.$versiTerakhir,
             'installHariIni' => $installHariIni,
             'provinsi_pengguna_opendk' => Opendk::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
@@ -36,6 +34,7 @@ class OpenDKDashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         return view('website.opendk.detail', compact('fillters'));
@@ -81,7 +80,7 @@ class OpenDKDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(Opendk::when($request->period ?? false, function ($subQuery) use ($request) {
+            return DataTables::of(Opendk::filterWilayah($request)->when($request->period ?? false, function ($subQuery) use ($request) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
                     // Validasi jika tanggal awal dan akhir berbeda

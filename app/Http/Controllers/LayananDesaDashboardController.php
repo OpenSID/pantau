@@ -18,18 +18,14 @@ class LayananDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
 
-        $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackMobile::with(['desa'])->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
+        $versiTerakhir = lastrelease_api_layanandesa();        
 
         return view('website.layanandesa.index', [
-            'fillters' => $fillters,
-            'total_desa' => format_angka(Desa::count()),
-            'pengguna_layanan_desa' => TrackMobile::distinct('kode_desa')->count(),
+            'fillters' => $fillters,                        
             'versi_terakhir' => $versiTerakhir,
             'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir,
             'total_versi' => TrackMobile::distinct('versi')->count(),
-            'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),
-            'installHariIni' => $installHariIni,
+            'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),           
         ]);
     }
 
@@ -39,6 +35,7 @@ class LayananDesaDashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         return view('website.layanandesa.detail', compact('fillters'));
@@ -53,7 +50,7 @@ class LayananDesaDashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(TrackMobile::groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
+            return DataTables::of(TrackMobile::filter($fillters)->groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
