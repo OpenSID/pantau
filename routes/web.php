@@ -68,8 +68,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);
-        Route::get('keloladesa', [WebsiteDashboardController::class, 'keloladesa']);
+        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);        
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);

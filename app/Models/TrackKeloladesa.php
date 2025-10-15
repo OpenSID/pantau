@@ -110,6 +110,31 @@ class TrackKeloladesa extends Model
             });
         }
 
+        if(isset($request['akses'])) {
+            $query->when(! empty($request['akses']), function ($query) use ($request) {
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                $sign = '>=';
+                switch($request['akses']) {
+                    case '4':
+                        $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                        break;
+                    case '2':
+                        $interval = 'interval 2 month';
+                        break;
+                    case '1':
+                        $interval = 'interval 2 month';
+                        $sign = '<';
+                        break;
+                    case '3':
+                        $interval = 'interval 4 month';
+                        $sign = '<';
+                        break;
+                }
+
+                return $query->whereRaw('tgl_akses '.$sign.' now() - '.$interval);
+            });
+        }
+
         return $query;
     }
 

@@ -19,6 +19,8 @@ use App\Http\Controllers\KelolaDesaDashboardController;
 use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\Api\TrackPBBController;
 use App\Http\Controllers\Api\DesaAktifOpensidController;
+use App\Http\Controllers\Api\InstallKelolaDesaTodayController;
+use App\Http\Controllers\Api\InstallLayananDesaTodayController;
 use App\Http\Controllers\Api\InstallOpendkTodayController;
 use App\Http\Controllers\Api\InstallOpensidTodayController;
 use App\Http\Controllers\Api\PenggunaSelainOpensidController;
@@ -88,5 +90,9 @@ Route::prefix('web')
         Route::get('install-hari-ini-opensid', InstallOpensidTodayController::class);
         Route::get('pengguna-selain-opensid', PenggunaSelainOpensidController::class);
         Route::get('aktif-opendk', AktifOpendkController::class);
+        Route::get('aktif-keloladesa', \App\Http\Controllers\Api\AktifKelolaDesaController::class);
+        Route::get('aktif-layanandesa', \App\Http\Controllers\Api\AktifLayananDesaController::class);
         Route::get('install-hari-ini-opendk', InstallOpendkTodayController::class);
+        Route::get('install-hari-ini-layanandesa', InstallLayananDesaTodayController::class);
+        Route::get('install-hari-ini-keloladesa', InstallKelolaDesaTodayController::class);
     });
