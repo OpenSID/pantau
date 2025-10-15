@@ -93,6 +93,7 @@
                 }
                 $('#filter').trigger('click');
             }, 1000);
+            $('#akses').find('option[value="5"]').remove();
 
         $('#table-pengguna-opendk').DataTable({
             processing: true,
