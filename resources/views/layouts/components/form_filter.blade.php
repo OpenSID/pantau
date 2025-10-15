@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        @if (array_key_exists('kode_kabupaten', $fillters))
+        @if (array_key_exists('kode_kecamatan', $fillters))
             <div class="col-sm">
                 <div class="form-group">
                     <label class="text-white">Kecamatan</label>

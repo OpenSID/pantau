@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\DesaExport;
 use App\Models\Desa;
+use App\Models\Scopes\RegionAccessScope;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -35,13 +36,21 @@ class LaporanController extends Controller
             'versi_hosting' => $request->versi_hosting,
             'tte' => $request->tte,
         ];
+        $hiddenColumns = [];
+        $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
+        if ($adminWilayah) {
+            $hiddenColumns[] = 'aksi';
+            $hiddenColumns[] = 'kontak';            
+        }
 
         if ($request->ajax() || $request->excel) {
             $query = DataTables::of($this->desa->fillter($fillters)->laporan());
             if ($request->excel) {
                 $query->filtering();
-
-                return Excel::download(new DesaExport($query->results()), 'Desa-yang-memasang-OpenSID.xlsx');
+                if(in_array('aksi', $hiddenColumns)){
+                    unset($hiddenColumns['aksi']);
+                }                
+                return Excel::download(new DesaExport($query->results(), $hiddenColumns), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
             return $query->addIndexColumn()
@@ -62,7 +71,7 @@ class LaporanController extends Controller
                 ->make(true);
         }
 
-        return view('laporan.desa', compact('fillters'));
+        return view('laporan.desa', compact('fillters', 'hiddenColumns'));
     }
 
     public function deleteDesa(Desa $desa)
@@ -96,7 +105,7 @@ class LaporanController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of($this->desa->versiOpenSID($fillters))
+            return DataTables::of($this->desa->newQueryWithoutScope(RegionAccessScope::class)->versiOpenSID($fillters))
                 ->orderColumn('x.versi', function ($query, $order) {
                     $query
                         ->orderByRaw("cast(versi as signed) {$order}")

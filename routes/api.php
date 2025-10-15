@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\TrackKelolaDesaController;
 use App\Http\Controllers\KelolaDesaDashboardController;
 use App\Http\Controllers\LayananDesaDashboardController;
 use App\Http\Controllers\Api\TrackPBBController;
+use App\Http\Controllers\Api\DesaAktifOpensidController;
+use App\Http\Controllers\Api\InstallOpensidTodayController;
+use App\Http\Controllers\Api\PenggunaSelainOpensidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +50,19 @@ Route::prefix('wilayah')
         Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
     });
 
+// API untuk laporan
+Route::get('kabupaten', function(\Illuminate\Http\Request $request) {
+    $query = \App\Models\Desa::select('kode_kabupaten', 'nama_kabupaten')
+        ->distinct()
+        ->orderBy('nama_kabupaten');
+
+    if ($request->kode_provinsi) {
+        $query->where('kode_provinsi', $request->kode_provinsi);
+    }
+
+    return $query->get();
+});
+
 Route::prefix('track')
     ->middleware('tracksid')
     ->group(function () {
@@ -66,4 +82,7 @@ Route::prefix('web')
         Route::get('summary-layanan', [LayananDesaDashboardController::class, 'summary']);
         Route::get('chart-opensid', [InstallOpensidController::class, 'chart']);
         Route::get('chart-opendk', [InstallOpenDKController::class, 'chart']);
+        Route::get('desa-aktif-opensid', DesaAktifOpensidController::class);
+        Route::get('install-hari-ini-opensid', InstallOpensidTodayController::class);
+        Route::get('pengguna-selain-opensid', PenggunaSelainOpensidController::class);
     });

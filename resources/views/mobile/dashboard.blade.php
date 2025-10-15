@@ -12,5 +12,4 @@
 
 @section('content')
     @include($baseView.'.summary.desa')
-    @include($baseView.'.summary.kelolaDesa')
 @stop

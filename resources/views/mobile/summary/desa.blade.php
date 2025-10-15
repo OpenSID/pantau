@@ -40,9 +40,9 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->kode_desa }}</td>
-                                    <td>{{ $item->desa->nama_desa }}</td>
-                                    <td>{{ $item->desa->nama_kecamatan }}</td>
-                                    <td>{{ $item->desa->nama_kabupaten }}</td>
+                                    <td>{{ $item->nama_desa }}</td>
+                                    <td>{{ $item->nama_kecamatan }}</td>
+                                    <td>{{ $item->nama_kabupaten }}</td>
                                     <td>{{ $item->jumlah }}</td>
                                 </tr>
                             @endforeach

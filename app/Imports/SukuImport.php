@@ -11,10 +11,11 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 class SukuImport implements ToModel, WithBatchInserts, WithUpserts, WithHeadingRow
 {
     private $regionMap = [];
+
     public function __construct()
     {
         ini_set('memory_limit', '-1');
-        $this->regionMap = \App\Models\Region::selectRaw('id, UPPER(region_name) as region_name')->where('parent_code',0)->pluck('id', 'region_name')->toArray();
+        $this->regionMap = \App\Models\Region::selectRaw('id, UPPER(region_name) as region_name')->where('parent_code', 0)->pluck('id', 'region_name')->toArray();
     }
 
     public function batchSize(): int
@@ -38,11 +39,12 @@ class SukuImport implements ToModel, WithBatchInserts, WithUpserts, WithHeadingR
     public function model(array $row)
     {
         // Check if the region name exists in the map
-        $namaProvinsi = trim(strtoupper(str_replace('Provinsi','',$row['nama_provinsi'])));
+        $namaProvinsi = trim(strtoupper(str_replace('Provinsi', '', $row['nama_provinsi'])));
         $regionId = $this->regionMap[$namaProvinsi] ?? null;
-        if(!$regionId) {
+        if (! $regionId) {
             return null; // Skip if region ID is not found
         }
+
         return new Suku([
             'tbl_region_id' => $regionId,
             'name' => $row['nama_suku'],

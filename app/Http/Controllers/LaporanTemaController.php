@@ -8,6 +8,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class LaporanTemaController extends Controller
 {
+    private $temaBawaan = ['esensi', 'natra', 'palanta', 'lestari'];
+
     public function index(Request $request)
     {
         $fillters = [
@@ -27,7 +29,7 @@ class LaporanTemaController extends Controller
             if ($tema) {
                 $data = DataTables::of(Desa::fillter($fillters)->where('tema', $tema));
             } else {
-                $data = DataTables::of(Desa::fillter($fillters)->whereIn('tema', ['esensi', 'natra', 'palanta']));
+                $data = DataTables::of(Desa::fillter($fillters)->whereIn('tema', $this->temaBawaan));
             }
 
             return $data->addIndexColumn()
@@ -38,12 +40,24 @@ class LaporanTemaController extends Controller
             ->rawColumns(['url_hosting']) // Mengizinkan HTML di kolom url_hosting
             ->make(true);
         }
-
-        $palanta = Desa::TemaPalanta();
-        $natra = Desa::TemaNatra();
-        $esensi = Desa::TemaEsensi();
+        $listTemaCard = [];
+        // Hitung jumlah pengguna untuk setiap tema
+        foreach ($this->temaBawaan as $tema) {
+            $countVarName = strtolower($tema);
+            $listTemaCard[$countVarName] = [
+                'name' => ucfirst($tema),
+                'count' => Desa::whereTema(ucfirst($tema))->count(),
+                'color' => match (strtolower($tema)) {
+                    'esensi' => 'bg-success',
+                    'natra' => 'bg-warning',
+                    'palanta' => 'bg-info',
+                    'lestari' => 'bg-primary',
+                    default => 'bg-secondary',
+                },
+            ];
+        }
         $tema = Desa::Tema();
 
-        return view('laporan.tema', compact('fillters', 'palanta', 'natra', 'esensi', 'tema'));
+        return view('laporan.tema', compact('fillters', 'listTemaCard', 'tema'));
     }
 }

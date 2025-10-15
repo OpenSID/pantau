@@ -24,7 +24,7 @@ class PekerjaanPmiRequest extends FormRequest
         $id = $this->route('pekerjaan_pmi');
 
         return [
-            'nama' => 'required|string|max:255|unique:pekerjaan_pmi,nama,' . $id,
+            'nama' => 'required|string|max:255|unique:pekerjaan_pmi,nama,'.$id,
         ];
     }
 
