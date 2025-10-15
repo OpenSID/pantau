@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OpenKabRegionAccess;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Openkab extends Model
 {
-    use HasFactory;
+    use HasFactory, OpenKabRegionAccess;
 
     /** {@inheritdoc} */
     protected $table = 'openkab';
@@ -68,12 +69,12 @@ class Openkab extends Model
 
     public function scopeJumlahProvinsi($query)
     {
-        return $query->select('kode_prov')->distinct('kode_prov')->count();
+        return $query->select("{$this->getTable()}.kode_prov")->distinct("{$this->getTable()}.kode_prov")->count();
     }
 
     public function scopeJumlahDesa($query)
     {
-        return $query->sum('jumlah_desa');
+        return $query->sum("{$this->getTable()}.jumlah_desa");
     }
 
     public function latestDesaVersion()

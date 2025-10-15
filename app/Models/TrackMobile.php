@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class TrackMobile extends Model
+class TrackMobile extends BaseModel
 {
     use HasFactory;
 
@@ -26,16 +25,6 @@ class TrackMobile extends Model
 
     /** {@inheritdoc} */
     public $incrementing = false;
-
-    public function scopeWilayahKhusus($query)
-    {
-        $provinsi = session('provinsi');
-        $query->when($provinsi, function ($r) use ($provinsi) {
-            $r->whereIn('kode_desa', function ($s) use ($provinsi) {
-                $s->select('kode_desa')->from('kode_wilayah')->where('kode_prov', $provinsi->kode_prov);
-            });
-        });
-    }
 
     public function scopeDesa($query, $fillters = [])
     {
@@ -72,7 +61,7 @@ class TrackMobile extends Model
             });
         }
 
-        if (isset($request['kode_kecamatan'])) {
+        if (isset($request['akses_mobile'])) {
             $query->when(! empty($request['akses_mobile']), function ($query) use ($request) {
                 $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';

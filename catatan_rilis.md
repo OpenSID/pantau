@@ -1,17 +1,18 @@
-Di rilis v2508.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#499](https://github.com/OpenSID/pantau/issues/499) Penambahan halaman pengguna opendk lengkap.
-2. [#500](https://github.com/OpenSID/pantau/issues/500) Penambahan halaman pengguna layanan desa lengkap.
-3. [#501](https://github.com/OpenSID/pantau/issues/501) Penambahan halaman pengguna kelola desa lengkap.
-4. [#496](https://github.com/OpenSID/pantau/issues/496) Penambahan modal action selengkapnya untuk semua pengguna opendesa, export excel, solved error leaflet, filtering.
+1. [#570](https://github.com/OpenSID/pantau/issues/570) Sesuaikan data dasboard jika user role admin wilayah.
+2. [#575](https://github.com/OpenSID/pantau/issues/575) Sesuaikan fungsi profil dan ubah password di user role admin wilayah.
+3. [#571](https://github.com/OpenSID/pantau/issues/571) Sesuaikan data desa sesuai pada akses wilayah. 
+4. [#573](https://github.com/OpenSID/pantau/issues/573) Sesuaikan dasbor OpenDK pada akses wilayah.
+5. [#574](https://github.com/OpenSID/pantau/issues/574) Sesuaikan data yang tampil pada halaman opendk/kecamatan.
+6. [#581](https://github.com/OpenSID/pantau/issues/581) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera.
 
 #### Perbaikan Bug
 
-1. [#512](https://github.com/OpenSID/pantau/issues/512) Jumlah desa yang terpasang pada halaman OpenKab tidak mencatan pengguna dengan benar.
-2. [#497](https://github.com/OpenSID/pantau/issues/497) Perbaikan error 500 pada halaman KelolaDesa di pantau.
+1. [#569](https://github.com/OpenSID/pantau/issues/569) Perbaikan install awal.
 
 #### Penyesuaian Teknis
 
-1. [#509](https://github.com/OpenSID/pantau/issues/509) upgrade package laravel & axios.
+1. [#530](https://github.com/OpenSID/pantau/issues/530) Update Jquery ke versi 3.5.0 atau lebih terbaru.
