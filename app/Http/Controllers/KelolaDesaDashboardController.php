@@ -17,19 +17,14 @@ class KelolaDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        $versiTerakhir = lastrelease_api_layanandesa();
-        $installHariIni = TrackKeloladesa::whereHas('desa')->with(['desa'])->whereDate('created_at', '>=', Carbon::now()->startOfYear()->format('Y-m-d'))->get();
+        $versiTerakhir = lastrelease_api_layanandesa();        
 
         return view('website.keloladesa.index', [
-            'fillters' => $fillters,
-            'total_versi' => 2,
-            'total_desa' => format_angka(Desa::count()),
-            'pengguna_layanan_desa' => TrackKeloladesa::distinct('kode_desa')->count(),
+            'fillters' => $fillters,                                    
             'versi_terakhir' => $versiTerakhir,
             'info_rilis' => 'Rilis KelolaDesa '.$versiTerakhir,
             'total_versi' => TrackKeloladesa::distinct('versi')->count(),
-            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),
-            'installHariIni' => $installHariIni,
+            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),            
         ]);
     }
 
@@ -39,6 +34,7 @@ class KelolaDesaDashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         return view('website.keloladesa.detail', compact('fillters'));
@@ -53,7 +49,7 @@ class KelolaDesaDashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
+            return DataTables::of(TrackKeloladesa::filter($fillters)->groupBy('versi')->selectRaw('versi, count(*) as jumlah'))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -83,7 +79,17 @@ class KelolaDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(TrackKeloladesa::with('desa')->filter($request))
+             $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+            $fillters = [
+                'kode_provinsi' => $request->kode_provinsi,
+                'kode_kabupaten' => $request->kode_kabupaten,
+                'kode_kecamatan' => $request->kode_kecamatan,
+            ];
+            $tanggalPeriod = explode(' - ', $period);
+            $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
+            $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
+
+            return DataTables::of(TrackKeloladesa::with('desa')->filter($request)->whereBetween('track_keloladesa.created_at', [$tanggalAwal, $tanggalAkhir]))
                 ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
                 ->addIndexColumn()
                 ->make(true);

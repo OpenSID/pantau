@@ -8,6 +8,9 @@ Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 4. [#573](https://github.com/OpenSID/pantau/issues/573) Sesuaikan dasbor OpenDK pada akses wilayah.
 5. [#574](https://github.com/OpenSID/pantau/issues/574) Sesuaikan data yang tampil pada halaman opendk/kecamatan.
 6. [#581](https://github.com/OpenSID/pantau/issues/581) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera.
+7. [#583](https://github.com/OpenSID/pantau/issues/583) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera pada halaman OpenDK.
+8. [#584](https://github.com/OpenSID/pantau/issues/584) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera pada halaman LayananDesa & KelolaDesa.
+
 
 #### Perbaikan Bug
 

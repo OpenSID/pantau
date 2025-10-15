@@ -56,12 +56,12 @@
                         @include('website.layanandesa.peta')
                     </div>
                     <div class="col-lg-2 box-provinsi">
-                        <p>Desa / Kelurahan Aktif</p>
+                        <p>Pengguna Aktif</p>
                         <div class="col-xs-12">
-                            <div class="small-box bg-white">
+                            <div class="small-box bg-white block_desa_aktif">
                                 <div class="inner text-center">
-                                    <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
-                                    <p class="text-black">Total Desa: {{ $total_desa }}</p>
+                                    <h3 class="text-blue" id="desa_aktif">0</h3>
+                                    <p class="text-black">Total Desa: <span id="total_desa"></span></p>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,13 @@
     </div>
     <div class="card-body">
         <div class="row mt-3">
-            <div class="col-lg-8">                
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <b>
+                        Daftar Pengguna Baru LayananDesa 7 Hari Terakhir
+                    </b>
+                    <a href="{{ route('web.layanandesa.detail') }}" class="btn btn-sm btn-primary">Data Selengkapnya</a>
+                </div>
                 @include('website.layanandesa.tabel')
             </div>
             <div class="col-lg-4">
@@ -125,14 +131,14 @@
     })
 
     $('input[name="periods"]').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('{{ config('local.daterangepicker.locale.format') }}') + ' - ' + picker.endDate.format('{{ config('local.daterangepicker.locale.format') }}'));
-      $(this).trigger('change')
-  });
+        $(this).val(picker.startDate.format('{{ config('local.daterangepicker.locale.format') }}') + ' - ' + picker.endDate.format('{{ config('local.daterangepicker.locale.format') }}'));
+        $(this).trigger('change')
+    });
 
-  $('input[name="periods"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-      $(this).trigger('change')
-  });
+    $('input[name="periods"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $(this).trigger('change')
+    });
 
     function updateData() {
         const params = {
@@ -170,12 +176,21 @@
                 $('#box-desa>.total').text(total.desa.total)
                 $('#box-desa span.pertumbuhan').html(`<a href="#" class="${total.desa.pertumbuhan < 0 ? 'text-red' : 'text-green'}"><i
                                     class="fa ${total.desa.pertumbuhan < 0 ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                ${total.desa.pertumbuhan}</span></a>`)                
+                                ${total.desa.pertumbuhan}</span></a>`)
+
+                // Trigger updates for dependent blocks (install baru, tables, versi)
+                $('.block_desa_aktif').trigger('change');
+                $('#block_install_baru').trigger('change');
+                $('#block_table_layanandesa_baru').trigger('change');
+                $('#block_table_versi').trigger('change');
             }
         }, 'json')
     }
 
     $(document).ready(function () {
+        // set default kosongkan datepicker
+        $('input[name=periods]').val('');
+
         $('#filter').click(function () {
             updateData()
         })
@@ -184,6 +199,23 @@
         })
         $('#reset').click(function () {
             $('#collapse-filter select').val('')
+        })
+
+        $('.block_desa_aktif').change(function() {
+            const params = {
+                kode_provinsi: $('select[name=provinsi]').val(),
+                kode_kabupaten: $('select[name=kabupaten]').val(),
+                kode_kecamatan: $('select[name=kecamatan]').val(),
+            }
+            $.get("{{ url('api/web/aktif-layanandesa') }}", params, function(data) {
+                params.nama_provinsi = $('#provinsi option:selected').text();
+                params.nama_kabupaten = $('#kabupaten option:selected').text();
+                params.nama_kecamatan = $('#kecamatan option:selected').text();
+                params.akses = 4;
+                const linkUrl = '{{ url('web/layanandesa/detail') }}?' + new URLSearchParams(params).toString();
+                $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
+                $('#total_desa').text(data.desa_total)
+            }, 'json')
         })
 
         updateData()

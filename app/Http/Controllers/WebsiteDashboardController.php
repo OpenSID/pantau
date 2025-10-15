@@ -252,11 +252,6 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
-    public function layanandesa(Request $request)
-    {
-        return view('website.layanandesa');
-    }
-
     public function openkab(Request $request)
     {
         if ($request->ajax()) {
@@ -321,12 +316,7 @@ class WebsiteDashboardController extends Controller
     public function openkabData(Request $request)
     {
         return view('website.openkab_data');
-    }
-
-    public function keloladesa(Request $request)
-    {
-        return view('website.keloladesa');
-    }
+    }    
 
     public function opensidData(Request $request)
     {
