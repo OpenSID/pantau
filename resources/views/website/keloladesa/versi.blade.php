@@ -1,5 +1,5 @@
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" id="block_table_versi">
         <div class="table-responsive">
             <table class="table" id="table-versi">
                 <thead>
@@ -30,9 +30,12 @@
             ajax: {
                 url: `{{ url('web/keloladesa/versi') }}`,
                 method: 'get',
-                data: function(data) {                     
+                data: function(data) {
+                    data.kode_provinsi = $('select[name=provinsi]').val()
+                    data.kode_kabupaten = $('select[name=kabupaten]').val()
+                    data.kode_kecamatan = $('select[name=kecamatan]').val()
                 }
-            },            
+            },
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -50,8 +53,12 @@
                     },
                     searchable: false,
                     orderable: false
-                },                
+                },
             ]
-        })        
+        })
+
+        $('#block_table_versi').change(function() {
+            desaVersi.ajax.reload();
+        })
     </script>
 @endpush

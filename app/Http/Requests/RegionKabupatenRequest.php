@@ -25,7 +25,7 @@ class RegionKabupatenRequest extends FormRequest
     {
         return [
             'parent_code' => 'required|string|max:10',
-            'region_code' => 'required|string|max:10|unique:tbl_regions,region_code,' . $this->route('kabupaten'),
+            'region_code' => 'required|string|max:10|unique:tbl_regions,region_code,'.$this->route('kabupaten'),
             'region_name' => 'required|string|max:100',
         ];
     }

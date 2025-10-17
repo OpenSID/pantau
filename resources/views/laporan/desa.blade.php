@@ -41,14 +41,18 @@
                                 <tr>
                                     <th>No</th>
                                     @auth
-                                        <th>Aksi</th>
+                                        @if(!in_array('aksi', $hiddenColumns ?? []))
+                                            <th>Aksi</th>
+                                        @endif                                        
                                     @endauth
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
                                     @auth
-                                        <th>Kontak</th>
+                                        @if(!in_array('kontak', $hiddenColumns ?? []))
+                                            <th>Kontak</th>                                        
+                                        @endif
                                     @endauth
                                     <th>Web</th>
                                     <th>Versi Offline</th>
@@ -145,13 +149,17 @@
                         searchable: false,
                         orderable: false
                     },
-                    @auth {
-                        data: 'action',
-                        name: 'action',
-                        searchable: false,
-                        orderable: false
-                    },
-                @endauth {
+                    @auth 
+                        @if(!in_array('aksi', $hiddenColumns ?? []))
+                            {
+                                data: 'action',
+                                name: 'action',
+                                searchable: false,
+                                orderable: false
+                            },
+                        @endif                                            
+                    @endauth 
+                {
                     data: 'nama_desa'
                 },
                 {
@@ -163,12 +171,15 @@
                 {
                     data: 'nama_provinsi'
                 },
-                @auth {
+                @auth 
+                    @if(!in_array('kontak', $hiddenColumns ?? []))
+                    {
                         data: 'kontak',
                         name: 'kontak',
                         searchable: false,
                         orderable: false
                     },
+                    @endif
                 @endauth
                 {
                     data: function(data) {
@@ -252,7 +263,7 @@
             }, ],
             @auth
         order: [
-                [21, 'desc']
+                [21 - {{ count($hiddenColumns) }}, 'desc']
             ],
         @else
             order: [

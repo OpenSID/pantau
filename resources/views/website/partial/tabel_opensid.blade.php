@@ -1,5 +1,5 @@
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" id="block_table_desa_baru">
         <div class="table-responsive">
             <table class="table" id="table-desa-baru">
                 <thead>
@@ -31,6 +31,12 @@
             ordering: true,
             ajax: {
                 url: `{{ route('datatables:desa-baru') }}`,
+                // add data parameter for filtering
+                data: function(d) {
+                    d.kode_provinsi = $('select[name=provinsi]').val()
+                    d.kode_kabupaten = $('select[name=kabupaten]').val()
+                    d.kode_kecamatan = $('select[name=kecamatan]').val()
+                },
                 method: 'get',
             },
             columns: [{
@@ -62,6 +68,10 @@
             order: [
                 [1, 'desc']
             ],
-        })        
+        })
+
+        $('#block_table_desa_baru').change(function() {
+            desaBaru.ajax.reload();
+        })
     </script>
 @endpush

@@ -9,7 +9,7 @@
         </small></h1>
 @stop
 
-@section('content')    
+@section('content')
     @include('layouts.components.notification')
     <div class="row">
         @if(empty(request()->query('tema')))
@@ -17,52 +17,27 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-4">
-                            <!-- small card -->
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{$natra}}</h3>
-                                    <p>Tema Natra</p>
+                        @foreach ($listTemaCard as $temaCard)
+                            <div class="col-lg-{{ ceil(12/count($listTemaCard)) }}">
+                                <!-- small card -->
+                                <div class="small-box {{ $temaCard['color'] }}">
+                                    <div class="inner">
+                                        <h3>{{ $temaCard['count'] }}</h3>
+                                        <p>Tema {{ $temaCard['name'] }}</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <a href="{{ url('laporan/tema') }}?tema={{ $temaCard['name'] }}&total={{ $temaCard['count'] }}" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                                 </div>
-                                <div class="icon">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </div>
-                                <a href="{{ url('laporan/tema') }}?tema=Natra" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-4">
-                            <!-- small card -->
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3>{{$esensi}}</h3>
-                                    <p>Tema Esensi</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ url('laporan/tema') }}?tema=Esensi" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-4">
-                            <!-- small card -->
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>{{$palanta}}</h3>
-                                    <p>Tema Palanta</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <a href="{{ url('laporan/tema') }}?tema=Palanta" class="small-box-footer">Lihat detail <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         @endif
         <div class="col-lg-12">
             <div class="card">
@@ -71,12 +46,8 @@
                     <div class="card-tools">
                         <span data-toggle="tooltip" title=""
                             class="badge badge-primary">
-                            @if(request()->query('tema') == 'Esensi')
-                            {{$esensi}}
-                            @elseif(request()->query('tema') == 'Natra')
-                            {{$natra}}
-                            @elseif(request()->query('tema') == 'Palanta')
-                            {{$palanta}}
+                            @if(request()->query('total'))
+                            {{request()->query('total')}}
                             @else
                             {{$tema}}
                             @endif
@@ -93,7 +64,7 @@
                         <table class="table" id="table-desa">
                             <thead>
                                 <tr>
-                                    <th>No</th>                                    
+                                    <th>No</th>
                                     <th>Tanggal Terpantau</th>
                                     <th>Desa</th>
                                     <th>Kecamatan</th>
@@ -195,7 +166,7 @@
                 },
                 {
                     data: 'url_hosting'
-                },                               
+                },
                 {
                     data: 'tema'
                 }, ],

@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasRegionAccess;
+use App\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Opendk extends Model
 {
-    use HasFactory;
+    use HasFactory, HasRegionAccess, FilterWilayahTrait;
 
     const ACTIVE_DAYS = 7;
 
@@ -173,7 +175,28 @@ class Opendk extends Model
                         $subQuery->whereDate('created_at', '=', $dates[0]);
                     }
                 }
-            })
+            })->when(! empty($fillters['akses']), function ($query) use ($fillters) {
+            $interval = 'interval '.self::ACTIVE_DAYS.' day';
+            $sign = '>=';
+            switch($fillters['akses']) {
+                case '4':
+                    $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                    break;
+                case '2':
+                    $interval = 'interval 2 month';
+                    break;
+                case '1':
+                    $interval = 'interval 2 month';
+                    $sign = '<';
+                    break;
+                case '3':
+                    $interval = 'interval 4 month';
+                    $sign = '<';
+                    break;
+            }
+
+            return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
+        })
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
                 $query->where('kode_provinsi', $kode_provinsi);
             })

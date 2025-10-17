@@ -47,7 +47,7 @@ class DashboardController extends Controller
     public function datatableDesaBaru(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of($this->desa->desaBaru()->get()->map(function ($desa) {
+            return DataTables::of($this->desa->filterWilayah($request)->desaBaru()->get()->map(function ($desa) {
                 if (auth()->check() == false) {
                     unset($desa['url_hosting']);
                 }
@@ -237,6 +237,7 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
@@ -265,6 +266,7 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
@@ -312,6 +314,7 @@ class DashboardController extends Controller
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
+            'akses' => $request->akses,
         ];
 
         if ($request->ajax()) {
@@ -421,7 +424,7 @@ class DashboardController extends Controller
                     } elseif ($item->modul_tte == 1) {
                         return '<span class="badge badge-success">Aktif</span>';
                     }
-                })->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->created_at).'</span>')
+                })->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns()
                 ->rawColumns(['modul_tte', 'tanggal'])
