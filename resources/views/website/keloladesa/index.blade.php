@@ -63,12 +63,12 @@
                             @include('website.keloladesa.peta')
                         </div>
                         <div class="col-lg-2 box-provinsi">
-                            <p>Desa / Kelurahan Aktif</p>
+                            <p>Pengguna Aktif</p>
                             <div class="col-xs-12">
-                                <div class="small-box bg-white">
+                                <div class="small-box bg-white block_desa_aktif">
                                     <div class="inner text-center">
-                                        <h3 class="text-blue">{{ $pengguna_layanan_desa }}</h3>
-                                        <p class="text-black">Total Desa: {{ $total_desa }}</p>
+                                        <h3 class="text-blue" id="desa_aktif">0</h3>
+                                        <p class="text-black">Total Desa: <span id="total_desa"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -176,6 +176,11 @@
                                 ${total.desa.pertumbuhan}</span></a>`)
                 }
             }, 'json')
+
+            $('.block_desa_aktif').trigger('change');
+            $('#block_install_baru').trigger('change')
+            $('#block_table_keloladesa_baru').trigger('change')
+            $('#block_table_versi').trigger('change')
         }
 
         $(document).ready(function() {
@@ -191,6 +196,23 @@
             })
             $('#reset').click(function() {
                 $('#collapse-filter select').val('')
+            })
+
+            $('.block_desa_aktif').change(function() {
+                const params = {
+                    kode_provinsi: $('select[name=provinsi]').val(),
+                    kode_kabupaten: $('select[name=kabupaten]').val(),
+                    kode_kecamatan: $('select[name=kecamatan]').val(),
+                }
+                $.get("{{ url('api/web/aktif-keloladesa') }}", params, function(data) {
+                    params.nama_provinsi = $('#provinsi option:selected').text();
+                    params.nama_kabupaten = $('#kabupaten option:selected').text();
+                    params.nama_kecamatan = $('#kecamatan option:selected').text();
+                    params.akses = 4;
+                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(params).toString();
+                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
+                    $('#total_desa').text(data.desa_total)
+                }, 'json')
             })
 
             updateData()

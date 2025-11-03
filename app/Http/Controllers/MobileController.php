@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\KelolaDesaExport;
 use App\Exports\LayananDesaExport;
 use App\Models\Desa;
-use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use App\Models\TrackMobileView;
 use Illuminate\Http\Request;
@@ -30,7 +28,6 @@ class MobileController extends Controller
 
     public function index()
     {
-
         $totalPengguna = $this->mobile->wilayahKhusus()->count();
         $totalDesaPengguna = $this->mobile->wilayahKhusus()->select(['kode_desa'])->distinct('kode_desa')->count();
         $totalDesaPenggunaAktif = $this->mobile->wilayahKhusus()->select(['kode_desa'])->distinct('kode_desa')->active()->count();
@@ -51,7 +48,7 @@ class MobileController extends Controller
             'baseRoute' => $this->baseRoute,
             'baseView' => $this->baseView,
             'desaWidgets' => $desaWidgets,
-            'daftar_baru' => $penggunaBaru
+            'daftar_baru' => $penggunaBaru,
         ]);
     }
 
@@ -69,7 +66,7 @@ class MobileController extends Controller
         ];
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(TrackMobileView::wilayahKhusus()->filterWilayah($request)->when(!empty($fillters['akses_mobile']), static fn($q) => $q->activePeriod($fillters['akses_mobile'])));
+            $query = DataTables::of(TrackMobileView::wilayahKhusus()->filterWilayah($request)->when(! empty($fillters['akses_mobile']), static fn ($q) => $q->activePeriod($fillters['akses_mobile'])));
             if ($request->excel) {
                 $query->filtering();
 
@@ -91,7 +88,7 @@ class MobileController extends Controller
             'akses_mobile' => $request->akses_mobile,
         ];
         if ($request->ajax()) {
-            return DataTables::of(Desa::filterWilayah($request)->withCount('mobile')->whereHas('mobile', function ($q) use ($request){
+            return DataTables::of(Desa::filterWilayah($request)->withCount('mobile')->whereHas('mobile', function ($q) use ($request) {
                 $q->when(! empty($request['akses_mobile']), function ($query) use ($request) {
                     $interval = 'interval '.TrackMobile::ACTIVE_DAYS.' day';
                     $sign = '>=';

@@ -1,5 +1,5 @@
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" id="block_table_keloladesa_baru">
         <div class="table-responsive">
             <table class="table" id="table-desa-baru">
                 <thead>
@@ -23,7 +23,9 @@
 @push('js')
     <script>
         $.extend($.fn.dataTable.defaults, {
-            language: { url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/id.json" }
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/id.json"
+            }
         });
 
 
@@ -35,11 +37,10 @@
             ajax: {
                 url: `{{ url('web/keloladesa/install_baru') }}`,
                 method: 'get',
-                data: function() {
-                    let period = $('input[name=periods]').val() || '';
-                    return {
-                        period,
-                    };
+                data: function(data) {
+                    data.kode_provinsi = $('select[name=provinsi]').val()
+                    data.kode_kabupaten = $('select[name=kabupaten]').val()
+                    data.kode_kecamatan = $('select[name=kecamatan]').val()
                 },
             },
             columns: [
@@ -79,15 +80,13 @@
         });
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            // Deteksi perubahan nilai pada input periods
-            $('input[name=periods]').on('change', function () {
+            $('#block_table_keloladesa_baru').change(function() {
                 desaBaru.ajax.reload();
             });
-            
-            
-        })
 
+
+        })
     </script>
 @endpush

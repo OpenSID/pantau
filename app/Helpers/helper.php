@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2510.0.0';
+        return 'v2511.0.0';
     }
 }
 
@@ -114,15 +114,60 @@ if (! function_exists('fixDomainName')) {
     }
 }
 
-if (! function_exists('lastrelease')) {
+if (! function_exists('is_trusted_github_api_url')) {
     /**
-     * Validasi domain.
+     * Validate that the URL is a trusted GitHub API endpoint to prevent SSRF attacks.
      *
      * @param  string $url
-     * @return object
+     * @return bool
+     */
+    function is_trusted_github_api_url($url)
+    {
+        // Parse the URL to validate its components
+        $parsed = parse_url($url);
+        
+        if (!$parsed || !isset($parsed['scheme'], $parsed['host'], $parsed['path'])) {
+            return false;
+        }
+
+        // Only allow HTTPS
+        if ($parsed['scheme'] !== 'https') {
+            return false;
+        }
+
+        // Only allow api.github.com domain
+        if ($parsed['host'] !== 'api.github.com') {
+            return false;
+        }
+
+        // Allow only specific trusted OpenSID repository release endpoints
+        $allowed_paths = [
+            '/repos/OpenSID/rilis-premium/releases/latest',
+            '/repos/OpenSID/rilis-pbb/releases/latest',
+            '/repos/OpenSID/opendk/releases/latest',
+            '/repos/OpenSID/rilis-opensid-api/releases/latest',
+        ];
+
+        return in_array($parsed['path'], $allowed_paths, true);
+    }
+}
+
+if (! function_exists('lastrelease')) {
+    /**
+     * Get latest release from trusted GitHub API endpoints.
+     * 
+     * Security: Only allows requests to trusted GitHub API endpoints to prevent SSRF attacks.
+     *
+     * @param  string $url
+     * @return object|false
      */
     function lastrelease($url)
     {
+        // Security: Validate that the URL is a trusted GitHub API endpoint
+        if (!is_trusted_github_api_url($url)) {
+            return false;
+        }
+
         try {
             $response = Http::withHeaders([
                 'Accept' => 'application/vnd.github.v3+json',

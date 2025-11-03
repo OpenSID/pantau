@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Desa extends Model
-{    
+{
     use HasFactory, HasRegionAccess, FilterWilayahTrait;
-    public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
+    public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
     /** {@inheritdoc} */
     protected $table = 'desa';
@@ -67,14 +67,28 @@ class Desa extends Model
         $states = '';
         $version = lastrelease_opensid();
 
+        $user = auth()->user();
+
+        if ($user && $user->hasRole('Admin Wilayah')) {
+            $regionAccess = $user->userRegionAccess;
+            if($regionAccess->kode_kabupaten) {
+                $states = "and x.kode_kabupaten='{$regionAccess->kode_kabupaten}'";
+            } else if($regionAccess->kode_provinsi) {
+                $states = "and x.kode_provinsi='{$regionAccess->kode_provinsi}'";
+            }
+        }
+
+
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
         }
-        $filterWilayah = '';
+
+        $filterWilayah = Desa::desaValid();
         $request = request();
         if ($request->kode_provinsi || $request->kode_kabupaten || $request->kode_kecamatan) {
-            $filterWilayah = Desa::filterWilayah($request)->toBoundSql();
+            $filterWilayah = $filterWilayah->filterWilayah($request);
         }
+        $filterWilayah = $filterWilayah->toBoundSql();
         if ($filterWilayah) {
             $filterWilayah = Str::replaceFirst('select * from `desa` where ', 'and ', $filterWilayah);
             $filterWilayah = Str::replaceMatches('/\b(kode_provinsi|kode_kabupaten|kode_kecamatan)\b/', 'x.$1', $filterWilayah);
@@ -94,7 +108,7 @@ class Desa extends Model
             ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) aktif")
             ->when($provinsi, function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
-            });
+            })->desaValid();
     }
 
     /**
@@ -128,6 +142,12 @@ class Desa extends Model
             });
     }
 
+    public function scopeDesaValid($query)
+    {
+        return $query->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1"); // 0 = i local;
+        
+    }
+
     /**
      * Scope a query review desa.
      *
@@ -151,7 +171,20 @@ class Desa extends Model
      */
     public function scopeKabupatenKosong($query)
     {
-        return DB::select("select a.region_code, a.region_name as nama_kabupaten, c.region_name as nama_provinsi, b.jml_desa from (select region_code, region_name from `tbl_regions` t left join desa d on t.region_name = d.nama_kabupaten where length(region_code) = 5 and region_name not like 'kota %' and d.id is null ) a left join (select left(region_code, 5) as kabupaten_code, left(region_code, 2) as provinsi_code, count(*) as jml_desa from tbl_regions where char_length(region_code) = 13 group by kabupaten_code, provinsi_code ) b on a.region_code = b.kabupaten_code left join tbl_regions c on c.region_code = b.provinsi_code order by a.region_code");
+        $user = auth()->user();
+
+        $regionFilter = '';
+        
+        if ($user && $user->hasRole('Admin Wilayah')) {
+            $regionAccess = $user->userRegionAccess;
+            if ($regionAccess->kode_kabupaten) {
+                $regionFilter = "and t.region_code = '{$regionAccess->kode_kabupaten}'";
+            } elseif ($regionAccess->kode_provinsi) {
+                $regionFilter = "and left(t.region_code, 2) = '{$regionAccess->kode_provinsi}'";
+            }
+        }
+        
+        return DB::select("select a.region_code, a.region_name as nama_kabupaten, c.region_name as nama_provinsi, b.jml_desa from (select region_code, region_name from `tbl_regions` t left join desa d on t.region_name = d.nama_kabupaten where length(region_code) = 5 and region_name not like 'kota %' and d.id is null {$regionFilter}) a left join (select left(region_code, 5) as kabupaten_code, left(region_code, 2) as provinsi_code, count(*) as jml_desa from tbl_regions where char_length(region_code) = 13 group by kabupaten_code, provinsi_code ) b on a.region_code = b.kabupaten_code left join tbl_regions c on c.region_code = b.provinsi_code order by a.region_code");
     }
 
     /**
@@ -537,6 +570,7 @@ class Desa extends Model
     public function scopeKecamatanOpenSID($query, $fillters = [])
     {
         $subQuery = Desa::fillter($fillters)->toBoundSql();
+
         return $query
             ->selectRaw('sub.kode_kecamatan')
             ->selectRaw('sub.nama_kecamatan')
@@ -569,15 +603,15 @@ class Desa extends Model
                 $q->orWhere('tema', 'like', "%{$tema}%");
             }
         })
-            ->selectRaw("
+            ->selectRaw('
         CASE 
-            " . collect(self::TEMA_PRO)->map(function ($tema) {
+            '.collect(self::TEMA_PRO)->map(function ($tema) {
                 return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
-            })->implode(' ') . "
+            })->implode(' ').'
             ELSE tema
         END AS tema_nama,
         COUNT(*) as total
-    ")
+    ')
             ->groupBy('tema_nama')
             ->pluck('total', 'tema_nama')
             ->toArray();
@@ -586,7 +620,7 @@ class Desa extends Model
         $allThemes = collect(self::TEMA_PRO)->map(function ($tema) use ($existingThemes) {
             return (object) [
                 'tema_nama' => $tema,
-                'total' => $existingThemes[$tema] ?? 0
+                'total' => $existingThemes[$tema] ?? 0,
             ];
         })->sortByDesc('total')->values();
 

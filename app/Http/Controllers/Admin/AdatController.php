@@ -6,8 +6,8 @@ use App\Exports\AdatExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdatRequest;
 use App\Imports\SukuImport;
-use App\Models\WilayahAdat;
 use App\Models\Region;
+use App\Models\WilayahAdat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -32,10 +32,10 @@ class AdatController extends Controller
 
             return $query->addIndexColumn()
                 ->addColumn('action', function ($data) {
-                    $edit = '<a href="' . route('adat.edit', $data->id) . '" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
-                    $delete = '<button data-href="' . route('adat.destroy', $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $edit = '<a href="'.route('adat.edit', $data->id).'" class="btn btn-sm btn-warning btn-sm"><i class="fas fa-pencil-alt"></i></a>';
+                    $delete = '<button data-href="'.route('adat.destroy', $data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $edit . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$edit.$delete.'</div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);

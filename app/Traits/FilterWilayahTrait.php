@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Traits;
+
 trait FilterWilayahTrait
 {
     public function scopeFilterWilayah($query, $request)
@@ -16,6 +18,7 @@ trait FilterWilayahTrait
         if ($request->kode_desa) {
             $query->where('kode_desa', $request->kode_desa);
         }
+
         return $query;
     }
 }

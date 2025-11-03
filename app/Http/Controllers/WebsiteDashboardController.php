@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
-use App\Models\Pbb;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use App\Models\Wilayah;
@@ -253,11 +252,6 @@ class WebsiteDashboardController extends Controller
         return response()->json($result);
     }
 
-    public function layanandesa(Request $request)
-    {
-        return view('website.layanandesa');
-    }
-
     public function openkab(Request $request)
     {
         if ($request->ajax()) {
@@ -322,12 +316,7 @@ class WebsiteDashboardController extends Controller
     public function openkabData(Request $request)
     {
         return view('website.openkab_data');
-    }
-
-    public function keloladesa(Request $request)
-    {
-        return view('website.keloladesa');
-    }
+    }    
 
     public function opensidData(Request $request)
     {
