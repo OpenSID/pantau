@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Desa::whereNull('kode_desa')->delete();
         Schema::table('desa', function(Blueprint $table){
-            $table->string('kode_desa')->nullable(false)->change();
+            $table->string('kode_desa')->nullable(false)->change();            
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('desa', function(Blueprint $table){
-            $table->string('kode_desa')->nullable(false)->change();
+            $table->string('kode_desa')->nullable(true)->change();            
         });
     }
 };
