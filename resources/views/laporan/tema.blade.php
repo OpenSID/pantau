@@ -165,7 +165,8 @@
                     data: 'nama_provinsi',
                 },
                 {
-                    data: 'url_hosting'
+                    data: 'url_hosting',
+                    visible: {!! auth()->check() ? 'true' : 'false' !!},
                 },
                 {
                     data: 'tema'

@@ -122,6 +122,7 @@
             },
             {
                  orderable: false,
+                visible: {!! auth()->check() ? 'true' : 'false' !!},
                 name: 'url',
                 data: function (data) {
                         return `<a target="_blank" href="https://${data.url}">https://${data.url}</a>`
