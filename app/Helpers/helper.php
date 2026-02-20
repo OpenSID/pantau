@@ -11,7 +11,7 @@ if (! function_exists('pantau_versi')) {
      */
     function pantau_versi()
     {
-        return 'v2511.0.1';
+        return 'v2601.0.0';
     }
 }
 
