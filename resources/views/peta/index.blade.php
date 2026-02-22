@@ -175,8 +175,9 @@
             // Add boundary control panel
             boundariesManager.createControl();
 
-            // Auto-load boundaries based on initial zoom
-            boundariesManager.updateVisibleLayers();
+            // DO NOT auto-load boundaries on init
+            // User must manually select checkbox to show boundaries
+            // boundariesManager.updateVisibleLayers(); // Removed - boundaries start hidden
 
             loadData();
 

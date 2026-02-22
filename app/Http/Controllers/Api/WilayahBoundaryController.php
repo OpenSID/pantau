@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\WilayahBoundaryIndexRequest;
+use App\Http\Requests\Api\WilayahBoundarySearchRequest;
+use App\Http\Requests\Api\WilayahBoundaryGeojsonRequest;
 use App\Http\Resources\WilayahBoundaryResource;
 use App\Models\WilayahBoundary;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -15,18 +17,12 @@ class WilayahBoundaryController extends Controller
     /**
      * Display a listing of boundaries.
      *
-     * @param  Request  $request
+     * @param  WilayahBoundaryIndexRequest  $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(WilayahBoundaryIndexRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'level' => 'sometimes|in:prov,kab,kec,kel',
-            'kode' => 'sometimes|string|max:13',
-            'search' => 'sometimes|string|max:100',
-            'page' => 'sometimes|integer|min:1',
-            'per_page' => 'sometimes|integer|min:1|max:100',
-        ]);
+        $validated = $request->validated();
 
         $query = WilayahBoundary::with('region');
 
@@ -89,21 +85,17 @@ class WilayahBoundaryController extends Controller
     /**
      * Get boundaries as GeoJSON.
      *
-     * @param  string  $level
+     * @param  WilayahBoundaryGeojsonRequest  $request
      * @return JsonResponse
      */
-    public function geojson(string $level): JsonResponse
+    public function geojson(WilayahBoundaryGeojsonRequest $request): JsonResponse
     {
-        if (!in_array($level, ['prov', 'kab', 'kec', 'kel'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid level. Must be one of: prov, kab, kec, kel',
-            ], 400);
-        }
+        $validated = $request->validated();
+        $level = $validated['level'];
 
         // Cache GeoJSON for 1 hour
         $cacheKey = "boundaries.geojson.{$level}";
-        
+
         $geojson = Cache::remember($cacheKey, 3600, function () use ($level) {
             $boundaries = WilayahBoundary::level($level)
                 ->with('region')
@@ -112,7 +104,7 @@ class WilayahBoundaryController extends Controller
             $features = $boundaries->map(function ($boundary) {
                 return $boundary->toGeoJSONFeature();
             })->filter(function ($feature) {
-                // Filter out boundaries without path data
+                // Filter out boundaries without path data or with empty coordinates
                 return !empty($feature['geometry']['coordinates']);
             })->values();
 
@@ -131,16 +123,12 @@ class WilayahBoundaryController extends Controller
     /**
      * Search boundaries by name or kode.
      *
-     * @param  Request  $request
+     * @param  WilayahBoundarySearchRequest  $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(WilayahBoundarySearchRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'q' => 'required|string|min:2|max:100',
-            'level' => 'sometimes|in:prov,kab,kec,kel',
-            'limit' => 'sometimes|integer|min:1|max:50',
-        ]);
+        $validated = $request->validated();
 
         $query = WilayahBoundary::with('region');
 

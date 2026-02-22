@@ -15,8 +15,11 @@ return new class extends Migration
             // Primary key: kode (natural key, also serves as unique index)
             $table->string('kode', 13)->primary();
             
+            // Name of the wilayah
+            $table->string('nama', 100)->nullable();
+            
             // Level hierarchy: prov, kab, kec, kel
-            $table->string('level', 4)->index();
+            $table->string('level', 4)->nullable()->index();
             
             // Centroid coordinates for quick reference
             $table->double('lat', 10, 8)->nullable();
@@ -29,10 +32,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
             
             // Timestamps
-            $table->timestamp('updated_at')->nullable();
-            
-            // Additional index for level-based queries
-            $table->index('level');
+            $table->timestamp('updated_at')->nullable();                        
         });
     }
 

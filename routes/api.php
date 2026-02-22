@@ -59,7 +59,7 @@ Route::prefix('wilayah')
 Route::prefix('boundaries')
     ->group(function () {
         // Static routes first (before dynamic {kode} route)
-        Route::get('/geojson/{level}', [WilayahBoundaryController::class, 'geojson']);
+        Route::get('/geojson', [WilayahBoundaryController::class, 'geojson']);
         Route::get('/search', [WilayahBoundaryController::class, 'search']);
         Route::get('/stats', [WilayahBoundaryController::class, 'stats']);
         

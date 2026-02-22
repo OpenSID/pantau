@@ -137,7 +137,8 @@ class BoundariesLayerManager {
         this.visibleLevels = new Set();
         this.cache = new Map();
         
-        this.init();
+        // Start with all layers hidden (do not auto-load)
+        // this.init(); // Removed - user must manually select
     }
     
     init() {

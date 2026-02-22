@@ -36,6 +36,9 @@ class WilayahBoundarySeeder extends Seeder
             $totalRecords += $count;
         }
 
+        // Update level column based on kode patterns
+        $this->updateLevels();
+
         $duration = round(microtime(true) - $startTime, 2);
 
         $this->command->info('─────────────────────────────────────────');
@@ -56,178 +59,146 @@ class WilayahBoundarySeeder extends Seeder
             return 0;
         }
 
-        $files = File::files($directory);
-        $totalFiles = count($files);
-        
-        $this->command->info("📁 Importing {$level} boundaries ({$totalFiles} files)...");
-
-        $fileCount = 0;
         $recordCount = 0;
 
-        foreach ($files as $index => $file) {
-            $count = $this->importFile($file->getPathname(), $level);
-            $recordCount += $count;
-            $fileCount++;
+        // For 'kel' level, scan subdirectories (kel/11/*.sql, kel/12/*.sql, etc.)
+        if ($level === 'kel') {
+            $recordCount = $this->importKelurahanRecursively($directory);
+        } else {
+            // For prov, kab, kec - process files directly in directory
+            $files = File::files($directory);
+            $totalFiles = count($files);
 
-            // Progress indicator every 5 files
-            if ($fileCount % 5 === 0 || $fileCount === $totalFiles) {
-                $this->command->info("   Progress: {$fileCount}/{$totalFiles} files ({$recordCount} records)");
+            $this->command->info("📁 Importing {$level} boundaries ({$totalFiles} files)...");
+
+            $fileCount = 0;
+
+            foreach ($files as $index => $file) {
+                $count = $this->importSqlFile($file->getPathname());
+                $recordCount += $count;
+                $fileCount++;
+
+                // Progress indicator every 5 files
+                if ($fileCount % 5 === 0 || $fileCount === $totalFiles) {
+                    $this->command->info("   Progress: {$fileCount}/{$totalFiles} files ({$recordCount} records)");
+                }
+            }
+
+            $this->command->info("   ✅ Imported {$fileCount} files ({$recordCount} records)");
+        }
+
+        return $recordCount;
+    }
+
+    /**
+     * Import kelurahan boundaries recursively from subdirectories.
+     *
+     * @param  string  $baseDirectory
+     * @return int
+     */
+    private function importKelurahanRecursively(string $baseDirectory): int
+    {
+        $this->command->info("📁 Importing kel boundaries (scanning subdirectories)...");
+
+        $recordCount = 0;
+        $fileCount = 0;
+        
+        // Get all subdirectories (11, 12, 13, etc.)
+        $subdirs = array_filter(File::directories($baseDirectory), function ($dir) {
+            return is_numeric(basename($dir));
+        });
+
+        $totalSubdirs = count($subdirs);
+        $this->command->info("   Found {$totalSubdirs} province subdirectories");
+
+        foreach ($subdirs as $index => $subdir) {
+            $provCode = basename($subdir);
+            $files = File::files($subdir);
+            $subdirFileCount = count($files);
+
+            foreach ($files as $file) {
+                $count = $this->importSqlFile($file->getPathname());
+                $recordCount += $count;
+                $fileCount++;
+            }
+
+            // Progress indicator every 5 subdirectories
+            if (($index + 1) % 5 === 0 || ($index + 1) === $totalSubdirs) {
+                $this->command->info("   Progress: " . ($index + 1) . "/{$totalSubdirs} provinces ({$fileCount} files, {$recordCount} records)");
             }
         }
 
         $this->command->info("   ✅ Imported {$fileCount} files ({$recordCount} records)");
-        
+
         return $recordCount;
     }
 
     /**
-     * Import a single SQL file.
+     * Import a single SQL file directly.
      *
      * @param  string  $filePath
-     * @param  string  $level
      * @return int
      */
-    private function importFile(string $filePath, string $level): int
+    private function importSqlFile(string $filePath): int
     {
-        $sqlContent = File::get($filePath);
-
-        // Remove comments
-        $sqlContent = $this->cleanSql($sqlContent);
-
-        // Modify INSERT statements to remove 'nama' column and add 'level'
-        $sqlContent = $this->modifyInsertStatements($sqlContent, $level);
-
-        // Split into individual statements
-        $statements = $this->parseSqlStatements($sqlContent);
-
-        $recordCount = 0;
-
-        DB::transaction(function () use ($statements, &$recordCount, $filePath) {
-            foreach ($statements as $statement) {
-                if (empty(trim($statement))) {
-                    continue;
-                }
-
-                try {
-                    // Execute DELETE or INSERT statements
-                    DB::unprepared($statement);
-
-                    // Count INSERT statements
-                    if (stripos($statement, 'INSERT') === 0) {
-                        // Count VALUES
-                        preg_match_all('/VALUES\s*\((.+?)\)(?:,|\s*$)/s', $statement, $matches);
-                        if (!empty($matches[1])) {
-                            $recordCount += count($matches[1]);
-                        }
-                    }
-                } catch (\Exception $e) {
-                    $this->command->error("   ❌ SQL Error in {$filePath}: " . $e->getMessage());
-                    throw $e;
-                }
-            }
-        });
-
-        return $recordCount;
-    }
-
-    /**
-     * Modify INSERT statements to remove 'nama' column and add 'level'.
-     *
-     * @param  string  $sqlContent
-     * @param  string  $level
-     * @return string
-     */
-    private function modifyInsertStatements(string $sqlContent, string $level): string
-    {
-        // Replace INSERT INTO wilayah_boundaries(kode,nama,lat,lng,path)
-        // with INSERT INTO wilayah_boundaries(kode,level,lat,lng,path)
-        $sqlContent = preg_replace(
-            '/INSERT INTO wilayah_boundaries\s*\(\s*kode\s*,\s*nama\s*,\s*lat\s*,\s*lng\s*,\s*path\s*\)/i',
-            'INSERT INTO wilayah_boundaries(kode,level,lat,lng,path)',
-            $sqlContent
-        );
-
-        // Replace VALUES ('XX','Name',lat,lng,'path')
-        // with VALUES ('XX','level',lat,lng,'path')
-        // This regex matches VALUES clauses and replaces the second value (nama) with the level
-        $sqlContent = preg_replace_callback(
-            '/VALUES\s*\(\s*\'([^\']+)\'\s*,\s*\'[^\']+\'\s*,\s*([0-9.\-]+)\s*,\s*([0-9.\-]+)\s*,\s*\'(.+)\'\s*\)/sU',
-            function ($matches) use ($level) {
-                $kode = $matches[1];
-                $lat = $matches[2];
-                $lng = $matches[3];
-                $path = $matches[4];
-                return "VALUES ('{$kode}','{$level}',{$lat},{$lng},'{$path}')";
-            },
-            $sqlContent
-        );
-
-        return $sqlContent;
-    }
-
-    /**
-     * Clean SQL content by removing comments.
-     *
-     * @param  string  $sql
-     * @return string
-     */
-    private function cleanSql(string $sql): string
-    {
-        // Remove multi-line comments
-        $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
-        
-        // Remove single-line comments
-        $sql = preg_replace('/--.*$/m', '', $sql);
-        
-        return trim($sql);
-    }
-
-    /**
-     * Parse SQL content into individual statements.
-     *
-     * @param  string  $sql
-     * @return array
-     */
-    private function parseSqlStatements(string $sql): array
-    {
-        $statements = [];
-        $currentStatement = '';
-        $inString = false;
-        $stringChar = null;
-        
-        $length = strlen($sql);
-        
-        for ($i = 0; $i < $length; $i++) {
-            $char = $sql[$i];
-            $prevChar = $i > 0 ? $sql[$i - 1] : null;
+        try {
+            // Read and execute the SQL file directly
+            $sql = File::get($filePath);
             
-            // Handle string literals
-            if (($char === "'" || $char === '"') && $prevChar !== '\\') {
-                if (!$inString) {
-                    $inString = true;
-                    $stringChar = $char;
-                } elseif ($char === $stringChar) {
-                    $inString = false;
-                    $stringChar = null;
-                }
-            }
+            // Menggunakan DB::unprepared() karena:
+            // 1. File SQL mengandung multiple statements (DELETE + INSERT)
+            // 2. Data polygon sangat besar (longText), tidak cocok untuk prepared statement
+            // 3. Tidak perlu parameter binding karena data sudah hard-coded
+            // 4. Lebih cepat untuk bulk operations
+            DB::unprepared($sql);
             
-            // Split on semicolon only outside strings
-            if ($char === ';' && !$inString) {
-                if (!empty(trim($currentStatement))) {
-                    $statements[] = trim($currentStatement);
-                }
-                $currentStatement = '';
-            } else {
-                $currentStatement .= $char;
-            }
+            // Count INSERT statements to estimate records imported
+            $recordCount = substr_count($sql, 'INSERT INTO');
+            
+            return $recordCount;
+        } catch (\Exception $e) {
+            $this->command->error("   ❌ Error importing {$filePath}: " . $e->getMessage());
+            return 0;
         }
+    }
+
+    /**
+     * Update the level column based on kode patterns.
+     *
+     * @return void
+     */
+    private function updateLevels(): void
+    {
+        $this->command->info('🔄 Updating level column based on kode patterns...');
         
-        // Add last statement if exists
-        if (!empty(trim($currentStatement))) {
-            $statements[] = trim($currentStatement);
+        try {
+            // Update provinces (kode pattern: XX)
+            $provCount = DB::table('wilayah_boundaries')
+                ->whereRaw('LENGTH(kode) = 2')
+                ->whereNull('level')
+                ->update(['level' => 'prov']);
+                
+            // Update regencies (kode pattern: XX.XX)
+            $kabCount = DB::table('wilayah_boundaries')
+                ->whereRaw('LENGTH(kode) = 5 AND kode LIKE "%.%"')
+                ->whereNull('level')
+                ->update(['level' => 'kab']);
+                
+            // Update districts (kode pattern: XX.XX.XX)
+            $kecCount = DB::table('wilayah_boundaries')
+                ->whereRaw('LENGTH(kode) = 8 AND kode LIKE "%.%.%"')
+                ->whereNull('level')
+                ->update(['level' => 'kec']);
+                
+            // Update villages (kode pattern: XX.XX.XX.XXXX)
+            $kelCount = DB::table('wilayah_boundaries')
+                ->whereRaw('LENGTH(kode) = 13 AND kode LIKE "%.%.%.%"')
+                ->whereNull('level')
+                ->update(['level' => 'kel']);
+                
+            $this->command->info("   ✅ Updated: {$provCount} provinces, {$kabCount} regencies, {$kecCount} districts, {$kelCount} villages");
+        } catch (\Exception $e) {
+            $this->command->error("   ❌ Error updating levels: " . $e->getMessage());
         }
-        
-        return $statements;
     }
 }

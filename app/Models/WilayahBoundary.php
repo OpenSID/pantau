@@ -169,6 +169,11 @@ class WilayahBoundary extends Model
      */
     public function toGeoJSONFeature(): array
     {
+        $coordinates = $this->convertToGeoJSONCoordinates($this->path);
+        
+        // Determine if it's a MultiPolygon or Polygon based on structure
+        $geometryType = $this->determineGeometryType($coordinates);
+
         return [
             'type' => 'Feature',
             'properties' => [
@@ -180,10 +185,80 @@ class WilayahBoundary extends Model
                 'lng' => $this->lng,
             ],
             'geometry' => [
-                'type' => 'Polygon',
-                'coordinates' => $this->path ?? null,
+                'type' => $geometryType,
+                'coordinates' => $coordinates,
             ],
         ];
+    }
+
+    /**
+     * Convert path coordinates to GeoJSON format.
+     * 
+     * The path is stored as [[[lat, lng], [lat, lng], ...], ...]
+     * GeoJSON expects [[[lng, lat], [lng, lat], ...], ...]
+     *
+     * @param  array|null  $path
+     * @return array|null
+     */
+    private function convertToGeoJSONCoordinates(?array $path): ?array
+    {
+        if (empty($path) || !is_array($path)) {
+            return null;
+        }
+
+        try {
+            // Convert each coordinate from [lat, lng] to [lng, lat]
+            // and flatten one level of nesting
+            return array_map(function ($polygon) {
+                // Each polygon is an array of rings
+                if (!is_array($polygon)) {
+                    return [];
+                }
+                return array_map(function ($ring) {
+                    // Each ring is an array of coordinates
+                    if (!is_array($ring)) {
+                        return [];
+                    }
+                    return array_map(function ($coordinate) {
+                        // Swap lat/lng to lng/lat for GeoJSON
+                        if (!is_array($coordinate) || count($coordinate) < 2) {
+                            return [0, 0];
+                        }
+                        return [$coordinate[1], $coordinate[0]];
+                    }, $ring);
+                }, $polygon);
+            }, $path);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Determine if the geometry is Polygon or MultiPolygon.
+     *
+     * @param  array|null  $coordinates
+     * @return string
+     */
+    private function determineGeometryType(?array $coordinates): string
+    {
+        if (empty($coordinates)) {
+            return 'Polygon';
+        }
+
+        // If first element is an array of rings, it's MultiPolygon
+        // If first element is a ring (array of points), it's Polygon
+        if (isset($coordinates[0]) && isset($coordinates[0][0]) && is_array($coordinates[0][0])) {
+            // Check if it's an array of polygons (MultiPolygon) or just rings (Polygon)
+            // MultiPolygon: [[[lng,lat],...], [[lng,lat],...]]  (multiple polygons)
+            // Polygon: [[lng,lat], [lng,lat], ...]  (single polygon with rings)
+            
+            // If coordinates[0][0] is an array of points, it's MultiPolygon
+            if (isset($coordinates[0][0][0]) && is_array($coordinates[0][0][0])) {
+                return 'MultiPolygon';
+            }
+        }
+
+        return 'Polygon';
     }
 
     /**

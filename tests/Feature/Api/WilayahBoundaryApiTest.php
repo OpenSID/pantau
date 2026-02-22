@@ -44,6 +44,7 @@ class WilayahBoundaryApiTest extends TestCase
         // Create boundaries
         WilayahBoundary::create([
             'kode' => 'TEST_P1',
+            'nama' => 'TEST ACEH',
             'level' => 'prov',
             'lat' => 4.2257,
             'lng' => 96.9119,
@@ -53,6 +54,7 @@ class WilayahBoundaryApiTest extends TestCase
 
         WilayahBoundary::create([
             'kode' => 'TEST_K1',
+            'nama' => 'TEST Aceh Selatan',
             'level' => 'kab',
             'lat' => 3.1619,
             'lng' => 97.4365,
@@ -62,6 +64,7 @@ class WilayahBoundaryApiTest extends TestCase
 
         WilayahBoundary::create([
             'kode' => 'TEST_P2',
+            'nama' => 'TEST DKI JAKARTA',
             'level' => 'prov',
             'lat' => -6.2088,
             'lng' => 106.8456,
@@ -71,6 +74,7 @@ class WilayahBoundaryApiTest extends TestCase
 
         WilayahBoundary::create([
             'kode' => 'TEST_K2',
+            'nama' => 'TEST Kepulauan Seribu',
             'level' => 'kab',
             'lat' => -5.6112,
             'lng' => 106.5297,
@@ -184,7 +188,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_get_geojson_for_provinsi()
     {
-        $response = $this->getJson('/api/boundaries/geojson/prov');
+        $response = $this->getJson('/api/boundaries/geojson?level=prov');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -198,7 +202,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_get_geojson_for_kabupaten()
     {
-        $response = $this->getJson('/api/boundaries/geojson/kab');
+        $response = $this->getJson('/api/boundaries/geojson?level=kab');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -211,7 +215,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_geojson_has_correct_structure()
     {
-        $response = $this->getJson('/api/boundaries/geojson/prov');
+        $response = $this->getJson('/api/boundaries/geojson?level=prov');
 
         $data = $response->json('data');
 
@@ -223,18 +227,24 @@ class WilayahBoundaryApiTest extends TestCase
         $this->assertEquals('Feature', $feature['type']);
         $this->assertArrayHasKey('geometry', $feature);
         $this->assertArrayHasKey('properties', $feature);
-        $this->assertEquals('Polygon', $feature['geometry']['type']);
+        // Geometry can be either Polygon or MultiPolygon depending on data structure
+        $this->assertTrue(in_array($feature['geometry']['type'], ['Polygon', 'MultiPolygon']));
     }
 
-    public function test_invalid_level_returns_400()
+    public function test_invalid_level_returns_422()
     {
-        $response = $this->getJson('/api/boundaries/geojson/invalid');
+        $response = $this->getJson('/api/boundaries/geojson?level=invalid');
 
-        $response->assertStatus(400)
-            ->assertJson([
-                'success' => false,
-                'message' => 'Invalid level. Must be one of: prov, kab, kec, kel',
-            ]);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['level']);
+    }
+
+    public function test_geojson_requires_level_parameter()
+    {
+        $response = $this->getJson('/api/boundaries/geojson');
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['level']);
     }
 
     public function test_can_search_with_query_parameter()
@@ -301,10 +311,10 @@ class WilayahBoundaryApiTest extends TestCase
     public function test_geojson_is_cached()
     {
         // First request - should populate cache
-        $this->getJson('/api/boundaries/geojson/prov');
+        $this->getJson('/api/boundaries/geojson?level=prov');
 
         // Second request - should use cache
-        $response = $this->getJson('/api/boundaries/geojson/prov');
+        $response = $this->getJson('/api/boundaries/geojson?level=prov');
 
         $response->assertStatus(200);
     }
@@ -315,6 +325,7 @@ class WilayahBoundaryApiTest extends TestCase
         for ($i = 10; $i <= 25; $i++) {
             WilayahBoundary::create([
                 'kode' => "TEST_K_$i",
+                'nama' => "TEST Kabupaten $i",
                 'level' => 'kab',
                 'lat' => 4.0 + ($i * 0.1),
                 'lng' => 96.0 + ($i * 0.1),
