@@ -1,6 +1,7 @@
 @extends('layouts.index')
 @include('layouts.components.select2_wilayah')
 @include('layouts.components.assets_leaflet')
+@include('peta.boundary-layer')
 
 @push('css')
     <style>
@@ -163,6 +164,19 @@
             function onEachFeature(feature, layer) {
                 layer.bindPopup(feature.properties.popupContent);
             }
+
+            // Initialize Boundaries Layer Manager
+            var boundariesManager = new BoundariesLayerManager(map, {
+                apiUrl: '/api/boundaries',
+                cacheEnabled: true,
+                maxZoom: 14
+            });
+
+            // Add boundary control panel
+            boundariesManager.createControl();
+
+            // Auto-load boundaries based on initial zoom
+            boundariesManager.updateVisibleLayers();
 
             loadData();
 

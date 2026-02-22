@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\InstallOpensidController;
 use App\Http\Controllers\Api\MargaController;
 use App\Http\Controllers\Api\PekerjaanPmiController;
 use App\Http\Controllers\Api\SukuController;
+use App\Http\Controllers\Api\WilayahBoundaryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
@@ -52,6 +53,19 @@ Route::prefix('wilayah')
         Route::get('marga', [MargaController::class, 'index']);
         Route::get('adat', [AdatController::class, 'index']);
         Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
+    });
+
+// Wilayah Boundaries API
+Route::prefix('boundaries')
+    ->group(function () {
+        // Static routes first (before dynamic {kode} route)
+        Route::get('/geojson/{level}', [WilayahBoundaryController::class, 'geojson']);
+        Route::get('/search', [WilayahBoundaryController::class, 'search']);
+        Route::get('/stats', [WilayahBoundaryController::class, 'stats']);
+        
+        // Dynamic routes last
+        Route::get('/', [WilayahBoundaryController::class, 'index']);
+        Route::get('/{kode}', [WilayahBoundaryController::class, 'show']);
     });
 
 // API untuk laporan
