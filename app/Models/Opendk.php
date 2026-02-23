@@ -111,7 +111,17 @@ class Opendk extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
+        $request = request();
+        return $query->when($request->period, function ($query) use ($request) {
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    $start = $dates[0] . ' 00:00:00';
+                    $end = $dates[1] . ' 23:59:59';
+                    $query->whereRaw('updated_at between ? and ?', [$start, $end]);
+                }
+            }, function ($query) {
+                $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
+            });
     }
 
     public function scopeNonActive($query)
