@@ -2,6 +2,7 @@ Di rilis v2601.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
+1. [#620](https://github.com/OpenSID/pantau/issues/620) Penambahan halaman PBB Pengguna Aktif.
 
 #### Perbaikan Bug
 
