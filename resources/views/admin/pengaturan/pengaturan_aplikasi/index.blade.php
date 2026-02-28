@@ -100,9 +100,12 @@
 @endsection
 @section('js')
     <script type="text/javascript">
-        $(function() {
-            $('.select2-multiple').select2();
+        $(function() {            
+            $('.select2-multiple').select2({
+                theme: 'bootstrap4'
+            });
             $('.select2-tag').select2({
+                theme: 'bootstrap4',
                 tags: true,
                 tokenSeparators: [',', '|', ' ']
             });
@@ -143,7 +146,7 @@
             display: block !important;
         }
 
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
             background-color: #3498db;
         }
     </style>
