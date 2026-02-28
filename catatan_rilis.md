@@ -5,6 +5,7 @@ Di rilis v2601.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Perbaikan Bug
 
+1. [#615](https://github.com/OpenSID/pantau/issues/615) Perbaiki tanggal dinamis di config.
 
 #### Penyesuaian Teknis
 
