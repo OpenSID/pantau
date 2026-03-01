@@ -210,7 +210,8 @@
                     params.nama_kabupaten = $('#kabupaten option:selected').text();
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
                     params.akses = 4;
-                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(params).toString();
+                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(
+                        params).toString();
                     $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
                     $('#total_desa').text(data.desa_total)
                     $('#filter-label').text(`${params.period}`)

@@ -38,7 +38,7 @@
                                         <input type="text" name="periods" class="form-control datepicker"
                                             value="{{ implode(' - ', config('local.daterangepicker_range.ranges')['30 Hari Terakhir']) }}"
                                             data-option='{!! json_encode(
-                                                array_merge(config('local.daterangepicker'), config('local.daterangepicker_range'), [
+                                                array_merge(config('local.daterangepicker'), daterangepicker_range(), [
                                                     'autoApply' => false,
                                                     'singleDatePicker' => false,
                                                 ]),
@@ -179,12 +179,13 @@
                     kode_kecamatan: $('select[name=kecamatan]').val(),
                 }
                 $.get("{{ url('api/web/aktif-opendk') }}", params, function(data) {
-                    params.akses = 4;// status desa aktif
+                    params.akses = 4; // status desa aktif
                     params.nama_provinsi = $('#provinsi option:selected').text();
                     params.nama_kabupaten = $('#kabupaten option:selected').text();
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
-                    const linkUrl = '{{ url('web/opendk/detail') }}?' + new URLSearchParams(params).toString();
-                    $('#kecamatan_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
+                    const linkUrl = '{{ url('web/opendk/detail') }}?' + new URLSearchParams(params)
+                        .toString();
+                    $('#kecamatan_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
                     $('#total_desa').text(data.desa_total)
                     $('#filter-label').text(`${params.period}`)
                 }, 'json')
