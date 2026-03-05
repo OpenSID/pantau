@@ -242,7 +242,7 @@ class BoundariesLayerManager {
         this.showLoading(level);
         
         try {
-            const response = await fetch(`${this.options.apiUrl}/geojson/${level}`);
+            const response = await fetch(`${this.options.apiUrl}/geojson?level=${level}`);
             const result = await response.json();
             
             if (result.success && result.data) {
