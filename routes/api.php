@@ -55,11 +55,17 @@ Route::prefix('wilayah')
         Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
     });
 
-// Wilayah Boundaries API
+// Wilayah Boundaries API, tetap public karena dibutuhkan oleh web public pantau
 Route::prefix('boundaries')
     ->group(function () {
         // Static routes first (before dynamic {kode} route)
         Route::get('/geojson', [WilayahBoundaryController::class, 'geojson']);
+    });
+
+Route::prefix('boundaries')
+    ->middleware('tracksid')
+    ->group(function () {
+        // Static routes first (before dynamic {kode} route)
         Route::get('/search', [WilayahBoundaryController::class, 'search']);
         Route::get('/stats', [WilayahBoundaryController::class, 'stats']);
         
@@ -67,7 +73,6 @@ Route::prefix('boundaries')
         Route::get('/', [WilayahBoundaryController::class, 'index']);
         Route::get('/{kode}', [WilayahBoundaryController::class, 'show']);
     });
-
 // API untuk laporan
 Route::get('kabupaten', function(\Illuminate\Http\Request $request) {
     $query = \App\Models\Desa::select('kode_kabupaten', 'nama_kabupaten')

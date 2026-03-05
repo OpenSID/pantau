@@ -5,17 +5,15 @@ namespace Tests\Feature\Api;
 use App\Models\Region;
 use App\Models\WilayahBoundary;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Feature\Api\TracksidApiTest;
 
-class WilayahBoundaryApiTest extends TestCase
+class WilayahBoundaryApiTest extends TracksidApiTest
 {
-    use DatabaseTransactions, WithFaker;
+    use DatabaseTransactions;
 
     protected function setUp(): void
     {
-        parent::setUp();
-
+        parent::setUp();        
         // Clean up any existing test data first
         WilayahBoundary::where('kode', 'like', 'TEST%')->delete();
         Region::where('region_code', 'like', 'TEST%')->delete();
@@ -85,7 +83,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_get_boundaries_list()
     {
-        $response = $this->getJson('/api/boundaries');
+        $response = $this->getJsonWithToken('/api/boundaries');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -119,7 +117,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_filter_boundaries_by_level()
     {
-        $response = $this->getJson('/api/boundaries?level=prov');
+        $response = $this->getJsonWithToken('/api/boundaries?level=prov');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -134,7 +132,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_filter_boundaries_by_kode()
     {
-        $response = $this->getJson('/api/boundaries?kode=TEST_P1');
+        $response = $this->getJsonWithToken('/api/boundaries?kode=TEST_P1');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -150,7 +148,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_search_boundaries()
     {
-        $response = $this->getJson('/api/boundaries?search=TEST ACEH');
+        $response = $this->getJsonWithToken('/api/boundaries?search=TEST ACEH');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -163,7 +161,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_get_single_boundary()
     {
-        $response = $this->getJson('/api/boundaries/TEST_P1');
+        $response = $this->getJsonWithToken('/api/boundaries/TEST_P1');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -177,7 +175,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_returns_404_for_nonexistent_boundary()
     {
-        $response = $this->getJson('/api/boundaries/99.99');
+        $response = $this->getJsonWithToken('/api/boundaries/99.99');
 
         $response->assertStatus(404)
             ->assertJson([
@@ -249,7 +247,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_search_with_query_parameter()
     {
-        $response = $this->getJson('/api/boundaries/search?q=TEST');
+        $response = $this->getJsonWithToken('/api/boundaries/search?q=TEST');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -262,7 +260,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_search_requires_query_parameter()
     {
-        $response = $this->getJson('/api/boundaries/search');
+        $response = $this->getJsonWithToken('/api/boundaries/search');
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors('q');
@@ -270,7 +268,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_search_with_limit()
     {
-        $response = $this->getJson('/api/boundaries/search?q=TEST&limit=1');
+        $response = $this->getJsonWithToken('/api/boundaries/search?q=TEST&limit=1');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -283,7 +281,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_can_get_statistics()
     {
-        $response = $this->getJson('/api/boundaries/stats');
+        $response = $this->getJsonWithToken('/api/boundaries/stats');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -333,7 +331,7 @@ class WilayahBoundaryApiTest extends TestCase
             ]);
         }
 
-        $response = $this->getJson('/api/boundaries?level=kab&per_page=5');
+        $response = $this->getJsonWithToken('/api/boundaries?level=kab&per_page=5');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -347,7 +345,7 @@ class WilayahBoundaryApiTest extends TestCase
 
     public function test_boundary_includes_region_data()
     {
-        $response = $this->getJson('/api/boundaries/TEST_P1');
+        $response = $this->getJsonWithToken('/api/boundaries/TEST_P1');
 
         $response->assertStatus(200)
             ->assertJson([
