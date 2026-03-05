@@ -173,10 +173,12 @@ class BoundariesLayerManager {
                             <input type="checkbox" id="boundary-kec" value="kec">
                             <span>Kecamatan</span>
                         </label>
+                        <!--
                         <label class="checkbox-item">
                             <input type="checkbox" id="boundary-kel" value="kel">
                             <span>Kelurahan/Desa</span>
                         </label>
+                        -->
                     </div>
                 </div>
                 <div class="boundary-legend">
@@ -192,10 +194,12 @@ class BoundariesLayerManager {
                         <span class="boundary-legend-color" style="background: #4CAF50;"></span>
                         <span>Kecamatan</span>
                     </div>
+                    <!--
                     <div class="boundary-legend-item">
                         <span class="boundary-legend-color" style="background: #9C27B0;"></span>
                         <span>Kelurahan</span>
                     </div>
+                    -->
                 </div>
             `;
             

@@ -23,8 +23,10 @@ class WilayahBoundaryGeojsonRequest extends FormRequest
      */
     public function rules(): array
     {
+        // disable level kel, karena data terlalu besar
         return [
-            'level' => 'required|in:prov,kab,kec,kel',
+            //'level' => 'required|in:prov,kab,kec,kel',
+            'level' => 'required|in:prov,kab,kec',
         ];
     }
 
