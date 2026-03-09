@@ -36,7 +36,7 @@
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 </div>
                                 <input type="text" name="periods" class="form-control datepicker"
-                                    data-option='{!! json_encode(array_merge(config("local.daterangepicker"), config("local.daterangepicker_range"), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
+                                    data-option='{!! json_encode(array_merge(config("local.daterangepicker"), daterangepicker_range(), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
                                     autocomplete="off">
                             </div>
                         </div>

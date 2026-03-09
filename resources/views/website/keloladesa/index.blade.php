@@ -37,7 +37,7 @@
                                         </div>
                                         <input type="text" name="periods" class="form-control datepicker"
                                             data-option='{!! json_encode(
-                                                array_merge(config('local.daterangepicker'), config('local.daterangepicker_range'), [
+                                                array_merge(config('local.daterangepicker'), daterangepicker_range(), [
                                                     'autoApply' => false,
                                                     'singleDatePicker' => false,
                                                 ]),
@@ -209,7 +209,8 @@
                     params.nama_kabupaten = $('#kabupaten option:selected').text();
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
                     params.akses = 4;
-                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(params).toString();
+                    const linkUrl = '{{ url('web/keloladesa/detail') }}?' + new URLSearchParams(
+                        params).toString();
                     $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
                     $('#total_desa').text(data.desa_total)
                 }, 'json')
