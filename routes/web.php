@@ -28,6 +28,7 @@ use App\Http\Controllers\LaporanTemaProController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\KecamatanAktifOpendkController;
+use App\Http\Controllers\PenggunaAktifPbbController;
 use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
@@ -68,7 +69,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);        
+        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
@@ -163,6 +164,7 @@ Route::prefix('pbb')
         Route::delete('desa/{desa}', [PbbController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [PbbController::class, 'kabupaten']);
         Route::get('versi', [PbbController::class, 'versi']);
+        Route::get('pengguna-aktif', [PenggunaAktifPbbController::class, 'index']);
     });
 
 Route::prefix('mobile')
