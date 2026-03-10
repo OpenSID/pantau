@@ -500,11 +500,28 @@ class Desa extends Model
         return $query->where('versi_hosting', '!=', '');
     }
 
-    public function scopeAktif($query, $batasTgl)
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
 
-        return $query->whereRaw(DB::raw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= '{$maksimalTanggal}'"));
+            return $query->whereRaw("
+                greatest(
+                    coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'),
+                    coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')
+                ) between ? and ?
+            ", [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->startOfDay();
+
+        return $query->whereRaw("
+            greatest(
+                coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'),
+                coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')
+            ) >= ?
+        ", [$maksimalTanggal]);
     }
 
     public function scopeAktifOnline($query, $batasTgl)

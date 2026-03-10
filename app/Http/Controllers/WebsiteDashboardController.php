@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
+use App\Models\Pbb;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use App\Models\Wilayah;
@@ -258,6 +259,29 @@ class WebsiteDashboardController extends Controller
         $result = [
             'labels' => $labels,
             'datasets' => $datasets,
+        ];
+
+        return response()->json($result);
+    }
+
+    public function summaryAktif(Request $request, $data = false)
+    {
+        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+        [$tanggalAwal, $tanggalAkhir] = explode(' - ', $period);
+        $opensid = Desa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $opendk = Opendk::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $layanan = TrackMobile::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $kelolaDesa = TrackKeloladesa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $pbb = Pbb::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $openkab = Openkab::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+
+        $result = [
+            'openkab' => $openkab->count(),
+            'opensid' => $opensid->count(),
+            'opendk' => $opendk->count(),
+            'layanandesa' => $layanan->count(),
+            'keloladesa' => $kelolaDesa->count(),
+            'pbb' => $pbb->count(),
         ];
 
         return response()->json($result);

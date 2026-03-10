@@ -130,9 +130,16 @@ class TrackMobile extends BaseModel
         return $query->whereRaw('tgl_akses <= now() - interval ' . self::ACTIVE_DAYS . ' day');
     }
 
-    public function scopeAktif($query, $batasTgl)
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('tgl_akses', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->startOfDay();
 
         return $query->where('tgl_akses', '>=', $maksimalTanggal);
     }
