@@ -154,10 +154,10 @@ class WebsiteDashboardController extends Controller
         // range minimal 7 hari, max 31 hari
         $minTanggal = Carbon::parse($tanggalAkhir)->subDays(7)->format('Y-m-d');
         $maxTanggal = Carbon::parse($tanggalAkhir)->subDays(31)->format('Y-m-d');
-        $hariIni = Carbon::now()->format('Y-m-d');
-        if ($tanggalAkhir > $hariIni) {
-            $tanggalAkhir = $hariIni;
-        }
+        // $hariIni = Carbon::now()->format('Y-m-d');
+        // if ($tanggalAkhir > $hariIni) {
+        //     $tanggalAkhir = $hariIni;
+        // }
         if ($tanggalAwal > $minTanggal) {
             $tanggalAwal = $minTanggal;
         }
@@ -166,6 +166,7 @@ class WebsiteDashboardController extends Controller
         }
 
         $rangeTanggal = CarbonPeriod::between($tanggalAwal, $tanggalAkhir);
+
         $opensid = Desa::aktif($tanggalAkhir);
         $opendk = Opendk::aktif($tanggalAkhir);
         $layanan = TrackMobile::aktif($tanggalAkhir);
@@ -209,19 +210,20 @@ class WebsiteDashboardController extends Controller
         $kelolaCount = $kelolaDesa->count();
         foreach ($rangeTanggal as $tanggal) {
             $labels[] = $tanggal->format('j M');
-            if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
-                $opensidData[] = $opensidCount;
-                $opendkData[] = $opendkCount;
-                $layananData[] = $layananCount;
-                $kelolaData[] = $kelolaCount;
-            } else {
-                $opensidData[] = $opensidCount + random_int(0, 30);
-                $opendkData[] = $opendkCount + random_int(0, 5);
-                $layananData[] = $layananCount + random_int(0, 15);
-                $kelolaData[] = $kelolaCount + random_int(0, 15);
-            }
-
+            $opensidData[] = $opensidCount;
+            $opendkData[] = $opendkCount;
+            $layananData[] = $layananCount;
+            $kelolaData[] = $kelolaCount;
             $openkabData[] = 0;
+
+            // sementara data acak di disable
+            // if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
+            // } else {
+            //     $opensidData[] = $opensidCount + random_int(0, 30);
+            //     $opendkData[] = $opendkCount + random_int(0, 5);
+            //     $layananData[] = $layananCount + random_int(0, 15);
+            //     $kelolaData[] = $kelolaCount + random_int(0, 15);
+            // }
         }
 
         $datasets = [];
