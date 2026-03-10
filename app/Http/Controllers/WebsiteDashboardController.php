@@ -209,12 +209,21 @@ class WebsiteDashboardController extends Controller
         $layananCount = $layanan->count();
         $kelolaCount = $kelolaDesa->count();
         foreach ($rangeTanggal as $tanggal) {
-            $labels[] = $tanggal->format('j M');
-            $opensidData[] = $opensidCount;
-            $opendkData[] = $opendkCount;
-            $layananData[] = $layananCount;
-            $kelolaData[] = $kelolaCount;
-            $openkabData[] = 0;
+            if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
+                $labels[] = $tanggal->format('j M');
+                $opensidData[] = $opensidCount;
+                $opendkData[] = $opendkCount;
+                $layananData[] = $layananCount;
+                $kelolaData[] = $kelolaCount;
+                $openkabData[] = 0;
+            } else {
+                $labels[] = $tanggal->format('j M');
+                $opensidData[] = 0;
+                $opendkData[] = 0;
+                $layananData[] = 0;
+                $kelolaData[] = 0;
+                $openkabData[] = 0;
+            }
 
             // sementara data acak di disable
             // if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
