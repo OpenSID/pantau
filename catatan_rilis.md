@@ -13,3 +13,5 @@ Di rilis v2601.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#639](https://github.com/OpenSID/pantau/issues/639) Perbaiki dependency bot.
+
