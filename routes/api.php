@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\InstallOpensidController;
 use App\Http\Controllers\Api\MargaController;
 use App\Http\Controllers\Api\PekerjaanPmiController;
 use App\Http\Controllers\Api\SukuController;
+use App\Http\Controllers\Api\WilayahBoundaryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\WilayahController;
@@ -54,6 +55,24 @@ Route::prefix('wilayah')
         Route::get('pekerjaan-pmi', [PekerjaanPmiController::class, 'index']);
     });
 
+// Wilayah Boundaries API, tetap public karena dibutuhkan oleh web public pantau
+Route::prefix('boundaries')
+    ->group(function () {
+        // Static routes first (before dynamic {kode} route)
+        Route::get('/geojson', [WilayahBoundaryController::class, 'geojson']);
+    });
+
+Route::prefix('boundaries')
+    ->middleware('tracksid')
+    ->group(function () {
+        // Static routes first (before dynamic {kode} route)
+        Route::get('/search', [WilayahBoundaryController::class, 'search']);
+        Route::get('/stats', [WilayahBoundaryController::class, 'stats']);
+        
+        // Dynamic routes last
+        Route::get('/', [WilayahBoundaryController::class, 'index']);
+        Route::get('/{kode}', [WilayahBoundaryController::class, 'show']);
+    });
 // API untuk laporan
 Route::get('kabupaten', function(\Illuminate\Http\Request $request) {
     $query = \App\Models\Desa::select('kode_kabupaten', 'nama_kabupaten')
