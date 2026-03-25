@@ -177,5 +177,6 @@
         $('#status').select2();
         $('#akses').select2();
         $('#tte').select2();
+        $('#tipe_pengguna').select2();
     </script>
 @endpush()

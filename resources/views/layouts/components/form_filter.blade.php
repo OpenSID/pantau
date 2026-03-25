@@ -115,6 +115,20 @@
             </div>
         @endif
 
+        @if (array_key_exists('tipe_pengguna', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Tipe Pengguna</label>
+                    <select class="select2 form-control-sm" id="tipe_pengguna" name="tipe_pengguna"
+                        data-placeholder="Semua Tipe" style="width: 100%;">
+                        <option selected value="">Semua Tipe</option>
+                        <option value="premium">Premium</option>
+                        <option value="umum">Umum</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
         @if (array_key_exists('akses_mobile', $fillters))
             <div class="col-sm">
                 <div class="form-group">

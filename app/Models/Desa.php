@@ -378,7 +378,7 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
             ->when(auth()->check() == true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
@@ -402,6 +402,7 @@ class Desa extends Model
             'versi_lokal' => null,
             'versi_hosting' => null,
             'tte' => null,
+            'tipe_pengguna' => null,
         ], $fillters);
 
         return $query->select(['*'])
@@ -450,6 +451,21 @@ class Desa extends Model
             })
             ->when(in_array($fillters['tte'], ['1', '0']), function ($query) use ($fillters) {
                 $query->where('modul_tte', $fillters['tte']);
+            })
+            ->when($fillters['tipe_pengguna'] === 'premium', function ($query) {
+                $query->where(function ($sub) {
+                    $sub->where($this->getTable().'.versi_hosting', 'LIKE', '%-premium%')
+                        ->orWhere($this->getTable().'.versi_lokal', 'LIKE', '%-premium%');
+                });
+            })
+            ->when($fillters['tipe_pengguna'] === 'umum', function ($query) {
+                $query->where(function ($sub) {
+                    $sub->where($this->getTable().'.versi_hosting', 'NOT LIKE', '%-premium%')
+                        ->orWhereNull($this->getTable().'.versi_hosting');
+                })->where(function ($sub) {
+                    $sub->where($this->getTable().'.versi_lokal', 'NOT LIKE', '%-premium%')
+                        ->orWhereNull($this->getTable().'.versi_lokal');
+                });
             });
     }
 
