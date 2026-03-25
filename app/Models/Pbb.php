@@ -141,9 +141,16 @@ class Pbb extends Model
         return null;
     }
 
-    public function scopeAktif($query, $batasTgl)
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('updated_at', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->startOfDay();
 
         return $query->where('updated_at', '>=', $maksimalTanggal);
     }

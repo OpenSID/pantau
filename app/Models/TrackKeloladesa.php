@@ -140,17 +140,34 @@ class TrackKeloladesa extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereRaw('tgl_akses >= now() - interval '.self::ACTIVE_DAYS.' day');
+        $request = request();
+        return $query->when($request->period, function ($query) use ($request) {
+                $dates = explode(' - ', $request->period);
+                if (count($dates) === 2) {
+                    $start = $dates[0];
+                    $end = $dates[1];
+                    $query->whereRaw('tgl_akses between ? and ?', [$start, $end]);
+                }
+            }, function ($query) {
+                $query->whereRaw('tgl_akses >= now() - interval '.self::ACTIVE_DAYS.' day');
+            });
     }
 
     public function scopeNonActive($query)
     {
         return $query->whereRaw('tgl_akses <= now() - interval '.self::ACTIVE_DAYS.' day');
     }
-
-    public function scopeAktif($query, $batasTgl)
+    
+     public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('tgl_akses', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->startOfDay();
 
         return $query->where('tgl_akses', '>=', $maksimalTanggal);
     }
