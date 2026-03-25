@@ -74,6 +74,7 @@
                                     <div class="inner text-center">
                                         <h3 class="text-blue" id="desa_aktif">0</h3>
                                         <p class="text-black">Total Desa: <span id="total_desa"></span></p>
+                                        <small class="text-black" id="filter-label"></small>
                                     </div>
                                 </div>
                             </div>
@@ -305,6 +306,7 @@
 
             $('.block_desa_aktif').change(function() {
                 const params = {
+                    period: $('input[name=periods]').val(),
                     kode_provinsi: $('select[name=provinsi]').val(),
                     kode_kabupaten: $('select[name=kabupaten]').val(),
                     kode_kecamatan: $('select[name=kecamatan]').val(),
@@ -314,10 +316,11 @@
                     params.nama_provinsi = $('#provinsi option:selected').text();
                     params.nama_kabupaten = $('#kabupaten option:selected').text();
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
-                    const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params)
-                        .toString();
-                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
+                    const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params).toString();
+                    
+                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
                     $('#total_desa').text(data.desa_total)
+                    $('#filter-label').text(`${params.period}`)
                 }, 'json')
             })
 

@@ -99,6 +99,7 @@ Route::prefix('track')
 
 Route::prefix('web')
     ->group(function () {
+        Route::get('summary-aktif/{data?}', [WebsiteDashboardController::class, 'summaryAktif']);
         Route::get('chart-usage/{data?}', [WebsiteDashboardController::class, 'chartUsage']);
         Route::get('summary', [WebsiteDashboardController::class, 'summary']);
         Route::get('summary-keloladesa', [KelolaDesaDashboardController::class, 'summary']);
