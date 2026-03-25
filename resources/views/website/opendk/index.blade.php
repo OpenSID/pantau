@@ -36,6 +36,7 @@
                                             <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                         </div>
                                         <input type="text" name="periods" class="form-control datepicker"
+                                            value="{{ implode(' - ', daterangepicker_range('30 Hari Terakhir')) }}"
                                             data-option='{!! json_encode(
                                                 array_merge(config('local.daterangepicker'), daterangepicker_range(), [
                                                     'autoApply' => false,
@@ -69,6 +70,7 @@
                                     <div class="inner text-center">
                                         <h3 class="text-blue" id="kecamatan_aktif">0</h3>
                                         <p class="text-black">Total Desa: <span id="total_desa"></span></p>
+                                        <small class="text-black" id="filter-label"></small>
                                     </div>
                                 </div>
                             </div>
@@ -159,9 +161,6 @@
 
         $(document).ready(function() {
 
-            // set default kosongkan datepicker
-            $('input[name=periods]').val('');
-
             $('#filter').click(function() {
                 updateData()
             })
@@ -174,6 +173,7 @@
 
             $('.block_kecamatan_aktif').change(function() {
                 const params = {
+                    period: $('input[name=periods]').val(),
                     kode_provinsi: $('select[name=provinsi]').val(),
                     kode_kabupaten: $('select[name=kabupaten]').val(),
                     kode_kecamatan: $('select[name=kecamatan]').val(),
@@ -187,6 +187,7 @@
                         .toString();
                     $('#kecamatan_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)
                     $('#total_desa').text(data.desa_total)
+                    $('#filter-label').text(`${params.period}`)
                 }, 'json')
             })
             updateData()

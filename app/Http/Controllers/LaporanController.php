@@ -35,6 +35,7 @@ class LaporanController extends Controller
             'versi_lokal' => $request->versi_lokal,
             'versi_hosting' => $request->versi_hosting,
             'tte' => $request->tte,
+            'tipe_pengguna' => $request->tipe_pengguna,
         ];
         $hiddenColumns = [];
         $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();

@@ -36,6 +36,7 @@
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 </div>
                                 <input type="text" name="periods" class="form-control datepicker"
+                                value="{{ implode(' - ', daterangepicker_range('30 Hari Terakhir')) }}"
                                     data-option='{!! json_encode(array_merge(config("local.daterangepicker"), daterangepicker_range(), ["autoApply" => false, "singleDatePicker" =>false])) !!}'
                                     autocomplete="off">
                             </div>
@@ -65,7 +66,7 @@
                 </div>
             </div>
             <div class="card-body">
-                @include('website.partial.chart')
+                @include('website.partial.summary_aktif')
                 @include('website.partial.opensid_baru')
                 @include('website.partial.peta')
             </div>
@@ -131,31 +132,19 @@
                     $(`#app-${i}-count`).text(summary[i])
                 }
 
+                // summary aktif pengguna
                 $.ajax({
-                    url: 'api/web/chart-usage',
+                    url: 'api/web/summary-aktif',
                     data: params,
                     type: "GET",
                     success: function(data) {
-                        const maxDataValue = Math.max(...data.datasets.flatMap(dataset => dataset.data));  // Find the largest data value
-                        const threshold = maxDataValue > 0 ? maxDataValue * 0.1 : 1;  // Set threshold to 10% of the largest dataset value, avoid zero
-
-                        myChart.data = {
-                            labels: data.labels,  // API-provided labels
-                            datasets: data.datasets.map((dataset) => {
-                                const datasetMaxValue = Math.max(...dataset.data);
-                                
-                                // If the dataset max value is smaller than the threshold, assign it to the secondary y-axis (y1)
-                                const isSmallDataset = datasetMaxValue <= threshold;
-
-                                return {
-                                    ...dataset,
-                                    yAxisID: isSmallDataset ? 'y1' : 'y',  // Use secondary axis for small datasets
-                                    borderWidth: 1,
-                                };
-                            })
-                        };
-
-                        myChart.update();  // Update the chart with the new data
+                        $('#app-openkab-count2').text(data.openkab)
+                        $('#app-opendk-count2').text(data.opendk)
+                        $('#app-opensid-count2').text(data.opensid)
+                        $('#app-layanandesa-count2').text(data.layanandesa)
+                        $('#app-keloladesa-count2').text(data.keloladesa)
+                        $('#app-pbb-count2').text(data.pbb)
+                        $('#app-openkab-count2').text(data.openkab)
                     },
                     error: function(error) {
                         console.error("Error fetching chart data: ", error);
@@ -168,7 +157,7 @@
     $(document).ready(function() {
 
         // set default kosongkan datepicker
-        $('input[name=periods]').val('');
+        // $('input[name=periods]').val('');
 
         $('#filter').click(function(){
             updateData()
