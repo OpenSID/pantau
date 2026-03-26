@@ -19,7 +19,6 @@ class AktifLayananDesaController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-
         return [
             'aktif' => TrackMobile::active()->filter($filters)->count() ?? 0,
             'desa_total' => Desa::desaValid()->filterWilayah($request)->count() ?? 0,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Desa;
 use App\Models\Opendk;
 use App\Models\Openkab;
+use App\Models\Pbb;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
 use App\Models\Wilayah;
@@ -154,10 +155,10 @@ class WebsiteDashboardController extends Controller
         // range minimal 7 hari, max 31 hari
         $minTanggal = Carbon::parse($tanggalAkhir)->subDays(7)->format('Y-m-d');
         $maxTanggal = Carbon::parse($tanggalAkhir)->subDays(31)->format('Y-m-d');
-        $hariIni = Carbon::now()->format('Y-m-d');
-        if ($tanggalAkhir > $hariIni) {
-            $tanggalAkhir = $hariIni;
-        }
+        // $hariIni = Carbon::now()->format('Y-m-d');
+        // if ($tanggalAkhir > $hariIni) {
+        //     $tanggalAkhir = $hariIni;
+        // }
         if ($tanggalAwal > $minTanggal) {
             $tanggalAwal = $minTanggal;
         }
@@ -166,6 +167,7 @@ class WebsiteDashboardController extends Controller
         }
 
         $rangeTanggal = CarbonPeriod::between($tanggalAwal, $tanggalAkhir);
+
         $opensid = Desa::aktif($tanggalAkhir);
         $opendk = Opendk::aktif($tanggalAkhir);
         $layanan = TrackMobile::aktif($tanggalAkhir);
@@ -208,20 +210,30 @@ class WebsiteDashboardController extends Controller
         $layananCount = $layanan->count();
         $kelolaCount = $kelolaDesa->count();
         foreach ($rangeTanggal as $tanggal) {
-            $labels[] = $tanggal->format('j M');
             if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
+                $labels[] = $tanggal->format('j M');
                 $opensidData[] = $opensidCount;
                 $opendkData[] = $opendkCount;
                 $layananData[] = $layananCount;
                 $kelolaData[] = $kelolaCount;
+                $openkabData[] = 0;
             } else {
-                $opensidData[] = $opensidCount + random_int(0, 30);
-                $opendkData[] = $opendkCount + random_int(0, 5);
-                $layananData[] = $layananCount + random_int(0, 15);
-                $kelolaData[] = $kelolaCount + random_int(0, 15);
+                $labels[] = $tanggal->format('j M');
+                $opensidData[] = 0;
+                $opendkData[] = 0;
+                $layananData[] = 0;
+                $kelolaData[] = 0;
+                $openkabData[] = 0;
             }
 
-            $openkabData[] = 0;
+            // sementara data acak di disable
+            // if ($tanggal->format('Y-m-d') == $tanggalAkhir) {
+            // } else {
+            //     $opensidData[] = $opensidCount + random_int(0, 30);
+            //     $opendkData[] = $opendkCount + random_int(0, 5);
+            //     $layananData[] = $layananCount + random_int(0, 15);
+            //     $kelolaData[] = $kelolaCount + random_int(0, 15);
+            // }
         }
 
         $datasets = [];
@@ -247,6 +259,29 @@ class WebsiteDashboardController extends Controller
         $result = [
             'labels' => $labels,
             'datasets' => $datasets,
+        ];
+
+        return response()->json($result);
+    }
+
+    public function summaryAktif(Request $request, $data = false)
+    {
+        $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+        [$tanggalAwal, $tanggalAkhir] = explode(' - ', $period);
+        $opensid = Desa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $opendk = Opendk::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $layanan = TrackMobile::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $kelolaDesa = TrackKeloladesa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $pbb = Pbb::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $openkab = Openkab::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+
+        $result = [
+            'openkab' => $openkab->count(),
+            'opensid' => $opensid->count(),
+            'opendk' => $opendk->count(),
+            'layanandesa' => $layanan->count(),
+            'keloladesa' => $kelolaDesa->count(),
+            'pbb' => $pbb->count(),
         ];
 
         return response()->json($result);

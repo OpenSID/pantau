@@ -417,7 +417,7 @@ class DashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            return DataTables::of($this->desa->fillter($filters)->semuaDesa()->orderBy('created_at', 'desc'))
+            return DataTables::of($this->desa->fillter($filters)->semuaDesa())
                 ->editColumn('modul_tte', function ($item) {
                     if ($item->modul_tte == 0) {
                         return '<span class="badge badge-secondary">Tidak Aktif</span>';

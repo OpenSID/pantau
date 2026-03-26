@@ -17,7 +17,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-10 align-content-center">
-                                    @if(request()->has('nama_wilayah'))
+                                    @if (request()->has('nama_wilayah'))
                                         <h4>{{ request('nama_wilayah') }}</h3>
                                     @endif
                                     <div class="d-flex">
@@ -40,9 +40,9 @@
                                             <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                         </div>
                                         <input type="text" name="periods" class="form-control datepicker"
-                                            value="{{ implode(' - ', config('local.daterangepicker_range.ranges')['30 Hari Terakhir']) }}"
+                                            value="{{ implode(' - ', daterangepicker_range('30 Hari Terakhir')) }}"
                                             data-option='{!! json_encode(
-                                                array_merge(config('local.daterangepicker'), config('local.daterangepicker_range'), [
+                                                array_merge(config('local.daterangepicker'), daterangepicker_range(), [
                                                     'autoApply' => false,
                                                     'singleDatePicker' => false,
                                                 ]),
@@ -74,6 +74,7 @@
                                     <div class="inner text-center">
                                         <h3 class="text-blue" id="desa_aktif">0</h3>
                                         <p class="text-black">Total Desa: <span id="total_desa"></span></p>
+                                        <small class="text-black" id="filter-label"></small>
                                     </div>
                                 </div>
                             </div>
@@ -190,30 +191,29 @@
 
 @push('js')
     <script>
+        const filters = {!! json_encode(request()->all()) !!};
 
-            const filters = {!! json_encode(request()->all()) !!};
+        // Tunggu select2 selesai diinisialisasi
+        setTimeout(function() {
+            if (filters.kode_provinsi) {
+                let option = new Option(filters.nama_provinsi, filters.kode_provinsi, true, true);
+                $('#provinsi').append(option).trigger('change');
 
-            // Tunggu select2 selesai diinisialisasi
-            setTimeout(function() {
-                if (filters.kode_provinsi) {
-                    let option = new Option(filters.nama_provinsi, filters.kode_provinsi, true, true);
-                    $('#provinsi').append(option).trigger('change');
-
-                    // Set kabupaten setelah delay
-                    if (filters.kode_kabupaten) {
-                        let optionKab = new Option(filters.nama_kabupaten, filters.kode_kabupaten, true, true);
-                        $('#kabupaten').attr('disabled', false);
-                        $('#kabupaten').append(optionKab).trigger('change');
-                    }
-
-                    $('#filter').trigger('click');
+                // Set kabupaten setelah delay
+                if (filters.kode_kabupaten) {
+                    let optionKab = new Option(filters.nama_kabupaten, filters.kode_kabupaten, true, true);
+                    $('#kabupaten').attr('disabled', false);
+                    $('#kabupaten').append(optionKab).trigger('change');
                 }
-            }, 1000);
 
-            $('.datepicker').each(function() {
-                const _options = $(this).data('option')
-                $(this).daterangepicker(_options)
-            })
+                $('#filter').trigger('click');
+            }
+        }, 1000);
+
+        $('.datepicker').each(function() {
+            const _options = $(this).data('option')
+            $(this).daterangepicker(_options)
+        })
 
 
 
@@ -306,18 +306,21 @@
 
             $('.block_desa_aktif').change(function() {
                 const params = {
+                    period: $('input[name=periods]').val(),
                     kode_provinsi: $('select[name=provinsi]').val(),
                     kode_kabupaten: $('select[name=kabupaten]').val(),
                     kode_kecamatan: $('select[name=kecamatan]').val(),
                 }
                 $.get("{{ url('api/web/desa-aktif-opensid') }}", params, function(data) {
-                    params.akses = 4;// status desa aktif
+                    params.akses = 4; // status desa aktif
                     params.nama_provinsi = $('#provinsi option:selected').text();
                     params.nama_kabupaten = $('#kabupaten option:selected').text();
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
                     const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params).toString();
+                    
                     $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
                     $('#total_desa').text(data.desa_total)
+                    $('#filter-label').text(`${params.period}`)
                 }, 'json')
             })
 
@@ -330,7 +333,8 @@
 
                 $.get("{{ url('api/web/pengguna-selain-opensid') }}", params, function(data) {
                     $('#block_pengguna_selain_opensid').find('#pengguna_pbb').text(data.pbb)
-                    $('#block_pengguna_selain_opensid').find('#pengguna_anjungan').text(data.anjungan)
+                    $('#block_pengguna_selain_opensid').find('#pengguna_anjungan').text(data
+                        .anjungan)
                 }, 'json')
             })
         })
