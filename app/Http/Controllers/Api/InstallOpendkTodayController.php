@@ -13,8 +13,8 @@ class InstallOpendkTodayController extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    {                
-        $installHariIni = Opendk::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get()->map(function($item) {
+    {
+        $installHariIni = Opendk::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get()->map(function ($item) {
             return [
                 'id' => $item->id,
                 'versi' => $item->versi,
@@ -27,7 +27,7 @@ class InstallOpendkTodayController extends Controller
             ];
         });
 
-        return [     
+        return [
             'installHariIni' => $installHariIni,
         ];
     }

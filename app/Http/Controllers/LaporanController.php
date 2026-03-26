@@ -41,16 +41,17 @@ class LaporanController extends Controller
         $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
         if ($adminWilayah) {
             $hiddenColumns[] = 'aksi';
-            $hiddenColumns[] = 'kontak';            
+            $hiddenColumns[] = 'kontak';
         }
 
         if ($request->ajax() || $request->excel) {
             $query = DataTables::of($this->desa->fillter($fillters)->laporan());
             if ($request->excel) {
                 $query->filtering();
-                if(in_array('aksi', $hiddenColumns)){
+                if (in_array('aksi', $hiddenColumns)) {
                     unset($hiddenColumns['aksi']);
-                }                
+                }
+
                 return Excel::download(new DesaExport($query->results(), $hiddenColumns), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 

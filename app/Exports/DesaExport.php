@@ -9,7 +9,9 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $data;
+
     private $hiddenColumns;
+
     public function __construct($data, $hiddenColumns = [])
     {
         $this->data = $data;

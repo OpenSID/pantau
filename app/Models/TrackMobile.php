@@ -40,34 +40,34 @@ class TrackMobile extends BaseModel
     {
         if (isset($request['kode_provinsi'])) {
             $query->when($request['kode_provinsi'], function ($q) use ($request) {
-                $q->whereRaw('left(track_mobile.kode_desa, 2) = \'' . $request['kode_provinsi'] . '\'');
+                $q->whereRaw('left(track_mobile.kode_desa, 2) = \''.$request['kode_provinsi'].'\'');
             });
         }
         if (isset($request['kode_kabupaten'])) {
             $query->when($request['kode_kabupaten'], function ($q) use ($request) {
-                $q->whereRaw('left(track_mobile.kode_desa, 5) = \'' . $request['kode_kabupaten'] . '\'');
+                $q->whereRaw('left(track_mobile.kode_desa, 5) = \''.$request['kode_kabupaten'].'\'');
             });
         }
 
         if (isset($request['kode_kecamatan'])) {
             $query->when($request['kode_kecamatan'], function ($q) use ($request) {
-                $q->whereRaw('left(track_mobile.kode_desa, 8) = \'' . $request['kode_kecamatan'] . '\'');
+                $q->whereRaw('left(track_mobile.kode_desa, 8) = \''.$request['kode_kecamatan'].'\'');
             });
         }
 
         if (isset($request['kode_desa'])) {
             $query->when($request['kode_desa'], function ($q) use ($request) {
-                $q->whereRaw('track_mobile.kode_desa = \'' . $request['kode_desa'] . '\'');
+                $q->whereRaw('track_mobile.kode_desa = \''.$request['kode_desa'].'\'');
             });
         }
 
         if (isset($request['akses_mobile'])) {
-            $query->when(!empty($request['akses_mobile']), function ($query) use ($request) {
-                $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
+            $query->when(! empty($request['akses_mobile']), function ($query) use ($request) {
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';
                 switch ($request['akses_mobile']) {
                     case '1':
-                        $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
+                        $interval = 'interval '.self::ACTIVE_DAYS.' day';
                         break;
                     case '2':
                         $interval = 'interval 2 month';
@@ -78,17 +78,17 @@ class TrackMobile extends BaseModel
                         break;
                 }
 
-                return $query->whereRaw('tgl_akses ' . $sign . ' now() - ' . $interval);
+                return $query->whereRaw('tgl_akses '.$sign.' now() - '.$interval);
             });
         }
 
         if (isset($request['akses'])) {
-            $query->when(!empty($request['akses']), function ($query) use ($request) {
-                $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
+            $query->when(! empty($request['akses']), function ($query) use ($request) {
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';
                 switch ($request['akses']) {
                     case '4':
-                        $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
+                        $interval = 'interval '.self::ACTIVE_DAYS.' day';
                         break;
                     case '2':
                         $interval = 'interval 2 month';
@@ -103,7 +103,7 @@ class TrackMobile extends BaseModel
                         break;
                 }
 
-                return $query->whereRaw('tgl_akses ' . $sign . ' now() - ' . $interval);
+                return $query->whereRaw('tgl_akses '.$sign.' now() - '.$interval);
             });
         }
 
@@ -113,6 +113,7 @@ class TrackMobile extends BaseModel
     public function scopeActive($query)
     {
         $request = request();
+
         return $query->when($request->period, function ($query) use ($request) {
             $dates = explode(' - ', $request->period);
             if (count($dates) === 2) {
@@ -121,13 +122,13 @@ class TrackMobile extends BaseModel
                 $query->whereRaw('tgl_akses between ? and ?', [$start, $end]);
             }
         }, function ($query) {
-            $query->whereRaw('tgl_akses >= now() - interval ' . self::ACTIVE_DAYS . ' day');
+            $query->whereRaw('tgl_akses >= now() - interval '.self::ACTIVE_DAYS.' day');
         });
     }
 
     public function scopeNonActive($query)
     {
-        return $query->whereRaw('tgl_akses <= now() - interval ' . self::ACTIVE_DAYS . ' day');
+        return $query->whereRaw('tgl_akses <= now() - interval '.self::ACTIVE_DAYS.' day');
     }
 
     public function scopeAktif($query, $batasTgl, $tglAwal = null)
@@ -146,16 +147,16 @@ class TrackMobile extends BaseModel
 
     public function scopeProvinsi($query, $provinsi)
     {
-        return $query->whereRaw('left(kode_desa, 2) = \'' . $provinsi . '\'');
+        return $query->whereRaw('left(kode_desa, 2) = \''.$provinsi.'\'');
     }
 
     public function scopeKabupaten($query, $kabupaten)
     {
-        return $query->whereRaw('left(kode_desa, 5) = \'' . $kabupaten . '\'');
+        return $query->whereRaw('left(kode_desa, 5) = \''.$kabupaten.'\'');
     }
 
     public function scopeKecamatan($query, $kecamatan)
     {
-        return $query->whereRaw('left(kode_desa, 8) = \'' . $kecamatan . '\'');
+        return $query->whereRaw('left(kode_desa, 8) = \''.$kecamatan.'\'');
     }
 }
