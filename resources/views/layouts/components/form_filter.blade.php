@@ -151,7 +151,7 @@
                     <select class="select2 form-control-sm" id="sebutan_desa" name="sebutan_desa"
                         data-placeholder="Semua Sebutan Desa" style="width: 100%;">
                         <option selected value="">Semua Sebutan Desa</option>
-                        @foreach($sebutanDesaList ?? [] as $sebutanDesa)
+                        @foreach(((new \App\Services\SebutanDesaService)->getSebutanDesaList() ?? []) as $sebutanDesa)
                             <option value="{{ $sebutanDesa }}">{{ $sebutanDesa }}</option>
                         @endforeach
                     </select>
