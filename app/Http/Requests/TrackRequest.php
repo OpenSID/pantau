@@ -58,6 +58,8 @@ class TrackRequest extends FormRequest
                 'sometimes',
                 Rule::in(['0', '1']),
             ],
+            'sebutan_desa' => 'nullable|string|max:255',
+            'layanan' => 'nullable|string|max:255',
         ];
     }
 
@@ -183,6 +185,8 @@ class TrackRequest extends FormRequest
             'anjungan',
             'kontak',
             'tema',
+            'sebutan_desa',
+            'layanan',
         ]);
     }
 }

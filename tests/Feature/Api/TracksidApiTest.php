@@ -51,6 +51,7 @@ abstract class TracksidApiTest extends TestCase
      */
     protected function postJsonWithToken(string $uri, array $data = [], array $headers = [])
     {
+        print_r($this->bearerToken);
         return $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->bearerToken,
         ])->postJson($uri, $data, $headers);

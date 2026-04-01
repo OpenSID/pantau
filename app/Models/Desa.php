@@ -31,6 +31,7 @@ class Desa extends Model
         'kontak' => 'array',
         'anjungan' => 'bool',
         'tema' => 'string',
+        'sebutan_desa' => 'string',
     ];
 
     /** {@inheritdoc} */
