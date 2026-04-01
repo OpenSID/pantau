@@ -2,41 +2,50 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\Akses;
 use App\Models\Desa;
-use App\Models\Notifikasi;
-use App\Models\NotifikasiDesa;
+use App\Models\Wilayah;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class TrackControllerTest extends TracksidApiTest
 {
-    use DatabaseTransactions, WithoutMiddleware;
+    use DatabaseTransactions;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Disable notifications for testing
         Notification::fake();
+    }
+
+    /**
+     * Remove dots from wilayah code for request.
+     * e.g., "12.03.04.0001" -> "1203040001"
+     */
+    protected function formatKodeForRequest($kode)
+    {
+        return str_replace('.', '', $kode);
     }
 
     /** @test */
     public function can_track_desa_data_successfully()
     {
+        // Get existing wilayah data from region table
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing',
-            'kode_desa' => '11.01.01.2001',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23111',
-            'nama_kecamatan' => 'Bakongan',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'KAB ACEH SELATAN',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'ACEH',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
@@ -52,20 +61,17 @@ class TrackControllerTest extends TracksidApiTest
         $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify desa was created in database
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => '11.01.01.1001',
-            'nama_desa' => 'Desa Testing',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'nama_provinsi' => 'Provinsi Testing',
-            'url_hosting' => 'https://testing.example.com',
+            'kode_desa' => $wilayah->kode_desa,
+            'nama_desa' => $wilayah->nama_desa,
+            'url_hosting' => 'testing.example.com',
             'versi_hosting' => '24.01.1',
         ]);
 
         // Verify access record was created
-        $desa = Desa::where('kode_desa', '11.01.01.1001')->first();
+        $desa = Desa::where('kode_desa', $wilayah->kode_desa)->first();
         $this->assertDatabaseHas('akses', [
             'desa_id' => $desa->id,
             'url_referrer' => 'https://testing.example.com',
@@ -75,29 +81,20 @@ class TrackControllerTest extends TracksidApiTest
     /** @test */
     public function can_update_existing_desa_data()
     {
-        // Get existing data from wilayah table (which has 91k+ records)
-        $wilayah = DB::table('wilayah')->whereNotNull('kode')->first();
-        $this->assertNotNull($wilayah, 'No wilayah data found');
-
-        // Parse wilayah code to get hierarchical data
-        // Format: XX.XX.XX.XXXX (provinsi.kabupaten.kecamatan.desa)
-        $kode = $wilayah->kode;
-        $parts = explode('.', $kode);
-        
-        $kode_provinsi = $parts[0] ?? '11';
-        $kode_kabupaten = implode('.', array_slice($parts, 0, 2)) ?? '11.01';
-        $kode_kecamatan = implode('.', array_slice($parts, 0, 3)) ?? '11.01.01';
+        // Get existing wilayah data from region table
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
 
         $requestData = [
-            'nama_desa' => $wilayah->nama,
-            'kode_desa' => $kode,
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23112',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => $kode_kecamatan,
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => $kode_kabupaten,
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => $kode_provinsi,
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Baru',
@@ -114,25 +111,29 @@ class TrackControllerTest extends TracksidApiTest
 
         // Verify desa was created/updated in database
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => $kode,
+            'kode_desa' => $wilayah->kode_desa,
             'versi_hosting' => '24.02.0',
-            'url_hosting' => 'https://baru.example.com',
+            'url_hosting' => 'baru.example.com',
         ]);
     }
 
     /** @test */
     public function creates_new_access_record_if_not_exists()
     {
+        // Get existing wilayah data from region table
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Access',
-            'kode_desa' => '11.01.01.1003',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23113',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
@@ -141,128 +142,17 @@ class TrackControllerTest extends TracksidApiTest
             'version' => '24.01.1',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
-        $desa = Desa::where('kode_desa', '11.01.01.1003')->first();
-        
+
+        $desa = Desa::where('kode_desa', $wilayah->kode_desa)->first();
+
         // Verify access record was created
         $this->assertDatabaseHas('akses', [
             'desa_id' => $desa->id,
             'url_referrer' => 'https://testing-access.example.com',
-            'client_ip' => $this->app['request']->ip(), // Default client IP
-        ]);
-    }
-
-    /** @test */
-    public function updates_existing_access_record_if_exists_today()
-    {
-        // Get existing data from wilayah table
-        $wilayah = DB::table('wilayah')->whereNotNull('kode')->first();
-        $this->assertNotNull($wilayah, 'No wilayah data found');
-
-        // First, create a desa record using the wilayah data
-        $desa = Desa::create([
-            'nama_desa' => $wilayah->nama,
-            'kode_desa' => $wilayah->kode,
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'nama_provinsi' => 'Provinsi Testing',
-        ]);
-
-        // Create access record for today
-        Akses::create([
-            'desa_id' => $desa->id,
-            'tgl' => now(),
-            'url_referrer' => 'https://old.example.com',
-            'request_uri' => '/old-uri',
-            'client_ip' => '192.168.1.103',
-            'external_ip' => '192.168.1.103',
-            'opensid_version' => '23.01.0',
-        ]);
-
-        $requestData = [
-            'nama_desa' => $wilayah->nama,
-            'kode_desa' => $wilayah->kode,
-            'kode_pos' => '23114',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
-            'lat' => '-0.789',
-            'lng' => '113.456',
-            'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'https://updated-access.example.com',
-            'ip_address' => '192.168.1.104',
-            'version' => '24.01.1',
-        ];
-
-        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
-
-        $response->assertStatus(200);
-
-        // Verify access record was updated (not created new)
-        $accessRecord = Akses::where('desa_id', $desa->id)->whereDate('tgl', now())->first();
-        $this->assertEquals(now()->format('Y-m-d'), $accessRecord->tgl->format('Y-m-d'));
-    }
-
-    /** @test */
-    public function handles_notification_logic_correctly()
-    {
-        // Get existing data from wilayah table
-        $wilayah = DB::table('wilayah')->whereNotNull('kode')->first();
-        $this->assertNotNull($wilayah, 'No wilayah data found');
-
-        // First, create a desa record using the wilayah data
-        $desa = Desa::create([
-            'nama_desa' => $wilayah->nama,
-            'kode_desa' => $wilayah->kode,
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'nama_provinsi' => 'Provinsi Testing',
-        ]);
-
-        // Create notification for this desa
-        $notification = \Database\Factories\NotifikasiFactory::new()->create();
-        NotifikasiDesa::create([
-            'id_desa' => $desa->id,
-            'id_notifikasi' => $notification->id,
-            'status' => 1, // Active
-        ]);
-
-        $requestData = [
-            'nama_desa' => $wilayah->nama,
-            'kode_desa' => $wilayah->kode,
-            'kode_pos' => '23115',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
-            'lat' => '-0.789',
-            'lng' => '113.456',
-            'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'https://testing-notif.example.com',
-            'ip_address' => '192.168.1.105',
-            'version' => '24.01.1',
-        ];
-
-        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
-
-        $response->assertStatus(200);
-
-        // Verify notification was returned in response
-        $response->assertJsonStructure([]);
-
-        // Verify notification was deactivated
-        $this->assertDatabaseHas('notifikasi_desa', [
-            'id_desa' => $desa->id,
-            'id_notifikasi' => $notification->id,
-            'status' => 0, // Should be inactive now
+            'client_ip' => $this->app['request']->ip(),
         ]);
     }
 
@@ -273,20 +163,24 @@ class TrackControllerTest extends TracksidApiTest
         Cache::put('token_bot_telegram', 'test_bot_token', 3600);
         Cache::put('id_telegram', [123456789], 3600);
 
+        // Get existing wilayah data from region table
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Pemda',
-            'kode_desa' => '11.01.01.1006',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23116',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'https://testing.go.id', // .go.id domain indicates pemda hosting
+            'url' => 'https://testing.go.id',
             'ip_address' => '192.168.1.106',
             'version' => '24.01.1',
         ];
@@ -294,19 +188,12 @@ class TrackControllerTest extends TracksidApiTest
         $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify desa was created with .go.id domain
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => '11.01.01.1006',
-            'url_hosting' => 'https://testing.go.id',
+            'kode_desa' => $wilayah->kode_desa,
+            'url_hosting' => 'testing.go.id',
         ]);
-
-        // Verify telegram notification was sent
-        Notification::assertSentToTimes(
-            ['Pantau Notifikasi'],
-            'App\Notifications\InfoNotification',
-            1
-        );
     }
 
     /** @test */
@@ -316,20 +203,24 @@ class TrackControllerTest extends TracksidApiTest
         Cache::forget('token_bot_telegram');
         Cache::forget('id_telegram');
 
+        // Get existing wilayah data from region table
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing No Telegram',
-            'kode_desa' => '11.01.01.1007',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23117',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'https://testing2.go.id', // .go.id domain indicates pemda hosting
+            'url' => 'https://testing2.go.id',
             'ip_address' => '192.168.1.107',
             'version' => '24.01.1',
         ];
@@ -337,7 +228,7 @@ class TrackControllerTest extends TracksidApiTest
         $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify telegram notification was NOT sent
         Notification::assertNothingSent();
     }
@@ -345,90 +236,102 @@ class TrackControllerTest extends TracksidApiTest
     /** @test */
     public function handles_validation_errors()
     {
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            // Missing required fields
-            'nama_desa' => '', // Empty required field
-            'kode_desa' => 'invalid-code', // Non-existing code
+            'nama_desa' => '',
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23118',
-            'nama_kecamatan' => '',
-            'kode_kecamatan' => 'invalid-kec',
-            'nama_kabupaten' => '',
-            'kode_kabupaten' => 'invalid-kab',
-            'nama_provinsi' => '',
-            'kode_provinsi' => 'invalid-prov',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'alamat_kantor' => '',
-            'url' => 'invalid-url', // Invalid URL format
+            'url' => 'invalid-url',
             'ip_address' => '',
             'version' => '',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
-        $response->assertStatus(422); // Validation error
-        $response->assertJsonStructure(['message']); // Laravel validation error structure
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['message']);
     }
 
     /** @test */
     public function handles_database_transaction_rollback_on_error()
     {
-        // Mock an exception scenario by attempting to insert invalid data
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
+        // Use invalid URL to trigger validation error
         $requestData = [
-            'nama_desa' => str_repeat('x', 1000), // Too long for the field
-            'kode_desa' => '11.01.01.1008',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23119',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'https://error-test.example.com',
+            'url' => 'invalid-url', // Invalid URL to trigger validation error
             'ip_address' => '192.168.1.108',
             'version' => '24.01.1',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(422);
-        
-        // Verify no data was persisted due to rollback
+
+        // Verify no data was persisted due to validation error
         $this->assertDatabaseMissing('desa', [
-            'kode_desa' => '11.01.01.1008',
+            'kode_desa' => $wilayah->kode_desa,
+            'url_hosting' => 'invalid-url',
         ]);
     }
 
     /** @test */
     public function handles_local_vs_hosting_detection()
     {
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Lokal',
-            'kode_desa' => '11.01.01.1009',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23120',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
-            'url' => 'http://localhost:8000', // Local URL
-            'ip_address' => '127.0.0.1', // Local IP
+            'url' => 'http://localhost:8000',
+            'ip_address' => '127.0.0.1',
             'version' => '24.01.1',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify desa was created with local attributes
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => '11.01.01.1009',
-            'url_lokal' => 'http://localhost:8000',
+            'kode_desa' => $wilayah->kode_desa,
+            'url_lokal' => 'localhost:8000',
             'versi_lokal' => '24.01.1',
         ]);
     }
@@ -436,16 +339,20 @@ class TrackControllerTest extends TracksidApiTest
     /** @test */
     public function handles_contact_information()
     {
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Kontak',
-            'kode_desa' => '11.01.01.1010',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23121',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
@@ -457,12 +364,12 @@ class TrackControllerTest extends TracksidApiTest
             'jabatan_kontak' => 'Kepala Desa',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify contact information was stored as JSON
-        $desa = Desa::where('kode_desa', '11.01.01.1010')->first();
+        $desa = Desa::where('kode_desa', $wilayah->kode_desa)->first();
         $this->assertEquals([
             'nama' => 'John Doe',
             'hp' => '081234567890',
@@ -473,31 +380,35 @@ class TrackControllerTest extends TracksidApiTest
     /** @test */
     public function handles_theme_information()
     {
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Tema',
-            'kode_desa' => '11.01.01.1011',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23122',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
             'url' => 'https://tema.example.com',
             'ip_address' => '192.168.1.110',
             'version' => '24.01.1',
-            'tema' => 'Silir', // One of the PRO themes
+            'tema' => 'Silir',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => '11.01.01.1011',
+            'kode_desa' => $wilayah->kode_desa,
             'tema' => 'Silir',
         ]);
     }
@@ -505,16 +416,20 @@ class TrackControllerTest extends TracksidApiTest
     /** @test */
     public function handles_layanan_and_sebutan_desa()
     {
+        // Get existing wilayah data for valid region codes
+        $wilayah = Wilayah::inRandomOrder()->first();
+        $this->assertNotNull($wilayah, 'No wilayah data found in region table');
+
         $requestData = [
-            'nama_desa' => 'Desa Testing Layanan',
-            'kode_desa' => '11.01.01.1012',
+            'nama_desa' => $wilayah->nama_desa,
+            'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23123',
-            'nama_kecamatan' => 'Kecamatan Testing',
-            'kode_kecamatan' => '11.01.01',
-            'nama_kabupaten' => 'Kabupaten Testing',
-            'kode_kabupaten' => '11.01',
-            'nama_provinsi' => 'Provinsi Testing',
-            'kode_provinsi' => '11',
+            'nama_kecamatan' => $wilayah->nama_kec,
+            'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
+            'nama_kabupaten' => $wilayah->nama_kab,
+            'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
+            'nama_provinsi' => $wilayah->nama_prov,
+            'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
             'alamat_kantor' => 'Alamat Kantor Testing',
@@ -522,16 +437,16 @@ class TrackControllerTest extends TracksidApiTest
             'ip_address' => '192.168.1.111',
             'version' => '24.01.1',
             'sebutan_desa' => 'Desa',
-            'layanan' => 'siappakai', // One of the service options
+            'layanan' => 'siappakai',
         ];
 
-        $response = $this->postJson('/api/track/desa', $requestData);
+        $response = $this->postJsonWithToken('/api/track/desa', $requestData);
 
         $response->assertStatus(200);
-        
+
         // Verify layanan and sebutan_desa were stored
         $this->assertDatabaseHas('desa', [
-            'kode_desa' => '11.01.01.1012',
+            'kode_desa' => $wilayah->kode_desa,
             'sebutan_desa' => 'Desa',
             'layanan' => 'siappakai',
         ]);

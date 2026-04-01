@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Layanan;
 use App\Models\Region;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -59,7 +60,12 @@ class TrackRequest extends FormRequest
                 Rule::in(['0', '1']),
             ],
             'sebutan_desa' => 'nullable|string|max:255',
-            'layanan' => 'nullable|string|max:255',
+            'layanan' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::enum(Layanan::class),
+            ],
         ];
     }
 

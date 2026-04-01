@@ -129,6 +129,36 @@
             </div>
         @endif
 
+        @if (array_key_exists('layanan', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Layanan</label>
+                    <select class="select2 form-control-sm" id="layanan" name="layanan"
+                        data-placeholder="Semua Layanan" style="width: 100%;">
+                        <option selected value="">Semua Layanan</option>
+                        @foreach(\App\Enums\Layanan::cases() as $layanan)
+                            <option value="{{ $layanan->value }}">{{ $layanan->label() }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('sebutan_desa', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Sebutan Desa</label>
+                    <select class="select2 form-control-sm" id="sebutan_desa" name="sebutan_desa"
+                        data-placeholder="Semua Sebutan Desa" style="width: 100%;">
+                        <option selected value="">Semua Sebutan Desa</option>
+                        @foreach($sebutanDesaList ?? [] as $sebutanDesa)
+                            <option value="{{ $sebutanDesa }}">{{ $sebutanDesa }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
+
         @if (array_key_exists('akses_mobile', $fillters))
             <div class="col-sm">
                 <div class="form-group">

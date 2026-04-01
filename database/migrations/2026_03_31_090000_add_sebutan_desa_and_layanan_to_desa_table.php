@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('desa', function (Blueprint $table) {
-            $table->string('sebutan_desa', 50)->default('desa')->after('jenis');
-            $table->string('layanan')->nullable()->after('sebutan_desa');
+        Schema::table('desa', function (Blueprint $table) {            
+            $table->string('layanan')->default('umum')->nullable()->after('sebutan_desa');
         });
     }
 
@@ -27,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('desa', function (Blueprint $table) {
-            $table->dropColumn(['sebutan_desa', 'layanan']);
+            $table->dropColumn(['layanan']);
         });
     }
 };

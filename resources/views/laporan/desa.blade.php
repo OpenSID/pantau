@@ -72,6 +72,8 @@
                                         <th>Dokumen</th>
                                         <th>Keluarga</th>
                                     @endauth
+                                    <th>Layanan</th>
+                                    <th>Sebutan Desa</th>
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -122,6 +124,24 @@
                 break;
         }
 
+        switch (params.get('layanan')) {
+            case 'siappakai':
+                $('#layanan').val('siappakai').change();
+                filter_open();
+                break;
+            case 'premium':
+                $('#layanan').val('premium').change();
+                filter_open();
+                break;
+            case 'umum':
+                $('#layanan').val('umum').change();
+                filter_open();
+                break;
+
+            default:
+                break;
+        }        
+
         var desa = $('#table-desa').DataTable({
                 processing: true,
                 serverSide: true,
@@ -141,6 +161,8 @@
                         data.akses = $('#akses').val();
                         data.tte = $('#tte').val();
                         data.tipe_pengguna = $('#tipe_pengguna').val();
+                        data.layanan = $('#layanan').val();
+                        data.sebutan_desa = $('#sebutan_desa').val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
                     }
@@ -263,10 +285,20 @@
                     data: 'jml_keluarga',
                     searchable: false,
                 },
-            @endauth {
+            @endauth 
+            {
+                data: 'layanan',
+                searchable: true,
+            }, 
+            {
+                data: 'sebutan_desa',
+                searchable: true,
+            }, 
+            {
                 data: 'tgl_akses',
                 searchable: false,
-            }, ],
+            }, 
+        ],
             @auth
         order: [
                 [22 - {{ count($hiddenColumns) }}, 'desc']
@@ -291,6 +323,8 @@
             $('#akses').val('0').change();
             $('#tte').val('empty').change();
             $('#tipe_pengguna').val('').change();
+            $('#layanan').val('').change();
+            $('#sebutan_desa').val('').change();
 
             desa.ajax.reload();
         });
