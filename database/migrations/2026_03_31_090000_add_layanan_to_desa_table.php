@@ -14,6 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('desa', function (Blueprint $table) {            
+            if(!Schema::hasColumn('desa', 'sebutan_desa')){
+                $table->string('sebutan_desa', 80)->default('Desa');
+            }
             $table->string('layanan')->default('umum')->nullable()->after('sebutan_desa');
             // Tambahkan index untuk performa filter
             $table->index('layanan', 'layanan');

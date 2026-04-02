@@ -169,6 +169,10 @@
                         data.sebutan_desa = $sebutanDesa.val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
+                    },
+                    error: function(xhr, error, thrown) {
+                        console.error('Error loading desa data:', error, thrown);
+                        alert('Terjadi kesalahan saat memuat data desa. Silakan coba lagi.');
                     }
                 },
                 columns: [{

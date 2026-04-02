@@ -83,8 +83,8 @@ class LaporanController extends Controller
                 })->rawColumns(['action', 'kontak'])
                 ->make(true);
         }
-
-        return view('laporan.desa', compact('fillters', 'hiddenColumns'));
+        $sebutanDesaList = (new SebutanDesaService())->getSebutanDesaList();
+        return view('laporan.desa', compact('fillters', 'hiddenColumns', 'sebutanDesaList'));
     }
 
     public function deleteDesa(Desa $desa)
