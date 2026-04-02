@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::table('desa', function (Blueprint $table) {            
             $table->string('layanan')->default('umum')->nullable()->after('sebutan_desa');
+            // Tambahkan index untuk performa filter
+            $table->index('layanan', 'layanan');
+            $table->index('sebutan_desa', 'sebutan_desa');
         });
     }
 
@@ -25,7 +28,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('desa', function (Blueprint $table) {
+        Schema::table('desa', function (Blueprint $table) {            
+            $table->dropIndex('layanan');
+            $table->dropIndex('sebutan_desa');
             $table->dropColumn(['layanan']);
         });
     }

@@ -66,7 +66,10 @@ class LaporanController extends Controller
                 ->editColumn('kontak', function ($q) {
                     $identitas = $q->kontak;
                     if ($identitas) {
-                        return '<div><div>' . $identitas['nama'] . '</div><div>' . $identitas['hp'] . '</div></div>';
+                        // Escape output untuk mencegah XSS
+                        $nama = e($identitas['nama'] ?? '-');
+                        $hp = e($identitas['hp'] ?? '-');
+                        return '<div><div>' . $nama . '</div><div>' . $hp . '</div></div>';                        
                     }
 
                     return '';
@@ -76,7 +79,7 @@ class LaporanController extends Controller
 
                     return '<div class="btn btn-group">' . $delete . '</div>';
                 })->editColumn('layanan', function ($data) {
-                    return (Layanan::tryFrom($data->layanan))->label() ?? '-';
+                    return (Layanan::tryFrom($data->layanan))?->label() ?? '-';
                 })->rawColumns(['action', 'kontak'])
                 ->make(true);
         }
