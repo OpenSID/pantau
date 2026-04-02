@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use App\Models\WilayahBoundary;
 
 class Region extends Model
 {
@@ -140,6 +141,16 @@ class Region extends Model
     public function opendk()
     {
         return $this->hasMany(Opendk::class, 'kode_kecamatan', 'region_code')->whereRaw('LENGTH(tbl_regions.parent_code) = 5');
+    }
+
+    /**
+     * Get the boundary for this region.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function boundary()
+    {
+        return $this->hasOne(WilayahBoundary::class, 'kode', 'region_code');
     }
 
     public static function boot()

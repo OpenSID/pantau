@@ -57,6 +57,7 @@
                                     <th>Web</th>
                                     <th>Versi Offline</th>
                                     <th>Versi Online</th>
+                                    <th>Tema</th>
                                     <th>Modul TTE</th>
                                     <th>Surat ter-TTE</th>
                                     @auth
@@ -139,6 +140,7 @@
                         data.status = $('#status').val();
                         data.akses = $('#akses').val();
                         data.tte = $('#tte').val();
+                        data.tipe_pengguna = $('#tipe_pengguna').val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
                     }
@@ -203,6 +205,10 @@
                     data: 'versi_hosting'
                 },
                 {
+                    data: 'tema',
+                    searchable: false,
+                },
+                {
                     data: function(data) {
                         if (data.modul_tte == 1) {
                             return `<span class="badge badge-pill badge-info">Aktif</span>`
@@ -263,11 +269,11 @@
             }, ],
             @auth
         order: [
-                [21 - {{ count($hiddenColumns) }}, 'desc']
+                [22 - {{ count($hiddenColumns) }}, 'desc']
             ],
         @else
             order: [
-                [10, 'desc']
+                [11, 'desc']
             ],
         @endauth
         });
@@ -284,6 +290,7 @@
             $('#status').val('0').change();
             $('#akses').val('0').change();
             $('#tte').val('empty').change();
+            $('#tipe_pengguna').val('').change();
 
             desa.ajax.reload();
         });

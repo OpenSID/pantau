@@ -1,8 +1,9 @@
 name: Deploy Pantau Rilis with Ansible
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
 
 permissions:
   contents: read
@@ -13,8 +14,6 @@ concurrency:
 
 jobs:
   deploy:
-    # rilis dari branch 'master' & bukan prerelease
-    if: github.event.release.target_commitish == 'master' && github.event.release.prerelease == false
     name: Deploy Pantau Rilis to Production Server
     runs-on: ubuntu-latest
 
@@ -32,4 +31,4 @@ jobs:
           script: |
             set -euo pipefail
             cd ${{ secrets.CICD_SERVER_PATH }}
-            ansible-playbook -i inventories/production/inventory.yml playbooks/deploy-pantau-rilis.yml --extra-vars "release_tag=${{ github.event.release.tag_name }}"
+            ansible-playbook -i inventories/production/inventory.yml playbooks/deploy-pantau-rilis.yml

@@ -1,16 +1,17 @@
-Di rilis v2603.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2604.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#620](https://github.com/OpenSID/pantau/issues/620) Penambahan halaman PBB Pengguna Aktif.
+1. [#617](https://github.com/OpenSID/pantau/issues/617) Penambahan fitur batas wilayah desa pada peta.
+2. [#614](https://github.com/OpenSID/pantau/issues/614) Penyesuaian jumlah desa aktif.
+3. [#636](https://github.com/OpenSID/pantau/issues/636) Penambahan filter tipe pengguna & kolom tema di laporan desa.
 
 #### Perbaikan Bug
 
-1. [#615](https://github.com/OpenSID/pantau/issues/615) Perbaikan tanggal dinamis di config.
-2. [#618](https://github.com/OpenSID/pantau/issues/618) Perbaikan Optimasi Query Laporan Desa Aktif
-
+1. [#630](https://github.com/OpenSID/pantau/issues/630) Perbaikan sorting akses terakhir masih tidak berfungsi.
+2. [#614](https://github.com/OpenSID/pantau/issues/614) Perbaikan jumlah Pantau tidak valid.
 
 #### Penyesuaian Teknis
 
-1. [#619](https://github.com/OpenSID/pantau/issues/619) Perbaikan tampilan pengaturan dasar di pantau.
-2. [#605](https://github.com/OpenSID/pantau/issues/605) Update keamanan package/library npm dan composer.
+1. [#639](https://github.com/OpenSID/pantau/issues/639) Perbaiki dependency bot.
+
