@@ -22,6 +22,15 @@ class Notifikasi extends Model
      */
     public function scopeSemuaNotifDesa($query, $desaId)
     {
-        return DB::select("select n.* from notifikasi as n where n.aktif = 1 and ((select nd.id from notifikasi_desa as nd where nd.id_notifikasi = n.id and nd.id_desa = '{$desaId}' and nd.status <> 0) is not null or (select nd.id from notifikasi_desa as nd where nd.id_notifikasi = n.id and nd.id_desa = '{$desaId}') is null)");
+        return $query->where('aktif', 1)
+            ->where(function ($q) use ($desaId) {
+                $q->whereHas('notifikasiDesa', function ($q) use ($desaId) {
+                    $q->where('id_desa', $desaId)
+                        ->where('status', '!=', 0);
+                })
+                ->orWhereDoesntHave('notifikasiDesa', function ($q) use ($desaId) {
+                    $q->where('id_desa', $desaId);
+                });
+            });
     }
 }
