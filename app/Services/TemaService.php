@@ -5,12 +5,12 @@ namespace App\Services;
 use App\Models\Desa;
 use Illuminate\Support\Facades\Cache;
 
-class SebutanDesaService
+class TemaService
 {
     /**
      * Cache key for sebutan desa list.
      */
-    private const CACHE_KEY = 'sebutan_desa_list';
+    private const CACHE_KEY = 'tema_list';
 
     /**
      * Cache duration in hours.
@@ -22,12 +22,12 @@ class SebutanDesaService
      *
      * @return array<string>
      */
-    public function getSebutanDesaList(): array
+    public function getList(): array
     {
-        return Cache::remember('sebutan_desa_list', now()->addDay(), function () {
-            $data = Desa::select('sebutan_desa')->whereNotNull('sebutan_desa')
+        return Cache::remember(self::CACHE_KEY, now()->addDay(), function () {
+            $data = Desa::select('tema')->whereNotNull('tema')
                 ->distinct()
-                ->pluck('sebutan_desa', 'sebutan_desa')
+                ->pluck('tema', 'tema')
                 ->toArray();
 
             // Sanitize setiap value untuk mencegah XSS
