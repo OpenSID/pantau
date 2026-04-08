@@ -14,6 +14,16 @@ class Notifikasi extends Model
     protected $table = 'notifikasi';
 
     /**
+     * Relasi ke tabel notifikasi_desa (pivot).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notifikasiDesa()
+    {
+        return $this->hasMany(NotifikasiDesa::class, 'id_notifikasi');
+    }
+
+    /**
      * Scope semua notif dari desa.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
