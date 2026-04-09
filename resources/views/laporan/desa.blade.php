@@ -60,7 +60,7 @@
                                     <th>Tema</th>
                                     <th>Modul TTE</th>
                                     <th>Surat ter-TTE</th>
-                                    @auth
+                                    {{-- @auth
                                         <th>Penduduk</th>
                                         <th>Artikel</th>
                                         <th>Surat Keluar</th>
@@ -71,7 +71,7 @@
                                         <th>Persil</th>
                                         <th>Dokumen</th>
                                         <th>Keluarga</th>
-                                    @endauth
+                                    @endauth --}}
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -223,51 +223,53 @@
                     data: 'jml_surat_tte',
                     searchable: false,
                 },
-                @auth {
-                    data: 'jml_penduduk',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_artikel',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_surat_keluar',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_bantuan',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_mandiri',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_pengguna',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_unsur_peta',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_persil',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_dokumen',
-                    searchable: false,
-                },
-                {
-                    data: 'jml_keluarga',
-                    searchable: false,
-                },
-            @endauth {
+            //     @auth 
+            //     {
+            //         data: 'jml_penduduk',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_artikel',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_surat_keluar',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_bantuan',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_mandiri',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_pengguna',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_unsur_peta',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_persil',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_dokumen',
+            //         searchable: false,
+            //     },
+            //     {
+            //         data: 'jml_keluarga',
+            //         searchable: false,
+            //     },
+            // @endauth 
+            {
                 data: 'tgl_akses',
                 searchable: false,
             }, ],
-            @auth
+        @auth
         order: [
                 [22 - {{ count($hiddenColumns) }}, 'desc']
             ],
