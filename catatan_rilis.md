@@ -5,6 +5,7 @@ Di rilis v2604.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 1. [#617](https://github.com/OpenSID/pantau/issues/617) Penambahan fitur batas wilayah desa pada peta.
 2. [#614](https://github.com/OpenSID/pantau/issues/614) Penyesuaian jumlah desa aktif.
 3. [#636](https://github.com/OpenSID/pantau/issues/636) Penambahan filter tipe pengguna & kolom tema di laporan desa.
+4. [#535](https://github.com/OpenSID/pantau/issues/535) Penambahan label kolom pengguna Dasbor SiapPakai atau Lisensi Premium.
 
 #### Perbaikan Bug
 
