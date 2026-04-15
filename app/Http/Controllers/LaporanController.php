@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Layanan;
 use App\Exports\DesaExport;
 use App\Models\Desa;
 use App\Models\Scopes\RegionAccessScope;
+use App\Services\SebutanDesaService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -14,9 +16,13 @@ class LaporanController extends Controller
     /** @var Desa */
     protected $desa;
 
-    public function __construct(Desa $desa)
+    /** @var SebutanDesaService */
+    protected $sebutanDesaService;
+
+    public function __construct(Desa $desa, SebutanDesaService $sebutanDesaService)
     {
         $this->desa = $desa;
+        $this->sebutanDesaService = $sebutanDesaService;
     }
 
     public function desa(Request $request)
@@ -36,21 +42,23 @@ class LaporanController extends Controller
             'versi_hosting' => $request->versi_hosting,
             'tte' => $request->tte,
             'tipe_pengguna' => $request->tipe_pengguna,
+            'layanan' => $request->layanan,
+            'sebutan_desa' => $request->sebutan_desa,
         ];
         $hiddenColumns = [];
         $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
         if ($adminWilayah) {
             $hiddenColumns[] = 'aksi';
-            $hiddenColumns[] = 'kontak';            
+            $hiddenColumns[] = 'kontak';
         }
 
         if ($request->ajax() || $request->excel) {
             $query = DataTables::of($this->desa->fillter($fillters)->laporan());
             if ($request->excel) {
                 $query->filtering();
-                if(in_array('aksi', $hiddenColumns)){
+                if (in_array('aksi', $hiddenColumns)) {
                     unset($hiddenColumns['aksi']);
-                }                
+                }
                 return Excel::download(new DesaExport($query->results(), $hiddenColumns), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
@@ -58,21 +66,25 @@ class LaporanController extends Controller
                 ->editColumn('kontak', function ($q) {
                     $identitas = $q->kontak;
                     if ($identitas) {
-                        return '<div><div>'.$identitas['nama'].'</div><div>'.$identitas['hp'].'</div></div>';
+                        // Escape output untuk mencegah XSS
+                        $nama = e($identitas['nama'] ?? '-');
+                        $hp = e($identitas['hp'] ?? '-');
+                        return '<div><div>' . $nama . '</div><div>' . $hp . '</div></div>';                        
                     }
 
                     return '';
                 })
                 ->addColumn('action', function ($data) {
-                    $delete = '<button data-href="'.url('laporan/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">'.$delete.'</div>';
-                })
-                ->rawColumns(['action', 'kontak'])
+                    return '<div class="btn btn-group">' . $delete . '</div>';
+                })->editColumn('layanan', function ($data) {
+                    return (Layanan::tryFrom($data->layanan))?->label() ?? '-';
+                })->rawColumns(['action', 'kontak'])
                 ->make(true);
         }
-
-        return view('laporan.desa', compact('fillters', 'hiddenColumns'));
+        $sebutanDesaList = (new SebutanDesaService())->getSebutanDesaList();
+        return view('laporan.desa', compact('fillters', 'hiddenColumns', 'sebutanDesaList'));
     }
 
     public function deleteDesa(Desa $desa)

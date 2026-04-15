@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Enums\Layanan;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -18,7 +19,8 @@ class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function collection()
     {
-        return $this->data->map(function ($item, $index) {
+        $mapLayanan = Layanan::toArray();
+        return $this->data->map(function ($item, $index) use($mapLayanan) {
             return [
                 'no' => $index + 1,  // Menambahkan nomor urut berdasarkan index
                 'nama_desa' => $item->nama_desa,
@@ -42,6 +44,8 @@ class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'jml_persil' => $item->jml_persil,
                 'jml_dokumen' => $item->jml_dokumen,
                 'jml_keluarga' => $item->jml_keluarga,
+                'layanan' => $mapLayanan[$item->layanan] ?? $item->layanan,
+                'sebutan_desa' => $item->sebutan_desa,
                 'tgl_akses' => $item->tgl_akses,
             ];
         });
@@ -72,6 +76,8 @@ class DesaExport implements FromCollection, WithHeadings, ShouldAutoSize
             'Persil',
             'Dokumen',
             'Keluarga',
+            'Layanan',
+            'Sebutan Desa',
             'Akses Terakhir',
         ];
     }
