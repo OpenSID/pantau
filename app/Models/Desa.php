@@ -31,6 +31,8 @@ class Desa extends Model
         'kontak' => 'array',
         'anjungan' => 'bool',
         'tema' => 'string',
+        'sebutan_desa' => 'string',
+        'layanan' => 'string',
     ];
 
     /** {@inheritdoc} */
@@ -376,9 +378,9 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema'])
+            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema', 'layanan', 'sebutan_desa'])
             ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
-            ->when(auth()->check() == true, function ($query) {
+            ->when(auth()->check() === true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
             })
             ->when(session('provinsi'), function ($query, $provinsi) {
@@ -401,6 +403,8 @@ class Desa extends Model
             'versi_hosting' => null,
             'tte' => null,
             'tipe_pengguna' => null,
+            'layanan' => null,
+            'sebutan_desa' => null,
         ], $fillters);
 
         return $query->select(['*'])
@@ -464,6 +468,12 @@ class Desa extends Model
                     $sub->where($this->getTable().'.versi_lokal', 'NOT LIKE', '%-premium%')
                         ->orWhereNull($this->getTable().'.versi_lokal');
                 });
+            })
+            ->when($fillters['layanan'], function ($query, $layanan) {
+                $query->layanan($layanan);
+            })
+            ->when($fillters['sebutan_desa'], function ($query, $sebutanDesa) {
+                $query->sebutanDesa($sebutanDesa);
             });
     }
 
@@ -620,6 +630,38 @@ class Desa extends Model
     public function scopeHostingOffline($query)
     {
         return $query->whereNotNull($this->getTable().'.versi_lokal')->whereNull($this->getTable().'.versi_hosting');
+    }
+
+    /**
+     * Scope a query by layanan.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string|null  $layanan
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeLayanan($query, $layanan = null)
+    {
+        if ($layanan === null) {
+            return $query;
+        }
+
+        return $query->where($this->getTable() . '.layanan', $layanan);
+    }
+
+    /**
+     * Scope a query by sebutan desa.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string|null  $sebutanDesa
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSebutanDesa($query, $sebutanDesa = null)
+    {
+        if ($sebutanDesa === null) {
+            return $query;
+        }
+
+        return $query->where($this->getTable() . '.sebutan_desa', $sebutanDesa);
     }
 
     /**

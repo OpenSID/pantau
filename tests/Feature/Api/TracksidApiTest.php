@@ -50,7 +50,7 @@ abstract class TracksidApiTest extends TestCase
      * @return \Illuminate\Testing\TestResponse
      */
     protected function postJsonWithToken(string $uri, array $data = [], array $headers = [])
-    {
+    {        
         return $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->bearerToken,
         ])->postJson($uri, $data, $headers);
