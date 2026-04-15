@@ -381,7 +381,7 @@ class TrackControllerTest extends TracksidApiTest
     public function handles_theme_information()
     {
         // Get existing wilayah data for valid region codes
-        $wilayah = Wilayah::inRandomOrder()->first();
+        $wilayah = Wilayah::inRandomOrder()->whereNotNull('nama_desa')->first();
         $this->assertNotNull($wilayah, 'No wilayah data found in region table');
 
         $requestData = [

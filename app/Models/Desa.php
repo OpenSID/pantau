@@ -405,6 +405,7 @@ class Desa extends Model
             'tipe_pengguna' => null,
             'layanan' => null,
             'sebutan_desa' => null,
+            'tema' => null,
         ], $fillters);
 
         return $query->select(['*'])
@@ -474,6 +475,8 @@ class Desa extends Model
             })
             ->when($fillters['sebutan_desa'], function ($query, $sebutanDesa) {
                 $query->sebutanDesa($sebutanDesa);
+            })->when($fillters['tema'], function ($query, $tema) {
+                $query->where('tema',$tema);
             });
     }
 

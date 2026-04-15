@@ -159,6 +159,21 @@
             </div>
         @endif
 
+        @if (array_key_exists('tema', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Tema</label>
+                    <select class="select2 form-control-sm" id="tema" name="tema"
+                        data-placeholder="Semua Tema" style="width: 100%;">
+                        <option selected value="">Semua Tema</option>
+                        @foreach((isset($temaList) ? $temaList : []) as $tema)
+                            <option value="{{ $tema }}">{{ $tema }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
+
         @if (array_key_exists('akses_mobile', $fillters))
             <div class="col-sm">
                 <div class="form-group">
@@ -244,3 +259,17 @@
     </div>
     <hr class="mt-0">
 </div>
+
+@push('js')
+    <script>        
+    $(document).ready(function(){        
+        $('#status').select2();
+        $('#akses').select2();
+        $('#tte').select2();
+        $('#tipe_pengguna').select2();
+        $('#sebutan_desa').select2();
+        $('#layanan').select2();
+        $('#tema').select2();
+	});    
+    </script>
+@endpush()

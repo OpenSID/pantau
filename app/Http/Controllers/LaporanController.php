@@ -7,6 +7,7 @@ use App\Exports\DesaExport;
 use App\Models\Desa;
 use App\Models\Scopes\RegionAccessScope;
 use App\Services\SebutanDesaService;
+use App\Services\TemaService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -44,6 +45,7 @@ class LaporanController extends Controller
             'tipe_pengguna' => $request->tipe_pengguna,
             'layanan' => $request->layanan,
             'sebutan_desa' => $request->sebutan_desa,
+            'tema' => $request->tema
         ];
         $hiddenColumns = [];
         $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
@@ -84,7 +86,8 @@ class LaporanController extends Controller
                 ->make(true);
         }
         $sebutanDesaList = (new SebutanDesaService())->getSebutanDesaList();
-        return view('laporan.desa', compact('fillters', 'hiddenColumns', 'sebutanDesaList'));
+        $temaList = (new TemaService())->getList();        
+        return view('laporan.desa', compact('fillters', 'hiddenColumns', 'sebutanDesaList', 'temaList'));
     }
 
     public function deleteDesa(Desa $desa)

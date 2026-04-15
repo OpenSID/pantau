@@ -94,6 +94,7 @@
         const $akses = $('#akses');
         const $layanan = $('#layanan');
         const $sebutanDesa = $('#sebutan_desa');
+        const $tema = $('#tema');
 
         switch (params.get('status')) {
             case '1':
@@ -169,6 +170,7 @@
                         data.sebutan_desa = $sebutanDesa.val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
+                        data.tema = $tema.val();
                     },
                     error: function(xhr, error, thrown) {
                         console.error('Error loading desa data:', error, thrown);
