@@ -37,9 +37,10 @@ class ImportWilayahBoundaries extends Command
         $this->newLine();
 
         // Check if wilayah_boundaries table exists
-        if (!DB::getSchemaBuilder()->hasTable('wilayah_boundaries')) {
+        if (! DB::getSchemaBuilder()->hasTable('wilayah_boundaries')) {
             $this->error('❌ Table "wilayah_boundaries" does not exist.');
             $this->info('💡 Run migration first: php artisan migrate');
+
             return Command::FAILURE;
         }
 
@@ -51,6 +52,7 @@ class ImportWilayahBoundaries extends Command
                 $this->newLine();
             } else {
                 $this->info('⏹️  Import cancelled.');
+
                 return Command::SUCCESS;
             }
         }
@@ -61,16 +63,17 @@ class ImportWilayahBoundaries extends Command
                 '--class' => 'WilayahBoundarySeeder',
                 '--force' => true,
             ]);
-            
+
             $this->newLine();
             $this->info('✅ Import completed successfully!');
-            
+
             // Show statistics
             $this->showStatistics();
-            
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('❌ Import failed: ' . $e->getMessage());
+            $this->error('❌ Import failed: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }

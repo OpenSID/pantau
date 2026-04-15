@@ -125,8 +125,8 @@ if (! function_exists('is_trusted_github_api_url')) {
     {
         // Parse the URL to validate its components
         $parsed = parse_url($url);
-        
-        if (!$parsed || !isset($parsed['scheme'], $parsed['host'], $parsed['path'])) {
+
+        if (! $parsed || ! isset($parsed['scheme'], $parsed['host'], $parsed['path'])) {
             return false;
         }
 
@@ -155,7 +155,7 @@ if (! function_exists('is_trusted_github_api_url')) {
 if (! function_exists('lastrelease')) {
     /**
      * Get latest release from trusted GitHub API endpoints.
-     * 
+     *
      * Security: Only allows requests to trusted GitHub API endpoints to prevent SSRF attacks.
      *
      * @param  string $url
@@ -164,7 +164,7 @@ if (! function_exists('lastrelease')) {
     function lastrelease($url)
     {
         // Security: Validate that the URL is a trusted GitHub API endpoint
-        if (!is_trusted_github_api_url($url)) {
+        if (! is_trusted_github_api_url($url)) {
             return false;
         }
 

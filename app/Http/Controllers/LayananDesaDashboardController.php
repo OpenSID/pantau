@@ -18,14 +18,14 @@ class LayananDesaDashboardController extends Controller
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
 
-        $versiTerakhir = lastrelease_api_layanandesa();        
+        $versiTerakhir = lastrelease_api_layanandesa();
 
         return view('website.layanandesa.index', [
-            'fillters' => $fillters,                        
+            'fillters' => $fillters,
             'versi_terakhir' => $versiTerakhir,
             'info_rilis' => 'Rilis LayananDesa '.$versiTerakhir,
             'total_versi' => TrackMobile::distinct('versi')->count(),
-            'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),           
+            'pengguna_versi_terakhir' => TrackMobile::where('versi', $versiTerakhir)->count(),
         ]);
     }
 

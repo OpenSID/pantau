@@ -17,14 +17,14 @@ class KelolaDesaDashboardController extends Controller
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
         ];
-        $versiTerakhir = lastrelease_api_layanandesa();        
+        $versiTerakhir = lastrelease_api_layanandesa();
 
         return view('website.keloladesa.index', [
-            'fillters' => $fillters,                                    
+            'fillters' => $fillters,
             'versi_terakhir' => $versiTerakhir,
             'info_rilis' => 'Rilis KelolaDesa '.$versiTerakhir,
             'total_versi' => TrackKeloladesa::distinct('versi')->count(),
-            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),            
+            'pengguna_versi_terakhir' => TrackKeloladesa::where('versi', $versiTerakhir)->count(),
         ]);
     }
 
@@ -79,7 +79,7 @@ class KelolaDesaDashboardController extends Controller
     public function install_baru(Request $request)
     {
         if ($request->ajax()) {
-             $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
+            $period = $request->get('period') ?? Carbon::now()->subDays(7)->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
             $fillters = [
                 'kode_provinsi' => $request->kode_provinsi,
                 'kode_kabupaten' => $request->kode_kabupaten,
