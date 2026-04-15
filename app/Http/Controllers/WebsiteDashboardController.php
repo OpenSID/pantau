@@ -351,7 +351,7 @@ class WebsiteDashboardController extends Controller
     public function openkabData(Request $request)
     {
         return view('website.openkab_data');
-    }    
+    }
 
     public function opensidData(Request $request)
     {

@@ -94,8 +94,8 @@ class LaporanDesaAktifController extends Controller
             ->when($fillters['status'] == 3, function ($q) {
                 $q->where(function ($sub) {
                     $version = lastrelease_opensid();
-                    $sub->where('desa.versi_hosting', 'LIKE', $version . '-premium%')
-                        ->orWhere('desa.versi_lokal', 'LIKE', $version . '-premium%');
+                    $sub->where('desa.versi_hosting', 'LIKE', $version.'-premium%')
+                        ->orWhere('desa.versi_lokal', 'LIKE', $version.'-premium%');
                 });
             })
             ->when($fillters['akses'] == 1, function ($q) {

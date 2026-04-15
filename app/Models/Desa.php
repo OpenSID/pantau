@@ -75,11 +75,10 @@ class Desa extends Model
             $regionAccess = $user->userRegionAccess;
             if ($regionAccess->kode_kabupaten) {
                 $states = "and x.kode_kabupaten='{$regionAccess->kode_kabupaten}'";
-            } else if ($regionAccess->kode_provinsi) {
+            } elseif ($regionAccess->kode_provinsi) {
                 $states = "and x.kode_provinsi='{$regionAccess->kode_provinsi}'";
             }
         }
-
 
         if ($provinsi = session('provinsi')) {
             $states = "and x.kode_provinsi={$provinsi->kode_prov}";
@@ -110,8 +109,8 @@ class Desa extends Model
             ->when($request->period, function ($query) use ($request, $states, $filterWilayah) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
-                    $start = $dates[0] . ' 00:00:00';
-                    $end = $dates[1] . ' 23:59:59';
+                    $start = $dates[0].' 00:00:00';
+                    $end = $dates[1].' 23:59:59';
                     $query->selectRaw("
                     (
                         select count(id)
@@ -177,7 +176,6 @@ class Desa extends Model
     {
         return $query->whereRaw('1 = 1');
         //return $query->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1"); // 0 = i local;
-
     }
 
     /**
@@ -412,13 +410,13 @@ class Desa extends Model
 
         return $query->select(['*'])
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-                $query->where($this->getTable() . '.kode_provinsi', $kode_provinsi);
+                $query->where($this->getTable().'.kode_provinsi', $kode_provinsi);
             })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-                $query->where($this->getTable() . '.kode_kabupaten', $kode_kabupaten);
+                $query->where($this->getTable().'.kode_kabupaten', $kode_kabupaten);
             })
             ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-                $query->where($this->getTable() . '.kode_kecamatan', $kode_kecamatan);
+                $query->where($this->getTable().'.kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
                 $query->hostingOnline();
@@ -429,8 +427,8 @@ class Desa extends Model
             ->when($fillters['status'] == 3, function ($query) {
                 $query->where(function ($query_versi) {
                     $version = lastrelease_opensid();
-                    $query_versi->where($this->getTable() . '.versi_hosting', 'LIKE', $version . '-premium%')
-                        ->orWhere($this->getTable() . '.versi_lokal', 'LIKE', $version . '-premium%');
+                    $query_versi->where($this->getTable().'.versi_hosting', 'LIKE', $version.'-premium%')
+                        ->orWhere($this->getTable().'.versi_lokal', 'LIKE', $version.'-premium%');
                 });
             })
             ->when($fillters['akses'] == 1, function ($query) {
@@ -567,7 +565,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -581,7 +579,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -629,12 +627,12 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_hosting')->whereNull($this->getTable() . '.versi_lokal');
+        return $query->whereNotNull($this->getTable().'.versi_hosting')->whereNull($this->getTable().'.versi_lokal');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
+        return $query->whereNotNull($this->getTable().'.versi_lokal')->whereNull($this->getTable().'.versi_hosting');
     }
 
     /**
@@ -713,9 +711,9 @@ class Desa extends Model
         })
             ->selectRaw('
         CASE 
-            ' . collect(self::TEMA_PRO)->map(function ($tema) {
+            '.collect(self::TEMA_PRO)->map(function ($tema) {
                 return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
-            })->implode(' ') . '
+            })->implode(' ').'
             ELSE tema
         END AS tema_nama,
         COUNT(*) as total

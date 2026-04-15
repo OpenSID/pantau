@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\WilayahBoundaryGeojsonRequest;
 use App\Http\Requests\Api\WilayahBoundaryIndexRequest;
 use App\Http\Requests\Api\WilayahBoundarySearchRequest;
-use App\Http\Requests\Api\WilayahBoundaryGeojsonRequest;
 use App\Http\Resources\WilayahBoundaryResource;
 use App\Models\WilayahBoundary;
 use Illuminate\Http\JsonResponse;
@@ -69,7 +69,7 @@ class WilayahBoundaryController extends Controller
     {
         $boundary = WilayahBoundary::with('region')->find($kode);
 
-        if (!$boundary) {
+        if (! $boundary) {
             return response()->json([
                 'success' => false,
                 'message' => 'Boundary not found',
@@ -105,7 +105,7 @@ class WilayahBoundaryController extends Controller
                 return $boundary->toGeoJSONFeature();
             })->filter(function ($feature) {
                 // Filter out boundaries without path data or with empty coordinates
-                return !empty($feature['geometry']['coordinates']);
+                return ! empty($feature['geometry']['coordinates']);
             })->values();
 
             return [

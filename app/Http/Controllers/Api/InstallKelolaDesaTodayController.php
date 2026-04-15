@@ -13,13 +13,14 @@ class InstallKelolaDesaTodayController extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    {                
-        $installHariIni = TrackKelolaDesaView::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get()->map(function($item) {
+    {
+        $installHariIni = TrackKelolaDesaView::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get()->map(function ($item) {
             $item->created_at_format_human = formatDateTimeForHuman($item->created_at);
-            return $item;                
+
+            return $item;
         });
 
-        return [     
+        return [
             'installHariIni' => $installHariIni,
         ];
     }

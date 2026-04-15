@@ -110,7 +110,7 @@ class TrackKeloladesa extends Model
             });
         }
 
-        if(isset($request['akses'])) {
+        if (isset($request['akses'])) {
             $query->when(! empty($request['akses']), function ($query) use ($request) {
                 $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';
@@ -141,24 +141,25 @@ class TrackKeloladesa extends Model
     public function scopeActive($query)
     {
         $request = request();
+
         return $query->when($request->period, function ($query) use ($request) {
-                $dates = explode(' - ', $request->period);
-                if (count($dates) === 2) {
-                    $start = $dates[0];
-                    $end = $dates[1];
-                    $query->whereRaw('tgl_akses between ? and ?', [$start, $end]);
-                }
-            }, function ($query) {
-                $query->whereRaw('tgl_akses >= now() - interval '.self::ACTIVE_DAYS.' day');
-            });
+            $dates = explode(' - ', $request->period);
+            if (count($dates) === 2) {
+                $start = $dates[0];
+                $end = $dates[1];
+                $query->whereRaw('tgl_akses between ? and ?', [$start, $end]);
+            }
+        }, function ($query) {
+            $query->whereRaw('tgl_akses >= now() - interval '.self::ACTIVE_DAYS.' day');
+        });
     }
 
     public function scopeNonActive($query)
     {
         return $query->whereRaw('tgl_akses <= now() - interval '.self::ACTIVE_DAYS.' day');
     }
-    
-     public function scopeAktif($query, $batasTgl, $tglAwal = null)
+
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
         if ($tglAwal) {
             $start = Carbon::parse($tglAwal)->startOfDay();
