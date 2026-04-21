@@ -155,7 +155,10 @@
 
                 ajax: {
                     url: `{{ url('laporan/desa') }}`,
-                    method: 'get',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                     data: function(data) {
                         data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get(
                             'kode_provinsi');
