@@ -410,13 +410,13 @@ class Desa extends Model
 
         return $query->select(['*'])
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-                $query->where($this->getTable().'.kode_provinsi', $kode_provinsi);
+                $query->where($this->getTable() . '.kode_provinsi', $kode_provinsi);
             })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-                $query->where($this->getTable().'.kode_kabupaten', $kode_kabupaten);
+                $query->where($this->getTable() . '.kode_kabupaten', $kode_kabupaten);
             })
             ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-                $query->where($this->getTable().'.kode_kecamatan', $kode_kecamatan);
+                $query->where($this->getTable() . '.kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
                 $query->hostingOnline();
@@ -565,7 +565,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -579,7 +579,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -627,12 +627,12 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull($this->getTable().'.versi_hosting')->whereNull($this->getTable().'.versi_lokal');
+        return $query->whereNotNull($this->getTable() . '.versi_hosting')->whereNull($this->getTable() . '.versi_lokal');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull($this->getTable().'.versi_lokal')->whereNull($this->getTable().'.versi_hosting');
+        return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
     }
 
     /**
@@ -711,9 +711,9 @@ class Desa extends Model
         })
             ->selectRaw('
         CASE 
-            '.collect(self::TEMA_PRO)->map(function ($tema) {
+            ' . collect(self::TEMA_PRO)->map(function ($tema) {
                 return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
-            })->implode(' ').'
+            })->implode(' ') . '
             ELSE tema
         END AS tema_nama,
         COUNT(*) as total

@@ -170,7 +170,6 @@ class WilayahBoundary extends Model
     public function toGeoJSONFeature(): array
     {
         $coordinates = $this->convertToGeoJSONCoordinates($this->path);
-
         // Determine if it's a MultiPolygon or Polygon based on structure
         $geometryType = $this->determineGeometryType($coordinates);
 
@@ -254,7 +253,6 @@ class WilayahBoundary extends Model
             // Check if it's an array of polygons (MultiPolygon) or just rings (Polygon)
             // MultiPolygon: [[[lng,lat],...], [[lng,lat],...]]  (multiple polygons)
             // Polygon: [[lng,lat], [lng,lat], ...]  (single polygon with rings)
-
             // If coordinates[0][0] is an array of points, it's MultiPolygon
             if (isset($coordinates[0][0][0]) && is_array($coordinates[0][0][0])) {
                 return 'MultiPolygon';
