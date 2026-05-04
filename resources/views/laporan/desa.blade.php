@@ -72,6 +72,8 @@
                                         <th>Dokumen</th>
                                         <th>Keluarga</th>
                                     @endauth
+                                    <th>Layanan</th>
+                                    <th>Sebutan Desa</th>
                                     <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
@@ -88,19 +90,24 @@
 @section('js')
     <script>
         const params = new URLSearchParams(window.location.search);
+        const $status = $('#status');
+        const $akses = $('#akses');
+        const $layanan = $('#layanan');
+        const $sebutanDesa = $('#sebutan_desa');
+        const $tema = $('#tema');
 
         switch (params.get('status')) {
             case '1':
-                $('#status').val('1').change();
+                $status.val('1').change();
                 filter_open();
                 break;
             case '2':
-                $('#status').val('2').change()
+                $status.val('2').change()
                 filter_open();
                 break;
 
             case '3':
-                $('#status').val('3').change()
+                $status.val('3').change()
                 filter_open();
                 break;
 
@@ -110,17 +117,35 @@
 
         switch (params.get('akses')) {
             case '4':
-                $('#akses').val('4').change();
+                $akses.val('4').change();
                 filter_open();
                 break;
             case '5':
-                $('#akses').val('5').change();
+                $akses.val('5').change();
                 filter_open();
                 break;
 
             default:
                 break;
         }
+
+        switch (params.get('layanan')) {
+            case 'siappakai':
+                $layanan.val('siappakai').change();
+                filter_open();
+                break;
+            case 'premium':
+                $layanan.val('premium').change();
+                filter_open();
+                break;
+            case 'umum':
+                $layanan.val('umum').change();
+                filter_open();
+                break;
+
+            default:
+                break;
+        }        
 
         var desa = $('#table-desa').DataTable({
                 processing: true,
@@ -130,19 +155,29 @@
 
                 ajax: {
                     url: `{{ url('laporan/desa') }}`,
-                    method: 'get',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
                     data: function(data) {
                         data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get(
                             'kode_provinsi');
                         data.kode_kabupaten = $('#kabupaten').val() ? $('#kabupaten').val() : params.get(
                             'kode_kabupaten');
                         data.kode_kecamatan = $('#kecamatan').val();
-                        data.status = $('#status').val();
-                        data.akses = $('#akses').val();
+                        data.status = $status.val();
+                        data.akses = $akses.val();
                         data.tte = $('#tte').val();
                         data.tipe_pengguna = $('#tipe_pengguna').val();
+                        data.layanan = $layanan.val();
+                        data.sebutan_desa = $sebutanDesa.val();
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
+                        data.tema = $tema.val();
+                    },
+                    error: function(xhr, error, thrown) {
+                        console.error('Error loading desa data:', error, thrown);
+                        alert('Terjadi kesalahan saat memuat data desa. Silakan coba lagi.');
                     }
                 },
                 columns: [{
@@ -263,10 +298,20 @@
                     data: 'jml_keluarga',
                     searchable: false,
                 },
-            @endauth {
+            @endauth 
+            {
+                data: 'layanan',
+                searchable: true,
+            }, 
+            {
+                data: 'sebutan_desa',
+                searchable: true,
+            }, 
+            {
                 data: 'tgl_akses',
                 searchable: false,
-            }, ],
+            }, 
+        ],
             @auth
         order: [
                 [22 - {{ count($hiddenColumns) }}, 'desc']
@@ -287,10 +332,12 @@
             $('#provinsi').val('').change();
             $('#kabupaten').val('').change();
             $('#kecamatan').val('').change();
-            $('#status').val('0').change();
-            $('#akses').val('0').change();
+            $status.val('0').change();
+            $akses.val('0').change();
             $('#tte').val('empty').change();
             $('#tipe_pengguna').val('').change();
+            $layanan.val('').change();
+            $sebutanDesa.val('').change();
 
             desa.ajax.reload();
         });

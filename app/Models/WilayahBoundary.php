@@ -170,7 +170,6 @@ class WilayahBoundary extends Model
     public function toGeoJSONFeature(): array
     {
         $coordinates = $this->convertToGeoJSONCoordinates($this->path);
-        
         // Determine if it's a MultiPolygon or Polygon based on structure
         $geometryType = $this->determineGeometryType($coordinates);
 
@@ -193,7 +192,7 @@ class WilayahBoundary extends Model
 
     /**
      * Convert path coordinates to GeoJSON format.
-     * 
+     *
      * The path is stored as [[[lat, lng], [lat, lng], ...], ...]
      * GeoJSON expects [[[lng, lat], [lng, lat], ...], ...]
      *
@@ -202,7 +201,7 @@ class WilayahBoundary extends Model
      */
     private function convertToGeoJSONCoordinates(?array $path): ?array
     {
-        if (empty($path) || !is_array($path)) {
+        if (empty($path) || ! is_array($path)) {
             return null;
         }
 
@@ -211,19 +210,22 @@ class WilayahBoundary extends Model
             // and flatten one level of nesting
             return array_map(function ($polygon) {
                 // Each polygon is an array of rings
-                if (!is_array($polygon)) {
+                if (! is_array($polygon)) {
                     return [];
                 }
+
                 return array_map(function ($ring) {
                     // Each ring is an array of coordinates
-                    if (!is_array($ring)) {
+                    if (! is_array($ring)) {
                         return [];
                     }
+
                     return array_map(function ($coordinate) {
                         // Swap lat/lng to lng/lat for GeoJSON
-                        if (!is_array($coordinate) || count($coordinate) < 2) {
+                        if (! is_array($coordinate) || count($coordinate) < 2) {
                             return [0, 0];
                         }
+
                         return [$coordinate[1], $coordinate[0]];
                     }, $ring);
                 }, $polygon);
@@ -251,7 +253,6 @@ class WilayahBoundary extends Model
             // Check if it's an array of polygons (MultiPolygon) or just rings (Polygon)
             // MultiPolygon: [[[lng,lat],...], [[lng,lat],...]]  (multiple polygons)
             // Polygon: [[lng,lat], [lng,lat], ...]  (single polygon with rings)
-            
             // If coordinates[0][0] is an array of points, it's MultiPolygon
             if (isset($coordinates[0][0][0]) && is_array($coordinates[0][0][0])) {
                 return 'MultiPolygon';

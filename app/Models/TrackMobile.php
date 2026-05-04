@@ -83,8 +83,8 @@ class TrackMobile extends BaseModel
         }
 
         if (isset($request['akses'])) {
-            $query->when(!empty($request['akses']), function ($query) use ($request) {
-                $interval = 'interval ' . self::ACTIVE_DAYS . ' day';
+            $query->when(! empty($request['akses']), function ($query) use ($request) {
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
                 $sign = '>=';
                 switch ($request['akses']) {
                     case '4':

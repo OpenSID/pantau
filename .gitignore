@@ -29,3 +29,6 @@ yarn-error.log
 
 # Ignore AI files
 QWEN.md
+.kilocode
+.qwen
+/template_ai/

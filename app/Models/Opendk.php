@@ -112,16 +112,17 @@ class Opendk extends Model
     public function scopeActive($query)
     {
         $request = request();
+
         return $query->when($request->period, function ($query) use ($request) {
-                $dates = explode(' - ', $request->period);
-                if (count($dates) === 2) {
-                    $start = $dates[0] . ' 00:00:00';
-                    $end = $dates[1] . ' 23:59:59';
-                    $query->whereRaw('updated_at between ? and ?', [$start, $end]);
-                }
-            }, function ($query) {
-                $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
-            });
+            $dates = explode(' - ', $request->period);
+            if (count($dates) === 2) {
+                $start = $dates[0].' 00:00:00';
+                $end = $dates[1].' 23:59:59';
+                $query->whereRaw('updated_at between ? and ?', [$start, $end]);
+            }
+        }, function ($query) {
+            $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
+        });
     }
 
     public function scopeNonActive($query)
@@ -193,27 +194,27 @@ class Opendk extends Model
                     }
                 }
             })->when(! empty($fillters['akses']), function ($query) use ($fillters) {
-            $interval = 'interval '.self::ACTIVE_DAYS.' day';
-            $sign = '>=';
-            switch($fillters['akses']) {
-                case '4':
-                    $interval = 'interval '.self::ACTIVE_DAYS.' day';
-                    break;
-                case '2':
-                    $interval = 'interval 2 month';
-                    break;
-                case '1':
-                    $interval = 'interval 2 month';
-                    $sign = '<';
-                    break;
-                case '3':
-                    $interval = 'interval 4 month';
-                    $sign = '<';
-                    break;
-            }
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                $sign = '>=';
+                switch($fillters['akses']) {
+                    case '4':
+                        $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                        break;
+                    case '2':
+                        $interval = 'interval 2 month';
+                        break;
+                    case '1':
+                        $interval = 'interval 2 month';
+                        $sign = '<';
+                        break;
+                    case '3':
+                        $interval = 'interval 4 month';
+                        $sign = '<';
+                        break;
+                }
 
-            return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
-        })
+                return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
+            })
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
                 $query->where('kode_provinsi', $kode_provinsi);
             })

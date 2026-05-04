@@ -13,11 +13,10 @@ class AktifOpendkController extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    {                 
+    {
         return [
             'aktif' => Opendk::active()->filterWilayah($request)->count() ?? 0,
             'desa_total' => Desa::desaValid()->filterWilayah($request)->count() ?? 0,
         ];
-        
     }
 }

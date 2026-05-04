@@ -143,7 +143,7 @@ Route::prefix('sesi')
 // Laporan
 Route::prefix('laporan')
     ->group(function () {
-        Route::get('desa', [LaporanController::class, 'desa']);
+        Route::match(['get', 'post'], 'desa', [LaporanController::class, 'desa']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('kecamatan', [LaporanKecamatanController::class, 'index'])->name('laporan.kecamatan');
