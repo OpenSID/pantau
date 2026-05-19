@@ -633,39 +633,7 @@ class Desa extends Model
     public function scopeHostingOffline($query)
     {
         return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
-    }
-
-    /**
-     * Scope a query by layanan.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string|null  $layanan
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeLayanan($query, $layanan = null)
-    {
-        if ($layanan === null) {
-            return $query;
-        }
-
-        return $query->where($this->getTable() . '.layanan', $layanan);
-    }
-
-    /**
-     * Scope a query by sebutan desa.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string|null  $sebutanDesa
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSebutanDesa($query, $sebutanDesa = null)
-    {
-        if ($sebutanDesa === null) {
-            return $query;
-        }
-
-        return $query->where($this->getTable() . '.sebutan_desa', $sebutanDesa);
-    }
+    }    
 
     /**
      * Scope a query by layanan.
