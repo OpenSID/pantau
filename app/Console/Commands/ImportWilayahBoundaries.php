@@ -52,7 +52,6 @@ class ImportWilayahBoundaries extends Command
                 $this->newLine();
             } else {
                 $this->info('⏹️  Import cancelled.');
-
                 return Command::SUCCESS;
             }
         }

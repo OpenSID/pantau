@@ -82,7 +82,7 @@ class TrackControllerTest extends TracksidApiTest
     public function can_update_existing_desa_data()
     {
         // Get existing wilayah data from region table
-        $wilayah = Wilayah::inRandomOrder()->first();
+        $wilayah = Wilayah::inRandomOrder()->whereNotNull('nama_desa')->where('nama_desa','!=','')->first();
         $this->assertNotNull($wilayah, 'No wilayah data found in region table');
 
         $requestData = [
