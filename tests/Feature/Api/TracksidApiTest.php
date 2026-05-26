@@ -23,6 +23,10 @@ abstract class TracksidApiTest extends TestCase
     {
         parent::setUp();
         
+        if (empty(config('tracksid.sandi.dev_token'))) {
+            config(['tracksid.sandi.dev_token' => 'test_token']);
+        }
+
         // Use the dev token from config for testing
         $this->bearerToken = config('tracksid.sandi.dev_token');
     }

@@ -33,8 +33,12 @@ class TracksidAuthentication
      */
     protected function verifikasiToken(Request $request)
     {
+        $devToken = config('tracksid.sandi.dev_token');
+        if (empty($devToken)) {
+            return false;
+        }
         $token = $request->bearerToken() ?? $request->input('token') ?? '';
-        return hash_equals(config('tracksid.sandi.dev_token'), $token);
+        return hash_equals($devToken, $token);
     }
 
     /**
@@ -44,6 +48,11 @@ class TracksidAuthentication
      */
     protected function verifikasiHashLicense(Request $request)
     {
-        return hash_equals(hash_file('sha256', base_path('LICENSE_OPENSID')), $request->bearerToken() ?? $request->input('token') ?? '');
+        $licensePath = base_path('LICENSE_OPENSID');
+        if (!file_exists($licensePath)) {
+            return false;
+        }
+        $token = $request->bearerToken() ?? $request->input('token') ?? '';
+        return hash_equals(hash_file('sha256', $licensePath), $token);
     }
 }
