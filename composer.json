@@ -24,7 +24,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^2.72",
-        "phpoffice/phpspreadsheet": "^1.29",
+        "phpoffice/phpspreadsheet": "^1.30.4",
         "spatie/laravel-backup": "^8.6",
         "spatie/laravel-permission": "^6.21",
         "yajra/laravel-datatables-oracle": "^10.0"
