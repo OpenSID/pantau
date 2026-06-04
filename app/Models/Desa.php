@@ -633,7 +633,7 @@ class Desa extends Model
     public function scopeHostingOffline($query)
     {
         return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
-    }
+    }    
 
     /**
      * Scope a query by layanan.
