@@ -22,7 +22,18 @@ class DesaController extends Controller
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Region::desa());
+            $query = DataTables::of(
+                Region::desa()
+                    ->when($request->kode_provinsi, function ($q) use ($request) {
+                        $q->where('prov.region_code', $request->kode_provinsi);
+                    })
+                    ->when($request->kode_kabupaten, function ($q) use ($request) {
+                        $q->where('kab.region_code', $request->kode_kabupaten);
+                    })
+                    ->when($request->kode_kecamatan, function ($q) use ($request) {
+                        $q->where('kec.region_code', $request->kode_kecamatan);
+                    })
+            );
             if ($request->excel) {
                 $query->filtering();
 
@@ -47,7 +58,9 @@ class DesaController extends Controller
                 ->make(true);
         }
 
-        return view('admin.wilayah.desa.index');
+        $fillters = ['kode_provinsi' => null, 'kode_kabupaten' => null, 'kode_kecamatan' => null];
+
+        return view('admin.wilayah.desa.index', compact('fillters'));
     }
 
     public function create()

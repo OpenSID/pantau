@@ -74,14 +74,17 @@ class Desa extends Model
         if ($user && $user->hasRole('Admin Wilayah')) {
             $regionAccess = $user->userRegionAccess;
             if ($regionAccess->kode_kabupaten) {
-                $states = "and x.kode_kabupaten='{$regionAccess->kode_kabupaten}'";
+                $safe_kode = DB::connection()->getPdo()->quote($regionAccess->kode_kabupaten);
+                $states = "and x.kode_kabupaten={$safe_kode}";
             } elseif ($regionAccess->kode_provinsi) {
-                $states = "and x.kode_provinsi='{$regionAccess->kode_provinsi}'";
+                $safe_kode = DB::connection()->getPdo()->quote($regionAccess->kode_provinsi);
+                $states = "and x.kode_provinsi={$safe_kode}";
             }
         }
 
         if ($provinsi = session('provinsi')) {
-            $states = "and x.kode_provinsi={$provinsi->kode_prov}";
+            $safe_kode = DB::connection()->getPdo()->quote($provinsi->kode_prov);
+            $states = "and x.kode_provinsi={$safe_kode}";
         }
 
         $filterWilayah = Desa::desaValid();
@@ -208,9 +211,11 @@ class Desa extends Model
         if ($user && $user->hasRole('Admin Wilayah')) {
             $regionAccess = $user->userRegionAccess;
             if ($regionAccess->kode_kabupaten) {
-                $regionFilter = "and t.region_code = '{$regionAccess->kode_kabupaten}'";
+                $safe_kode = DB::connection()->getPdo()->quote($regionAccess->kode_kabupaten);
+                $regionFilter = "and t.region_code = {$safe_kode}";
             } elseif ($regionAccess->kode_provinsi) {
-                $regionFilter = "and left(t.region_code, 2) = '{$regionAccess->kode_provinsi}'";
+                $safe_kode = DB::connection()->getPdo()->quote($regionAccess->kode_provinsi);
+                $regionFilter = "and left(t.region_code, 2) = {$safe_kode}";
             }
         }
 
@@ -633,7 +638,7 @@ class Desa extends Model
     public function scopeHostingOffline($query)
     {
         return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
-    }
+    }    
 
     /**
      * Scope a query by layanan.
