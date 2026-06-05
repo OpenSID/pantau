@@ -261,8 +261,8 @@
 
             function list_kecamatan() {
                 var getkab = $('#list_kabupaten').val();
-                var getkodekab = '{!!$desa->kode_kabupaten!!}';
-                var getnamakab = '{!!$desa->nama_kabupaten!!}';
+                var getkodekab = @json($desa->kode_kabupaten);
+                var getnamakab = @json($desa->nama_kabupaten);
                 if(getkab == getnamakab){
                     var getkab = getkodekab;
                 }

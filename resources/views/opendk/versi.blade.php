@@ -50,7 +50,7 @@
 
 @section('js')
 <script>
-    const listVersi = {!! json_encode($listVersi) !!}
+    const listVersi = @json($listVersi)
 
     for(var i in listVersi) {
         $('#versi_opendk').append('<option>'+listVersi[i]+'</option>')
