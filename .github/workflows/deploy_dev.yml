@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - rilis-dev
+  workflow_dispatch:
+    inputs:
+      info:
+        description: '⚠️ Branch rilis-dev only. Tidak perlu diisi, cukup pilih branch lalu klik Run workflow.'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -18,6 +24,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Ensure workflow_dispatch uses rilis-dev
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "rilis-dev" ]; then
+            echo "::error::workflow_dispatch hanya boleh dijalankan dari branch rilis-dev. Saat ini: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
       - name: Checkout Ansible Code
         uses: actions/checkout@v4
 
