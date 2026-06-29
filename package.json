@@ -1,6 +1,9 @@
 {
     "private": true,
     "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch",
         "test:e2e": "playwright test",
         "test:e2e:headed": "playwright test --headed",
         "test:e2e:ui": "playwright test --ui",
@@ -9,12 +12,9 @@
     },
     "devDependencies": {
         "@playwright/test": "^1.54.1",
-        "axios": "^0.32.0",
-        "laravel-mix": "^6.0.6",
+        "axios": "^1.16.1",
+        "laravel-vite-plugin": "^1.2.0",
         "lodash": "^4.17.19",
-        "postcss": "^8.5.10"
-    },
-    "overrides": {
-        "webpack-dev-server": ">=5.2.1"
+        "vite": "^6.3.5"
     }
 }

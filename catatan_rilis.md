@@ -1,4 +1,4 @@
-Di rilis v2606.0.1 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 2. [#680](https://github.com/OpenSID/pantau/issues/680) Penambahan filter wilayah di menu data wilayah
