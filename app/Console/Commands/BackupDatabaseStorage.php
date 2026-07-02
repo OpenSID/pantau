@@ -80,7 +80,7 @@ class BackupDatabaseStorage extends Command
                 'log' => 'pantau:backup-database-storage :'.$ex->getMessage(),
             ]);
 
-            return exec('rm '.$this->folder_database.'/'.$this->database_name);
+            return exec('rm ' . escapeshellarg($this->folder_database . '/' . $this->database_name));
         }
     }
 
@@ -94,7 +94,7 @@ class BackupDatabaseStorage extends Command
         }
 
         if (file_exists($folderdesa_from)) {
-            exec('cp -R '.$folderdesa_from.' '.$folderdesa_to);
+            exec('cp -R ' . escapeshellarg($folderdesa_from) . ' ' . escapeshellarg($folderdesa_to));
         }
     }
 }

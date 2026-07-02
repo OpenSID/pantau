@@ -46,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        return 'assets/img/profile.webp';
     }
 
     /**

@@ -14,15 +14,21 @@ class KecamatanController extends Controller
 {
     public function index(Request $request)
     {
-        $r = Region::with(['child'])->find(67);
-
         if ($request->excel) {
             $paramDatatable = json_decode($request->get('params'), 1);
             $request->merge($paramDatatable);
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Region::kecamatan());
+            $query = DataTables::of(
+                Region::kecamatan()
+                    ->when($request->kode_provinsi, function ($q) use ($request) {
+                        $q->where('prov.region_code', $request->kode_provinsi);
+                    })
+                    ->when($request->kode_kabupaten, function ($q) use ($request) {
+                        $q->where('kab.region_code', $request->kode_kabupaten);
+                    })
+            );
             if ($request->excel) {
                 $query->filtering();
 
@@ -40,7 +46,9 @@ class KecamatanController extends Controller
                 ->make(true);
         }
 
-        return view('admin.wilayah.kecamatan.index');
+        $fillters = ['kode_provinsi' => null, 'kode_kabupaten' => null];
+
+        return view('admin.wilayah.kecamatan.index', compact('fillters'));
     }
 
     public function create()
