@@ -29,8 +29,7 @@ class TrackControllerTest extends TracksidApiTest
         return str_replace('.', '', $kode);
     }
 
-    /** @test */
-    public function can_track_desa_data_successfully()
+    public function test_can_track_desa_data_successfully()
     {
         // Get existing wilayah data from region table
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -78,8 +77,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function can_update_existing_desa_data()
+    public function test_can_update_existing_desa_data()
     {
         // Get existing wilayah data from region table
         $wilayah = Wilayah::inRandomOrder()->whereNotNull('nama_desa')->where('nama_desa','!=','')->first();
@@ -117,8 +115,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function creates_new_access_record_if_not_exists()
+    public function test_creates_new_access_record_if_not_exists()
     {
         // Get existing wilayah data from region table
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -156,8 +153,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function sends_telegram_notification_for_new_pemda_hosting_desa()
+    public function test_sends_telegram_notification_for_new_pemda_hosting_desa()
     {
         // Set up cache for telegram bot
         Cache::put('token_bot_telegram', 'test_bot_token', 3600);
@@ -196,8 +192,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function does_not_send_telegram_notification_if_no_cache_values()
+    public function test_does_not_send_telegram_notification_if_no_cache_values()
     {
         // Clear cache to simulate no telegram settings
         Cache::forget('token_bot_telegram');
@@ -233,8 +228,7 @@ class TrackControllerTest extends TracksidApiTest
         Notification::assertNothingSent();
     }
 
-    /** @test */
-    public function handles_validation_errors()
+    public function test_handles_validation_errors()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -262,8 +256,7 @@ class TrackControllerTest extends TracksidApiTest
         $response->assertJsonStructure(['message']);
     }
 
-    /** @test */
-    public function handles_database_transaction_rollback_on_error()
+    public function test_handles_database_transaction_rollback_on_error()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -299,8 +292,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function handles_local_vs_hosting_detection()
+    public function test_handles_local_vs_hosting_detection()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -336,8 +328,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function handles_contact_information()
+    public function test_handles_contact_information()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->first();
@@ -377,8 +368,7 @@ class TrackControllerTest extends TracksidApiTest
         ], $desa->kontak);
     }
 
-    /** @test */
-    public function handles_theme_information()
+    public function test_handles_theme_information()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->whereNotNull('nama_desa')->first();
@@ -413,8 +403,7 @@ class TrackControllerTest extends TracksidApiTest
         ]);
     }
 
-    /** @test */
-    public function handles_layanan_and_sebutan_desa()
+    public function test_handles_layanan_and_sebutan_desa()
     {
         // Get existing wilayah data for valid region codes
         $wilayah = Wilayah::inRandomOrder()->first();
