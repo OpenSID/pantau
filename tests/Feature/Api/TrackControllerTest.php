@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
-class TrackControllerTest extends TracksidApiTest
+class TrackControllerTest extends TracksidApiTestCase
 {
     use DatabaseTransactions;
 
