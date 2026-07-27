@@ -318,7 +318,7 @@
                     params.nama_kecamatan = $('#kecamatan option:selected').text();
                     const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params).toString();
                     
-                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
+                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.desa_online + `</a>`)                    
                     $('#total_desa').text(data.desa_total)
                     $('#filter-label').text(`${params.period}`)
                 }, 'json')
