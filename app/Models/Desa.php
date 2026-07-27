@@ -101,8 +101,7 @@ class Desa extends Model
 
         return $query
             ->selectRaw('count(id) as desa_total')
-            ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states} {$filterWilayah})  desa_offline")
-            ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) desa_online")
+            ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= DATE(now() - interval 6 day) {$states} {$filterWilayah})  desa_offline")
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} {$filterWilayah}) as kabupaten_premium")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states} {$filterWilayah}) kabupaten_offline")
@@ -124,6 +123,18 @@ class Desa extends Model
                         ) between ? and ?
                         {$states} {$filterWilayah}
                     ) as aktif
+                    ", [$start, $end])
+                    ->selectRaw("
+                    (
+                        select count(id)
+                        from desa as x
+                        where x.versi_hosting <> ''
+                        and greatest(
+                            coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                            coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                        ) between ? and ?
+                        {$states} {$filterWilayah}
+                    ) as desa_online
                     ", [$start, $end]);
                 }
             }, function ($query) use ($states, $filterWilayah) {
@@ -134,9 +145,21 @@ class Desa extends Model
                     where greatest(
                         coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
                         coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
-                    ) >= now() - interval 7 day
+                    ) >= DATE(now() - interval 6 day)
                     {$states} {$filterWilayah}
                 ) as aktif
+                ")
+                ->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where x.versi_hosting <> ''
+                    and greatest(
+                        coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                        coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                    ) >= DATE(now() - interval 6 day)
+                    {$states} {$filterWilayah}
+                ) as desa_online
                 ");
             })
             ->when($provinsi, function ($query, $provinsi) {
