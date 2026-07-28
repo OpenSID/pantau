@@ -677,12 +677,18 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_hosting')->whereNull($this->getTable() . '.versi_lokal');
+        return $query->whereNotNull($this->getTable() . '.versi_hosting')
+                     ->where($this->getTable() . '.versi_hosting', '<>', '');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
+        return $query->whereNotNull($this->getTable() . '.versi_lokal')
+                     ->where($this->getTable() . '.versi_lokal', '<>', '')
+                     ->where(function($q) {
+                         $q->whereNull($this->getTable() . '.versi_hosting')
+                           ->orWhere($this->getTable() . '.versi_hosting', '');
+                     });
     }    
 
     /**
