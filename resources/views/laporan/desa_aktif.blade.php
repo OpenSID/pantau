@@ -127,13 +127,16 @@
                     data: 'nama_desa'
                 },
                 {
-                    data: 'akses_count'
+                    data: 'akses_count',
+                    searchable: false
                 },
                 {
-                    data: 'akses_count'
+                    data: 'akses_count',
+                    searchable: false
                 },
                 {
-                    data: 'jml_surat_tte'
+                    data: 'jml_surat_tte',
+                    searchable: false
                 },
                 {
                     data: 'jml_mandiri',
