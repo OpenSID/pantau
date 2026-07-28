@@ -11,7 +11,7 @@
         "php": "^8.4",
         "aws/aws-sdk-php": "3.371.4",
         "doctrine/dbal": "^3.6",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "7.15.1",
         "jeroennoten/laravel-adminlte": "^3.13",
         "laravel-notification-channels/telegram": "*",
         "laravel/framework": "^13.0",
@@ -24,7 +24,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^3.0",
-        "phpoffice/phpspreadsheet": "^1.30.4",
+        "phpoffice/phpspreadsheet": "1.30.6",
         "spatie/laravel-backup": "^10.0",
         "spatie/laravel-permission": "^6.21",
         "yajra/laravel-datatables-oracle": "^13.0"
