@@ -493,6 +493,9 @@ class Desa extends Model
             ->when($fillters['akses'] == 5, function ($query) {
                 $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
             })
+            ->when($fillters['akses'] == 6, function ($query) {
+                $query->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)");
+            })
             ->when($fillters['versi_lokal'], function ($query, $versi) {
                 $query->where('versi_lokal', $versi);
             })
