@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use Illuminate\Foundation\Application;
+
 define('LARAVEL_START', microtime(true));
 
 /*
@@ -17,8 +19,6 @@ define('LARAVEL_START', microtime(true));
 
 require __DIR__.'/vendor/autoload.php';
 
-$app = require_once __DIR__.'/bootstrap/app.php';
-
 /*
 |--------------------------------------------------------------------------
 | Run The Artisan Application
@@ -30,24 +30,10 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 |
 */
 
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+/** @var Application $app */
+$app = require_once __DIR__.'/bootstrap/app.php';
 
-$status = $kernel->handle(
-    $input = new Symfony\Component\Console\Input\ArgvInput,
-    new Symfony\Component\Console\Output\ConsoleOutput
-);
-
-/*
-|--------------------------------------------------------------------------
-| Shutdown The Application
-|--------------------------------------------------------------------------
-|
-| Once Artisan has finished running, we will fire off the shutdown events
-| so that any final work may be done by the application before we shut
-| down the process. This is the last thing to happen to the request.
-|
-*/
-
-$kernel->terminate($input, $status);
+$status = $app->handleCommand(new Symfony\Component\Console\Input\ArgvInput);
 
 exit($status);
+
