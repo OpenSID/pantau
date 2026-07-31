@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->preventRequestsDuringMaintenance(except: ['api*']);
         $middleware->alias([
             'auth'          => \App\Http\Middleware\Authenticate::class,
             'guest'         => \App\Http\Middleware\RedirectIfAuthenticated::class,
