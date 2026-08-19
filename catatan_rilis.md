@@ -1,13 +1,14 @@
 Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
-2. [#680](https://github.com/OpenSID/pantau/issues/680) Penambahan filter wilayah di menu data wilayah
+
 
 #### Perbaikan Bug
 
+1. [#703](https://github.com/OpenSID/pantau/issues/703) Perbaikan logika perhitungan desa aktif pada dasbor pantau.
+2. [#698](https://github.com/OpenSID/pantau/issues/698) Perbaikan data jumlah desa pengguna OpenSID yang ada dipantau berbeda
+
 #### Penyesuaian Teknis
 
-1. [#](https://github.com/OpenSID/Selain-OpenSID/issues) Security Updates - 2026-05-30
-2. [#668](https://github.com/OpenSID/pantau/issues/680) Fix based on Security Report from devops
-3. [#](https://github.com/OpenSID/Selain-OpenSID/issues) Security Updates - 2026-06-04
 
+ 
