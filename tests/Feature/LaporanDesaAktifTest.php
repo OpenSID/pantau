@@ -55,6 +55,7 @@ class LaporanDesaAktifTest extends TestCase
         $desa = Desa::factory()->create([
             'nama_desa' => 'DesaTestAktif_' . uniqid(),
             'updated_at' => now()->subDays(5),
+            'tgl_akses_lokal' => now()->subDays(5),
         ]);
 
         $response = $this->actingAs($this->user)
@@ -74,6 +75,7 @@ class LaporanDesaAktifTest extends TestCase
         $desa = Desa::factory()->create([
             'nama_desa' => 'DesaAksesCount_' . uniqid(),
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         // Create recent akses records (within 30 days)
@@ -109,12 +111,14 @@ class LaporanDesaAktifTest extends TestCase
             'nama_desa' => 'DesaJawa_' . $uniqueSuffix,
             'kode_provinsi' => '99',
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         $desaSumatra = Desa::factory()->create([
             'nama_desa' => 'DesaSumatra_' . $uniqueSuffix,
             'kode_provinsi' => '98',
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         $response = $this->actingAs($this->user)
