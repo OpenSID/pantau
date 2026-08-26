@@ -10,5 +10,5 @@ Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
-
+1. [#695](https://github.com/OpenSID/pantau/issues/695) Upgrade Laravel 13.
  

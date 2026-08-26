@@ -129,8 +129,7 @@ class LaporanOpenkabTest extends TestCase
         $this->assertArrayHasKey('versi', $firstRow);
     }
 
-    /** @test */
-    public function pengguna_page_can_be_accessed()
+    public function test_pengguna_page_can_be_accessed()
     {
         $response = $this->actingAs($this->user)
             ->get('/laporan/openkab/pengguna');
@@ -138,8 +137,7 @@ class LaporanOpenkabTest extends TestCase
         $response->assertViewIs('laporan.openkab-pengguna');
     }
 
-    /** @test */
-    public function pengguna_page_displays_correct_statistics()
+    public function test_pengguna_page_displays_correct_statistics()
     {
         $response = $this->actingAs($this->user)
             ->get('/laporan/openkab/pengguna');
@@ -148,8 +146,7 @@ class LaporanOpenkabTest extends TestCase
         $response->assertViewIs('laporan.openkab-pengguna');
     }
 
-    /** @test */
-    public function pengguna_page_returns_ajax_data()
+    public function test_pengguna_page_returns_ajax_data()
     {
         $response = $this->actingAs($this->user)
             ->ajaxGet('/laporan/openkab/pengguna');

@@ -5,7 +5,7 @@ namespace Tests\Feature\Api;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-abstract class TracksidApiTest extends TestCase
+abstract class TracksidApiTestCase extends TestCase
 {
     use WithFaker;
 
