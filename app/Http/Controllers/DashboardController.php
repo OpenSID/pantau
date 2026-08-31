@@ -233,6 +233,11 @@ class DashboardController extends Controller
 
     public function datatablePenggunaLayanandesa(Request $request)
     {
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -262,6 +267,11 @@ class DashboardController extends Controller
 
     public function datatablePenggunaOpendk(Request $request)
     {
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -270,7 +280,10 @@ class DashboardController extends Controller
         ];
 
         if ($request->ajax()) {
-            $desa = Opendk::filter($fillters)->orderBY('created_at', 'desc')->get()
+            $desa = Opendk::filter($fillters)
+                ->pengguna()
+                ->orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                     $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
@@ -290,8 +303,15 @@ class DashboardController extends Controller
 
     public function datatablePenggunaPbb(Request $request)
     {
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         if ($request->ajax()) {
-            $desa = Pbb::orderBY('created_at', 'desc')->get()
+            $desa = Pbb::pengguna()
+                ->orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                     $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap
@@ -310,6 +330,11 @@ class DashboardController extends Controller
 
     public function datatablePenggunaKeloladesa(Request $request)
     {
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
@@ -385,8 +410,15 @@ class DashboardController extends Controller
 
     public function datatablePenggunaOpenkab(Request $request)
     {
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         if ($request->ajax()) {
-            $desa = Openkab::orderBY('created_at', 'desc')->get()
+            $desa = Openkab::pengguna()
+                ->orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($item) {
                     $item->tanggal = formatDateTimeForHuman($item->created_at); // Misalnya formatDateTimeForHuman merupakan fungsi untuk mengubah format tanggal
                     $item->tanggal = '<span class="text-nowrap text-muted">'.$item->tanggal.'</span>'; // Menambahkan kelas Bootstrap

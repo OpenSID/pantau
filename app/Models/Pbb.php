@@ -50,6 +50,29 @@ class Pbb extends Model
         return $query->filterDatatable($fillters)->select('*');
     }
 
+    /**
+     * Scope pengguna PBB untuk datatable dengan whitelist kolom aman (tanpa url).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_desa',
+            'nama_desa',
+            'kode_kecamatan',
+            'nama_kecamatan',
+            'kode_kabupaten',
+            'nama_kabupaten',
+            'kode_provinsi',
+            'nama_provinsi',
+            'versi',
+            'updated_at',
+            'created_at',
+        ]);
+    }
+
     public function scopeKabupaten($query, $fillters = [])
     {
         return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi, kode_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi', 'kode_provinsi']);
