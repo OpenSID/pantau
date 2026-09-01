@@ -217,6 +217,74 @@ class Desa extends Model
             });
     }
 
+    /**
+     * Scope semua desa untuk tampilan publik — whitelist kolom aman, tanpa PII.
+     *
+     * Kolom yang TIDAK disertakan (PII & infrastruktur):
+     * email_desa, telepon, kontak, ip_lokal, ip_hosting,
+     * url_lokal, url_hosting, lat, lng, alamat_kantor,
+     * kode_pos, anjungan, tgl_rekam_*, tgl_akses_*, opensid_valid, jenis.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSemuaDesaPublik($query)
+    {
+        return $query
+            ->select([
+                'nama_desa',
+                'nama_kecamatan',
+                'kode_kecamatan',
+                'nama_kabupaten',
+                'kode_kabupaten',
+                'nama_provinsi',
+                'kode_provinsi',
+                'versi_lokal',
+                'versi_hosting',
+                'modul_tte',
+                'jml_surat_tte',
+                'updated_at',
+                'created_at',
+            ])
+            ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
+    }
+
+    /**
+     * Scope semua desa untuk user terautentikasi — kolom lebih lengkap termasuk URL.
+     * Tetap TIDAK menyertakan PII individu (email_desa, telepon, kontak, IP).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSemuaDesaAuth($query)
+    {
+        return $query
+            ->select([
+                'nama_desa',
+                'kode_desa',
+                'nama_kecamatan',
+                'kode_kecamatan',
+                'nama_kabupaten',
+                'kode_kabupaten',
+                'nama_provinsi',
+                'kode_provinsi',
+                'versi_lokal',
+                'versi_hosting',
+                'modul_tte',
+                'jml_surat_tte',
+                'updated_at',
+                'created_at',
+                'url_hosting',
+            ])
+            ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
+    }
+
     public function scopeDesaValid($query)
     {
         return $query->whereRaw('1 = 1');
