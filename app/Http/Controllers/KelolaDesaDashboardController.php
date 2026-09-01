@@ -89,9 +89,13 @@ class KelolaDesaDashboardController extends Controller
             $tanggalAwal = $tanggalPeriod[0].' 00:00:00';
             $tanggalAkhir = $tanggalPeriod[1].' 23:59:59';
 
-            return DataTables::of(TrackKeloladesa::with('desa')->filter($request)->whereBetween('track_keloladesa.created_at', [$tanggalAwal, $tanggalAkhir]))
-                ->editColumn('updated_at', static fn ($q) => $q->updated_at->translatedFormat('j F Y H:i'))
+            return DataTables::of(TrackKeloladesa::with('desa')
+                ->select('track_keloladesa.*', 'track_keloladesa.updated_at as akses_terakhir')
+                ->filter($request)
+                ->whereBetween('track_keloladesa.created_at', [$tanggalAwal, $tanggalAkhir]))
+                ->editColumn('akses_terakhir', static fn ($q) => $q->akses_terakhir ? Carbon::parse($q->akses_terakhir)->translatedFormat('j F Y H:i:s') : '')
                 ->addIndexColumn()
+                ->makeHidden(['id_device'])
                 ->make(true);
         }
     }
