@@ -269,6 +269,8 @@ class DashboardController extends Controller
             return DataTables::of($desa)
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns([])
+                ->editColumn('tgl_akses', static fn ($q) => $q->updated_at ? Carbon::parse($q->updated_at)->translatedFormat('j F Y H:i:s') : '')
+                ->makeHidden(['id'])
                 ->make(true);
         }
 
@@ -366,6 +368,8 @@ class DashboardController extends Controller
             return DataTables::of($desa)
                 ->addIndexColumn() // Menambahkan kolom indeks
                 ->escapeColumns([])
+                ->editColumn('tgl_akses', static fn ($q) => $q->updated_at ? Carbon::parse($q->updated_at)->translatedFormat('j F Y H:i:s') : '')
+                ->makeHidden(['id_device'])                
                 ->make(true);
         }
 
