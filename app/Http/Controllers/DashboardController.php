@@ -62,23 +62,33 @@ class DashboardController extends Controller
     public function datatableSemuaDesa(Request $request)
     {
         if ($request->excel) {
+            // Export Excel hanya untuk user yang sudah login
+            if (! auth()->check()) {
+                abort(403, 'Unauthorized');
+            }
             $paramDatatable = json_decode($request->get('params'), 1);
             $request->merge($paramDatatable);
         }
 
         $filters = [
-            'kode_provinsi' => $request->kode_provinsi,
+            'kode_provinsi'  => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
-            'status' => $request->status,
-            'akses' => $request->akses,
-            'tte' => $request->tte,
-            'versi_lokal' => '',
-            'versi_hosting' => '',
+            'status'         => $request->status,
+            'akses'          => $request->akses,
+            'tte'            => $request->tte,
+            'versi_lokal'    => '',
+            'versi_hosting'  => '',
         ];
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of($this->desa->fillter($filters)->semuaDesa());
+            // Pilih scope berdasarkan status autentikasi
+            // Auth: kolom lebih lengkap (+url_hosting), Publik: hanya kolom aman tanpa PII
+            $queryBuilder = auth()->check()
+                ? $this->desa->fillter($filters)->semuaDesaAuth()
+                : $this->desa->fillter($filters)->semuaDesaPublik();
+
+            $query = DataTables::of($queryBuilder);
 
             if ($request->excel) {
                 $query->filtering();
@@ -405,32 +415,46 @@ class DashboardController extends Controller
 
     public function datatablePenggunaOpensid(Request $request)
     {
+        // Batasi jumlah baris per request untuk mencegah dump massal data
+        // Auth: max 100 baris, Publik: max 25 baris
+        $maxLength = auth()->check() ? 100 : 25;
+        if ($request->has('length') && (int) $request->length > $maxLength) {
+            $request->merge(['length' => $maxLength]);
+        }
+
         $filters = [
-            'kode_provinsi' => $request->kode_provinsi,
+            'kode_provinsi'  => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
             'kode_kecamatan' => $request->kode_kecamatan,
-            'status' => $request->status,
-            'akses' => $request->akses,
-            'tte' => $request->tte,
-            'versi_lokal' => '',
-            'versi_hosting' => '',
+            'status'         => $request->status,
+            'akses'          => $request->akses,
+            'tte'            => $request->tte,
+            'versi_lokal'    => '',
+            'versi_hosting'  => '',
         ];
 
         if ($request->ajax()) {
-            return DataTables::of($this->desa->fillter($filters)->semuaDesa())
+            // Pilih scope berdasarkan status autentikasi
+            // Auth: kolom lebih lengkap (+url_hosting), Publik: hanya kolom aman tanpa PII
+            $query = auth()->check()
+                ? $this->desa->fillter($filters)->semuaDesaAuth()
+                : $this->desa->fillter($filters)->semuaDesaPublik();
+
+            return DataTables::of($query)
                 ->editColumn('modul_tte', function ($item) {
                     if ($item->modul_tte == 0) {
                         return '<span class="badge badge-secondary">Tidak Aktif</span>';
                     } elseif ($item->modul_tte == 1) {
                         return '<span class="badge badge-success">Aktif</span>';
                     }
-                })->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
-                ->addIndexColumn() // Menambahkan kolom indeks
+                })
+                ->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
+                ->addIndexColumn()
                 ->escapeColumns()
                 ->rawColumns(['modul_tte', 'tanggal'])
                 ->make(true);
         }
 
-        abort(404); // Mengembalikan 404 jika bukan permintaan AJAX
+        abort(404);
     }
 }
