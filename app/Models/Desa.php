@@ -101,8 +101,6 @@ class Desa extends Model
 
         return $query
             ->selectRaw('count(id) as desa_total')
-            ->selectRaw("(select count(id) from desa as x where x.versi_lokal <> '' and x.versi_hosting is null and coalesce(x.tgl_akses_lokal, 0) >= now() - interval 7 day {$states} {$filterWilayah})  desa_offline")
-            ->selectRaw("(select count(id) from desa as x where x.versi_hosting <> '' and greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) >= now() - interval 7 day {$states} {$filterWilayah}) desa_online")
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} {$filterWilayah}) as kabupaten_premium")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states} {$filterWilayah}) kabupaten_offline")
@@ -124,6 +122,28 @@ class Desa extends Model
                         ) between ? and ?
                         {$states} {$filterWilayah}
                     ) as aktif
+                    ", [$start, $end])
+                    ->selectRaw("
+                    (
+                        select count(id)
+                        from desa as x
+                        where x.versi_hosting <> ''
+                        and greatest(
+                            coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                            coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                        ) between ? and ?
+                        {$states} {$filterWilayah}
+                    ) as desa_online
+                    ", [$start, $end])
+                    ->selectRaw("
+                    (
+                        select count(id)
+                        from desa as x
+                        where x.versi_lokal <> ''
+                        and x.versi_hosting is null
+                        and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') between ? and ?
+                        {$states} {$filterWilayah}
+                    ) as desa_offline
                     ", [$start, $end]);
                 }
             }, function ($query) use ($states, $filterWilayah) {
@@ -134,9 +154,31 @@ class Desa extends Model
                     where greatest(
                         coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
                         coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
-                    ) >= now() - interval 7 day
+                    ) >= DATE(now() - interval 29 day)
                     {$states} {$filterWilayah}
                 ) as aktif
+                ")
+                ->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where x.versi_hosting <> ''
+                    and greatest(
+                        coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                        coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                    ) >= DATE(now() - interval 29 day)
+                    {$states} {$filterWilayah}
+                ) as desa_online
+                ")
+                ->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where x.versi_lokal <> ''
+                    and x.versi_hosting is null
+                    and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') >= DATE(now() - interval 29 day)
+                    {$states} {$filterWilayah}
+                ) as desa_offline
                 ");
             })
             ->when($provinsi, function ($query, $provinsi) {
@@ -170,6 +212,74 @@ class Desa extends Model
             ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
             // filter ip lokal
             //->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1") // 0 = i local
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
+    }
+
+    /**
+     * Scope semua desa untuk tampilan publik — whitelist kolom aman, tanpa PII.
+     *
+     * Kolom yang TIDAK disertakan (PII & infrastruktur):
+     * email_desa, telepon, kontak, ip_lokal, ip_hosting,
+     * url_lokal, url_hosting, lat, lng, alamat_kantor,
+     * kode_pos, anjungan, tgl_rekam_*, tgl_akses_*, opensid_valid, jenis.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSemuaDesaPublik($query)
+    {
+        return $query
+            ->select([
+                'nama_desa',
+                'nama_kecamatan',
+                'kode_kecamatan',
+                'nama_kabupaten',
+                'kode_kabupaten',
+                'nama_provinsi',
+                'kode_provinsi',
+                'versi_lokal',
+                'versi_hosting',
+                'modul_tte',
+                'jml_surat_tte',
+                'updated_at',
+                'created_at',
+            ])
+            ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
+    }
+
+    /**
+     * Scope semua desa untuk user terautentikasi — kolom lebih lengkap termasuk URL.
+     * Tetap TIDAK menyertakan PII individu (email_desa, telepon, kontak, IP).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSemuaDesaAuth($query)
+    {
+        return $query
+            ->select([
+                'nama_desa',
+                'kode_desa',
+                'nama_kecamatan',
+                'kode_kecamatan',
+                'nama_kabupaten',
+                'kode_kabupaten',
+                'nama_provinsi',
+                'kode_provinsi',
+                'versi_lokal',
+                'versi_hosting',
+                'modul_tte',
+                'jml_surat_tte',
+                'updated_at',
+                'created_at',
+                'url_hosting',
+            ])
+            ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });
@@ -451,6 +561,9 @@ class Desa extends Model
             ->when($fillters['akses'] == 5, function ($query) {
                 $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
             })
+            ->when($fillters['akses'] == 6, function ($query) {
+                $query->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)");
+            })
             ->when($fillters['versi_lokal'], function ($query, $versi) {
                 $query->where('versi_lokal', $versi);
             })
@@ -632,12 +745,18 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_hosting')->whereNull($this->getTable() . '.versi_lokal');
+        return $query->whereNotNull($this->getTable() . '.versi_hosting')
+                     ->where($this->getTable() . '.versi_hosting', '<>', '');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_lokal')->whereNull($this->getTable() . '.versi_hosting');
+        return $query->whereNotNull($this->getTable() . '.versi_lokal')
+                     ->where($this->getTable() . '.versi_lokal', '<>', '')
+                     ->where(function($q) {
+                         $q->whereNull($this->getTable() . '.versi_hosting')
+                           ->orWhere($this->getTable() . '.versi_hosting', '');
+                     });
     }    
 
     /**

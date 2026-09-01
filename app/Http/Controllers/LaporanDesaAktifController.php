@@ -23,7 +23,7 @@ class LaporanDesaAktifController extends Controller
         ];
 
         if ($request->ajax()) {
-            $_30HariLalu = Carbon::now()->subDays(30);
+            $_30HariLalu = Carbon::now()->subDays(29);
 
             $query = Desa::query()
                 ->select([
@@ -47,7 +47,9 @@ class LaporanDesaAktifController extends Controller
                     '(SELECT COUNT(*) FROM akses WHERE akses.desa_id = desa.id AND akses.created_at >= ?) as akses_count',
                     [$_30HariLalu]
                 )
-                ->where('desa.updated_at', '>=', $_30HariLalu);
+                ->whereRaw(
+                    'greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)'
+                );
 
             $this->applyFilters($query, $fillters);
 
