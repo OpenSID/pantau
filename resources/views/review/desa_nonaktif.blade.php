@@ -1,9 +1,9 @@
 @extends('layouts.index')
 
-@section('title', 'Desa Baru')
+@section('title', 'Desa Tidak Aktif')
 
 @section('content_header')
-    <h1>Desa Baru<small class="font-weight-light ml-1 text-md">(Sejak tujuh hari terakhir)</small></h1>
+    <h1>Desa Tidak Aktif<small class="font-weight-light ml-1 text-md">(Sejak tujuh hari terakhir)</small></h1>
 @stop
 
 @section('content')
@@ -79,7 +79,8 @@
                 {
                     data: 'tgl_akses',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    defaultContent: '-'
                 },
             ]
         })

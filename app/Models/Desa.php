@@ -302,8 +302,10 @@ class Desa extends Model
         return $query
             ->select(['*'])
             ->selectRaw("date_format(greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)),'%Y-%m-%d') as tgl_akses")
-            ->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) < now() - interval 4 month')
-            ->where('jenis', 2);
+            ->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) < now() - interval 7 day')
+            ->when(session('provinsi'), function ($query, $provinsi) {
+                $query->where('kode_provinsi', $provinsi->kode_prov);
+            });
     }
 
     /**
@@ -494,7 +496,7 @@ class Desa extends Model
         return $query
             // ->select(['*'])
             ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema', 'layanan', 'sebutan_desa'])
-            ->selectRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) as tgl_akses')
+            ->selectRaw("date_format(greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), '%Y-%m-%d') as tgl_akses")
             ->when(auth()->check() === true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
             })
