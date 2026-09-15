@@ -47,8 +47,11 @@ class LaporanDesaAktifController extends Controller
                     '(SELECT COUNT(*) FROM akses WHERE akses.desa_id = desa.id AND akses.created_at >= ?) as akses_count',
                     [$_30HariLalu]
                 )
+                ->selectRaw(
+                    "date_format(greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)), '%Y-%m-%d') as tgl_akses"
+                )
                 ->whereRaw(
-                    'greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)'
+                    'greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 7 day'
                 );
 
             $this->applyFilters($query, $fillters);
@@ -114,6 +117,9 @@ class LaporanDesaAktifController extends Controller
             })
             ->when($fillters['akses'] == 5, function ($q) {
                 $q->whereRaw("desa.versi_lokal <> '' and desa.versi_hosting is null and coalesce(desa.tgl_akses_lokal, 0) >= now() - interval 7 day");
+            })
+            ->when($fillters['akses'] == 6, function ($q) {
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
             })
             ->when($fillters['versi_lokal'], function ($q, $versi) {
                 $q->where('desa.versi_lokal', $versi);
