@@ -104,13 +104,13 @@ class LaporanDesaAktifController extends Controller
                 });
             })
             ->when($fillters['akses'] == 1, function ($q) {
-                $q->whereRaw('timestampdiff(month, greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)), now()) > 1');
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) < now() - interval 2 month');
             })
             ->when($fillters['akses'] == 2, function ($q) {
-                $q->whereRaw('timestampdiff(month, greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)), now()) <= 1');
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 2 month');
             })
             ->when($fillters['akses'] == 3, function ($q) {
-                $q->whereRaw('timestampdiff(month, greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)), now()) > 3');
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) < now() - interval 4 month');
             })
             ->when($fillters['akses'] == 4, function ($q) {
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 7 day');
@@ -120,6 +120,15 @@ class LaporanDesaAktifController extends Controller
             })
             ->when($fillters['akses'] == 6, function ($q) {
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
+            })
+            ->when($fillters['akses'] == 7, function ($q) {
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 3 month');
+            })
+            ->when($fillters['akses'] == 8, function ($q) {
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 6 month');
+            })
+            ->when($fillters['akses'] == 9, function ($q) {
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) < now() - interval 6 month');
             })
             ->when($fillters['versi_lokal'], function ($q, $versi) {
                 $q->where('desa.versi_lokal', $versi);
