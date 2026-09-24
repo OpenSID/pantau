@@ -99,7 +99,7 @@
                         return {
                             results: $.map(response.results, function(item) {
                                 return {
-                                    id: item.region_code,
+                                    id: item.kode_prov,
                                     text: item.nama_prov,
                                 }
                             }),
