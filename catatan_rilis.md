@@ -1,4 +1,4 @@
-Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2609.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
@@ -7,6 +7,8 @@ Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 1. [#703](https://github.com/OpenSID/pantau/issues/703) Perbaikan logika perhitungan desa aktif pada dasbor pantau.
 2. [#698](https://github.com/OpenSID/pantau/issues/698) Perbaikan data jumlah desa pengguna OpenSID yang ada dipantau berbeda
+3. [#718](https://github.com/OpenSID/pantau/issues/718) Pebaikan halaman desa tidak aktif.
+4. [#719](https://github.com/OpenSID/pantau/issues/719) Sesuaikan filter akses terakhir pada menu desa, review desa tidak aktif, dan review desa baru.
 
 #### Penyesuaian Teknis
 
