@@ -116,6 +116,15 @@
         }
 
         switch (params.get('akses')) {
+            case '0':
+                $akses.val('0').change();
+                break;
+            case '1':
+            case '2':
+            case '3':
+                $akses.val(params.get('akses')).change();
+                filter_open();
+                break;
             case '4':
                 $akses.val('4').change();
                 filter_open();
@@ -124,8 +133,13 @@
                 $akses.val('5').change();
                 filter_open();
                 break;
-
+            case '6':
+                $akses.val('6').change();
+                filter_open();
+                break;
             default:
+                // Default: Bulan ini
+                $akses.val('6').change();
                 break;
         }
 

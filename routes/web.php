@@ -95,12 +95,13 @@ Route::group(['middleware' => 'web.dashboard'], function () {
     });
 });
 
-// datatable
+// datatable — publik dengan rate limiting
+// Data yang dikembalikan dikontrol di controller berdasarkan auth status (Option C Issue #51).
 Route::prefix('datatables')->as('datatables:')
+    ->middleware('throttle:60,1')
     ->group(function () {
         Route::get('desa-baru', [DashboardController::class, 'datatableDesaBaru'])->name('desa-baru');
         Route::get('semua-desa', [DashboardController::class, 'datatableSemuaDesa'])->name('semua-desa');
-        Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
         Route::get('opendk-baru', [DashboardController::class, 'datatableOpendkBaru'])->name('opendk-baru');
         Route::get('openkab-baru', [DashboardController::class, 'datatableOpenkabBaru'])->name('openkab-baru');
         Route::get('opensid-baru', [DashboardController::class, 'datatableOpensidBaru'])->name('opensid-baru');
@@ -113,6 +114,13 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('pengguna-openkab', [DashboardController::class, 'datatablePenggunaOpenkab'])->name('pengguna-openkab');
         Route::get('pengguna-opensid', [DashboardController::class, 'datatablePenggunaOpensid'])->name('pengguna-opensid');
         Route::get('pengguna-pbb', [DashboardController::class, 'datatablePenggunaPbb'])->name('pengguna-pbb');
+    });
+
+// datatable — khusus admin, tidak dipakai di halaman publik manapun
+Route::prefix('datatables')->as('datatables:')
+    ->middleware(['auth', 'throttle:60,1'])
+    ->group(function () {
+        Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
     });
 
 // Peta

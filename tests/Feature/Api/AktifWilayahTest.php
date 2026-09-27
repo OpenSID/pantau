@@ -59,8 +59,7 @@ class AktifWilayahTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function opensid_aktif_filter_period()
+    public function test_opensid_aktif_filter_period()
     {
         $start = Carbon::now()->subDays(5)->format('Y-m-d');
         $end = Carbon::now()->format('Y-m-d');
@@ -73,8 +72,7 @@ class AktifWilayahTest extends TestCase
         $this->assertArrayHasKey('aktif', $response->json());
     }
 
-    /** @test */
-    public function layanandesa_aktif_filter_period()
+    public function test_layanandesa_aktif_filter_period()
     {
         $start = Carbon::now()->subDays(5)->format('Y-m-d');
         $end = Carbon::now()->format('Y-m-d');
@@ -87,8 +85,7 @@ class AktifWilayahTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $response->json('aktif'));
     }
 
-    /** @test */
-    public function keloladesa_aktif_filter_period()
+    public function test_keloladesa_aktif_filter_period()
     {
         $start = Carbon::now()->subDays(5)->format('Y-m-d');
         $end = Carbon::now()->format('Y-m-d');
@@ -101,8 +98,7 @@ class AktifWilayahTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $response->json('aktif'));
     }
 
-    /** @test */
-    public function opendk_aktif_filter_period()
+    public function test_opendk_aktif_filter_period()
     {
         $start = Carbon::now()->subDays(5)->format('Y-m-d');
         $end = Carbon::now()->format('Y-m-d');

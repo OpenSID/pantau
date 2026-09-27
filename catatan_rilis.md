@@ -1,13 +1,19 @@
-Di rilis v2607.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2609.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
-2. [#680](https://github.com/OpenSID/pantau/issues/680) Penambahan filter wilayah di menu data wilayah
+
+1. [#724](https://github.com/OpenSID/pantau/issues/724) Batasi Perhitungan "Tidak Aktif 4 Bulan" pada dasbor dan laporan desa.
 
 #### Perbaikan Bug
 
+1. [#703](https://github.com/OpenSID/pantau/issues/703) Perbaikan logika perhitungan desa aktif pada dasbor pantau.
+2. [#698](https://github.com/OpenSID/pantau/issues/698) Perbaikan data jumlah desa pengguna OpenSID yang ada dipantau berbeda
+3. [#718](https://github.com/OpenSID/pantau/issues/718) Pebaikan halaman desa tidak aktif.
+4. [#719](https://github.com/OpenSID/pantau/issues/719) Sesuaikan filter akses terakhir pada menu desa, review desa tidak aktif, dan review desa baru.
+
 #### Penyesuaian Teknis
 
-1. [#](https://github.com/OpenSID/Selain-OpenSID/issues) Security Updates - 2026-05-30
-2. [#668](https://github.com/OpenSID/pantau/issues/680) Fix based on Security Report from devops
-3. [#](https://github.com/OpenSID/Selain-OpenSID/issues) Security Updates - 2026-06-04
-
+1. [#695](https://github.com/OpenSID/pantau/issues/695) Upgrade Laravel 13.
+2. [#51] (https://github.com/OpenSID/wiki-keamanan/issues/51) [P0][CRITICAL] Pantau - Endpoint Publik /datatables/pengguna-opensid Bocor Massal 26.099 Desa (PII + Infra). 
+3. [#52] (https://github.com/OpenSID/wiki-keamanan/issues/52) [P1][MEDIUM] Pantau - Endpoint Publik /datatables/pengguna-opendk Bocor 740 Domain Kecamatan.
+4. [#53] (https://github.com/OpenSID/wiki-keamanan/issues/53) [P1][MEDIUM] Pantau - Endpoint Publik LayananDesa (100) & KelolaDesa (87 + id_device) Bocor.

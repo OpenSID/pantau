@@ -83,7 +83,7 @@
                     },
                     {
                         data: 'wilayah_adat.name',
-                        name: 'wilayah_adat.name',
+                        name: 'wilayahAdat.name',
                         render: function(data, type, row) {
                             return data ? data : '-';
                         }

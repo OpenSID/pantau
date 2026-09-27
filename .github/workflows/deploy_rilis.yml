@@ -22,6 +22,8 @@ jobs:
   deploy:
     name: Deploy Pantau Rilis to Production Server
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
     steps:
       - name: Ensure workflow_dispatch uses master

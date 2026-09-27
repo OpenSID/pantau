@@ -98,4 +98,27 @@ class Openkab extends Model
 
         return $query->where('updated_at', '>=', $maksimalTanggal);
     }
+
+    /**
+     * Scope pengguna OpenKab untuk datatable dengan whitelist kolom aman.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_kab',
+            'nama_kab',
+            'kode_prov',
+            'nama_prov',
+            'nama_aplikasi',
+            'sebutan_kab',
+            'versi',
+            'jumlah_desa',
+            'updated_at',
+            'created_at',
+            'tgl_rekam',
+        ]);
+    }
 }
