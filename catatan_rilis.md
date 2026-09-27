@@ -10,6 +10,7 @@ Di rilis v2609.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 2. [#698](https://github.com/OpenSID/pantau/issues/698) Perbaikan data jumlah desa pengguna OpenSID yang ada dipantau berbeda
 3. [#718](https://github.com/OpenSID/pantau/issues/718) Pebaikan halaman desa tidak aktif.
 4. [#719](https://github.com/OpenSID/pantau/issues/719) Sesuaikan filter akses terakhir pada menu desa, review desa tidak aktif, dan review desa baru.
+5. [#696](https://github.com/OpenSID/pantau/issues/696) Pebaikan pilihan provinsi tidak dapat dipilih pada form edit suku.
 
 #### Penyesuaian Teknis
 
