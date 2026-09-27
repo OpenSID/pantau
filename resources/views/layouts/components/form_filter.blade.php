@@ -77,11 +77,15 @@
                     <select class="select2 form-control-sm" id="akses" name="akses"
                         data-placeholder="Semua Status" style="width: 100%;">
                         <option selected value="0">Semua Status</option>
+                        <option value="4">7 Hari Terakhir</option>
+                        <option value="6">1 Bulan Terakhir</option>
+                        <option value="7">3 Bulan Terakhir</option>
+                        <option value="8">6 Bulan Terakhir</option>
+                        <option value="2">2 Bulan Terakhir</option>
+                        <option value="1">Sebelum 2 Bulan yang Lalu</option>
+                        <option value="3">Sebelum 4 Bulan yang Lalu</option>
+                        <option value="9">Sebelum 6 Bulan yang Lalu</option>
                         <option value="5">Desa aktif hanya offline</option>
-                        <option value="4">Sejak tujuh hari yang lalu</option>
-                        <option value="2">Sejak dua bulan yang lalu</option>
-                        <option value="1">Sebelum dua bulan yang lalu</option>
-                        <option value="3">Sebelum empat bulan yang lalu</option>
                     </select>
                 </div>
             </div>
@@ -110,6 +114,65 @@
                         <option selected value="empty">Semua Status</option>
                         <option value="1">Aktif</option>
                         <option value="0">Tidak Aktif</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('tipe_pengguna', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Tipe Pengguna</label>
+                    <select class="select2 form-control-sm" id="tipe_pengguna" name="tipe_pengguna"
+                        data-placeholder="Semua Tipe" style="width: 100%;">
+                        <option selected value="">Semua Tipe</option>
+                        <option value="premium">Premium</option>
+                        <option value="umum">Umum</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('layanan', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Layanan</label>
+                    <select class="select2 form-control-sm" id="layanan" name="layanan"
+                        data-placeholder="Semua Layanan" style="width: 100%;">
+                        <option selected value="">Semua Layanan</option>
+                        @foreach(\App\Enums\Layanan::cases() as $layanan)
+                            <option value="{{ $layanan->value }}">{{ $layanan->label() }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('sebutan_desa', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Sebutan Desa</label>
+                    <select class="select2 form-control-sm" id="sebutan_desa" name="sebutan_desa"
+                        data-placeholder="Semua Sebutan Desa" style="width: 100%;">
+                        <option selected value="">Semua Sebutan Desa</option>
+                        @foreach((isset($sebutanDesaList) ? $sebutanDesaList : []) as $sebutanDesa)
+                            <option value="{{ $sebutanDesa }}">{{ $sebutanDesa }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('tema', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Tema</label>
+                    <select class="select2 form-control-sm" id="tema" name="tema"
+                        data-placeholder="Semua Tema" style="width: 100%;">
+                        <option selected value="">Semua Tema</option>
+                        @foreach((isset($temaList) ? $temaList : []) as $tema)
+                            <option value="{{ $tema }}">{{ $tema }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -200,3 +263,17 @@
     </div>
     <hr class="mt-0">
 </div>
+
+@push('js')
+    <script>        
+    $(document).ready(function(){        
+        $('#status').select2();
+        $('#akses').select2();
+        $('#tte').select2();
+        $('#tipe_pengguna').select2();
+        $('#sebutan_desa').select2();
+        $('#layanan').select2();
+        $('#tema').select2();
+	});    
+    </script>
+@endpush()

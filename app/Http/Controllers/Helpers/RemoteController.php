@@ -33,10 +33,10 @@ class RemoteController extends Controller
                 $directory_backup = $root.$this->host.'/backupserverdukungan/'.date('Y-m-d');
 
                 // membuat folder di storage_type
-                exec('rclone mkdir '.$remote_name.':/'.$directory_backup);
+                exec('rclone mkdir ' . escapeshellarg($remote_name . ':/' . $directory_backup));
 
                 // proses backup ke storage_type
-                exec('rclone -v sync '.folder_backup().' '.$remote_name.':'.$directory_backup);
+                exec('rclone -v sync ' . escapeshellarg(folder_backup()) . ' ' . escapeshellarg($remote_name . ':' . $directory_backup));
 
                 // notif berhasil
                 $this->command->notifMessage('Berhasil backup menggunakan tipe '.$storage_type.' tanggal '.date('Y-m-d'));
@@ -69,7 +69,7 @@ class RemoteController extends Controller
 
     public function countDirectoryCloudStorage($remote_name, $root)
     {
-        $count_dir = exec('rclone lsd '.$remote_name.':'.$root.$this->host.'/ | wc -l');
+        $count_dir = exec('rclone lsd ' . escapeshellarg($remote_name . ':' . $root . $this->host . '/') . ' | wc -l');
         $this->command->notifMessage('Jumlah Folder '.$count_dir);
 
         return $count_dir;
@@ -78,7 +78,7 @@ class RemoteController extends Controller
     public function removeBackup($directory, $remote_name, $akhir_backup, $root)
     {
         // folder yang paling lama
-        $old_dir = exec('sudo rclone lsf '.$remote_name.':'.$root.$this->host.'/ | sort -r | tail -n +'.$directory);
+        $old_dir = exec('sudo rclone lsf ' . escapeshellarg($remote_name . ':' . $root . $this->host . '/') . ' | sort -r | tail -n +' . escapeshellarg($directory));
         $old_dir = rtrim($old_dir, '/');
 
         // nama app_url & tanggal backup
@@ -86,7 +86,7 @@ class RemoteController extends Controller
 
         if (rclone_syncs_storage() == true && cek_tgl_akhir_backup($akhir_backup) == 0) {
             // hapus folder backup terlama
-            exec('sudo rclone purge '.$remote_name.':/'.$directory_backup);
+            exec('sudo rclone purge ' . escapeshellarg($remote_name . ':/' . $directory_backup));
             /**
              * rclone rmdir = hapus directory
              * rclone rmdirs = hapus directory dengan beberapa directory di dalamnya

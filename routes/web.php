@@ -28,6 +28,7 @@ use App\Http\Controllers\LaporanTemaProController;
 use App\Http\Controllers\OpenDKDashboardController;
 use App\Http\Controllers\LaporanDesaAktifController;
 use App\Http\Controllers\KecamatanAktifOpendkController;
+use App\Http\Controllers\PenggunaAktifPbbController;
 use App\Http\Controllers\OpenKabDashboardController;
 use App\Http\Controllers\WebsiteDashboardController;
 use App\Http\Controllers\Admin\Wilayah\DesaController;
@@ -68,7 +69,7 @@ Route::group(['middleware' => 'web.dashboard'], function () {
         Route::get('opensid', [WebsiteDashboardController::class, 'opensid']);
         Route::get('opensid/versi', [WebsiteDashboardController::class, 'opensid_versi']);
         Route::get('opensid/versi/detail', [WebsiteDashboardController::class, 'opensid_versi_detail']);
-        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);        
+        Route::get('opensid/peta', [PetaPeriodController::class, 'index']);
         Route::get('opensid-data', [WebsiteDashboardController::class, 'opensidData']);
         Route::get('pbb-data', [WebsiteDashboardController::class, 'pbbData']);
         Route::get('openkab-data', [WebsiteDashboardController::class, 'openkabData']);
@@ -94,12 +95,13 @@ Route::group(['middleware' => 'web.dashboard'], function () {
     });
 });
 
-// datatable
+// datatable — publik dengan rate limiting
+// Data yang dikembalikan dikontrol di controller berdasarkan auth status (Option C Issue #51).
 Route::prefix('datatables')->as('datatables:')
+    ->middleware('throttle:60,1')
     ->group(function () {
         Route::get('desa-baru', [DashboardController::class, 'datatableDesaBaru'])->name('desa-baru');
         Route::get('semua-desa', [DashboardController::class, 'datatableSemuaDesa'])->name('semua-desa');
-        Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
         Route::get('opendk-baru', [DashboardController::class, 'datatableOpendkBaru'])->name('opendk-baru');
         Route::get('openkab-baru', [DashboardController::class, 'datatableOpenkabBaru'])->name('openkab-baru');
         Route::get('opensid-baru', [DashboardController::class, 'datatableOpensidBaru'])->name('opensid-baru');
@@ -112,6 +114,13 @@ Route::prefix('datatables')->as('datatables:')
         Route::get('pengguna-openkab', [DashboardController::class, 'datatablePenggunaOpenkab'])->name('pengguna-openkab');
         Route::get('pengguna-opensid', [DashboardController::class, 'datatablePenggunaOpensid'])->name('pengguna-opensid');
         Route::get('pengguna-pbb', [DashboardController::class, 'datatablePenggunaPbb'])->name('pengguna-pbb');
+    });
+
+// datatable — khusus admin, tidak dipakai di halaman publik manapun
+Route::prefix('datatables')->as('datatables:')
+    ->middleware(['auth', 'throttle:60,1'])
+    ->group(function () {
+        Route::get('kabupaten-kosong', [DashboardController::class, 'datatableKabupatenKosong'])->name('kabupaten-kosong');
     });
 
 // Peta
@@ -142,7 +151,7 @@ Route::prefix('sesi')
 // Laporan
 Route::prefix('laporan')
     ->group(function () {
-        Route::get('desa', [LaporanController::class, 'desa']);
+        Route::match(['get', 'post'], 'desa', [LaporanController::class, 'desa']);
         Route::delete('desa/{desa}', [LaporanController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [LaporanController::class, 'kabupaten']);
         Route::get('kecamatan', [LaporanKecamatanController::class, 'index'])->name('laporan.kecamatan');
@@ -163,6 +172,7 @@ Route::prefix('pbb')
         Route::delete('desa/{desa}', [PbbController::class, 'deleteDesa'])->middleware('auth');
         Route::get('kabupaten', [PbbController::class, 'kabupaten']);
         Route::get('versi', [PbbController::class, 'versi']);
+        Route::get('pengguna-aktif', [PenggunaAktifPbbController::class, 'index']);
     });
 
 Route::prefix('mobile')

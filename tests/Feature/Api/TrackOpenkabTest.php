@@ -12,8 +12,7 @@ class TrackOpenkabTest extends TestCase
 {
     use DatabaseTransactions, WithoutMiddleware;
 
-    /** @test */
-    public function can_track_openkab_data_successfully()
+    public function test_can_track_openkab_data_successfully()
     {
         $kodeWilayah = Wilayah::inRandomOrder()->first();
         $requestData = [

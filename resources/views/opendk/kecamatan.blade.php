@@ -56,7 +56,7 @@
 @section('js')
 <script>
     const params = new URLSearchParams(window.location.search);
-    const listVersi = {!! json_encode($listVersi) !!}
+    const listVersi = @json($listVersi)
 
     for(var i in listVersi) {
         $('#versi_opendk').append('<option>'+listVersi[i]+'</option>')
@@ -118,6 +118,7 @@
             {
                  orderable: false,
                 name: 'url',
+                visible: {!! auth()->check() ? 'true' : 'false' !!},
                 data: function (data) {
                         return `<a target="_blank" href="https://${data.url}">https://${data.url}</a>`
                     },

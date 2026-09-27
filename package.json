@@ -1,6 +1,9 @@
 {
     "private": true,
     "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch",
         "test:e2e": "playwright test",
         "test:e2e:headed": "playwright test --headed",
         "test:e2e:ui": "playwright test --ui",
@@ -8,6 +11,10 @@
         "test:e2e:report": "playwright show-report"
     },
     "devDependencies": {
-        "@playwright/test": "^1.54.1"
+        "@playwright/test": "^1.54.1",
+        "axios": "^1.16.1",
+        "laravel-vite-plugin": "^1.2.0",
+        "lodash": "^4.17.19",
+        "vite": "^6.3.5"
     }
 }

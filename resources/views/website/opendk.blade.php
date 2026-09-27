@@ -83,7 +83,8 @@
                     data: 'nama_provinsi'
                 },
                 {
-                    data: 'url'
+                    data: 'url',
+                    visible: {!! auth()->check() ? 'true' : 'false' !!},
                 },
                 {
                     data: 'versi'

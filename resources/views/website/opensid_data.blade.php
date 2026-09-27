@@ -100,6 +100,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ordering: true,
+                order: [[9, 'desc']], // Default ordering by column 9 (Akses Terakhir) descending
                 ajax: {
                     url: `{{ route('datatables:pengguna-opensid') }}`,
                     data: function(d) {
@@ -119,30 +120,38 @@
                         orderable: false
                     },
                     {
-                        data: 'nama_desa'
+                        data: 'nama_desa',
+                        name: 'nama_desa'
                     },
                     {
-                        data: 'nama_kecamatan'
+                        data: 'nama_kecamatan',
+                        name: 'nama_kecamatan'
                     },
                     {
-                        data: 'nama_kabupaten'
+                        data: 'nama_kabupaten',
+                        name: 'nama_kabupaten'
                     },
                     {
-                        data: 'nama_provinsi'
+                        data: 'nama_provinsi',
+                        name: 'nama_provinsi'
                     },
                     {
-                        data: 'versi_lokal'
+                        data: 'versi_lokal',
+                        name: 'versi_lokal'
                     },
                     {
-                        data: 'versi_hosting'
+                        data: 'versi_hosting',
+                        name: 'versi_hosting'
                     },
                     {
                         data: 'modul_tte',
+                        name: 'modul_tte',
                         searchable: false,
                         orderable: false
                     },
                     {
-                        data: 'jml_surat_tte'
+                        data: 'jml_surat_tte',
+                        name: 'jml_surat_tte'
                     },
                     {
                         data: 'tanggal',

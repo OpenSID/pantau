@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Desa;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LaporanTemaProTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseTransactions, WithFaker;
 
     protected $user;
 
@@ -89,6 +89,13 @@ class LaporanTemaProTest extends TestCase
 
     public function test_tema_pro_constant_filtering()
     {
+        // Get initial count of pro theme records
+        $initialCount = Desa::where(function ($q) {
+            foreach (Desa::TEMA_PRO as $tema) {
+                $q->orWhere('tema', 'like', "%{$tema}%");
+            }
+        })->count();
+
         // Create data with themes from TEMA_PRO constant
         foreach (Desa::TEMA_PRO as $tema) {
             Desa::factory()->create(['tema' => $tema]);
@@ -106,8 +113,9 @@ class LaporanTemaProTest extends TestCase
 
         $data = $response->json();
 
-        // Should only return data with pro themes
-        $this->assertEquals(count(Desa::TEMA_PRO), $data['recordsTotal']);
+        // Should return initial count plus the 5 new pro theme records
+        $expectedCount = $initialCount + count(Desa::TEMA_PRO);
+        $this->assertEquals($expectedCount, $data['recordsTotal']);
     }    /**
          * Helper method to make AJAX requests
          */

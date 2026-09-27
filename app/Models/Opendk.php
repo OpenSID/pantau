@@ -58,6 +58,30 @@ class Opendk extends Model
         return $query->filterDatatable($fillters)->select('*');
     }
 
+    /**
+     * Scope pengguna OpenDK untuk datatable dengan whitelist kolom aman.
+     * Tidak menyertakan data sensitif seperti url, peta_wilayah, batas_wilayah,
+     * nama_camat, jumlah_*, dan alamat.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_kecamatan',
+            'kode_kabupaten',
+            'kode_provinsi',
+            'nama_kecamatan',
+            'nama_kabupaten',
+            'nama_provinsi',
+            'versi',
+            'sebutan_wilayah',
+            'updated_at',
+            'created_at',
+        ]);
+    }
+
     public function scopeKabupaten($query, $fillters = [])
     {
         return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi, kode_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi', 'kode_provinsi']);
@@ -111,7 +135,18 @@ class Opendk extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
+        $request = request();
+
+        return $query->when($request->period, function ($query) use ($request) {
+            $dates = explode(' - ', $request->period);
+            if (count($dates) === 2) {
+                $start = $dates[0].' 00:00:00';
+                $end = $dates[1].' 23:59:59';
+                $query->whereRaw('updated_at between ? and ?', [$start, $end]);
+            }
+        }, function ($query) {
+            $query->whereRaw('updated_at >= now() - interval '.self::ACTIVE_DAYS.' day');
+        });
     }
 
     public function scopeNonActive($query)
@@ -149,9 +184,16 @@ class Opendk extends Model
         return null;
     }
 
-    public function scopeAktif($query, $batasTgl)
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('updated_at', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->startOfDay();
 
         return $query->where('updated_at', '>=', $maksimalTanggal);
     }
@@ -176,27 +218,27 @@ class Opendk extends Model
                     }
                 }
             })->when(! empty($fillters['akses']), function ($query) use ($fillters) {
-            $interval = 'interval '.self::ACTIVE_DAYS.' day';
-            $sign = '>=';
-            switch($fillters['akses']) {
-                case '4':
-                    $interval = 'interval '.self::ACTIVE_DAYS.' day';
-                    break;
-                case '2':
-                    $interval = 'interval 2 month';
-                    break;
-                case '1':
-                    $interval = 'interval 2 month';
-                    $sign = '<';
-                    break;
-                case '3':
-                    $interval = 'interval 4 month';
-                    $sign = '<';
-                    break;
-            }
+                $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                $sign = '>=';
+                switch($fillters['akses']) {
+                    case '4':
+                        $interval = 'interval '.self::ACTIVE_DAYS.' day';
+                        break;
+                    case '2':
+                        $interval = 'interval 2 month';
+                        break;
+                    case '1':
+                        $interval = 'interval 2 month';
+                        $sign = '<';
+                        break;
+                    case '3':
+                        $interval = 'interval 4 month';
+                        $sign = '<';
+                        break;
+                }
 
-            return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
-        })
+                return $query->whereRaw('updated_at '.$sign.' now() - '.$interval);
+            })
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
                 $query->where('kode_provinsi', $kode_provinsi);
             })

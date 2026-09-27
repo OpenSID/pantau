@@ -1,8 +1,15 @@
 name: Deploy Pantau Rilis with Ansible
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      info:
+        description: '⚠️ Branch master only. Tidak perlu diisi, cukup pilih branch lalu klik Run workflow.'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -13,12 +20,20 @@ concurrency:
 
 jobs:
   deploy:
-    # rilis dari branch 'master' & bukan prerelease
-    if: github.event.release.target_commitish == 'master' && github.event.release.prerelease == false
     name: Deploy Pantau Rilis to Production Server
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
     steps:
+      - name: Ensure workflow_dispatch uses master
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "master" ]; then
+            echo "::error::workflow_dispatch hanya boleh dijalankan dari branch master. Saat ini: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
       - name: Checkout Ansible Code
         uses: actions/checkout@v4
 
@@ -32,4 +47,4 @@ jobs:
           script: |
             set -euo pipefail
             cd ${{ secrets.CICD_SERVER_PATH }}
-            ansible-playbook -i inventories/production/inventory.yml playbooks/deploy-pantau-rilis.yml --extra-vars "release_tag=${{ github.event.release.tag_name }}"
+            ansible-playbook -i inventories/production/inventory.yml playbooks/deploy-pantau-rilis.yml

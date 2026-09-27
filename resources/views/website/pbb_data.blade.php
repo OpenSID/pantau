@@ -29,7 +29,6 @@
                                                 <th>Kecamatan</th>
                                                 <th>Kabupaten</th>
                                                 <th>Provinsi</th>
-                                                <th>URL</th>
                                                 <th>Versi</th>
                                                 <th>Akses Terakhir</th>
                                             </tr>
@@ -82,9 +81,6 @@
                 },
                 {
                     data: 'nama_provinsi'
-                },
-                {
-                    data: 'url'
                 },
                 {
                     data: 'versi'

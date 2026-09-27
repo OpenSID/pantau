@@ -50,6 +50,29 @@ class Pbb extends Model
         return $query->filterDatatable($fillters)->select('*');
     }
 
+    /**
+     * Scope pengguna PBB untuk datatable dengan whitelist kolom aman (tanpa url).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_desa',
+            'nama_desa',
+            'kode_kecamatan',
+            'nama_kecamatan',
+            'kode_kabupaten',
+            'nama_kabupaten',
+            'kode_provinsi',
+            'nama_provinsi',
+            'versi',
+            'updated_at',
+            'created_at',
+        ]);
+    }
+
     public function scopeKabupaten($query, $fillters = [])
     {
         return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi, kode_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi', 'kode_provinsi']);
@@ -141,9 +164,16 @@ class Pbb extends Model
         return null;
     }
 
-    public function scopeAktif($query, $batasTgl)
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
     {
-        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(7)->format('Y-m-d');
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('updated_at', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->startOfDay();
 
         return $query->where('updated_at', '>=', $maksimalTanggal);
     }

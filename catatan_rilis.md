@@ -1,21 +1,20 @@
-Di rilis v2510.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2609.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
-1. [#570](https://github.com/OpenSID/pantau/issues/570) Sesuaikan data dasboard jika user role admin wilayah.
-2. [#575](https://github.com/OpenSID/pantau/issues/575) Sesuaikan fungsi profil dan ubah password di user role admin wilayah.
-3. [#571](https://github.com/OpenSID/pantau/issues/571) Sesuaikan data desa sesuai pada akses wilayah. 
-4. [#573](https://github.com/OpenSID/pantau/issues/573) Sesuaikan dasbor OpenDK pada akses wilayah.
-5. [#574](https://github.com/OpenSID/pantau/issues/574) Sesuaikan data yang tampil pada halaman opendk/kecamatan.
-6. [#581](https://github.com/OpenSID/pantau/issues/581) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera.
-7. [#583](https://github.com/OpenSID/pantau/issues/583) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera pada halaman OpenDK.
-8. [#584](https://github.com/OpenSID/pantau/issues/584) Penambahan fitur untuk melihat daftar pada pengguna aktif menggunakan link alternatif dari angka tertera pada halaman LayananDesa & KelolaDesa.
-
+1. [#724](https://github.com/OpenSID/pantau/issues/724) Batasi Perhitungan "Tidak Aktif 4 Bulan" pada dasbor dan laporan desa.
 
 #### Perbaikan Bug
 
-1. [#569](https://github.com/OpenSID/pantau/issues/569) Perbaikan install awal.
+1. [#703](https://github.com/OpenSID/pantau/issues/703) Perbaikan logika perhitungan desa aktif pada dasbor pantau.
+2. [#698](https://github.com/OpenSID/pantau/issues/698) Perbaikan data jumlah desa pengguna OpenSID yang ada dipantau berbeda
+3. [#718](https://github.com/OpenSID/pantau/issues/718) Pebaikan halaman desa tidak aktif.
+4. [#719](https://github.com/OpenSID/pantau/issues/719) Sesuaikan filter akses terakhir pada menu desa, review desa tidak aktif, dan review desa baru.
+5. [#696](https://github.com/OpenSID/pantau/issues/696) Pebaikan pilihan provinsi tidak dapat dipilih pada form edit suku.
 
 #### Penyesuaian Teknis
 
-1. [#530](https://github.com/OpenSID/pantau/issues/530) Update Jquery ke versi 3.5.0 atau lebih terbaru.
+1. [#695](https://github.com/OpenSID/pantau/issues/695) Upgrade Laravel 13.
+2. [#51] (https://github.com/OpenSID/wiki-keamanan/issues/51) [P0][CRITICAL] Pantau - Endpoint Publik /datatables/pengguna-opensid Bocor Massal 26.099 Desa (PII + Infra). 
+3. [#52] (https://github.com/OpenSID/wiki-keamanan/issues/52) [P1][MEDIUM] Pantau - Endpoint Publik /datatables/pengguna-opendk Bocor 740 Domain Kecamatan.
+4. [#53] (https://github.com/OpenSID/wiki-keamanan/issues/53) [P1][MEDIUM] Pantau - Endpoint Publik LayananDesa (100) & KelolaDesa (87 + id_device) Bocor.

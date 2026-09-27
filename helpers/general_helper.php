@@ -162,7 +162,7 @@ function convert_xml_to_array($filename)
 function convert_born_date_to_age($date)
 {
     $from = new DateTime($date);
-    $to   = new DateTime('today');
+    $to = new DateTime('today');
     return $from->diff($to)->y;
 }
 
@@ -215,22 +215,22 @@ function get_words($sentence, $count = 10)
 
 function diff_for_humans($date)
 {
-    return  Carbon::parse($date)->diffForHumans();
+    return Carbon::parse($date)->diffForHumans();
 }
 
 function format_datetime($date)
 {
-    return  Carbon::parse($date)->translatedFormat('d F Y H:i:s');
+    return Carbon::parse($date)->translatedFormat('d F Y H:i:s');
 }
 
 function format_date($date)
 {
-    return  Carbon::parse($date)->translatedFormat('d F Y');
+    return Carbon::parse($date)->translatedFormat('d F Y');
 }
 
 function format_daydate($date)
 {
-    return  Carbon::parse($date)->translatedFormat('l, d F Y');
+    return Carbon::parse($date)->translatedFormat('l, d F Y');
 }
 
 function kuartal_bulan()
@@ -405,7 +405,7 @@ if (!function_exists('checkWebsiteAccessibility')) {
     {
         $options = [
             'http' => [
-                'method'  => 'GET',
+                'method' => 'GET',
                 'timeout' => 3,
             ],
         ];
@@ -437,5 +437,55 @@ if (!function_exists('parsedown')) {
         }
 
         return $parsedown;
+    }
+}
+
+if (!function_exists('daterangepicker_range')) {
+    function daterangepicker_range($key = null)
+    {
+        $now = Carbon::now();
+
+        $ranges = [
+            'Hari Ini' => [
+                $now->copy()->format('Y-m-d'),
+                $now->copy()->format('Y-m-d'),
+            ],
+            'Kemarin' => [
+                $now->copy()->subDay()->format('Y-m-d'),
+                $now->copy()->subDay()->format('Y-m-d'),
+            ],
+            '7 Hari Terakhir' => [
+                $now->copy()->subDays(6)->format('Y-m-d'),
+                $now->copy()->format('Y-m-d'),
+            ],
+            '30 Hari Terakhir' => [
+                $now->copy()->subDays(29)->format('Y-m-d'),
+                $now->copy()->format('Y-m-d'),
+            ],
+            'Bulan Ini' => [
+                $now->copy()->startOfMonth()->format('Y-m-d'),
+                $now->copy()->endOfMonth()->format('Y-m-d'),
+            ],
+            'Bulan Lalu' => [
+                $now->copy()->subMonth()->startOfMonth()->format('Y-m-d'),
+                $now->copy()->subMonth()->endOfMonth()->format('Y-m-d'),
+            ],
+            'Tahun Ini' => [
+                $now->copy()->startOfYear()->format('Y-m-d'),
+                $now->copy()->endOfYear()->format('Y-m-d'),
+            ],
+            'Semua Tanggal' => [
+                '1970-01-01',
+                $now->copy()->format('Y-m-d'),
+            ],
+        ];
+
+        if ($key !== null) {
+            return $ranges[$key] ?? null;
+        }
+
+        return [
+            'ranges' => $ranges,
+        ];
     }
 }

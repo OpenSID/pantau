@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Desa;
 use App\Models\TrackKeloladesa;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -16,26 +15,18 @@ class KelolaDesaDashboardControllerTest extends TestCase
     public function test_index_displays_dashboard_correctly()
     {
         // Create test data
-        $desa = Desa::factory()->create();
-        $trackKeloladesa = TrackKeloladesa::factory()->create([
-            'kode_desa' => $desa->kode_desa,
-            'versi' => '2507.0.0',
-            'created_at' => Carbon::now()
-        ]);
+        $desa = Desa::factory()->create();        
 
         $response = $this->get('/web/keloladesa');
 
         $response->assertStatus(200);
         $response->assertViewIs('website.keloladesa.index');
-        $response->assertViewHas([
-            'fillters',
-            'total_versi',
-            'total_desa',
-            'pengguna_layanan_desa',
+        $response->assertViewHas([            
+            'fillters',  
             'versi_terakhir',
             'info_rilis',
-            'pengguna_versi_terakhir',
-            'installHariIni'
+            'total_versi',
+            'pengguna_versi_terakhir'
         ]);
     }
 

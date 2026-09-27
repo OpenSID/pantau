@@ -17,6 +17,11 @@ yarn-error.log
 /.vscode
 /backup
 
+# Build artifacts
+/public/js/app.js
+/public/css/app.css
+/public/mix-manifest.json
+
 # E2E Testing
 /test-results/
 /playwright-report/
@@ -24,3 +29,9 @@ yarn-error.log
 
 # Ignore AI files
 QWEN.md
+.kilocode
+.qwen
+/template_ai/
+
+/docs/
+docs

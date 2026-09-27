@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\OpenKabRegionAccess;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -22,6 +23,8 @@ class Openkab extends Model
 
     /** {@inheritdoc} */
     public $incrementing = false;
+
+    private const ACTIVE_DAYS = 7;
 
     protected $fillable = [
         'kode_kab',
@@ -58,7 +61,7 @@ class Openkab extends Model
         if (Str::contains($namaKab, $sebutanKab)) {
             return $namaKab;
         } else {
-            return $sebutanKab.' '.$namaKab;
+            return $sebutanKab . ' ' . $namaKab;
         }
     }
 
@@ -80,5 +83,42 @@ class Openkab extends Model
     public function latestDesaVersion()
     {
         return $this->desa()->latestVersion();
+    }
+
+    public function scopeAktif($query, $batasTgl, $tglAwal = null)
+    {
+        if ($tglAwal) {
+            $start = Carbon::parse($tglAwal)->startOfDay();
+            $end = Carbon::parse($batasTgl)->endOfDay();
+
+            return $query->whereBetween('updated_at', [$start, $end]);
+        }
+
+        $maksimalTanggal = Carbon::parse($batasTgl)->subDays(self::ACTIVE_DAYS)->startOfDay();
+
+        return $query->where('updated_at', '>=', $maksimalTanggal);
+    }
+
+    /**
+     * Scope pengguna OpenKab untuk datatable dengan whitelist kolom aman.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_kab',
+            'nama_kab',
+            'kode_prov',
+            'nama_prov',
+            'nama_aplikasi',
+            'sebutan_kab',
+            'versi',
+            'jumlah_desa',
+            'updated_at',
+            'created_at',
+            'tgl_rekam',
+        ]);
     }
 }

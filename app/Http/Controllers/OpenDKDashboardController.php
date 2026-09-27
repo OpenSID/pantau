@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Desa;
 use App\Models\Opendk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ class OpenDKDashboardController extends Controller
         $fillters = [
             'kode_provinsi' => $request->kode_provinsi,
             'kode_kabupaten' => $request->kode_kabupaten,
-            'kode_kecamatan' => $request->kode_kecamatan,            
+            'kode_kecamatan' => $request->kode_kecamatan,
         ];
         $versiTerakhir = lastrelease_opendk();
         $installHariIni = Opendk::whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();

@@ -20,7 +20,12 @@ class KabupatenController extends Controller
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Region::kabupaten());
+            $query = DataTables::of(
+                Region::kabupaten()
+                    ->when($request->kode_provinsi, function ($q) use ($request) {
+                        $q->where('prov.region_code', $request->kode_provinsi);
+                    })
+            );
             if ($request->excel) {
                 $query->filtering();
 
@@ -41,7 +46,9 @@ class KabupatenController extends Controller
                 ->make(true);
         }
 
-        return view('admin.wilayah.kabupaten.index');
+        $fillters = ['kode_provinsi' => null];
+
+        return view('admin.wilayah.kabupaten.index', compact('fillters'));
     }
 
     public function datatables(Request $request)
@@ -52,7 +59,12 @@ class KabupatenController extends Controller
         }
 
         if ($request->ajax() || $request->excel) {
-            $query = DataTables::of(Region::kabupaten());
+            $query = DataTables::of(
+                Region::kabupaten()
+                    ->when($request->kode_provinsi, function ($q) use ($request) {
+                        $q->where('prov.region_code', $request->kode_provinsi);
+                    })
+            );
             if ($request->excel) {
                 $query->filtering();
 

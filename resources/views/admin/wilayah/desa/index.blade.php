@@ -1,4 +1,5 @@
 @extends('layouts.index')
+@include('layouts.components.select2_wilayah')
 
 @section('title', 'Daftar Desa')
 
@@ -13,13 +14,28 @@
         <div class="col-lg-12">
             <div class="card card-outline card-primary">
                 <div class="card-header with-border">
-                    <a href="{{ route('desa.create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i>
-                        &ensp;Tambah</a>
-                    <a href="{{ route('desa.import') }}" class="btn btn-primary btn-sm"><i class="fas fa-upload"></i>
-                        &ensp;Import</a>
-                    <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('desa') }}"><i class="fas fa-file-excel"></i> Excels<a>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a href="{{ route('desa.create') }}" class="btn btn-success btn-sm"><i class="fas fa-plus"></i>
+                                &ensp;Tambah</a>
+                            <a href="{{ route('desa.import') }}" class="btn btn-primary btn-sm"><i class="fas fa-upload"></i>
+                                &ensp;Import</a>
+                            <a class="btn btn-sm btn-success" id="btn-export" role="button" data-href="{{ url('desa') }}"><i class="fas fa-file-excel"></i> Excel</a>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a class="btn btn-sm btn-secondary" data-toggle="collapse" href="#collapse-filter" role="button"
+                                aria-expanded="false" aria-controls="collapse-filter">
+                                <i class="fas fa-filter"></i> Filter
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @include('layouts.components.form_filter')
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="datatable">
                             <thead>
@@ -43,66 +59,84 @@
 
     @include('layouts.components.global_delete')
 @endsection
+
 @section('js')
     <script>
-        $(function() {
-            $('#datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                searchable: true,
-                orderable: true,
-                ajax: "{{ url('desa') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        data: 'kode_desa',
-                        name: 'tbl_regions.region_code'
-                    },
-                    {
-                        data: 'nama_provinsi',
-                        name: 'prov.region_name'
-                    },
-                    {
-                        data: 'nama_kabupaten',
-                        name: 'kab.region_name'
-                    },
-                    {
-                        data: 'nama_kecamatan',
-                        name: 'kec.region_name'
-                    },
-                    {
-                        data: 'nama_desa',
-                        name: 'tbl_regions.region_name'
-                    },
-                    {
-                        data: 'nama_desa_baru',
-                        name: 'tbl_regions.new_region_name'
-                    },
-                ],
-                order: [
-                    [2, 'asc']
-                ],
-                createdRow: function(row, data, dataIndex) {
-                    if (data.kode_desa.slice(9, 11) == '99') {
-                        $(row).css("backgroundColor", "orange");
-                    }
+        var table = $('#datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            searchable: true,
+            orderable: true,
+            ajax: {
+                url: "{{ url('desa') }}",
+                data: function(d) {
+                    d.kode_provinsi  = $('#provinsi').val();
+                    d.kode_kabupaten = $('#kabupaten').val();
+                    d.kode_kecamatan = $('#kecamatan').val();
                 }
-            });
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'kode_desa',
+                    name: 'tbl_regions.region_code'
+                },
+                {
+                    data: 'nama_provinsi',
+                    name: 'prov.region_name'
+                },
+                {
+                    data: 'nama_kabupaten',
+                    name: 'kab.region_name'
+                },
+                {
+                    data: 'nama_kecamatan',
+                    name: 'kec.region_name'
+                },
+                {
+                    data: 'nama_desa',
+                    name: 'tbl_regions.region_name'
+                },
+                {
+                    data: 'nama_desa_baru',
+                    name: 'tbl_regions.new_region_name'
+                },
+            ],
+            order: [
+                [2, 'asc']
+            ],
+            createdRow: function(row, data, dataIndex) {
+                if (data.kode_desa.slice(9, 11) == '99') {
+                    $(row).css("backgroundColor", "orange");
+                }
+            }
         });
-        
-        $('#btn-export').click(function(){
+
+        $('#filter').on('click', function() {
+            table.draw();
+        });
+
+        $(document).on('click', '#reset', function(e) {
+            e.preventDefault();
+            $('#provinsi').val('').trigger('change');
+            $('#kabupaten').val('').trigger('change').attr('disabled', true);
+            $('#kecamatan').val('').trigger('change').attr('disabled', true);
+            table.draw();
+        });
+
+        $('#btn-export').click(function() {
             const _href = $(this).data('href')
-            window.location.href = _href+'?excel=1&params=' + JSON.stringify($('#datatable').DataTable().ajax.params())
+            window.location.href = _href + '?excel=1&params=' + JSON.stringify($('#datatable').DataTable().ajax.params())
         })
     </script>
 @endsection
