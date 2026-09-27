@@ -115,18 +115,32 @@
                 break;
         }
 
-        const allowedAkses = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        if (params.has('akses')) {
-            const paramAkses = params.get('akses');
-            if (allowedAkses.includes(paramAkses)) {
-                $akses.val(paramAkses).change();
-                if (paramAkses !== '0') {
-                    filter_open();
-                }
-            }
-        } else {
-            // Default: 1 Bulan Terakhir
-            $akses.val('6').change();
+        switch (params.get('akses')) {
+            case '0':
+                $akses.val('0').change();
+                break;
+            case '1':
+            case '2':
+            case '3':
+                $akses.val(params.get('akses')).change();
+                filter_open();
+                break;
+            case '4':
+                $akses.val('4').change();
+                filter_open();
+                break;
+            case '5':
+                $akses.val('5').change();
+                filter_open();
+                break;
+            case '6':
+                $akses.val('6').change();
+                filter_open();
+                break;
+            default:
+                // Default: Bulan ini
+                $akses.val('6').change();
+                break;
         }
 
         switch (params.get('layanan')) {

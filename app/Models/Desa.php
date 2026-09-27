@@ -106,7 +106,7 @@ class Desa extends Model
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states} {$filterWilayah}) kabupaten_offline")
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states} {$filterWilayah}) kabupaten_online")
             ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states} {$filterWilayah}) bukan_desa")
-            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, 0), coalesce(x.tgl_akses_hosting, 0)) < now() - interval 4 month {$states} {$filterWilayah}) tidak_aktif")
+            ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) >= now() - interval 4 month and greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) < DATE(now() - interval 29 day) {$states} {$filterWilayah}) tidak_aktif")
             ->when($request->period, function ($query) use ($request, $states, $filterWilayah) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
@@ -621,7 +621,7 @@ class Desa extends Model
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 2 month');
             })
             ->when($fillters['akses'] == 3, function ($query) {
-                $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) < now() - interval 4 month');
+                $query->whereRaw("greatest(coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')) >= now() - interval 4 month and greatest(coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')) < DATE(now() - interval 29 day)");
             })
             ->when($fillters['akses'] == 4, function ($query) {
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day');

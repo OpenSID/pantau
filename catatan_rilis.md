@@ -2,6 +2,7 @@ Di rilis v2609.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
+1. [#724](https://github.com/OpenSID/pantau/issues/724) Batasi Perhitungan "Tidak Aktif 4 Bulan" pada dasbor dan laporan desa.
 
 #### Perbaikan Bug
 
