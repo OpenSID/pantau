@@ -46,6 +46,7 @@
                                     <th>Jumlah Artikel</th>
                                     <th>Jumlah Mutasi Penduduk</th>
                                     <th>Jumlah Dokumen</th>
+                                    <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -88,6 +89,10 @@
                 break;
             case '5':
                 $('#akses').val('5').change();
+                filter_open();
+                break;
+            case '6':
+                $('#akses').val('6').change();
                 filter_open();
                 break;
 
@@ -154,6 +159,11 @@
                 {
                     data: 'jml_dokumen',
                     searchable: false,
+                },
+                {
+                    data: 'tgl_akses',
+                    searchable: false,
+                    defaultContent: '-'
                 } ],
             order: [
                 [2, 'desc']
