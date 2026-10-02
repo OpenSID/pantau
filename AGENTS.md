@@ -23,7 +23,7 @@ This file provides guidance to agents when working with code in this repository.
 
 **Security - GitHub API (MANDATORY):**
 - All GitHub API calls MUST use `lastrelease()` helper which validates URLs via `is_trusted_github_api_url()`
-- Only these endpoints are allowed: `/repos/OpenSID/rilis-premium/releases/latest`, `/repos/OpenSID/rilis-pbb/releases/latest`, `/repos/OpenSID/opendk/releases/latest`, `/repos/OpenSID/rilis-opensid-api/releases/latest`
+- Only these endpoints are allowed: `/repos/OpenSID/rilis-premium/releases/latest`, `/repos/OpenSID/OpenSID/releases/latest`, `/repos/OpenSID/rilis-pbb/releases/latest`, `/repos/OpenSID/opendk/releases/latest`, `/repos/OpenSID/rilis-opensid-api/releases/latest`
 - Never make direct HTTP requests to GitHub without this validation (SSRF protection)
 
 **Custom Helpers (Auto-loaded):**
