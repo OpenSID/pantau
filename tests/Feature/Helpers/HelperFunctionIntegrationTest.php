@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Helpers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -25,6 +26,33 @@ class HelperFunctionIntegrationTest extends TestCase
         $version = lastrelease_opensid();
 
         $this->assertEquals('2.3.0', $version);
+    }
+
+    /**
+     * Test that the versi umum function reads from the OpenSID repository,
+     * bukan dari repository rilis premium.
+     */
+    public function test_lastrelease_opensid_umum_function_works_with_security_fix()
+    {
+        Cache::forget('opensid_umum_version');
+
+        $mockResponse = [
+            'tag_name' => 'v2.2.0',
+            'name' => 'Release 2.2.0',
+            'published_at' => '2023-01-01T00:00:00Z'
+        ];
+
+        Http::fake([
+            'api.github.com/repos/OpenSID/OpenSID/releases/latest' => Http::response($mockResponse, 200)
+        ]);
+
+        $version = lastrelease_opensid_umum();
+
+        $this->assertEquals('2.2.0', $version);
+
+        Http::assertSent(function ($request) {
+            return $request->url() === 'https://api.github.com/repos/OpenSID/OpenSID/releases/latest';
+        });
     }
 
     /**
@@ -58,12 +86,14 @@ class HelperFunctionIntegrationTest extends TestCase
 
         // These should return default values when the HTTP request fails
         $opensidVersion = lastrelease_opensid();
+        $opensidUmumVersion = lastrelease_opensid_umum();
         $pbbVersion = lastrelease_pbb();
         $opendkVersion = lastrelease_opendk();
         $layananDesaVersion = lastrelease_api_layanandesa();
 
         // Verify they returned the cached/default values
         $this->assertIsString($opensidVersion);
+        $this->assertIsString($opensidUmumVersion);
         $this->assertIsString($pbbVersion);
         $this->assertIsString($opendkVersion);
         $this->assertIsString($layananDesaVersion);
