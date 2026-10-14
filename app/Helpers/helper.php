@@ -143,6 +143,7 @@ if (! function_exists('is_trusted_github_api_url')) {
         // Allow only specific trusted OpenSID repository release endpoints
         $allowed_paths = [
             '/repos/OpenSID/rilis-premium/releases/latest',
+            '/repos/OpenSID/OpenSID/releases/latest',
             '/repos/OpenSID/rilis-pbb/releases/latest',
             '/repos/OpenSID/opendk/releases/latest',
             '/repos/OpenSID/rilis-opensid-api/releases/latest',
@@ -184,10 +185,9 @@ if (! function_exists('lastrelease')) {
 
 if (! function_exists('lastrelease_opensid')) {
     /**
-     * Validasi domain.
+     * Get the latest OpenSID premium release version.
      *
-     * @param  string $url
-     * @return object
+     * @return string
      */
     function lastrelease_opensid()
     {
@@ -198,6 +198,33 @@ if (! function_exists('lastrelease_opensid')) {
             $version = str_replace('v', '', $versi_opensid->tag_name);
             Cache::forever('opensid_premium_version', $version);
         }
+
+        return $version;
+    }
+}
+
+if (! function_exists('lastrelease_opensid_umum')) {
+    /**
+     * Get the latest OpenSID non-premium (umum) release version.
+     *
+     * Versi rilis umum tidak selalu sama dengan versi rilis premium,
+     * sehingga diambil dari repository OpenSID/OpenSID.
+     *
+     * @return string
+     */
+    function lastrelease_opensid_umum()
+    {
+        // Cache data sampai akhir hari
+        $version = Cache::remember('opensid_umum_version', now()->endOfDay(), function () {
+            $version = '2307.0.1';
+            $versi_opensid = lastrelease('https://api.github.com/repos/OpenSID/OpenSID/releases/latest');
+
+            if ($versi_opensid !== false) {
+                $version = str_replace('v', '', $versi_opensid->tag_name);
+            }
+
+            return $version;
+        });
 
         return $version;
     }
