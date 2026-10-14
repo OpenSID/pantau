@@ -1,4 +1,4 @@
-Di rilis v2610.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2610.0.1 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
