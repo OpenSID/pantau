@@ -2,6 +2,7 @@ Di rilis v2610.0.1 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
+1. [#250](https://github.com/OpenSID/pantau/issues/250) Sesuaikan pendataan desa di pantau berdasarkan kode desa, jika desa ganti domain maka catat sebagai riwayat.
 
 #### Perbaikan Bug
 
