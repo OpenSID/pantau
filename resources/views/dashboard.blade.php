@@ -195,9 +195,23 @@
                 </div>
             </div>
         </div>
-        <!-- /.card-body -->
     </div>
-    <!-- /.card -->
+    @if (auth()->check() && auth()->user()->hasRole('Administrator'))
+    <div class="row mb-3">
+        <div class="col-lg-4 col-xs-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>{{ \App\Models\DomainHistory::whereNull('desa_id')->count() }}</h3>
+                    <p>Domain Belum Terpetakan</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <a href="{{ route('desa.domain-history.orphan') }}" class="small-box-footer">Review <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class="card collapsed-card">

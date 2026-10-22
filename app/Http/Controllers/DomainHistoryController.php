@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SetActiveDomainHistoryRequest;
+use App\Http\Requests\StoreDomainHistoryRequest;
 use App\Models\Desa;
 use App\Models\DomainHistory;
 use App\Services\DomainHistoryService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class DomainHistoryController extends Controller
 {
@@ -24,31 +24,22 @@ class DomainHistoryController extends Controller
         return view('desa.domain-history.index', compact('desa', 'histories'));
     }
 
-    public function store(Request $request, Desa $desa)
+    public function store(StoreDomainHistoryRequest $request, Desa $desa)
     {
-        Gate::authorize('is-admin');
-
-        $request->validate([
-            'domain' => ['required', 'string', 'max:255'],
-            'note' => ['nullable', 'string'],
-        ]);
-
-        $domain = fixDomainName($request->domain);
-
-        if ($domain === '') {
-            return back()->with('error', 'Domain tidak valid.');
-        }
+        $domain = $request->getNormalizedDomain();
 
         $this->domainHistoryService->addManualDomain($desa, $domain, $request->note);
 
         return redirect()->back()->with('success', 'Domain berhasil dicatat.');
     }
 
-    public function setActive(Desa $desa, DomainHistory $history)
+    public function setActive(SetActiveDomainHistoryRequest $request, Desa $desa, DomainHistory $history)
     {
-        Gate::authorize('is-admin');
+        $berhasil = $this->domainHistoryService->setActive($desa, $history);
 
-        $this->domainHistoryService->setActive($history);
+        if (! $berhasil) {
+            return redirect()->back()->with('error', 'Domain tidak dapat diaktifkan untuk desa ini.');
+        }
 
         return redirect()->back()->with('success', 'Domain aktif berhasil diubah.');
     }

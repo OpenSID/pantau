@@ -96,7 +96,7 @@ class DomainHistoryServiceTest extends TestCase
         $this->service->recordDomainChange($desa->kode_desa, 'lama.example.id', 'crawler');
         $baru = $this->service->recordDomainChange($desa->kode_desa, 'baru.example.id', 'crawler');
 
-        $this->assertTrue($this->service->setActive($baru));
+        $this->assertTrue($this->service->setActive($desa, $baru));
 
         $this->assertSame(1, DomainHistory::where('desa_id', $desa->id)->where('is_active', true)->count());
         $this->assertSame('baru.example.id', $desa->refresh()->domain);

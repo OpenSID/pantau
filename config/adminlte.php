@@ -533,13 +533,7 @@ return [
                     'can' => 'desa.view',
                     'text' => 'Desa',
                     'url' => 'desa',
-                ],
-                [
-                    'can' => 'desa.view',
-                    'text' => 'Riwayat Domain',
-                    'url' => 'desa/domain-history-yatim',
-                    'icon' => 'fas fa-history',
-                ],
+                ],                
             ],
         ],
 

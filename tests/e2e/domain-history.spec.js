@@ -1,6 +1,19 @@
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 
+function getFirstDesaKode() {
+  try {
+    const out = execSync(`php artisan tinker --execute="
+      $d = \\App\\Models\\Desa::orderBy('id')->first();
+      if (! $d) { echo ''; exit; }
+      echo \$d->kode_desa;
+    "`, { stdio: 'pipe' }).toString().trim();
+    return out || '11.01.01.2001';
+  } catch (e) {
+    return '11.01.01.2001';
+  }
+}
+
 /**
  * E2E untuk fitur Riwayat Domain per Desa.
  *
@@ -11,7 +24,7 @@ const { execSync } = require('child_process');
  * 4. Halaman riwayat domain menampilkan 2 domain dengan hanya 1 aktif.
  */
 test.describe('Riwayat Domain Desa', () => {
-  const kodeDesa = '99.88.77.0001';
+  const kodeDesa = getFirstDesaKode();
 
   test.beforeAll(() => {
     try {
@@ -45,7 +58,7 @@ test.describe('Riwayat Domain Desa', () => {
     await kirim('desa-lama-e2e.example.id');
     await kirim('desa-baru-e2e.example.id');
 
-    // Ambil id desa untukgeda navigasi.
+    // Ambil id desa untuk navigasi.
     const desaId = execSync(`php artisan tinker --execute="
       $desa = \\App\\Models\\Desa::where('kode_desa', '${kodeDesa}')->first();
       echo $desa ? $desa->id : '';

@@ -33,6 +33,7 @@ class Desa extends Model
         'tema' => 'string',
         'sebutan_desa' => 'string',
         'layanan' => 'string',
+        'domain_updated_at' => 'datetime'
     ];
 
     /** {@inheritdoc} */
@@ -338,7 +339,6 @@ class Desa extends Model
             ])
             ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
             ->selectRaw('(select count(*) from domain_histories dh where dh.desa_id = desa.id) as jumlah_domain')
-            ->selectRaw('(select max(dh.obtained_at) from domain_histories dh where dh.desa_id = desa.id) as domain_terakhir')
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });
@@ -585,7 +585,7 @@ class Desa extends Model
     {
         return $query
             // ->select(['*'])
-            ->select(['nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema', 'layanan', 'sebutan_desa'])
+            ->select(['id', 'nama_desa', 'kode_desa', 'nama_kecamatan', 'nama_kabupaten', 'kode_kecamatan', 'kode_kabupaten', 'nama_provinsi', 'kode_provinsi', 'versi_lokal', 'versi_hosting', 'jml_surat_tte', 'modul_tte', 'jml_penduduk', 'jml_artikel', 'jml_surat_keluar', 'jml_bantuan', 'jml_mandiri', 'jml_pengguna', 'jml_unsur_peta', 'jml_persil', 'jml_dokumen', 'jml_keluarga', 'kontak', 'tema', 'layanan', 'sebutan_desa', 'domain'])
             ->selectRaw("date_format(greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), '%Y-%m-%d') as tgl_akses")
             ->when(auth()->check() === true, function ($query) {
                 $query->selectRaw('url_lokal, url_hosting');
@@ -621,13 +621,13 @@ class Desa extends Model
 
         return $query->select(['*'])
             ->when($fillters['kode_provinsi'] ?? false, function ($query, $kode_provinsi) {
-                $query->where($this->getTable() . '.kode_provinsi', $kode_provinsi);
+                $query->where($this->getTable().'.kode_provinsi', $kode_provinsi);
             })
             ->when($fillters['kode_kabupaten'] ?? false, function ($query, $kode_kabupaten) {
-                $query->where($this->getTable() . '.kode_kabupaten', $kode_kabupaten);
+                $query->where($this->getTable().'.kode_kabupaten', $kode_kabupaten);
             })
             ->when($fillters['kode_kecamatan'] ?? false, function ($query, $kode_kecamatan) {
-                $query->where($this->getTable() . '.kode_kecamatan', $kode_kecamatan);
+                $query->where($this->getTable().'.kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($query) {
                 $query->hostingOnline();
@@ -658,7 +658,7 @@ class Desa extends Model
                 $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
             })
             ->when($fillters['akses'] == 6, function ($query) {
-                $query->whereRaw("greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)");
+                $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
             })
             ->when($fillters['akses'] == 7, function ($query) {
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 3 month');
@@ -699,12 +699,15 @@ class Desa extends Model
             ->when($fillters['sebutan_desa'], function ($query, $sebutanDesa) {
                 $query->sebutanDesa($sebutanDesa);
             })->when($fillters['tema'], function ($query, $tema) {
-                $query->where('tema',$tema);
+                $query->where('tema', $tema);
             })
             ->when($fillters['kode_desa'], function ($query, $kodeDesa) {
                 $query->where($this->getTable().'.kode_desa', 'LIKE', '%'.$kodeDesa.'%');
             })
             ->when($fillters['domain'], function ($query, $domain) {
+                if (! auth()->check()) {
+                    return;
+                }
                 $query->where(function ($sub) use ($domain) {
                     $sub->where($this->getTable().'.domain', 'LIKE', '%'.$domain.'%')
                         ->orWhereExists(function ($q) use ($domain) {
@@ -716,6 +719,9 @@ class Desa extends Model
                 });
             })
             ->when($fillters['jumlah_domain'], function ($query, $jumlah) {
+                if (! auth()->check()) {
+                    return;
+                }
                 $query->whereIn($this->getTable().'.id', function ($sub) use ($jumlah) {
                     $sub->select('desa_id')
                         ->from('domain_histories')
@@ -725,6 +731,9 @@ class Desa extends Model
                 });
             })
             ->when($fillters['punya_riwayat'] !== null && $fillters['punya_riwayat'] !== '', function ($query) use ($fillters) {
+                if (! auth()->check()) {
+                    return;
+                }
                 if ($fillters['punya_riwayat'] == '1') {
                     $query->whereHas('domainHistories');
                 } else {
@@ -818,7 +827,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -832,7 +841,7 @@ class Desa extends Model
                         CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(versi_hosting, '.', -2), '.', 1) AS UNSIGNED) DESC"
             )->first();
 
-        $versi = $versi ? 'v' . $versi->versi_hosting : 'Belum ada data';
+        $versi = $versi ? 'v'.$versi->versi_hosting : 'Belum ada data';
 
         return $versi;
     }
@@ -880,19 +889,19 @@ class Desa extends Model
 
     public function scopeHostingOnline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_hosting')
-                     ->where($this->getTable() . '.versi_hosting', '<>', '');
+        return $query->whereNotNull($this->getTable().'.versi_hosting')
+                     ->where($this->getTable().'.versi_hosting', '<>', '');
     }
 
     public function scopeHostingOffline($query)
     {
-        return $query->whereNotNull($this->getTable() . '.versi_lokal')
-                     ->where($this->getTable() . '.versi_lokal', '<>', '')
-                     ->where(function($q) {
-                         $q->whereNull($this->getTable() . '.versi_hosting')
-                           ->orWhere($this->getTable() . '.versi_hosting', '');
+        return $query->whereNotNull($this->getTable().'.versi_lokal')
+                     ->where($this->getTable().'.versi_lokal', '<>', '')
+                     ->where(function ($q) {
+                         $q->whereNull($this->getTable().'.versi_hosting')
+                           ->orWhere($this->getTable().'.versi_hosting', '');
                      });
-    }    
+    }
 
     /**
      * Scope a query by layanan.
@@ -907,7 +916,7 @@ class Desa extends Model
             return $query;
         }
 
-        return $query->where($this->getTable() . '.layanan', $layanan);
+        return $query->where($this->getTable().'.layanan', $layanan);
     }
 
     /**
@@ -923,7 +932,7 @@ class Desa extends Model
             return $query;
         }
 
-        return $query->where($this->getTable() . '.sebutan_desa', $sebutanDesa);
+        return $query->where($this->getTable().'.sebutan_desa', $sebutanDesa);
     }
 
     /**
@@ -970,9 +979,9 @@ class Desa extends Model
         })
             ->selectRaw('
         CASE 
-            ' . collect(self::TEMA_PRO)->map(function ($tema) {
+            '.collect(self::TEMA_PRO)->map(function ($tema) {
                 return "WHEN tema LIKE \"%{$tema}%\" THEN \"{$tema}\"";
-            })->implode(' ') . '
+            })->implode(' ').'
             ELSE tema
         END AS tema_nama,
         COUNT(*) as total

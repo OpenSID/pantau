@@ -45,7 +45,11 @@ class LaporanController extends Controller
             'tipe_pengguna' => $request->tipe_pengguna,
             'layanan' => $request->layanan,
             'sebutan_desa' => $request->sebutan_desa,
-            'tema' => $request->tema
+            'tema' => $request->tema,
+            'kode_desa' => $request->kode_desa,
+            'domain' => $request->domain,
+            'jumlah_domain' => $request->jumlah_domain,
+            'punya_riwayat' => $request->punya_riwayat,
         ];
         $hiddenColumns = [];
         $adminWilayah = auth()->check() && auth()->user()->isAdminWilayah();
@@ -61,6 +65,7 @@ class LaporanController extends Controller
                 if (in_array('aksi', $hiddenColumns)) {
                     unset($hiddenColumns['aksi']);
                 }
+
                 return Excel::download(new DesaExport($query->results(), $hiddenColumns), 'Desa-yang-memasang-OpenSID.xlsx');
             }
 
@@ -71,22 +76,25 @@ class LaporanController extends Controller
                         // Escape output untuk mencegah XSS
                         $nama = e($identitas['nama'] ?? '-');
                         $hp = e($identitas['hp'] ?? '-');
-                        return '<div><div>' . $nama . '</div><div>' . $hp . '</div></div>';                        
+
+                        return '<div><div>'.$nama.'</div><div>'.$hp.'</div></div>';
                     }
 
                     return '';
                 })
                 ->addColumn('action', function ($data) {
-                    $delete = '<button data-href="' . url('laporan/desa/' . $data->id) . '" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
+                    $history = '<a href="'.route('desa.domain-history', ['desa' => $data->id]).'" class="btn btn-sm btn-info" title="Riwayat Domain"><i class="fas fa-history"></i></a>';
+                    $delete = '<button data-href="'.url('laporan/desa/'.$data->id).'" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirm-delete"><i class="fas fa-trash"></i></button>';
 
-                    return '<div class="btn btn-group">' . $delete . '</div>';
+                    return '<div class="btn btn-group">'.$history.$delete.'</div>';
                 })->editColumn('layanan', function ($data) {
-                    return (Layanan::tryFrom($data->layanan))?->label() ?? '-';
+                    return Layanan::tryFrom($data->layanan)?->label() ?? '-';
                 })->rawColumns(['action', 'kontak'])
                 ->make(true);
         }
         $sebutanDesaList = (new SebutanDesaService())->getSebutanDesaList();
-        $temaList = (new TemaService())->getList();        
+        $temaList = (new TemaService())->getList();
+
         return view('laporan.desa', compact('fillters', 'hiddenColumns', 'sebutanDesaList', 'temaList'));
     }
 
