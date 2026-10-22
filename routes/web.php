@@ -283,3 +283,12 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+
+// Domain History Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('desa/domain-history-yatim', [App\Http\Controllers\DomainHistoryController::class, 'orphan'])->name('desa.domain-history.orphan');
+    Route::get('desa/{desa}/domain-history', [App\Http\Controllers\DomainHistoryController::class, 'index'])->name('desa.domain-history');
+    Route::get('desa/{desa}/domain-history/download', [App\Http\Controllers\DomainHistoryController::class, 'download'])->name('desa.domain-history.download');
+    Route::post('desa/{desa}/domain-history', [App\Http\Controllers\DomainHistoryController::class, 'store'])->name('desa.domain-history.store');
+    Route::patch('desa/{desa}/domain-history/{history}/set-active', [App\Http\Controllers\DomainHistoryController::class, 'setActive'])->name('desa.domain-history.set-active');
+});

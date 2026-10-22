@@ -79,6 +79,10 @@ class DashboardController extends Controller
             'tte'            => $request->tte,
             'versi_lokal'    => '',
             'versi_hosting'  => '',
+            'kode_desa'      => $request->kode_desa,
+            'domain'         => $request->domain,
+            'jumlah_domain'  => $request->jumlah_domain,
+            'punya_riwayat'  => $request->punya_riwayat,
         ];
 
         if ($request->ajax() || $request->excel) {

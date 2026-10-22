@@ -49,6 +49,26 @@ class Desa extends Model
     }
 
     /**
+     * Define a one-to-many relationship with domain history.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function domainHistories()
+    {
+        return $this->hasMany(DomainHistory::class);
+    }
+
+    /**
+     * Get current active domain.
+     *
+     * @return string|null
+     */
+    public function currentDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
      * Define a many-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -298,6 +318,7 @@ class Desa extends Model
     {
         return $query
             ->select([
+                'id',
                 'nama_desa',
                 'kode_desa',
                 'nama_kecamatan',
@@ -313,8 +334,11 @@ class Desa extends Model
                 'updated_at',
                 'created_at',
                 'url_hosting',
+                'domain',
             ])
             ->selectRaw('(CASE WHEN (versi_hosting IS NULL) THEN versi_lokal WHEN (versi_lokal IS NULL) THEN versi_hosting WHEN (tgl_rekam_hosting > tgl_rekam_lokal) THEN versi_hosting ELSE versi_lokal END) as versi')
+            ->selectRaw('(select count(*) from domain_histories dh where dh.desa_id = desa.id) as jumlah_domain')
+            ->selectRaw('(select max(dh.obtained_at) from domain_histories dh where dh.desa_id = desa.id) as domain_terakhir')
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             });
@@ -589,6 +613,10 @@ class Desa extends Model
             'layanan' => null,
             'sebutan_desa' => null,
             'tema' => null,
+            'kode_desa' => null,
+            'domain' => null,
+            'jumlah_domain' => null,
+            'punya_riwayat' => null,
         ], $fillters);
 
         return $query->select(['*'])
@@ -672,6 +700,36 @@ class Desa extends Model
                 $query->sebutanDesa($sebutanDesa);
             })->when($fillters['tema'], function ($query, $tema) {
                 $query->where('tema',$tema);
+            })
+            ->when($fillters['kode_desa'], function ($query, $kodeDesa) {
+                $query->where($this->getTable().'.kode_desa', 'LIKE', '%'.$kodeDesa.'%');
+            })
+            ->when($fillters['domain'], function ($query, $domain) {
+                $query->where(function ($sub) use ($domain) {
+                    $sub->where($this->getTable().'.domain', 'LIKE', '%'.$domain.'%')
+                        ->orWhereExists(function ($q) use ($domain) {
+                            $q->select(DB::raw(1))
+                                ->from('domain_histories')
+                                ->whereColumn('domain_histories.desa_id', $this->getTable().'.id')
+                                ->where('domain_histories.domain_normalized', 'LIKE', '%'.strtolower(trim($domain)).'%');
+                        });
+                });
+            })
+            ->when($fillters['jumlah_domain'], function ($query, $jumlah) {
+                $query->whereIn($this->getTable().'.id', function ($sub) use ($jumlah) {
+                    $sub->select('desa_id')
+                        ->from('domain_histories')
+                        ->whereNotNull('desa_id')
+                        ->groupBy('desa_id')
+                        ->havingRaw('COUNT(*) > ?', [(int) $jumlah]);
+                });
+            })
+            ->when($fillters['punya_riwayat'] !== null && $fillters['punya_riwayat'] !== '', function ($query) use ($fillters) {
+                if ($fillters['punya_riwayat'] == '1') {
+                    $query->whereHas('domainHistories');
+                } else {
+                    $query->whereDoesntHave('domainHistories');
+                }
             });
     }
 

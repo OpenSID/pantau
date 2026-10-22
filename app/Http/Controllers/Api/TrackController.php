@@ -9,6 +9,7 @@ use App\Models\Desa;
 use App\Models\Notifikasi;
 use App\Models\NotifikasiDesa;
 use App\Notifications\InfoNotification;
+use App\Services\DomainHistoryService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Notification;
 
 class TrackController extends Controller
 {
-    public function __invoke(TrackRequest $request)
+    public function __invoke(TrackRequest $request, DomainHistoryService $domainHistoryService)
     {
         DB::beginTransaction();
 
@@ -25,6 +26,13 @@ class TrackController extends Controller
                 $request->requestWhere(),
                 $request->requestData()
             );
+
+            // Catat riwayat domain desa (hanya domain hosting, bukan lokal).
+            $domain = $request->filled('url') ? fixDomainName($request->url) : null;
+
+            if ($domain && ! is_local($request->url)) {
+                $domainHistoryService->recordDomainChange($desa->kode_desa, $domain, 'crawler');
+            }
 
             $akses = Akses::query()->where('desa_id', $desa->id)->whereDate('tgl', date('Y-m-d'))->first();
 
