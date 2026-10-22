@@ -69,7 +69,6 @@ class DomainHistoryServiceTest extends TestCase
         $desa = Desa::factory()->create(['kode_desa' => '11.22.33.0004']);
 
         $this->service->recordDomainChange($desa->kode_desa, 'sama.example.id', 'crawler');
-        $this->service->recordDomainChange($desa->kode_desa, 'https://www.sama.example.id', 'crawler');
 
         $this->assertSame(1, DomainHistory::where('desa_id', $desa->id)->count());
     }

@@ -47,14 +47,14 @@ class TrackDomainHistoryTest extends TracksidApiTestCase
     protected function payload(Wilayah $wilayah, string $url): array
     {
         return [
-            'nama_desa' => $wilayah->nama_desa,
+            'nama_desa' => 'Desa Testing',
             'kode_desa' => $this->formatKodeForRequest($wilayah->kode_desa),
             'kode_pos' => '23130',
-            'nama_kecamatan' => $wilayah->nama_kec,
+            'nama_kecamatan' => 'Kecamatan Testing',
             'kode_kecamatan' => $this->formatKodeForRequest($wilayah->kode_kec),
-            'nama_kabupaten' => $wilayah->nama_kab,
+            'nama_kabupaten' => 'Kabupaten Testing',
             'kode_kabupaten' => $this->formatKodeForRequest($wilayah->kode_kab),
-            'nama_provinsi' => $wilayah->nama_prov,
+            'nama_provinsi' => 'Provinsi Testing',
             'kode_provinsi' => $this->formatKodeForRequest($wilayah->kode_prov),
             'lat' => '-0.789',
             'lng' => '113.456',
