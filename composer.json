@@ -31,6 +31,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "laravel/sail": "^1.15",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.0",
