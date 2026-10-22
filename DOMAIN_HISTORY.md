@@ -165,6 +165,41 @@ Ringkasan:
 npm run test:e2e -- domain-history.spec.js
 ```
 
+### Script uji manual (simulasi pengiriman dari OpenSID)
+
+`scripts/test-perubahan-domain.php` mengirim request HTTP sungguhan ke
+`POST /api/track/desa` — endpoint yang dipakai crawler OpenSID — sehingga
+middleware `tracksid` (Bearer token) dan seluruh validasi `TrackRequest`
+ikut teruji seperti kondisi produksi.
+
+```bash
+# Uji pada desa acak dari kode_wilayah
+php scripts/test-perubahan-domain.php
+
+# Uji pada desa tertentu
+php scripts/test-perubahan-domain.php --desa=11.01.01.2001
+
+# Simpan hasil uji (default: data uji dibersihkan)
+php scripts/test-perubahan-domain.php --keep
+
+# Kembalikan data ke kondisi semula
+php scripts/test-perubahan-domain.php --rollback --desa=11.01.01.2001
+```
+
+Skenario yang dijalankan:
+
+1. OpenSID mengirim data desa dengan domain **lama** → HTTP 200.
+2. OpenSID mengirim data desa dengan domain **baru** pada `kode_desa` yang sama → HTTP 200.
+3. Verifikasi otomatis:
+   - hanya ada **1** entri desa untuk `kode_desa` tersebut (tidak ada duplikasi),
+   - `domain_histories` berisi **2** baris (lama + baru),
+   - hanya **1** baris dengan `is_active = true`,
+   - `desa.domain` berisi domain terakhir,
+   - domain lama tersimpan dengan `is_active = false`.
+
+Exit code `0` bila semua pemeriksaan lulus, `1` bila ada yang gagal.
+
+> Memerlukan token aktif di `TRACKSID_DEV_TOKEN` (file `.env`).
 ---
 
 ## 7. Out of Scope
