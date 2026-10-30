@@ -24,13 +24,14 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^3.0",
-        "phpoffice/phpspreadsheet": "1.30.6",
+        "phpoffice/phpspreadsheet": "^1.30.7",
         "spatie/laravel-backup": "^10.0",
         "spatie/laravel-permission": "^6.21",
         "yajra/laravel-datatables-oracle": "^13.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "laravel/sail": "^1.15",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.0",
