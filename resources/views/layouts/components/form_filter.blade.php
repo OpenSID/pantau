@@ -220,19 +220,37 @@
                     </select>
                 </div>
             </div>
-        @endif
+        @endif        
 
-        @if (array_key_exists('suku', $fillters))
+        @if (array_key_exists('domain', $fillters))
             <div class="col-sm">
                 <div class="form-group">
-                    <label class="text-white">Suku</label>
-                    <select class="select2 form-control-sm" id="suku" name="suku"
-                        data-placeholder="Semua Suku" style="width: 100%;">
-                        <option value="" selected>Semua Suku</option>
-                        @if ($fillters['suku'] && is_array($fillters['suku']))
-                            <option value="{{ $fillters['suku']['id'] ?? '' }}" selected>
-                                {{ $fillters['suku']['name'] ?? '' }}</option>
-                        @endif
+                    <label>Domain</label>
+                    <input type="text" class="form-control" id="filter-domain" name="domain" placeholder="Cari domain">
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('jumlah_domain', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Jumlah Domain</label>
+                    <select class="form-control form-control-sm" id="filter-jumlah-domain" name="jumlah_domain" style="width: 100%;">
+                        <option value="">Semua</option>
+                        <option value="1">Lebih dari 1 domain</option>
+                    </select>
+                </div>
+            </div>
+        @endif
+
+        @if (array_key_exists('punya_riwayat', $fillters))
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Riwayat Domain</label>
+                    <select class="form-control form-control-sm" id="filter-punya-riwayat" name="punya_riwayat" style="width: 100%;">
+                        <option value="">Semua</option>
+                        <option value="1">Memiliki riwayat</option>
+                        <option value="0">Tanpa riwayat</option>
                     </select>
                 </div>
             </div>
@@ -274,6 +292,8 @@
         $('#sebutan_desa').select2();
         $('#layanan').select2();
         $('#tema').select2();
+        $('#filter-jumlah-domain').select2();
+        $('#filter-punya-riwayat').select2();
 	});    
     </script>
 @endpush()

@@ -8,6 +8,7 @@
 .env.backup
 .php-cs-fixer.cache
 .phpunit.result.cache
+.phpunit.cache/
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml
@@ -35,3 +36,10 @@ QWEN.md
 
 /docs/
 docs
+.opencode/
+.specify/
+specs/
+.opencode/
+.specify/
+specs/
+.claude/

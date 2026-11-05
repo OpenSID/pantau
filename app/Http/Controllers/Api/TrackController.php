@@ -9,6 +9,7 @@ use App\Models\Desa;
 use App\Models\Notifikasi;
 use App\Models\NotifikasiDesa;
 use App\Notifications\InfoNotification;
+use App\Services\DomainHistoryService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,15 +17,88 @@ use Illuminate\Support\Facades\Notification;
 
 class TrackController extends Controller
 {
-    public function __invoke(TrackRequest $request)
+    public function __invoke(TrackRequest $request, DomainHistoryService $domainHistoryService)
     {
         DB::beginTransaction();
 
         try {
+            $kodeDesaTracking = $request->input('kode_desa');
+            if ($kodeDesaTracking) {
+                $kodeDesaTracking = str_replace('.', '', (string) $kodeDesaTracking);
+                // Format ulang seperti biasa jika perlu, tapi lebih aman ambil dari requestWhere
+            }
+            $requestWhere = $request->requestWhere();
+            $desaLama = isset($requestWhere['kode_desa']) ? Desa::where('kode_desa', $requestWhere['kode_desa'])->first() : null;
+            $urlHostLama = $desaLama?->url_hosting;
+
             $desa = Desa::query()->updateOrCreate(
-                $request->requestWhere(),
+                $requestWhere,
                 $request->requestData()
             );
+
+            // Catat riwayat domain desa hanya jika url_hosting berubah atau desa baru.
+            // Pencatatan riwayat bersifat best-effort agar kegagalan migrasi/skema
+            // tidak menggagalkan seluruh proses tracking OpenSID.
+            $urlHostBaru = $desa->url_hosting;
+            $domainBerubah = $desa->wasRecentlyCreated || ($urlHostLama !== $urlHostBaru);
+
+            if ($domainBerubah && $urlHostBaru) {
+                $domain = fixDomainName($urlHostBaru);
+
+                if ($domain && ! is_local($urlHostBaru)) {
+                    try {
+                        if (DB::transactionLevel() > 0 && DB::getDriverName() !== 'sqlite') {
+                            DB::statement('SAVEPOINT sp_domain_hist');
+                            try {
+                                $domainHistoryService->recordDomainChange($desa->kode_desa, $urlHostBaru, 'crawler');
+                                DB::statement('RELEASE SAVEPOINT sp_domain_hist');
+                            } catch (\Throwable $e) {
+                                DB::statement('ROLLBACK TO SAVEPOINT sp_domain_hist');
+                                DB::statement('RELEASE SAVEPOINT sp_domain_hist');
+                                Log::warning('Gagal mencatat riwayat domain saat tracking desa: '.$desa->kode_desa, [
+                                    'domain' => $domain,
+                                    'message' => $e->getMessage(),
+                                ]);
+                            }
+                        } else {
+                            $domainHistoryService->recordDomainChange($desa->kode_desa, $urlHostBaru, 'crawler');
+                        }
+                    } catch (\Throwable $e) {
+                        Log::warning('Gagal mencatat riwayat domain saat tracking desa: '.$desa->kode_desa, [
+                            'domain' => $domain,
+                            'message' => $e->getMessage(),
+                        ]);
+                    }
+                }
+            } elseif ($domainBerubah && ! $urlHostBaru && $request->filled('url')) {
+                $domain = fixDomainName($request->url);
+
+                if ($domain && ! is_local($request->url)) {
+                    try {
+                        if (DB::transactionLevel() > 0 && DB::getDriverName() !== 'sqlite') {
+                            DB::statement('SAVEPOINT sp_domain_hist');
+                            try {
+                                $domainHistoryService->recordDomainChange($desa->kode_desa, $request->url, 'crawler');
+                                DB::statement('RELEASE SAVEPOINT sp_domain_hist');
+                            } catch (\Throwable $e) {
+                                DB::statement('ROLLBACK TO SAVEPOINT sp_domain_hist');
+                                DB::statement('RELEASE SAVEPOINT sp_domain_hist');
+                                Log::warning('Gagal mencatat riwayat domain saat tracking desa: '.$desa->kode_desa, [
+                                    'domain' => $domain,
+                                    'message' => $e->getMessage(),
+                                ]);
+                            }
+                        } else {
+                            $domainHistoryService->recordDomainChange($desa->kode_desa, $request->url, 'crawler');
+                        }
+                    } catch (\Throwable $e) {
+                        Log::warning('Gagal mencatat riwayat domain saat tracking desa: '.$desa->kode_desa, [
+                            'domain' => $domain,
+                            'message' => $e->getMessage(),
+                        ]);
+                    }
+                }
+            }
 
             $akses = Akses::query()->where('desa_id', $desa->id)->whereDate('tgl', date('Y-m-d'))->first();
 

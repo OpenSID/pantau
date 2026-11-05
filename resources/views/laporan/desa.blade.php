@@ -49,6 +49,7 @@
                                     <th>Kecamatan</th>
                                     <th>Kabupaten</th>
                                     <th>Provinsi</th>
+                                    <th>Domain Saat Ini</th>
                                     @auth
                                         @if(!in_array('kontak', $hiddenColumns ?? []))
                                             <th>Kontak</th>                                        
@@ -188,6 +189,12 @@
                         data.versi_lokal = params.get('versi_lokal');
                         data.versi_hosting = params.get('versi_hosting');
                         data.tema = $tema.val();
+                        @auth
+                        data.kode_desa = $('#filter-kode-desa').val();
+                        data.domain = $('#filter-domain').val();
+                        data.jumlah_domain = $('#filter-jumlah-domain').val();
+                        data.punya_riwayat = $('#filter-punya-riwayat').val();
+                        @endauth
                     },
                     error: function(xhr, error, thrown) {
                         console.error('Error loading desa data:', error, thrown);
@@ -221,6 +228,18 @@
                 },
                 {
                     data: 'nama_provinsi'
+                },
+                {
+                    data: 'domain',
+                    name: 'domain',
+                    render: function (data, type, row) {
+                        if (! data) {
+                            return '<span class="text-muted">-</span>';
+                        }
+
+                        return '<code>'+ $('<div>').text(data).html() +'</code>';
+                    },
+                    searchable: false
                 },
                 @auth 
                     @if(!in_array('kontak', $hiddenColumns ?? []))
@@ -339,7 +358,7 @@
 
         $('#filter').on('click', function(e) {
             desa.draw();
-        });
+        });        
 
         $(document).on('click', '#reset', function(e) {
             e.preventDefault();
@@ -352,6 +371,12 @@
             $('#tipe_pengguna').val('').change();
             $layanan.val('').change();
             $sebutanDesa.val('').change();
+            @auth
+            $('#filter-kode-desa').val('');
+            $('#filter-domain').val('');
+            $('#filter-jumlah-domain').val('').trigger('change');
+            $('#filter-punya-riwayat').val('').trigger('change');
+            @endauth
 
             desa.ajax.reload();
         });
