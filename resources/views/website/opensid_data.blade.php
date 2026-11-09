@@ -32,6 +32,16 @@
                                         @include('layouts.components.form_filter')
                                     </div>
                                 </div>
+                                <div id="periode-akses-info" class="alert alert-info py-2 d-flex justify-content-between align-items-center" style="display: none !important;">
+                                    <span>
+                                        <i class="fas fa-calendar"></i>
+                                        Menampilkan desa dengan akses terakhir pada periode
+                                        <strong id="periode-akses-label"></strong>
+                                    </span>
+                                    <button type="button" class="close" id="hapus-periode-akses" aria-label="Hapus filter periode">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table" id="table-pengguna-opensid">
                                         <thead>
@@ -70,6 +80,25 @@
     <script>
         $(document).ready(function() {
             const filters = {!! json_encode(request()->all()) !!};
+            // Periode akses dari kartu "Desa Aktif" di dasbor (sudah divalidasi di controller)
+            let periodeAkses = @json($fillters['period'] ?? null);
+
+            function tampilkanPeriodeAkses() {
+                if (periodeAkses) {
+                    $('#periode-akses-label').text(periodeAkses);
+                    $('#periode-akses-info').attr('style', '');
+                } else {
+                    $('#periode-akses-label').text('');
+                    $('#periode-akses-info').attr('style', 'display: none !important;');
+                }
+            }
+
+            function hapusPeriodeAkses() {
+                periodeAkses = null;
+                tampilkanPeriodeAkses();
+            }
+
+            tampilkanPeriodeAkses();
 
             // Tunggu select2 selesai diinisialisasi
             setTimeout(function() {
@@ -110,6 +139,7 @@
                         d.status = $('#status').val();
                         d.akses = $('#akses').val();
                         d.tte = $('#tte').val();
+                        d.period = periodeAkses || '';
                     },
                     method: 'get',
                 },
@@ -172,7 +202,16 @@
                 $('#status').val('').trigger('change');
                 $('#akses').val('').trigger('change');
                 $('#tte').val('').trigger('change');
+                hapusPeriodeAkses();
                 semuaDesa.ajax.reload();
+            })
+            $('#hapus-periode-akses').click(function() {
+                hapusPeriodeAkses();
+                semuaDesa.ajax.reload();
+            })
+            // Memilih filter Akses secara manual menggantikan periode dari dasbor agar filter tidak bertumpuk
+            $('#akses').on('select2:select', function() {
+                hapusPeriodeAkses();
             })
         })
     </script>
