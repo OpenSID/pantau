@@ -221,9 +221,9 @@
         function updateData() {
             const params = {
                 period: $('input[name=periods]').val(),
-                provinsi: $('select[name=provinsi]').val(),
-                kabupaten: $('select[name=kabupaten]').val(),
-                kecamatan: $('select[name=kecamatan]').val(),
+                kode_provinsi: $('select[name=provinsi]').val(),
+                kode_kabupaten: $('select[name=kabupaten]').val(),
+                kode_kecamatan: $('select[name=kecamatan]').val(),
                 versi_opensid: '{{ $versi_terakhir }}'
             }
 

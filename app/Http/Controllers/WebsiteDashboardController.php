@@ -49,9 +49,11 @@ class WebsiteDashboardController extends Controller
     public function summary(Request $request)
     {
         $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
-        $provinsi = $request->get('provinsi');
-        $kabupaten = $request->get('kabupaten');
-        $kecamatan = $request->get('kecamatan');
+        [
+            'kode_provinsi' => $provinsi,
+            'kode_kabupaten' => $kabupaten,
+            'kode_kecamatan' => $kecamatan,
+        ] = $this->wilayahParams($request);
         $versiOpensid = $request->get('versi_opensid');
         $summary = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
         $summarySebelumnya = Desa::selectRaw('count(distinct kode_desa) as desa, count(distinct kode_kecamatan) as kecamatan, count(distinct kode_kabupaten) as kabupaten, count(distinct kode_provinsi) as provinsi');
@@ -60,10 +62,10 @@ class WebsiteDashboardController extends Controller
         $summary->where('created_at', '<=', $tanggalAkhir);
         $summarySebelumnya->where('created_at', '<=', Carbon::parse($tanggalAkhir)->subMonth()->format('Y-m-d'));
 
-        $opensid = Desa::aktif($tanggalAkhir)->select(['nama_desa'])->limit(7)->get();
-        $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7)->get();
-        $layanan = TrackMobile::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
-        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7)->get();
+        $opensid = Desa::aktif($tanggalAkhir)->select(['nama_desa'])->limit(7);
+        $opendk = Opendk::aktif($tanggalAkhir)->select(['nama_kecamatan'])->limit(7);
+        $layanan = TrackMobile::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7);
+        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir)->with(['desa' => static fn ($q) => $q->select(['kode_desa', 'nama_desa'])])->distinct()->select(['kode_desa'])->limit(7);
 
         $openkabWilayah = Openkab::where('created_at', '<=', $tanggalAkhir);
         $opensidWilayah = Desa::where('created_at', '<=', $tanggalAkhir);
@@ -88,6 +90,11 @@ class WebsiteDashboardController extends Controller
             $opendkWilayah->where('kode_provinsi', $provinsi);
             $layananWilayah->provinsi($provinsi);
             $kelolaDesaWilayah->provinsi($provinsi);
+
+            $opensid->where('kode_provinsi', $provinsi);
+            $opendk->where('kode_provinsi', $provinsi);
+            $layanan->provinsi($provinsi);
+            $kelolaDesa->provinsi($provinsi);
         }
         if ($kabupaten) {
             $summary->where('kode_kabupaten', $kabupaten);
@@ -99,17 +106,32 @@ class WebsiteDashboardController extends Controller
             $opendkWilayah->where('kode_kabupaten', $kabupaten);
             $layananWilayah->kabupaten($kabupaten);
             $kelolaDesaWilayah->kabupaten($kabupaten);
+
+            $opensid->where('kode_kabupaten', $kabupaten);
+            $opendk->where('kode_kabupaten', $kabupaten);
+            $layanan->kabupaten($kabupaten);
+            $kelolaDesa->kabupaten($kabupaten);
         }
         if ($kecamatan) {
             $summary->where('kode_kecamatan', $kecamatan);
             $summarySebelumnya->where('kode_kecamatan', $kecamatan);
             $versiTerakhirOpensid->where('kode_kecamatan', $kecamatan);
 
-            $opensidWilayah->where('kode_kecamatan', $kabupaten);
-            $opendkWilayah->where('kode_kecamatan', $kabupaten);
+            $opensidWilayah->where('kode_kecamatan', $kecamatan);
+            $opendkWilayah->where('kode_kecamatan', $kecamatan);
             $layananWilayah->kecamatan($kecamatan);
             $kelolaDesaWilayah->kecamatan($kecamatan);
+
+            $opensid->where('kode_kecamatan', $kecamatan);
+            $opendk->where('kode_kecamatan', $kecamatan);
+            $layanan->kecamatan($kecamatan);
+            $kelolaDesa->kecamatan($kecamatan);
         }
+        $opensid = $opensid->get();
+        $opendk = $opendk->get();
+        $layanan = $layanan->get();
+        $kelolaDesa = $kelolaDesa->get();
+
         $summareResult = $summary->first();
         $summarySebelumnyaResult = $summarySebelumnya->first();
         $totalVersiTerakhirOpensid = 0;
@@ -126,10 +148,10 @@ class WebsiteDashboardController extends Controller
             ],
             'detail' => [
                 'openkab' => [],
-                'opendk' => $opendk ? $opendk->map(static fn ($q) => $q->nama_kecamatan)->toArray() : [],
-                'opensid' => $opensid ? $opensid->map(static fn ($q) => $q->nama_desa)->toArray() : [],
-                'layanandesa' => $layanan ? $layanan->map(static fn ($q) => $q->desa->nama_desa)->toArray() : [],
-                'keloladesa' => $kelolaDesa ? $kelolaDesa->map(static fn ($q) => $q->desa->nama_desa)->toArray() : [],
+                'opendk' => $opendk->map(static fn ($q) => $q->nama_kecamatan)->toArray(),
+                'opensid' => $opensid->map(static fn ($q) => $q->nama_desa)->toArray(),
+                'layanandesa' => $layanan->map(static fn ($q) => $q->desa?->nama_desa)->filter()->values()->toArray(),
+                'keloladesa' => $kelolaDesa->map(static fn ($q) => $q->desa?->nama_desa)->filter()->values()->toArray(),
             ],
             'additional' => [
                 'opensid' => ['install_versi_terakhir' => $totalVersiTerakhirOpensid],
@@ -148,9 +170,11 @@ class WebsiteDashboardController extends Controller
     public function chartUsage(Request $request, $data = false)
     {
         $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
-        $provinsi = $request->get('provinsi');
-        $kabupaten = $request->get('kabupaten');
-        $kecamatan = $request->get('kecamatan');
+        [
+            'kode_provinsi' => $provinsi,
+            'kode_kabupaten' => $kabupaten,
+            'kode_kecamatan' => $kecamatan,
+        ] = $this->wilayahParams($request);
         [$tanggalAwal, $tanggalAkhir] = explode(' - ', $period);
         // range minimal 7 hari, max 31 hari
         $minTanggal = Carbon::parse($tanggalAkhir)->subDays(7)->format('Y-m-d');
@@ -268,12 +292,27 @@ class WebsiteDashboardController extends Controller
     {
         $period = $request->get('period') ?? Carbon::now()->format('Y-m-d').' - '.Carbon::now()->format('Y-m-d');
         [$tanggalAwal, $tanggalAkhir] = explode(' - ', $period);
-        $opensid = Desa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
-        $opendk = Opendk::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
-        $layanan = TrackMobile::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
-        $kelolaDesa = TrackKeloladesa::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
-        $pbb = Pbb::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
-        $openkab = Openkab::filterWilayah($request)->aktif($tanggalAkhir, $tanggalAwal);
+        $wilayah = $this->wilayahParams($request);
+        $filter = new Request($wilayah);
+
+        $opensid = Desa::filterWilayah($filter)->aktif($tanggalAkhir, $tanggalAwal);
+        $opendk = Opendk::filterWilayah($filter)->aktif($tanggalAkhir, $tanggalAwal);
+        $pbb = Pbb::filterWilayah($filter)->aktif($tanggalAkhir, $tanggalAwal);
+
+        // Tabel track hanya memiliki kode_desa, sehingga filter wilayah memakai prefix kode_desa.
+        $layanan = TrackMobile::aktif($tanggalAkhir, $tanggalAwal)
+            ->when($wilayah['kode_provinsi'], static fn ($q, $kode) => $q->provinsi($kode))
+            ->when($wilayah['kode_kabupaten'], static fn ($q, $kode) => $q->kabupaten($kode))
+            ->when($wilayah['kode_kecamatan'], static fn ($q, $kode) => $q->kecamatan($kode));
+        $kelolaDesa = TrackKeloladesa::aktif($tanggalAkhir, $tanggalAwal)
+            ->when($wilayah['kode_provinsi'], static fn ($q, $kode) => $q->provinsi($kode))
+            ->when($wilayah['kode_kabupaten'], static fn ($q, $kode) => $q->kabupaten($kode))
+            ->when($wilayah['kode_kecamatan'], static fn ($q, $kode) => $q->kecamatan($kode));
+
+        // OpenKab berada di level kabupaten, sehingga filter kecamatan tidak diterapkan.
+        $openkab = Openkab::aktif($tanggalAkhir, $tanggalAwal)
+            ->when($wilayah['kode_provinsi'], static fn ($q, $kode) => $q->where('kode_prov', $kode))
+            ->when($wilayah['kode_kabupaten'], static fn ($q, $kode) => $q->where('kode_kab', $kode));
 
         $result = [
             'openkab' => $openkab->count(),
@@ -285,6 +324,20 @@ class WebsiteDashboardController extends Controller
         ];
 
         return response()->json($result);
+    }
+
+    /**
+     * Normalisasi parameter filter wilayah.
+     * Nama standar adalah kode_provinsi, kode_kabupaten, kode_kecamatan;
+     * nama lama (provinsi, kabupaten, kecamatan) tetap diterima sebagai fallback.
+     */
+    private function wilayahParams(Request $request): array
+    {
+        return [
+            'kode_provinsi' => $request->get('kode_provinsi') ?: $request->get('provinsi'),
+            'kode_kabupaten' => $request->get('kode_kabupaten') ?: $request->get('kabupaten'),
+            'kode_kecamatan' => $request->get('kode_kecamatan') ?: $request->get('kecamatan'),
+        ];
     }
 
     public function openkab(Request $request)
