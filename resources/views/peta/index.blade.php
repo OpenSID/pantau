@@ -14,7 +14,7 @@
 @section('title', 'Online Pengguna OpenSID')
 
 @section('content_header')
-    <h1>Online Pengguna OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">Pengguna aktif dalam 7 hari terakhir @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small>
+    <h1>Online Pengguna OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">Desa yang mengakses Pantau dalam 60 hari terakhir @if($provinsi = session('provinsi')) {{ "| {$provinsi->nama_prov}" }} @endif</small>
     </h1>
 @stop
 

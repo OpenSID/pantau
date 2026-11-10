@@ -10,6 +10,7 @@ use App\Models\Pbb;
 use App\Models\PengaturanAplikasi;
 use App\Models\TrackKeloladesa;
 use App\Models\TrackMobile;
+use App\Services\PetaDesaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -382,48 +383,18 @@ class DashboardController extends Controller
 
     public function dataPeta(Request $request)
     {
-        $markers = Desa::select(['lat', 'lng', 'alamat_kantor'])
+        // Peta publik menampilkan desa yang pertama kali terpasang (created_at) pada periode terpilih.
+        $markers = Desa::select(PetaDesaService::KOLOM)
             ->when($request->period ?? false, function ($subQuery) use ($request) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
-                    // Validasi jika tanggal awal dan akhir berbeda
-                    if ($dates[0] !== $dates[1]) {
-                        $subQuery->whereBetween('created_at', [$dates[0], $dates[1]]);
-                    } else {
-                        $subQuery->whereDate('created_at', '=', $dates[0]);
-                    }
+                    $subQuery->whereBetween('created_at', [trim($dates[0]).' 00:00:00', trim($dates[1]).' 23:59:59']);
                 }
             })
-            ->whereNotNullLatLng()
-            ->get()
-            ->map(function ($marker) {
-                return [
-                    'type' => 'Feature',
-                    'geometry' => [
-                        'type' => 'Point',
-                        'coordinates' => [
-                            (float) $marker->lng,
-                            (float) $marker->lat,
-                        ],
-                    ],
-                    'properties' => $this->properties($marker),
-                    'id' => $marker->id,
-                ];
-            });
+            ->koordinatValid()
+            ->get();
 
-        return response()->json([
-            'type' => 'FeatureCollection',
-            'features' => $markers,
-        ]);
-    }
-
-    public function properties(Desa $desa)
-    {
-        $alamat = $desa->alamat_kantor;
-
-        return [
-            'popupContent' => "{$alamat}",
-        ];
+        return response()->json(PetaDesaService::featureCollection($markers));
     }
 
     public function datatablePenggunaOpenkab(Request $request)

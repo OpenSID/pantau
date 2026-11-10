@@ -533,7 +533,36 @@ class Desa extends Model
     }
 
     /**
-     * Scope a query desa map.
+     * Scope bersama untuk semua peta desa: hanya koordinat yang valid.
+     *
+     * - lat/lng terisi dan berupa bilangan
+     * - berada dalam batas wilayah Indonesia (lat -10 s/d 6, lng 95 s/d 142)
+     * - bukan desa contoh (berdasarkan kode desa atau pasangan koordinat bawaan)
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKoordinatValid($query)
+    {
+        $contoh = config('tracksid.desa_contoh');
+
+        return $query
+            ->whereNotNull('lat')
+            ->whereNotNull('lng')
+            ->whereRaw("CONCAT('', lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw("CONCAT('', lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
+            ->whereRaw('lat BETWEEN -10 AND 6')
+            ->whereRaw('lng BETWEEN 95 AND 142')
+            ->where(function ($query) use ($contoh) {
+                $query->whereNull('kode_desa')->orWhere('kode_desa', '!=', $contoh['kode_desa']);
+            })
+            ->whereNot(function ($query) use ($contoh) {
+                $query->where('lat', $contoh['lat'])->where('lng', $contoh['lng']);
+            });
+    }
+
+    /**
+     * Scope a query desa map: desa aktif dalam 60 hari terakhir.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -541,36 +570,26 @@ class Desa extends Model
     public function scopePeta($query)
     {
         return $query
+            ->koordinatValid()
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
             })
-            ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw('lat BETWEEN -10 AND 6')
-            ->whereRaw('lng BETWEEN 95 AND 142')
             ->whereRaw('GREATEST(tgl_akses_lokal, tgl_akses_hosting) >= NOW()-INTERVAL 60 DAY') //sejak dua bulan yang lalu
-            ->where(function ($query) {
-                $query
-                    ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
-                    ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
-            })
             ->orderBy('kode_desa', 'ASC');
     }
 
+    /**
+     * Scope a query desa map tanpa batasan tanggal akses.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopePetaSemua($query)
     {
         return $query
+            ->koordinatValid()
             ->when(session('provinsi'), function ($query, $provinsi) {
                 $query->where('kode_provinsi', $provinsi->kode_prov);
-            })
-            ->whereRaw("CONCAT('',lat * 1) = lat") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw("CONCAT('',lng * 1) = lng") // tdk ikut sertakan data bukan bilangan
-            ->whereRaw('lat BETWEEN -10 AND 6')
-            ->whereRaw('lng BETWEEN 95 AND 142')
-            ->where(function ($query) {
-                $query
-                    ->where('lat', '!=', config('tracksid.desa_contoh.lat'))
-                    ->where('lng', '!=', config('tracksid.desa_contoh.lng'));
             })
             ->orderBy('kode_desa', 'ASC');
     }

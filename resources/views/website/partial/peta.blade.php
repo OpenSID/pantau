@@ -9,7 +9,8 @@
 </style>
 @endpush
 
-<h3>Peta Pengguna OpenDesa</h3>
+<h3 class="mb-1">Peta Pengguna OpenDesa</h3>
+<p class="text-muted small mb-2">Menampilkan desa yang pertama kali terpasang pada periode terpilih. Desa contoh dan koordinat di luar wilayah Indonesia tidak ditampilkan.</p>
 <div class="row">
   <div class="col-lg-9">
       <div id="map"></div>
