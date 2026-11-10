@@ -20,7 +20,9 @@
 }
 </style>
 @endpush
-<div class="bg-blue p-2 text-bold"><h5>Sebaran Pengguna Baru OpenSID Periode <span id="judul_range_periode"></span></h5></div>
+<div class="bg-blue p-2 text-bold"><h5 class="mb-1">Sebaran Pengguna Baru OpenSID Periode <span id="judul_range_periode"></span></h5>
+    <small class="font-weight-normal">Berdasarkan tanggal pemasangan pertama. Desa contoh dan koordinat di luar wilayah Indonesia tidak ditampilkan.</small>
+</div>
 <div id="map"></div>
 
 @section('js')
