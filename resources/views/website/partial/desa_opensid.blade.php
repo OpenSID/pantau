@@ -1,5 +1,5 @@
 <img src="{{ asset('assets/img/opensid_logo.png') }}" width="20" alt="Logo">
-<span class="text-black">Daftar Desa Baru Install</span>
+<span class="text-black">Total Desa OpenSID</span>
 <div id="block_install_baru">
     <div class="row">
         <div class="col-md-6 mt-2">
@@ -18,6 +18,7 @@
         </div>
     </div>
     <hr>
+    <span class="text-black">Daftar Desa Baru Install Hari Ini</span>
     <div class="container marquee" style="height: 250px;">
         <div class="track-vertical w-100 pr-4">
             <div class="flex-vertical marquee-fix" id="list_install_baru">

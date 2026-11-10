@@ -91,10 +91,10 @@ class LaporanDesaAktifController extends Controller
                 $q->where('desa.kode_kecamatan', $kode_kecamatan);
             })
             ->when($fillters['status'] == 1, function ($q) {
-                $q->whereNotNull('desa.versi_hosting')->whereNull('desa.versi_lokal');
+                $q->whereRaw(Desa::sqlOnline('desa.'));
             })
             ->when($fillters['status'] == 2, function ($q) {
-                $q->whereNotNull('desa.versi_lokal')->whereNull('desa.versi_hosting');
+                $q->whereRaw(Desa::sqlOffline('desa.'));
             })
             ->when($fillters['status'] == 3, function ($q) {
                 $q->where(function ($sub) {
@@ -116,7 +116,7 @@ class LaporanDesaAktifController extends Controller
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 7 day');
             })
             ->when($fillters['akses'] == 5, function ($q) {
-                $q->whereRaw("desa.versi_lokal <> '' and desa.versi_hosting is null and coalesce(desa.tgl_akses_lokal, 0) >= now() - interval 7 day");
+                $q->whereRaw(Desa::sqlOffline('desa.').' and coalesce(desa.tgl_akses_lokal, 0) >= now() - interval 7 day');
             })
             ->when($fillters['akses'] == 6, function ($q) {
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
