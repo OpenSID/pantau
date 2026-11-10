@@ -432,6 +432,9 @@ class Desa extends Model
      */
     public function scopeKabupatenOpenSID($query, $fillters = [])
     {
+        // Versi premium hanya dibutuhkan untuk filter status 3, di-resolve sekali di luar subquery
+        $versiPremium = ($fillters['status'] ?? null) == 3 ? lastrelease_opensid() : null;
+
         return $query
             ->selectRaw('sub.kode_kabupaten')
             ->selectRaw('sub.nama_kabupaten')
@@ -439,7 +442,7 @@ class Desa extends Model
             ->selectRaw('sub.nama_provinsi')
             ->selectRaw("count(case when versi_lokal <> '' and versi_hosting is null then 1 else null end) as 'offline'")
             ->selectRaw("count(case when versi_hosting <> '' and versi_lokal is null then 1 else null end) as 'online'")
-            ->fromSub(function ($query) use ($fillters) {
+            ->fromSub(function ($query) use ($fillters, $versiPremium) {
                 $query
                     ->select(
                         'd.versi_lokal',
@@ -459,10 +462,11 @@ class Desa extends Model
                     ->when($fillters['status'] == 2, function ($query) {
                         $query->hostingOffline();
                     })
-                    ->when($fillters['status'] == 3, function ($query) {
-                        $version = lastrelease_opensid();
-                        $query->where('d.versi_hosting', 'like', "{$version}-premium%")
-                            ->orWhere('d.versi_lokal', 'like', "{$version}-premium%");
+                    ->when($fillters['status'] == 3, function ($query) use ($versiPremium) {
+                        $query->where(function ($q) use ($versiPremium) {
+                            $q->where('d.versi_hosting', 'like', "{$versiPremium}-premium%")
+                                ->orWhere('d.versi_lokal', 'like', "{$versiPremium}-premium%");
+                        });
                     });
             }, 'sub')
             ->when(session('provinsi'), function ($query, $provinsi) {
