@@ -68,6 +68,32 @@ class KabupatenOpenSIDScopeTest extends TestCase
         $this->assertSame(1, (int) $hasil->first()->online);
     }
 
+    public function test_filter_status_online_dan_offline_tidak_error()
+    {
+        // Kabupaten 1206: hanya hosting (online)
+        $this->buatDesa('1206001001', '1206', 'Kabupaten Online', null, '22.06');
+
+        // Kabupaten 1207: hanya lokal (offline)
+        $this->buatDesa('1207001001', '1207', 'Kabupaten Offline', '22.06', null);
+
+        // Tabel tidak kosong (ada data lain), jadi hanya kabupaten fixture yang diperiksa
+        $kodeFixture = ['1206', '1207'];
+
+        $online = Desa::kabupatenOpenSID(['status' => 1])->get()
+            ->pluck('kode_kabupaten')
+            ->intersect($kodeFixture)
+            ->values()
+            ->all();
+        $this->assertSame(['1206'], $online);
+
+        $offline = Desa::kabupatenOpenSID(['status' => 2])->get()
+            ->pluck('kode_kabupaten')
+            ->intersect($kodeFixture)
+            ->values()
+            ->all();
+        $this->assertSame(['1207'], $offline);
+    }
+
     private function buatDesa(string $kodeDesa, string $kodeKabupaten, string $namaKabupaten, ?string $versiLokal, ?string $versiHosting): void
     {
         Desa::create([

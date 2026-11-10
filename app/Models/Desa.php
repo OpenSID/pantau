@@ -5,8 +5,14 @@ namespace App\Models;
 use App\Models\Traits\HasRegionAccess;
 use App\Traits\FilterWilayahTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -44,7 +50,7 @@ class Desa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function akses()
+    public function akses(): HasMany
     {
         return $this->hasMany(Akses::class);
     }
@@ -54,7 +60,7 @@ class Desa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function domainHistories()
+    public function domainHistories(): HasMany
     {
         return $this->hasMany(DomainHistory::class);
     }
@@ -64,7 +70,7 @@ class Desa extends Model
      *
      * @return string|null
      */
-    public function currentDomain()
+    public function currentDomain(): ?string
     {
         return $this->domain;
     }
@@ -74,7 +80,7 @@ class Desa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function notifikasi()
+    public function notifikasi(): BelongsToMany
     {
         return $this->belongsToMany(Notifikasi::class, 'notifikasi_desa', 'id_desa', 'id_notifikasi');
     }
@@ -85,7 +91,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeJumlahDesa($query)
+    public function scopeJumlahDesa(Builder $query): Builder
     {
         $states = '';
         $version = lastrelease_opensid();
@@ -213,7 +219,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeDesaBaru($query, array $fillters = [])
+    public function scopeDesaBaru(Builder $query, array $fillters = []): Builder
     {
         return $query
             ->select(['*'])
@@ -261,7 +267,7 @@ class Desa extends Model
             });
     }
 
-    public function scopeSemuaDesa($query)
+    public function scopeSemuaDesa(Builder $query): Builder
     {
         return $query
             ->select(['*'])
@@ -284,7 +290,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSemuaDesaPublik($query)
+    public function scopeSemuaDesaPublik(Builder $query): Builder
     {
         return $query
             ->select([
@@ -315,7 +321,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSemuaDesaAuth($query)
+    public function scopeSemuaDesaAuth(Builder $query): Builder
     {
         return $query
             ->select([
@@ -344,7 +350,7 @@ class Desa extends Model
             });
     }
 
-    public function scopeDesaValid($query)
+    public function scopeDesaValid(Builder $query): Builder
     {
         return $query->whereRaw('1 = 1');
         //return $query->whereRaw("(CASE WHEN ((url_hosting = '' || url_hosting IS NULL) && (url_lokal Like 'localhost%' || url_lokal Like '10.%' || url_lokal Like '127.%' || url_lokal Like '192.168.%' || url_lokal Like '169.254.%' || url_lokal REGEXP '(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)')) THEN 0 ELSE 1 END) = 1"); // 0 = i local;
@@ -356,7 +362,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeReviewDesa($query, array $fillters = [])
+    public function scopeReviewDesa(Builder $query, array $fillters = []): Builder
     {
         return $query
             ->select(['*'])
@@ -404,7 +410,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeKabupatenKosong($query)
+    public function scopeKabupatenKosong(Builder $query): array
     {
         $user = auth()->user();
 
@@ -430,7 +436,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeKabupatenOpenSID($query, $fillters = [])
+    public function scopeKabupatenOpenSID(Builder $query, array $fillters = []): Builder
     {
         // Versi premium hanya dibutuhkan untuk filter status 3, di-resolve sekali di luar subquery
         $versiPremium = ($fillters['status'] ?? null) == 3 ? lastrelease_opensid() : null;
@@ -456,11 +462,12 @@ class Desa extends Model
                     ->leftJoin('desa as d', 'desa.kode_desa', 'd.kode_desa')
                     ->whereRaw("desa.kode_kabupaten <> ''")
                     // filter
+                    // $query di dalam fromSub adalah Query\Builder, jadi memakai helper statis, bukan scope model
                     ->when($fillters['status'] == 1, function ($query) {
-                        $query->hostingOnline();
+                        self::whereHostingOnline($query, 'desa');
                     })
                     ->when($fillters['status'] == 2, function ($query) {
-                        $query->hostingOffline();
+                        self::whereHostingOffline($query, 'desa');
                     })
                     ->when($fillters['status'] == 3, function ($query) use ($versiPremium) {
                         $query->where(function ($q) use ($versiPremium) {
@@ -481,7 +488,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeVersiOpenSID($query, $fillters = [])
+    public function scopeVersiOpenSID(Builder $query, array $fillters = []): Builder
     {
         return $query->fromSub(function ($query) use ($fillters) {
             $query->selectRaw("versi, sum( CASE WHEN jenis = 'offline' THEN 1 ELSE 0 END ) AS offline, sum( CASE WHEN jenis = 'online' THEN 1 ELSE 0 END ) AS online")
@@ -524,14 +531,14 @@ class Desa extends Model
      * @param mixed $value
      * @return void
      */
-    public function setOpensidValidAttribute($value)
+    public function setOpensidValidAttribute(mixed $value): void
     {
         if (version_compare($value, '20.12', '>=')) {
             $this->attributes['opensid_valid'] = true;
         }
     }
 
-    public static function hapusNonaktifTidakTerdaftar()
+    public static function hapusNonaktifTidakTerdaftar(): Expression
     {
         return DB::raw('DELETE FROM desa WHERE GREATEST(COALESCE(tgl_akses_lokal,0), COALESCE(tgl_akses_hosting,0)) < NOW()-INTERVAL 1 MONTH');
     }
@@ -542,7 +549,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePeta($query)
+    public function scopePeta(Builder $query): Builder
     {
         return $query
             ->when(session('provinsi'), function ($query, $provinsi) {
@@ -561,7 +568,7 @@ class Desa extends Model
             ->orderBy('kode_desa', 'ASC');
     }
 
-    public function scopePetaSemua($query)
+    public function scopePetaSemua(Builder $query): Builder
     {
         return $query
             ->when(session('provinsi'), function ($query, $provinsi) {
@@ -585,7 +592,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeLaporan($query)
+    public function scopeLaporan(Builder $query): Builder
     {
         return $query
             // ->select(['*'])
@@ -605,7 +612,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFillter($query, array $fillters)
+    public function scopeFillter(Builder $query, array $fillters): Builder
     {
         $fillters = array_merge([
             'akses' => null,
@@ -746,7 +753,7 @@ class Desa extends Model
             });
     }
 
-    public function getFormatCreatedAtAttribute()
+    public function getFormatCreatedAtAttribute(): ?string
     {
         if ($this->created_at) {
             return $this->created_at->format('d/m/Y');
@@ -760,7 +767,7 @@ class Desa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function mobile()
+    public function mobile(): HasMany
     {
         return $this->hasMany(TrackMobile::class, 'kode_desa', 'kode_desa');
     }
@@ -770,12 +777,12 @@ class Desa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function kelolaDesa()
+    public function kelolaDesa(): HasMany
     {
         return $this->hasMany(TrackKeloladesa::class, 'kode_desa', 'kode_desa');
     }
 
-    public function scopeWilayahKhusus($query)
+    public function scopeWilayahKhusus(Builder $query): void
     {
         $provinsi = session('provinsi');
         $query->when($provinsi, function ($r) use ($provinsi) {
@@ -783,17 +790,17 @@ class Desa extends Model
         });
     }
 
-    public function scopeWhereNotNullLatLng($query)
+    public function scopeWhereNotNullLatLng(Builder $query): Builder
     {
         return $query->whereNotNull('lat')->whereNotNull('lng');
     }
 
-    public function scopeOnline($query)
+    public function scopeOnline(Builder $query): Builder
     {
         return $query->where('versi_hosting', '!=', '');
     }
 
-    public function scopeAktif($query, $batasTgl, $tglAwal = null)
+    public function scopeAktif(Builder $query, $batasTgl, ?string $tglAwal = null): Builder
     {
         if ($tglAwal) {
             $start = Carbon::parse($tglAwal)->startOfDay();
@@ -817,12 +824,12 @@ class Desa extends Model
         ", [$maksimalTanggal]);
     }
 
-    public function scopeAktifOnline($query, $batasTgl)
+    public function scopeAktifOnline(Builder $query, $batasTgl): Builder
     {
         return $query->online()->aktif($batasTgl);
     }
 
-    public function scopeLatestPremiumVersion($query)
+    public function scopeLatestPremiumVersion(Builder $query): string
     {
         $versi = $query->where('versi_hosting', 'like', '%-premium')
             ->orderByRaw(
@@ -836,7 +843,7 @@ class Desa extends Model
         return $versi;
     }
 
-    public function scopeLatestUmumVersion($query)
+    public function scopeLatestUmumVersion(Builder $query): string
     {
         $versi = $query->where('versi_hosting', 'not like', '%-premium')
             ->orderByRaw(
@@ -850,61 +857,84 @@ class Desa extends Model
         return $versi;
     }
 
-    public function scopeLatestVersion($query)
+    public function scopeLatestVersion(Builder $query): Builder
     {
         return $query->orderByRaw('CAST(SUBSTRING_INDEX(versi_hosting, "-", 1) AS DECIMAL) DESC')
             ->orderBy('versi_hosting', 'DESC');
     }
 
-    public function scopeAnjungan($query)
+    public function scopeAnjungan(Builder $query): Builder
     {
         return $query->where('anjungan', true);
     }
 
-    public function isPemdaHosting()
+    public function isPemdaHosting(): bool
     {
         return Str::endsWith($this->url_hosting, '.go.id');
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->created_at->format('Y-m-d') == date('Y-m-d');
     }
 
-    public function scopeTemaPalanta($query)
+    public function scopeTemaPalanta(Builder $query): int
     {
         return $query->where('tema', 'Palanta')->count();
     }
 
-    public function scopeTemaNatra($query)
+    public function scopeTemaNatra(Builder $query): int
     {
         return $query->where('tema', 'Natra')->count();
     }
 
-    public function scopeTemaEsensi($query)
+    public function scopeTemaEsensi(Builder $query): int
     {
         return $query->where('tema', 'Esensi')->count();
     }
 
-    public function scopeTema($query)
+    public function scopeTema(Builder $query): int
     {
         return $query->whereIn('tema', ['esensi', 'natra', 'palanta'])->count();
     }
 
-    public function scopeHostingOnline($query)
+    public function scopeHostingOnline(Builder $query): Builder
     {
-        return $query->whereNotNull($this->getTable().'.versi_hosting')
-                     ->where($this->getTable().'.versi_hosting', '<>', '');
+        return self::whereHostingOnline($query, $this->getTable());
     }
 
-    public function scopeHostingOffline($query)
+    public function scopeHostingOffline(Builder $query): Builder
     {
-        return $query->whereNotNull($this->getTable().'.versi_lokal')
-                     ->where($this->getTable().'.versi_lokal', '<>', '')
-                     ->where(function ($q) {
-                         $q->whereNull($this->getTable().'.versi_hosting')
-                           ->orWhere($this->getTable().'.versi_hosting', '');
-                     });
+        return self::whereHostingOffline($query, $this->getTable());
+    }
+
+    /**
+     * Kondisi desa online (versi hosting terisi). Berbagi logika antara scope model
+     * dan query builder biasa (misalnya di dalam fromSub), sehingga cukup ditulis sekali.
+     *
+     * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
+     */
+    private static function whereHostingOnline(QueryBuilder|Builder $query, string $table): QueryBuilder|Builder
+    {
+        return $query->whereNotNull($table.'.versi_hosting')
+            ->where($table.'.versi_hosting', '<>', '');
+    }
+
+    /**
+     * Kondisi desa offline (versi lokal terisi, tanpa versi hosting).
+     *
+     * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
+     */
+    private static function whereHostingOffline(QueryBuilder|Builder $query, string $table): QueryBuilder|Builder
+    {
+        return $query->whereNotNull($table.'.versi_lokal')
+            ->where($table.'.versi_lokal', '<>', '')
+            ->where(function ($q) use ($table) {
+                $q->whereNull($table.'.versi_hosting')
+                    ->orWhere($table.'.versi_hosting', '');
+            });
     }
 
     /**
@@ -914,7 +944,7 @@ class Desa extends Model
      * @param  string|null  $layanan
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeLayanan($query, $layanan = null)
+    public function scopeLayanan(Builder $query, ?string $layanan = null): Builder
     {
         if ($layanan === null) {
             return $query;
@@ -930,7 +960,7 @@ class Desa extends Model
      * @param  string|null  $sebutanDesa
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSebutanDesa($query, $sebutanDesa = null)
+    public function scopeSebutanDesa(Builder $query, ?string $sebutanDesa = null): Builder
     {
         if ($sebutanDesa === null) {
             return $query;
@@ -945,7 +975,7 @@ class Desa extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeKecamatanOpenSID($query, $fillters = [])
+    public function scopeKecamatanOpenSID(Builder $query, array $fillters = []): Builder
     {
         $subQuery = Desa::fillter($fillters)->toBoundSql();
 
@@ -964,7 +994,7 @@ class Desa extends Model
             ->orderBy('sub.nama_kecamatan');
     }
 
-    public function scopeTemaPro($query)
+    public function scopeTemaPro(Builder $query): int
     {
         return $query->where(function ($q) {
             foreach (self::TEMA_PRO as $tema) {
@@ -973,7 +1003,7 @@ class Desa extends Model
         })->whereNotNull('tema')->count();
     }
 
-    public function scopeTemaProList($query)
+    public function scopeTemaProList(Builder $query): Collection
     {
         // Get data for themes that exist in database
         $existingThemes = $query->where(function ($q) {
