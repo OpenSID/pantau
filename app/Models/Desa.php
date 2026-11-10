@@ -95,6 +95,8 @@ class Desa extends Model
     {
         $states = '';
         $version = lastrelease_opensid();
+        $sqlOnline = self::sqlOnline('x.');
+        $sqlOffline = self::sqlOffline('x.');
 
         $user = auth()->user();
 
@@ -130,11 +132,11 @@ class Desa extends Model
             ->selectRaw('count(id) as desa_total')
             ->selectRaw('count(distinct kode_kabupaten) as kabupaten_total')
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where (x.versi_hosting like '{$version}-premium%' or x.versi_lokal like '{$version}-premium%') {$states} {$filterWilayah}) as kabupaten_premium")
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_lokal <> '' {$states} {$filterWilayah}) kabupaten_offline")
-            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states} {$filterWilayah}) kabupaten_online")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where {$sqlOffline} {$states} {$filterWilayah}) kabupaten_offline")
+            ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where {$sqlOnline} {$states} {$filterWilayah}) kabupaten_online")
             ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states} {$filterWilayah}) bukan_desa")
             ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) >= now() - interval 4 month and greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) < DATE(now() - interval 29 day) {$states} {$filterWilayah}) tidak_aktif")
-            ->when($request->period, function ($query) use ($request, $states, $filterWilayah) {
+            ->when($request->period, function ($query) use ($request, $states, $filterWilayah, $sqlOnline, $sqlOffline) {
                 $dates = explode(' - ', $request->period);
                 if (count($dates) === 2) {
                     $start = $dates[0].' 00:00:00';
@@ -154,7 +156,7 @@ class Desa extends Model
                     (
                         select count(id)
                         from desa as x
-                        where x.versi_hosting <> ''
+                        where {$sqlOnline}
                         and greatest(
                             coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
                             coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
@@ -166,14 +168,13 @@ class Desa extends Model
                     (
                         select count(id)
                         from desa as x
-                        where x.versi_lokal <> ''
-                        and x.versi_hosting is null
+                        where {$sqlOffline}
                         and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') between ? and ?
                         {$states} {$filterWilayah}
                     ) as desa_offline
                     ", [$start, $end]);
                 }
-            }, function ($query) use ($states, $filterWilayah) {
+            }, function ($query) use ($states, $filterWilayah, $sqlOnline, $sqlOffline) {
                 $query->selectRaw("
                 (
                     select count(id)
@@ -189,7 +190,7 @@ class Desa extends Model
                 (
                     select count(id)
                     from desa as x
-                    where x.versi_hosting <> ''
+                    where {$sqlOnline}
                     and greatest(
                         coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
                         coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
@@ -201,8 +202,7 @@ class Desa extends Model
                 (
                     select count(id)
                     from desa as x
-                    where x.versi_lokal <> ''
-                    and x.versi_hosting is null
+                    where {$sqlOffline}
                     and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') >= DATE(now() - interval 29 day)
                     {$states} {$filterWilayah}
                 ) as desa_offline

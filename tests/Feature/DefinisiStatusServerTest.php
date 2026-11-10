@@ -61,6 +61,47 @@ class DefinisiStatusServerTest extends TestCase
         $this->assertSame(0, (int) $baris->where('versi', '99.04')->sum('offline') + (int) $baris->where('versi', '99.04')->sum('online'));
     }
 
+    public function test_jumlah_desa_dashboard_memakai_definisi_yang_sama()
+    {
+        $aktifSejak = 'DATE(now() - interval 29 day)';
+        $aktifDalamPeriode = "coalesce(tgl_akses_lokal, '1970-01-01 00:00:00') between ? and ?";
+
+        $jumlah = Desa::jumlahDesa()->first();
+
+        // Kartu dashboard: online dan offline hanya desa aktif 29 hari terakhir
+        $aktifOnline = Desa::hostingOnline()
+            ->whereRaw("greatest(coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')) >= {$aktifSejak}")
+            ->count();
+        $aktifOffline = Desa::hostingOffline()
+            ->whereRaw("coalesce(tgl_akses_lokal, '1970-01-01 00:00:00') >= {$aktifSejak}")
+            ->count();
+
+        $this->assertSame($aktifOnline, (int) $jumlah->desa_online);
+        $this->assertSame($aktifOffline, (int) $jumlah->desa_offline);
+
+        // Jumlah kabupaten online dan offline memakai definisi yang sama
+        $this->assertSame(
+            Desa::hostingOnline()->distinct('kode_kabupaten')->count('kode_kabupaten'),
+            (int) $jumlah->kabupaten_online
+        );
+        $this->assertSame(
+            Desa::hostingOffline()->distinct('kode_kabupaten')->count('kode_kabupaten'),
+            (int) $jumlah->kabupaten_offline
+        );
+
+        // Filter periode: desa aktif pada rentang tanggal
+        $mulai = now()->subDays(7)->format('Y-m-d');
+        $selesai = now()->format('Y-m-d');
+        request()->merge(['period' => $mulai.' - '.$selesai]);
+
+        $periode = Desa::jumlahDesa()->first();
+        $offlinePeriode = Desa::hostingOffline()
+            ->whereRaw($aktifDalamPeriode, [$mulai.' 00:00:00', $selesai.' 23:59:59'])
+            ->count();
+
+        $this->assertSame($offlinePeriode, (int) $periode->desa_offline);
+    }
+
     private function buatDesa(string $kodeDesa, ?string $versiHosting, ?string $versiLokal): void
     {
         Desa::create([
