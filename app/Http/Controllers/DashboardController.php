@@ -476,9 +476,11 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             // Pilih scope berdasarkan status autentikasi
             // Auth: kolom lebih lengkap (+url_hosting), Publik: hanya kolom aman tanpa PII
-            $query = auth()->check()
+            // Akses Terakhir = tanggal akses riil OpenSID (sama dengan /laporan/desa), bukan updated_at record Pantau
+            $query = (auth()->check()
                 ? $this->desa->fillter($filters)->semuaDesaAuth()
-                : $this->desa->fillter($filters)->semuaDesaPublik();
+                : $this->desa->fillter($filters)->semuaDesaPublik())
+                ->selectRaw("date_format(greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)), '%Y-%m-%d') as tgl_akses");
 
             return DataTables::of($query)
                 ->editColumn('modul_tte', function ($item) {
@@ -488,8 +490,8 @@ class DashboardController extends Controller
                         return '<span class="badge badge-success">Aktif</span>';
                     }
                 })
-                ->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
-                ->orderColumn('tanggal', 'updated_at $1')
+                ->editColumn('tanggal', static fn ($item) => $item->tgl_akses ? '<span class="text-nowrap text-muted">'.$item->tgl_akses.'</span>' : '')
+                ->orderColumn('tanggal', 'greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) $1')
                 ->addIndexColumn()
                 ->escapeColumns()
                 ->rawColumns(['modul_tte', 'tanggal'])
