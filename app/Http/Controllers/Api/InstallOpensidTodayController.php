@@ -14,12 +14,13 @@ class InstallOpensidTodayController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $totalInstall = Desa::filterWilayah($request)->count();
-        $totalInstallOnline = Desa::filterWilayah($request)->online()->count();
+        // Definisi online/offline sama dengan laporan lain (lihat Desa::sqlOnline/sqlOffline)
+        $totalInstallOnline = Desa::filterWilayah($request)->hostingOnline()->count();
+        $totalInstallOffline = Desa::filterWilayah($request)->hostingOffline()->count();
         $installHariIni = Desa::filterWilayah($request)->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'))->get();
 
         return [
-            'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstall - $totalInstallOnline],
+            'total' => ['online' => $totalInstallOnline, 'offline' => $totalInstallOffline],
             'installHariIni' => $installHariIni,
         ];
     }

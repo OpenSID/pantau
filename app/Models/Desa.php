@@ -383,7 +383,7 @@ class Desa extends Model
                         $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day');
                         break;
                     case '5':
-                        $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
+                        $query->whereRaw(self::sqlOffline().' and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
                         break;
                     case '6':
                         $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
@@ -446,8 +446,8 @@ class Desa extends Model
             ->selectRaw('sub.nama_kabupaten')
             ->selectRaw('sub.kode_provinsi')
             ->selectRaw('sub.nama_provinsi')
-            ->selectRaw("count(case when versi_lokal <> '' and versi_hosting is null then 1 else null end) as 'offline'")
-            ->selectRaw("count(case when versi_hosting <> '' and versi_lokal is null then 1 else null end) as 'online'")
+            ->selectRaw("count(case when ".self::sqlOffline()." then 1 else null end) as 'offline'")
+            ->selectRaw("count(case when ".self::sqlOnline()." then 1 else null end) as 'online'")
             ->fromSub(function ($query) use ($fillters, $versiPremium) {
                 $query
                     ->select(
@@ -493,32 +493,23 @@ class Desa extends Model
         return $query->fromSub(function ($query) use ($fillters) {
             $query->selectRaw("versi, sum( CASE WHEN jenis = 'offline' THEN 1 ELSE 0 END ) AS offline, sum( CASE WHEN jenis = 'online' THEN 1 ELSE 0 END ) AS online")
                 ->fromSub(function ($query) use ($fillters) {
+                    // Satu baris per desa (tanpa UNION ALL agar desa dengan dua versi tidak dihitung ganda):
+                    // versi hosting jika online, selain itu versi lokal.
+                    $tglAkses = 'CASE WHEN '.self::sqlOnline().' THEN tgl_akses_hosting ELSE tgl_akses_lokal END';
+
                     $query
-                        ->selectRaw("versi_lokal AS versi, 'offline' AS jenis ")
+                        ->selectRaw('CASE WHEN '.self::sqlOnline().' THEN versi_hosting ELSE versi_lokal END AS versi')
+                        ->selectRaw("CASE WHEN ".self::sqlOnline()." THEN 'online' ELSE 'offline' END AS jenis")
                         ->filterWilayah(request())
-                        ->where('versi_lokal', '<>', '')
+                        ->whereRaw(self::sqlOnline().' OR '.self::sqlOffline())
                         ->when(session('provinsi'), function ($query, $provinsi) {
                             $query->where('kode_provinsi', $provinsi->kode_prov);
                         })
-                        ->when($fillters['aktif'] == '1', function ($query) {
-                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
+                        ->when($fillters['aktif'] == '1', function ($query) use ($tglAkses) {
+                            $query->whereRaw("coalesce({$tglAkses}, 0) >= now() - interval 7 day");
                         })
-                        ->when($fillters['aktif'] == '0', function ($query) {
-                            $query->whereRaw('coalesce(tgl_akses_lokal, 0) <= now() - interval 7 day');
-                        })
-                        ->unionAll(function ($query) use ($fillters) {
-                            $query->selectRaw("versi_hosting AS versi, 'online' AS jenis ")
-                                ->where('versi_hosting', '<>', '')
-                                ->when(session('provinsi'), function ($query, $provinsi) {
-                                    $query->where('kode_provinsi', $provinsi->kode_prov);
-                                })
-                                ->when($fillters['aktif'] == '1', function ($query) {
-                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) >= now() - interval 7 day');
-                                })
-                                ->when($fillters['aktif'] == '0', function ($query) {
-                                    $query->whereRaw('coalesce(tgl_akses_hosting, 0) <= now() - interval 7 day');
-                                })->filterWilayah(request())
-                                ->from('desa');
+                        ->when($fillters['aktif'] == '0', function ($query) use ($tglAkses) {
+                            $query->whereRaw("coalesce({$tglAkses}, 0) <= now() - interval 7 day");
                         })
                         ->from('desa');
                 }, 't')->groupBy(['versi']);
@@ -666,7 +657,7 @@ class Desa extends Model
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= now() - interval 7 day');
             })
             ->when($fillters['akses'] == 5, function ($query) {
-                $query->whereRaw("versi_lokal <> '' and versi_hosting is null and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day");
+                $query->whereRaw(self::sqlOffline().' and coalesce(tgl_akses_lokal, 0) >= now() - interval 7 day');
             })
             ->when($fillters['akses'] == 6, function ($query) {
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
@@ -909,32 +900,41 @@ class Desa extends Model
     }
 
     /**
-     * Kondisi desa online (versi hosting terisi). Berbagi logika antara scope model
-     * dan query builder biasa (misalnya di dalam fromSub), sehingga cukup ditulis sekali.
+     * Definisi tunggal status server desa (issue #748).
+     * Online: versi hosting terisi. Offline: versi lokal terisi dan belum ada versi hosting.
+     * Semua laporan memakai dua fungsi ini agar angkanya konsisten.
      *
+     * @param  string  $prefix  Prefix kolom, misalnya 'desa.' atau '' (kosong)
+     */
+    public static function sqlOnline(string $prefix = ''): string
+    {
+        return "({$prefix}versi_hosting IS NOT NULL AND {$prefix}versi_hosting <> '')";
+    }
+
+    /**
+     * @param  string  $prefix  Prefix kolom, misalnya 'desa.' atau '' (kosong)
+     */
+    public static function sqlOffline(string $prefix = ''): string
+    {
+        return "({$prefix}versi_lokal IS NOT NULL AND {$prefix}versi_lokal <> '' AND ({$prefix}versi_hosting IS NULL OR {$prefix}versi_hosting = ''))";
+    }
+
+    /**
      * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
      */
     private static function whereHostingOnline(QueryBuilder|Builder $query, string $table): QueryBuilder|Builder
     {
-        return $query->whereNotNull($table.'.versi_hosting')
-            ->where($table.'.versi_hosting', '<>', '');
+        return $query->whereRaw(self::sqlOnline($table.'.'));
     }
 
     /**
-     * Kondisi desa offline (versi lokal terisi, tanpa versi hosting).
-     *
      * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
      */
     private static function whereHostingOffline(QueryBuilder|Builder $query, string $table): QueryBuilder|Builder
     {
-        return $query->whereNotNull($table.'.versi_lokal')
-            ->where($table.'.versi_lokal', '<>', '')
-            ->where(function ($q) use ($table) {
-                $q->whereNull($table.'.versi_hosting')
-                    ->orWhere($table.'.versi_hosting', '');
-            });
+        return $query->whereRaw(self::sqlOffline($table.'.'));
     }
 
     /**
@@ -986,8 +986,8 @@ class Desa extends Model
             ->selectRaw('sub.nama_kabupaten')
             ->selectRaw('sub.kode_provinsi')
             ->selectRaw('sub.nama_provinsi')
-            ->selectRaw("count(case when versi_lokal <> '' and versi_hosting is null then 1 else null end) as 'offline'")
-            ->selectRaw("count(case when versi_hosting <> '' and versi_lokal is null then 1 else null end) as 'online'")
+            ->selectRaw("count(case when ".self::sqlOffline()." then 1 else null end) as 'offline'")
+            ->selectRaw("count(case when ".self::sqlOnline()." then 1 else null end) as 'online'")
             ->selectRaw("count(*) as 'total_desa'")
             ->fromRaw("({$subQuery}) as sub")
             ->groupBy(['sub.kode_kecamatan', 'sub.nama_kecamatan', 'sub.kode_kabupaten', 'sub.nama_kabupaten', 'sub.kode_provinsi', 'sub.nama_provinsi'])
