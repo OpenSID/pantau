@@ -98,7 +98,7 @@
                 ordering: true,
 
                 ajax: {
-                    url: `{{ url('laporan/desa') }}`,
+                    url: `{{ route('datatables:pengguna-opensid') }}`,
                     method: 'get',
                     data: function(data) {
                         data.kode_provinsi = $('#provinsi').val() ? $('#provinsi').val() : params.get(
@@ -153,13 +153,7 @@
                     data: 'versi_hosting'
                 },
                 {
-                    data: function(data) {
-                        if (data.modul_tte == 1) {
-                            return `<span class="badge badge-pill badge-info">Aktif</span>`
-                        } else {
-                            return `<span class="badge badge-pill badge-secondary">Tidak Aktif</span>`
-                        }
-                    },
+                    data: 'modul_tte',
                     searchable: false,
                     orderable: false
                 },
@@ -168,7 +162,7 @@
                     searchable: false,
                 },
                  {
-                data: 'tgl_akses',
+                data: 'tanggal',
                 searchable: false,
             }, ],
             
