@@ -469,8 +469,8 @@ class DashboardController extends Controller
             'status'         => $request->status,
             'akses'          => $request->akses,
             'tte'            => $request->tte,
-            'versi_lokal'    => '',
-            'versi_hosting'  => '',
+            'versi_lokal'    => $request->versi_lokal,
+            'versi_hosting'  => $request->versi_hosting,
         ];
 
         if ($request->ajax()) {
@@ -489,6 +489,7 @@ class DashboardController extends Controller
                     }
                 })
                 ->editColumn('tanggal', static fn ($item) => '<span class="text-nowrap text-muted">'.formatDateTimeForHuman($item->updated_at).'</span>')
+                ->orderColumn('tanggal', 'updated_at $1')
                 ->addIndexColumn()
                 ->escapeColumns()
                 ->rawColumns(['modul_tte', 'tanggal'])
