@@ -304,6 +304,8 @@
                 $('#collapse-filter select').val('')
             })
 
+            const defaultPeriodDesaAktif = @json(implode(' - ', daterangepicker_range('30 Hari Terakhir')));
+
             $('.block_desa_aktif').change(function() {
                 const params = {
                     period: $('input[name=periods]').val(),
@@ -312,13 +314,24 @@
                     kode_kecamatan: $('select[name=kecamatan]').val(),
                 }
                 $.get("{{ url('api/web/desa-aktif-opensid') }}", params, function(data) {
-                    params.akses = 4; // status desa aktif
-                    params.nama_provinsi = $('#provinsi option:selected').text();
-                    params.nama_kabupaten = $('#kabupaten option:selected').text();
-                    params.nama_kecamatan = $('#kecamatan option:selected').text();
-                    const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(params).toString();
-                    
-                    $('#desa_aktif').html(`<a href="` + linkUrl + `">` + data.aktif + `</a>`)                    
+                    const linkParams = {
+                        kode_provinsi: params.kode_provinsi || '',
+                        kode_kabupaten: params.kode_kabupaten || '',
+                        kode_kecamatan: params.kode_kecamatan || '',
+                        nama_provinsi: $('#provinsi option:selected').text(),
+                        nama_kabupaten: $('#kabupaten option:selected').text(),
+                        nama_kecamatan: $('#kecamatan option:selected').text(),
+                    };
+                    // Tautan harus memakai definisi rentang yang sama dengan angka kartu.
+                    // Periode default (30 hari) = akses 6 "1 Bulan Terakhir"; periode lain diteruskan apa adanya.
+                    if (params.period === defaultPeriodDesaAktif) {
+                        linkParams.akses = 6;
+                    } else if (params.period) {
+                        linkParams.period = params.period;
+                    }
+                    const linkUrl = '{{ url('web/opensid-data') }}?' + new URLSearchParams(linkParams).toString();
+
+                    $('#desa_aktif').empty().append($('<a>').attr('href', linkUrl).text(data.aktif))
                     $('#total_desa').text(data.desa_total)
                     $('#filter-label').text(`${params.period}`)
                 }, 'json')
