@@ -5,7 +5,7 @@
 
 @section('content_header')
     <h1>
-        Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa Aktif OpenSID) @if ($provinsi = session('provinsi'))
+        Desa OpenSID<small class="font-weight-light ml-1 text-md font-weight-bold">(Desa Aktif OpenSID dalam 30 hari terakhir) @if ($provinsi = session('provinsi'))
                 {{ "| {$provinsi->nama_prov}" }}
             @endif
         </small></h1>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            @include('layouts.components.form_filter')
+                            @include('layouts.components.form_filter', ['labelAksesAktif' => true])
                         </div>
                     </div>
                     <div class="table-responsive">

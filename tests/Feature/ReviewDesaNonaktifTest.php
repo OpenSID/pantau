@@ -30,7 +30,7 @@ class ReviewDesaNonaktifTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('review.desa_nonaktif');
         $response->assertSee('Desa Tidak Aktif');
-        $response->assertSee('Sejak tujuh hari terakhir');
+        $response->assertSee('Tidak diakses dalam 30 hari terakhir');
         $response->assertDontSee('Desa Baru');
     }
 
@@ -54,16 +54,16 @@ class ReviewDesaNonaktifTest extends TestCase
     {
         $uniqueSuffix = uniqid();
 
-        // Inactive desa (accessed 10 days ago, > 7 days)
+        // Inactive desa (accessed 35 days ago, outside 30-day window)
         $desaInactive = Desa::factory()->create([
             'nama_desa' => 'DesaNonAktif_' . $uniqueSuffix,
-            'updated_at' => now()->subDays(10),
-            'tgl_akses_lokal' => now()->subDays(10),
+            'updated_at' => now()->subDays(35),
+            'tgl_akses_lokal' => now()->subDays(35),
             'tgl_akses_hosting' => null,
             'jenis' => 1,
         ]);
 
-        // Active desa (accessed 3 days ago, <= 7 days)
+        // Active desa (accessed 3 days ago, inside 30-day window)
         $desaActive = Desa::factory()->create([
             'nama_desa' => 'DesaAktif_' . $uniqueSuffix,
             'updated_at' => now()->subDays(3),
@@ -89,20 +89,29 @@ class ReviewDesaNonaktifTest extends TestCase
     {
         $uniqueSuffix = uniqid();
 
-        // Desa inactive: 12 days ago (> 7 days)
+        // Desa inactive: 35 days ago (outside 30-day window)
         $desaInactive = Desa::factory()->create([
             'nama_desa' => 'DesaMutExInactive_' . $uniqueSuffix,
-            'updated_at' => now()->subDays(12),
-            'tgl_akses_lokal' => now()->subDays(12),
+            'updated_at' => now()->subDays(35),
+            'tgl_akses_lokal' => now()->subDays(35),
             'tgl_akses_hosting' => null,
             'jenis' => 1,
         ]);
 
-        // Desa active: 2 days ago (<= 7 days)
+        // Desa active: 2 days ago (inside 30-day window)
         $desaActive = Desa::factory()->create([
             'nama_desa' => 'DesaMutExActive_' . $uniqueSuffix,
             'updated_at' => now()->subDays(2),
             'tgl_akses_lokal' => now()->subDays(2),
+            'tgl_akses_hosting' => null,
+            'jenis' => 1,
+        ]);
+
+        // Desa diakses 15 hari lalu: dulu (batas 7 hari) masuk Nonaktif, kini wajib masuk Aktif saja (#745)
+        $desa15Hari = Desa::factory()->create([
+            'nama_desa' => 'DesaMutEx15Hari_' . $uniqueSuffix,
+            'updated_at' => now()->subDays(15),
+            'tgl_akses_lokal' => now()->subDays(15),
             'tgl_akses_hosting' => null,
             'jenis' => 1,
         ]);
@@ -117,6 +126,7 @@ class ReviewDesaNonaktifTest extends TestCase
 
         $this->assertContains($desaInactive->nama_desa, $nonAktifNames);
         $this->assertNotContains($desaActive->nama_desa, $nonAktifNames);
+        $this->assertNotContains($desa15Hari->nama_desa, $nonAktifNames);
 
         // Check /laporan/desa-aktif (Desa Aktif)
         $responseAktif = $this->actingAs($this->user)
@@ -127,13 +137,21 @@ class ReviewDesaNonaktifTest extends TestCase
         $aktifNames = collect($responseAktif->json('data'))->pluck('nama_desa')->toArray();
 
         $this->assertContains($desaActive->nama_desa, $aktifNames);
+        $this->assertContains($desa15Hari->nama_desa, $aktifNames);
         $this->assertNotContains($desaInactive->nama_desa, $aktifNames);
+
+        // Tidak ada desa yang tampil di kedua daftar sekaligus
+        $this->assertEmpty(array_intersect(
+            [$desaActive->nama_desa, $desa15Hari->nama_desa, $desaInactive->nama_desa],
+            $aktifNames,
+            $nonAktifNames
+        ));
     }
 
     public function test_tgl_akses_format_and_field_in_review_desa_nonaktif()
     {
         $uniqueSuffix = uniqid();
-        $accessDate = now()->subDays(10);
+        $accessDate = now()->subDays(35);
 
         $desa = Desa::factory()->create([
             'nama_desa' => 'DesaTglAkses_' . $uniqueSuffix,
@@ -173,11 +191,11 @@ class ReviewDesaNonaktifTest extends TestCase
     {
         $uniqueSuffix = uniqid();
 
-        // Inactive desa 15 days ago (within 1 month, within 6 months)
-        $desa15Hari = Desa::factory()->create([
-            'nama_desa' => 'Desa15Hari_' . $uniqueSuffix,
-            'updated_at' => now()->subDays(15),
-            'tgl_akses_lokal' => now()->subDays(15),
+        // Inactive desa 45 days ago (outside 30-day window, within 2 months)
+        $desa45Hari = Desa::factory()->create([
+            'nama_desa' => 'Desa45Hari_' . $uniqueSuffix,
+            'updated_at' => now()->subDays(45),
+            'tgl_akses_lokal' => now()->subDays(45),
             'tgl_akses_hosting' => null,
             'jenis' => 1,
         ]);
@@ -200,14 +218,24 @@ class ReviewDesaNonaktifTest extends TestCase
             'jenis' => 1,
         ]);
 
-        // 1. Filter: 1 Bulan Terakhir (akses=6)
+        // 1. Filter: 2 Bulan Terakhir (akses=2)
+        $responseBulan2 = $this->actingAs($this->user)
+            ->get('/review/non-aktif?akses=2&length=999', [
+                'X-Requested-With' => 'XMLHttpRequest',
+            ]);
+        $responseBulan2->assertStatus(200);
+        $namesBulan2 = collect($responseBulan2->json('data'))->pluck('nama_desa')->toArray();
+        $this->assertContains($desa45Hari->nama_desa, $namesBulan2);
+        $this->assertNotContains($desa250Hari->nama_desa, $namesBulan2);
+
+        // 1b. Filter: 1 Bulan Terakhir (akses=6) — irisan dengan "tidak aktif 30 hari" selalu kosong
         $responseBulan1 = $this->actingAs($this->user)
             ->get('/review/non-aktif?akses=6&length=999', [
                 'X-Requested-With' => 'XMLHttpRequest',
             ]);
         $responseBulan1->assertStatus(200);
         $namesBulan1 = collect($responseBulan1->json('data'))->pluck('nama_desa')->toArray();
-        $this->assertContains($desa15Hari->nama_desa, $namesBulan1);
+        $this->assertNotContains($desa45Hari->nama_desa, $namesBulan1);
         $this->assertNotContains($desa60Hari->nama_desa, $namesBulan1);
         $this->assertNotContains($desa250Hari->nama_desa, $namesBulan1);
 
@@ -218,7 +246,7 @@ class ReviewDesaNonaktifTest extends TestCase
             ]);
         $responseBulan6->assertStatus(200);
         $namesBulan6 = collect($responseBulan6->json('data'))->pluck('nama_desa')->toArray();
-        $this->assertContains($desa15Hari->nama_desa, $namesBulan6);
+        $this->assertContains($desa45Hari->nama_desa, $namesBulan6);
         $this->assertContains($desa60Hari->nama_desa, $namesBulan6);
         $this->assertNotContains($desa250Hari->nama_desa, $namesBulan6);
 
@@ -229,7 +257,7 @@ class ReviewDesaNonaktifTest extends TestCase
             ]);
         $responseSblm6->assertStatus(200);
         $namesSblm6 = collect($responseSblm6->json('data'))->pluck('nama_desa')->toArray();
-        $this->assertNotContains($desa15Hari->nama_desa, $namesSblm6);
+        $this->assertNotContains($desa45Hari->nama_desa, $namesSblm6);
         $this->assertNotContains($desa60Hari->nama_desa, $namesSblm6);
         $this->assertContains($desa250Hari->nama_desa, $namesSblm6);
     }

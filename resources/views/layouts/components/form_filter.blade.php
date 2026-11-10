@@ -77,8 +77,8 @@
                     <select class="select2 form-control-sm" id="akses" name="akses"
                         data-placeholder="Semua Status" style="width: 100%;">
                         <option selected value="0">Semua Status</option>
-                        <option value="4">7 Hari Terakhir</option>
-                        <option value="6">1 Bulan Terakhir</option>
+                        <option value="4">{{ ($labelAksesAktif ?? false) ? 'Aktif Mingguan (7 hari)' : '7 Hari Terakhir' }}</option>
+                        <option value="6">{{ ($labelAksesAktif ?? false) ? 'Aktif Bulanan (30 hari)' : '1 Bulan Terakhir' }}</option>
                         <option value="7">3 Bulan Terakhir</option>
                         <option value="8">6 Bulan Terakhir</option>
                         <option value="2">2 Bulan Terakhir</option>
