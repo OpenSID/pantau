@@ -3,7 +3,7 @@
 @section('title', 'Desa Tidak Aktif')
 
 @section('content_header')
-    <h1>Desa Tidak Aktif<small class="font-weight-light ml-1 text-md">(Sejak tujuh hari terakhir)</small></h1>
+    <h1>Desa Tidak Aktif<small class="font-weight-light ml-1 text-md">(Tidak diakses dalam 30 hari terakhir)</small></h1>
 @stop
 
 @section('content')

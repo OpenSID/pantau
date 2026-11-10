@@ -23,7 +23,8 @@ class LaporanDesaAktifController extends Controller
         ];
 
         if ($request->ajax()) {
-            $_30HariLalu = Carbon::now()->subDays(29);
+            // Batas awal 30 hari kalender, sama dengan definisi Desa::scopeAktifBulanan().
+            $_30HariLalu = Carbon::now()->subDays(Desa::HARI_AKTIF_BULANAN)->startOfDay();
 
             $query = Desa::query()
                 ->select([
@@ -50,9 +51,12 @@ class LaporanDesaAktifController extends Controller
                 ->selectRaw(
                     "date_format(greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)), '%Y-%m-%d') as tgl_akses"
                 )
-                ->whereRaw(
-                    'greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 7 day'
-                );
+                // Definisi & cakupan sama dengan kartu "Desa Aktif" di dashboard admin (Desa::scopeJumlahDesa).
+                ->aktifBulanan()
+                ->desaValid()
+                ->when(session('provinsi'), function ($q, $provinsi) {
+                    $q->where('desa.kode_provinsi', $provinsi->kode_prov);
+                });
 
             $this->applyFilters($query, $fillters);
 
@@ -113,13 +117,13 @@ class LaporanDesaAktifController extends Controller
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) < now() - interval 4 month');
             })
             ->when($fillters['akses'] == 4, function ($q) {
-                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 7 day');
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval '.Desa::HARI_AKTIF_MINGGUAN.' day');
             })
             ->when($fillters['akses'] == 5, function ($q) {
-                $q->whereRaw("desa.versi_lokal <> '' and desa.versi_hosting is null and coalesce(desa.tgl_akses_lokal, 0) >= now() - interval 7 day");
+                $q->whereRaw("desa.versi_lokal <> '' and desa.versi_hosting is null and coalesce(desa.tgl_akses_lokal, 0) >= DATE(now() - interval ".Desa::HARI_AKTIF_BULANAN.' day)');
             })
             ->when($fillters['akses'] == 6, function ($q) {
-                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval 29 day)');
+                $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= DATE(now() - interval '.Desa::HARI_AKTIF_BULANAN.' day)');
             })
             ->when($fillters['akses'] == 7, function ($q) {
                 $q->whereRaw('greatest(coalesce(desa.tgl_akses_lokal, 0), coalesce(desa.tgl_akses_hosting, 0)) >= now() - interval 3 month');
