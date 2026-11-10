@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,25 +20,28 @@ class NotifikasiDesa extends Model
      * Non-aktifkan notififikasi untuk desa, asumsi saat ini
      * setiap notifikasi hanya dikirim sekali.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      * @param mixed $notif
      * @param mixed $desaId
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return void
      */
-    public function scopeNonAktifkan($query, $notif, $desaId)
+    public function scopeNonAktifkan(Builder $query, $notif, $desaId)
     {
-        // foreach ($notif as $data) {
-        //     $query->updateOrCreate(
-        //         ['id_notifikasi' => $data->id, 'id_desa' => $desaId],
-        //         ['status' => 0, 'tgl_kirim' => now()]
-        //     );
-        // }
+        if ($notif->isEmpty()) {
+            return;
+        }
 
-        $notif->each(function ($item) use ($query, $desaId) {
-            $query->updateOrCreate(
-                ['id_notifikasi' => $item->id, 'id_desa' => $desaId],
-                ['status' => 0, 'tgl_kirim' => now()]
-            );
-        });
+        $now = now();
+        $rows = $notif->map(fn ($item) => [
+            'id_notifikasi' => $item->id,
+            'id_desa' => $desaId,
+            'status' => 0,
+            'tgl_kirim' => $now,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ])->all();
+
+        // Satu query untuk semua notifikasi, membutuhkan unique (id_notifikasi, id_desa)
+        $query->upsert($rows, ['id_notifikasi', 'id_desa'], ['status', 'tgl_kirim', 'updated_at']);
     }
 }
