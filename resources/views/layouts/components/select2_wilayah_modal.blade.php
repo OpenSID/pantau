@@ -2,9 +2,6 @@
     <script>
         $('#kode_provinsi').select2({
             ajax: {
-                headers: {
-                    "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-                },
                 url: '{{ url('api/v1/wilayah/provinsi') }}',
                 dataType: 'json',
                 delay: 400,
@@ -39,9 +36,6 @@
 
             $('#kode_kabupaten').select2({
                 ajax: {
-                    headers: {
-                        "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-                    },
                     url: '{{ url('api/v1/wilayah/kabupaten') }}',
                     dataType: 'json',
                     delay: 400,
@@ -76,9 +70,6 @@
             $('#kode_kecamatan').val('').trigger('change');
             $('#kode_kecamatan').select2({
                 ajax: {
-                    headers: {
-                        "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-                    },
                     url: '{{ url('api/v1/wilayah/kecamatan') }}',
                     dataType: 'json',
                     delay: 400,
@@ -111,9 +102,6 @@
         $('#kode_kecamatan').on('select2:select', function(e) {
             $('#kode_desa').select2({
                 ajax: {
-                    headers: {
-                        "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-                    },
                     url: '{{ url('api/v1/wilayah/desa') }}',
                     dataType: 'json',
                     delay: 400,

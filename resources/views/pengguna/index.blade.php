@@ -239,9 +239,6 @@
         dropdownParent: $('#edit-modal'),
         width: '100%',
         ajax: {
-            headers: {
-                "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-            },
             url: "{{ url('api/v1/wilayah/provinsi') }}",
             dataType: 'json',
             delay: 400,
@@ -271,9 +268,6 @@
         dropdownParent: $('#edit-modal'),
         width: '100%',
         ajax: {
-            headers: {
-                "Authorization": `Bearer {{ config('tracksid.sandi.sanctum_token') }}`,
-            },
             url: "{{ url('api/v1/wilayah/kabupaten') }}",
             dataType: 'json',
             delay: 400,

@@ -18,8 +18,10 @@ use App\Http\Controllers\Api\TrackOpenkabController;
 |
 */
 
+// Data wilayah bersifat publik (dipakai filter select2 di halaman publik & admin),
+// jadi tidak memerlukan token. Dilindungi rate limiting.
 Route::prefix('wilayah')
-    ->middleware(['auth:sanctum', 'ability:pantau-wilayah'])
+    ->middleware(['throttle:api'])
     ->group(function () {
         Route::get('/', [WilayahController::class, 'index']);
         Route::get('provinsi', [WilayahController::class, 'provinsi']);
