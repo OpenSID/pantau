@@ -171,7 +171,7 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $jumlahDesa->kabupaten_online }}</h3>
-                            <p>Kabupaten Pengguna Premium</p>
+                            <p>Kabupaten Pengguna Online</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
