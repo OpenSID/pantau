@@ -5,9 +5,20 @@ namespace App\Providers;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+
+// New imports
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Gate;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Register the Excel facade alias (moved from config/app.php)
+        AliasLoader::getInstance()->alias('Excel', \Maatwebsite\Excel\Facades\Excel::class);
     }
 
     /**
@@ -30,6 +42,55 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootLogQuery();
         $this->bootQueryBuilderMacros();
+
+        // Rate Limiter from RouteServiceProvider
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        // Gates from AuthServiceProvider
+        Gate::define('is-admin', function (Authenticatable $user) {
+            return $user->hasRole('Administrator');
+        });
+
+        Gate::define('is-admin-wilayah', function (Authenticatable $user) {
+            return $user->hasRole('Admin Wilayah');
+        });
+
+        // Event listeners from EventServiceProvider
+        Event::listen(BuildingMenu::class, function (BuildingMenu $event) {
+            if (Auth::check() === false) {
+                $event->menu->add([
+                    'text' => '',
+                    'url' => 'login',
+                    'icon' => 'fas fa-sign-in-alt',
+                    'topnav_right' => true,
+                ]);
+            }
+
+            foreach (pantau_wilayah_khusus() as $key => $val) {
+                $event->menu->addIn('khusus', [
+                    'text' => $val,
+                    'url' => "sesi/provinsi/{$key}",
+                    'active' => session('provinsi.kode_prov') == $key ? true : false,
+                ]);
+            }
+
+            if (session('pantau') == 'opensid' || session('pantau') == null) {
+                foreach (config('opensid.menu') as $key => $val) {
+                    $event->menu->addBefore('utama', $val);
+                }
+            }
+
+            if (session('pantau') == 'opendk') {
+                foreach (config('opendk.menu') as $key => $val) {
+                    $event->menu->addBefore('utama', $val);
+                }
+                foreach (config('opendk.title') as $key => $val) {
+                    Config::set("adminlte.{$key}", $val);
+                }
+            }
+        });
     }
 
     protected function bootQueryBuilderMacros()

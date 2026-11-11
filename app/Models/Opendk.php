@@ -58,6 +58,30 @@ class Opendk extends Model
         return $query->filterDatatable($fillters)->select('*');
     }
 
+    /**
+     * Scope pengguna OpenDK untuk datatable dengan whitelist kolom aman.
+     * Tidak menyertakan data sensitif seperti url, peta_wilayah, batas_wilayah,
+     * nama_camat, jumlah_*, dan alamat.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePengguna($query)
+    {
+        return $query->select([
+            'kode_kecamatan',
+            'kode_kabupaten',
+            'kode_provinsi',
+            'nama_kecamatan',
+            'nama_kabupaten',
+            'nama_provinsi',
+            'versi',
+            'sebutan_wilayah',
+            'updated_at',
+            'created_at',
+        ]);
+    }
+
     public function scopeKabupaten($query, $fillters = [])
     {
         return $query->filterDatatable($fillters)->distinct('kode_kabupaten, nama_kabupaten, nama_provinsi, kode_provinsi')->select(['kode_kabupaten', 'nama_kabupaten', 'nama_provinsi', 'kode_provinsi']);

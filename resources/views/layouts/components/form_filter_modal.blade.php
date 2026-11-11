@@ -77,11 +77,15 @@
                     <select class="select2 form-control-sm" id="akses" name="akses"
                         data-placeholder="Semua Status" style="width: 100%;">
                         <option selected value="0">Semua Status</option>
+                        <option value="4">7 Hari Terakhir</option>
+                        <option value="6">1 Bulan Terakhir</option>
+                        <option value="7">3 Bulan Terakhir</option>
+                        <option value="8">6 Bulan Terakhir</option>
+                        <option value="2">2 Bulan Terakhir</option>
+                        <option value="1">Sebelum 2 Bulan yang Lalu</option>
+                        <option value="3">Sebelum 4 Bulan yang Lalu</option>
+                        <option value="9">Sebelum 6 Bulan yang Lalu</option>
                         <option value="5">Desa aktif hanya offline</option>
-                        <option value="4">Sejak tujuh hari yang lalu</option>
-                        <option value="2">Sejak dua bulan yang lalu</option>
-                        <option value="1">Sebelum dua bulan yang lalu</option>
-                        <option value="3">Sebelum empat bulan yang lalu</option>
                     </select>
                 </div>
             </div>

@@ -397,7 +397,7 @@ class WebsiteDashboardController extends Controller
             'provinsi_pengguna_opensid' => Desa::selectRaw('nama_provinsi, count(*) as total')->orderBy('total', 'desc')->groupBy('nama_provinsi')->get(),
             'versi_pbb' => lastrelease_pbb(),
             'latestPremiumVersion' => 'v'.lastrelease_opensid().'-premium',
-            'latestUmumVersion' => 'v'.lastrelease_opensid(),
+            'latestUmumVersion' => 'v'.lastrelease_opensid_umum(),
         ]);
     }
 

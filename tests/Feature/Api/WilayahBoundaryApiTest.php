@@ -5,9 +5,9 @@ namespace Tests\Feature\Api;
 use App\Models\Region;
 use App\Models\WilayahBoundary;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\Feature\Api\TracksidApiTest;
 
-class WilayahBoundaryApiTest extends TracksidApiTest
+
+class WilayahBoundaryApiTest extends TracksidApiTestCase
 {
     use DatabaseTransactions;
 

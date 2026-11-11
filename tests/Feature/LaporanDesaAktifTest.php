@@ -51,10 +51,11 @@ class LaporanDesaAktifTest extends TestCase
 
     public function test_active_desa_is_included_in_response()
     {
-        // Create active desa (within 30 days)
+        // Create active desa (within 7 days)
         $desa = Desa::factory()->create([
             'nama_desa' => 'DesaTestAktif_' . uniqid(),
-            'updated_at' => now()->subDays(5),
+            'updated_at' => now()->subDays(3),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         $response = $this->actingAs($this->user)
@@ -67,6 +68,32 @@ class LaporanDesaAktifTest extends TestCase
 
         $names = collect($data)->pluck('nama_desa')->toArray();
         $this->assertContains($desa->nama_desa, $names);
+
+        $desaData = collect($data)->firstWhere('nama_desa', $desa->nama_desa);
+        $this->assertNotNull($desaData);
+        $this->assertArrayHasKey('tgl_akses', $desaData);
+        $this->assertEquals(now()->subDays(3)->format('Y-m-d'), $desaData['tgl_akses']);
+    }
+
+    public function test_inactive_desa_is_excluded_from_response()
+    {
+        // Create inactive desa (> 7 days)
+        $desa = Desa::factory()->create([
+            'nama_desa' => 'DesaTestInaktif_' . uniqid(),
+            'updated_at' => now()->subDays(10),
+            'tgl_akses_lokal' => now()->subDays(10),
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->get('/laporan/desa-aktif?length=999', [
+                'X-Requested-With' => 'XMLHttpRequest',
+            ]);
+
+        $response->assertStatus(200);
+        $data = $response->json('data');
+
+        $names = collect($data)->pluck('nama_desa')->toArray();
+        $this->assertNotContains($desa->nama_desa, $names);
     }
 
     public function test_akses_count_is_present_in_response()
@@ -74,6 +101,7 @@ class LaporanDesaAktifTest extends TestCase
         $desa = Desa::factory()->create([
             'nama_desa' => 'DesaAksesCount_' . uniqid(),
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         // Create recent akses records (within 30 days)
@@ -109,12 +137,14 @@ class LaporanDesaAktifTest extends TestCase
             'nama_desa' => 'DesaJawa_' . $uniqueSuffix,
             'kode_provinsi' => '99',
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         $desaSumatra = Desa::factory()->create([
             'nama_desa' => 'DesaSumatra_' . $uniqueSuffix,
             'kode_provinsi' => '98',
             'updated_at' => now(),
+            'tgl_akses_lokal' => now()->subDays(3),
         ]);
 
         $response = $this->actingAs($this->user)

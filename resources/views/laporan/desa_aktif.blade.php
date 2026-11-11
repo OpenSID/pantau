@@ -46,6 +46,7 @@
                                     <th>Jumlah Artikel</th>
                                     <th>Jumlah Mutasi Penduduk</th>
                                     <th>Jumlah Dokumen</th>
+                                    <th>Akses Terakhir</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -90,6 +91,10 @@
                 $('#akses').val('5').change();
                 filter_open();
                 break;
+            case '6':
+                $('#akses').val('6').change();
+                filter_open();
+                break;
 
             default:
                 break;
@@ -127,13 +132,16 @@
                     data: 'nama_desa'
                 },
                 {
-                    data: 'akses_count'
+                    data: 'akses_count',
+                    searchable: false
                 },
                 {
-                    data: 'akses_count'
+                    data: 'akses_count',
+                    searchable: false
                 },
                 {
-                    data: 'jml_surat_tte'
+                    data: 'jml_surat_tte',
+                    searchable: false
                 },
                 {
                     data: 'jml_mandiri',
@@ -151,6 +159,11 @@
                 {
                     data: 'jml_dokumen',
                     searchable: false,
+                },
+                {
+                    data: 'tgl_akses',
+                    searchable: false,
+                    defaultContent: '-'
                 } ],
             order: [
                 [2, 'desc']

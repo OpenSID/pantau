@@ -14,6 +14,7 @@ class SecurityHelperTest extends TestCase
     {
         $trustedUrls = [
             'https://api.github.com/repos/OpenSID/rilis-premium/releases/latest',
+            'https://api.github.com/repos/OpenSID/OpenSID/releases/latest',
             'https://api.github.com/repos/OpenSID/rilis-pbb/releases/latest',
             'https://api.github.com/repos/OpenSID/opendk/releases/latest',
             'https://api.github.com/repos/OpenSID/rilis-opensid-api/releases/latest',

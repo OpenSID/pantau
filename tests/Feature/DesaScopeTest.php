@@ -248,23 +248,67 @@ class DesaScopeTest extends TestCase
 
     public function test_scope_jumlah_desa_counts_inactive_desa()
     {
-        // Create inactive desa (last access > 4 months ago)
+        // Act as Admin Wilayah
+        $this->actingAs($this->adminWilayahUser);
+
+        $initialInactiveCount = Desa::jumlahDesa()->first()->tidak_aktif ?? 0;
+
+        // Create desa dengan akses 2 bulan lalu (masuk rentang tidak aktif 30 hari s/d 4 bulan)
         Desa::create([
-            'nama_desa' => 'Desa Tidak Aktif',
+            'nama_desa' => 'Desa Tidak Aktif 2 Bulan',
             'kode_desa' => '1201001006',
+            'kode_provinsi' => '12',
+            'kode_kabupaten' => '1201',
+            'versi_hosting' => '22.06',
+            'tgl_akses_hosting' => now()->subMonths(2),
+        ]);
+
+        // Create desa dengan akses 5 bulan lalu (lebih dari 4 bulan lalu, TIDAK boleh terhitung)
+        Desa::create([
+            'nama_desa' => 'Desa Terlalu Lama',
+            'kode_desa' => '1201001007',
             'kode_provinsi' => '12',
             'kode_kabupaten' => '1201',
             'versi_hosting' => '22.06',
             'tgl_akses_hosting' => now()->subMonths(5),
         ]);
 
-        // Act as Admin Wilayah
-        $this->actingAs($this->adminWilayahUser);
-
         // Execute scopeJumlahDesa
         $result = Desa::jumlahDesa()->first();
 
-        // Assert tidak_aktif is counted
-        $this->assertGreaterThanOrEqual(1, $result->tidak_aktif, 'tidak_aktif should be at least 1');
+        // Assert hanya desa dalam rentang 30 hari s/d 4 bulan yang bertambah dihitung
+        $this->assertEquals($initialInactiveCount + 1, $result->tidak_aktif, 'tidak_aktif hanya menghitung desa dalam rentang 30 hari s/d 4 bulan');
+    }
+
+    public function test_scope_fillter_akses_3_matches_inactive_range()
+    {
+        $this->actingAs($this->adminWilayahUser);
+
+        $initialCount = Desa::fillter(['akses' => 3])->count();
+
+        // Desa 2 bulan lalu (masuk rentang)
+        Desa::create([
+            'nama_desa' => 'Desa Filter 2 Bulan',
+            'kode_desa' => '1201001008',
+            'kode_provinsi' => '12',
+            'kode_kabupaten' => '1201',
+            'versi_hosting' => '22.06',
+            'tgl_akses_hosting' => now()->subMonths(2),
+        ]);
+
+        // Desa 5 bulan lalu (> 4 bulan, tidak masuk rentang)
+        Desa::create([
+            'nama_desa' => 'Desa Filter 5 Bulan',
+            'kode_desa' => '1201001009',
+            'kode_provinsi' => '12',
+            'kode_kabupaten' => '1201',
+            'versi_hosting' => '22.06',
+            'tgl_akses_hosting' => now()->subMonths(5),
+        ]);
+
+        $afterCount = Desa::fillter(['akses' => 3])->count();
+
+        $this->assertEquals($initialCount + 1, $afterCount, 'Filter akses 3 hanya menghitung desa dalam rentang 30 hari s/d 4 bulan');
     }
 }
+

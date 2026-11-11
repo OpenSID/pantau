@@ -4,8 +4,7 @@
             <table class="table" id="table-desa-baru">
                 <thead>
                     <tr>
-                        <th>No</th>                        
-                        <th>Id Perangkat</th>
+                        <th>No</th>                                                
                         <th>Desa</th>
                         <th>Kecamatan</th>
                         <th>Kabupaten</th>
@@ -49,10 +48,7 @@
                     name: 'DT_RowIndex',
                     searchable: false,
                     orderable: false
-                },
-                {
-                    data: 'id_device'
-                },
+                },                
                 {
                     data: 'desa.nama_desa'
                 },
@@ -70,7 +66,7 @@
                     searchable: false
                 },
                 {
-                    data: 'updated_at',
+                    data: 'akses_terakhir',
                     searchable: false
                 },
             ],
