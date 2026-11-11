@@ -34,7 +34,6 @@ QWEN.md
 .qwen
 /template_ai/
 
-/docs/
 docs
 .opencode/
 .specify/
@@ -43,3 +42,4 @@ specs/
 .specify/
 specs/
 .claude/
+CLAUDE.md

@@ -16,6 +16,12 @@ class Desa extends Model
 
     public const TEMA_PRO = ['Silir', 'Batuah', 'Pusako', 'DeNava', 'Lestari'];
 
+    /**
+     * Tema bawaan OpenSID. Satu-satunya sumber daftar untuk kartu, tabel, dan total
+     * di laporan tema bawaan. Tidak boleh beririsan dengan TEMA_PRO.
+     */
+    public const TEMA_BAWAAN = ['Esensi', 'Natra', 'Palanta'];
+
     /** {@inheritdoc} */
     protected $table = 'desa';
 
@@ -884,7 +890,7 @@ class Desa extends Model
 
     public function scopeTema($query)
     {
-        return $query->whereIn('tema', ['esensi', 'natra', 'palanta'])->count();
+        return $query->whereIn('tema', self::TEMA_BAWAAN)->count();
     }
 
     public function scopeHostingOnline($query)
