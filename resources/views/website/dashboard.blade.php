@@ -85,7 +85,12 @@
     })
     
     function updateData(){
-        const params = {period : $('input[name=periods]').val(), provinsi : $('select[name=provinsi]').val(), kabupaten : $('select[name=kabupaten]').val(), kecamatan : $('select[name=kecamatan]').val()}        
+        const params = {
+            period: $('input[name=periods]').val(),
+            kode_provinsi: $('select[name=provinsi]').val(),
+            kode_kabupaten: $('select[name=kabupaten]').val(),
+            kode_kecamatan: $('select[name=kecamatan]').val()
+        }
 
         $.ajax({
             url: 'api/web/summary',
@@ -144,7 +149,6 @@
                         $('#app-layanandesa-count2').text(data.layanandesa)
                         $('#app-keloladesa-count2').text(data.keloladesa)
                         $('#app-pbb-count2').text(data.pbb)
-                        $('#app-openkab-count2').text(data.openkab)
                     },
                     error: function(error) {
                         console.error("Error fetching chart data: ", error);
