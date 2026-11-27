@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Website;
 
+use App\Models\TrackKeloladesa;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
@@ -77,6 +79,40 @@ class WebsiteDashboardFilterTest extends TestCase
         $this->getJson($this->url('api/web/summary-aktif', []))
             ->assertOk()
             ->assertJsonStructure(['openkab', 'opensid', 'opendk', 'layanandesa', 'keloladesa', 'pbb']);
+    }
+
+    #[DataProvider('kodeWilayahTidakValidProvider')]
+    public function test_kode_wilayah_tidak_valid_ditolak_422(array $filter, string $field)
+    {
+        foreach (['api/web/summary', 'api/web/summary-aktif', 'api/web/chart-usage'] as $path) {
+            $this->getJson($this->url($path, $filter))
+                ->assertStatus(422)
+                ->assertJsonValidationErrors([$field]);
+        }
+    }
+
+    public static function kodeWilayahTidakValidProvider(): array
+    {
+        return [
+            'injeksi provinsi' => [['kode_provinsi' => "x' OR '1'='1"], 'kode_provinsi'],
+            'injeksi kabupaten' => [['kode_kabupaten' => "99.98' OR '1'='1"], 'kode_kabupaten'],
+            'injeksi kecamatan' => [['kode_kecamatan' => "99.98.01' OR '1'='1"], 'kode_kecamatan'],
+            'injeksi lewat nama lama' => [['provinsi' => "x' OR '1'='1"], 'kode_provinsi'],
+            'format salah tingkat' => [['kode_kecamatan' => '99.98'], 'kode_kecamatan'],
+            'array' => [['kode_provinsi' => ['99']], 'kode_provinsi'],
+        ];
+    }
+
+    public function test_scope_wilayah_keloladesa_memakai_binding()
+    {
+        $payload = "' OR '1'='1";
+
+        $this->assertSame(2, TrackKeloladesa::provinsi('99')->count());
+        $this->assertSame(0, TrackKeloladesa::provinsi('99'.$payload)->count());
+        $this->assertSame(0, TrackKeloladesa::kabupaten('99.98'.$payload)->count());
+        $this->assertSame(0, TrackKeloladesa::kecamatan('99.98.01'.$payload)->count());
+        $this->assertSame(0, TrackKeloladesa::filter(['kode_desa' => '99.98.01.2001'.$payload])->count());
+        $this->assertSame(1, TrackKeloladesa::filter(['kode_desa' => '99.98.01.2001'])->count());
     }
 
     private function assertSummary(array $filter, array $expected, array $desaAktif): void

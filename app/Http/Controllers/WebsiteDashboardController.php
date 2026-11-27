@@ -11,8 +11,10 @@ use App\Models\TrackMobile;
 use App\Models\Wilayah;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class WebsiteDashboardController extends Controller
@@ -327,17 +329,38 @@ class WebsiteDashboardController extends Controller
     }
 
     /**
-     * Normalisasi parameter filter wilayah.
+     * Normalisasi dan validasi parameter filter wilayah.
      * Nama standar adalah kode_provinsi, kode_kabupaten, kode_kecamatan;
      * nama lama (provinsi, kabupaten, kecamatan) tetap diterima sebagai fallback.
+     * Format kode yang tidak valid ditolak dengan respons 422.
+     *
+     * @throws HttpResponseException
      */
     private function wilayahParams(Request $request): array
     {
-        return [
+        $params = [
             'kode_provinsi' => $request->get('kode_provinsi') ?: $request->get('provinsi'),
             'kode_kabupaten' => $request->get('kode_kabupaten') ?: $request->get('kabupaten'),
             'kode_kecamatan' => $request->get('kode_kecamatan') ?: $request->get('kecamatan'),
         ];
+
+        $validator = Validator::make($params, [
+            'kode_provinsi' => ['nullable', 'string', 'regex:/^\d{2}$/'],
+            'kode_kabupaten' => ['nullable', 'string', 'regex:/^\d{2}\.\d{2}$/'],
+            'kode_kecamatan' => ['nullable', 'string', 'regex:/^\d{2}\.\d{2}\.\d{2}$/'],
+        ], [
+            'regex' => 'Format :attribute tidak valid.',
+            'string' => 'Format :attribute tidak valid.',
+        ]);
+
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json([
+                'message' => 'Parameter filter wilayah tidak valid.',
+                'errors' => $validator->errors(),
+            ], 422));
+        }
+
+        return $params;
     }
 
     public function openkab(Request $request)
