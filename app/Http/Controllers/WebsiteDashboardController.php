@@ -362,6 +362,7 @@ class WebsiteDashboardController extends Controller
             'status' => $request->status,
             'akses' => $request->akses,
             'tte' => $request->tte,
+            'period' => Desa::parsePeriode($request->period) ? $request->period : null,
         ];
 
         return view('website.opensid_data', compact('fillters'));

@@ -471,6 +471,7 @@ class DashboardController extends Controller
             'tte'            => $request->tte,
             'versi_lokal'    => '',
             'versi_hosting'  => '',
+            'period'         => $request->period,
         ];
 
         if ($request->ajax()) {

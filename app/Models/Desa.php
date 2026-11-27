@@ -80,6 +80,56 @@ class Desa extends Model
     }
 
     /**
+     * Ubah string periode daterangepicker "Y-m-d - Y-m-d" menjadi rentang datetime.
+     *
+     * Dipakai bersama oleh kartu desa aktif (scopeJumlahDesa) dan filter tabel
+     * (scopeFillter) agar keduanya memakai satu definisi rentang yang sama.
+     *
+     * @return array{0: string, 1: string}|null [awal 00:00:00, akhir 23:59:59] atau null jika tidak valid
+     */
+    public static function parsePeriode($period): ?array
+    {
+        if (! is_string($period) || $period === '') {
+            return null;
+        }
+
+        $dates = explode(' - ', $period);
+        if (count($dates) !== 2) {
+            return null;
+        }
+
+        $parsed = [];
+        foreach ($dates as $date) {
+            $date = trim($date);
+            if (! preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+                return null;
+            }
+
+            try {
+                $carbon = Carbon::createFromFormat('!Y-m-d', $date);
+            } catch (\Throwable $e) {
+                return null;
+            }
+
+            // Tolak tanggal yang "meluap" seperti 2025-13-01 atau 2025-02-30
+            if (! $carbon || $carbon->format('Y-m-d') !== $date) {
+                return null;
+            }
+
+            $parsed[] = $carbon;
+        }
+
+        if ($parsed[0]->gt($parsed[1])) {
+            return null;
+        }
+
+        return [
+            $parsed[0]->format('Y-m-d').' 00:00:00',
+            $parsed[1]->format('Y-m-d').' 23:59:59',
+        ];
+    }
+
+    /**
      * Scope a query jumlah desa.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -128,45 +178,41 @@ class Desa extends Model
             ->selectRaw("(select count(distinct x.kode_kabupaten) from desa as x where x.versi_hosting <> '' {$states} {$filterWilayah}) kabupaten_online")
             ->selectRaw("(select count(id) from desa as x where x.jenis = 2 {$states} {$filterWilayah}) bukan_desa")
             ->selectRaw("(select count(id) from desa as x where greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) >= now() - interval 4 month and greatest(coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')) < DATE(now() - interval 29 day) {$states} {$filterWilayah}) tidak_aktif")
-            ->when($request->period, function ($query) use ($request, $states, $filterWilayah) {
-                $dates = explode(' - ', $request->period);
-                if (count($dates) === 2) {
-                    $start = $dates[0].' 00:00:00';
-                    $end = $dates[1].' 23:59:59';
-                    $query->selectRaw("
-                    (
-                        select count(id)
-                        from desa as x
-                        where greatest(
-                            coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
-                            coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
-                        ) between ? and ?
-                        {$states} {$filterWilayah}
-                    ) as aktif
-                    ", [$start, $end])
-                    ->selectRaw("
-                    (
-                        select count(id)
-                        from desa as x
-                        where x.versi_hosting <> ''
-                        and greatest(
-                            coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
-                            coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
-                        ) between ? and ?
-                        {$states} {$filterWilayah}
-                    ) as desa_online
-                    ", [$start, $end])
-                    ->selectRaw("
-                    (
-                        select count(id)
-                        from desa as x
-                        where x.versi_lokal <> ''
-                        and x.versi_hosting is null
-                        and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') between ? and ?
-                        {$states} {$filterWilayah}
-                    ) as desa_offline
-                    ", [$start, $end]);
-                }
+            ->when(self::parsePeriode($request->period), function ($query, $range) use ($states, $filterWilayah) {
+                [$start, $end] = $range;
+                $query->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where greatest(
+                        coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                        coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                    ) between ? and ?
+                    {$states} {$filterWilayah}
+                ) as aktif
+                ", [$start, $end])
+                ->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where x.versi_hosting <> ''
+                    and greatest(
+                        coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00'),
+                        coalesce(x.tgl_akses_hosting, '1970-01-01 00:00:00')
+                    ) between ? and ?
+                    {$states} {$filterWilayah}
+                ) as desa_online
+                ", [$start, $end])
+                ->selectRaw("
+                (
+                    select count(id)
+                    from desa as x
+                    where x.versi_lokal <> ''
+                    and x.versi_hosting is null
+                    and coalesce(x.tgl_akses_lokal, '1970-01-01 00:00:00') between ? and ?
+                    {$states} {$filterWilayah}
+                ) as desa_offline
+                ", [$start, $end]);
             }, function ($query) use ($states, $filterWilayah) {
                 $query->selectRaw("
                 (
@@ -617,6 +663,7 @@ class Desa extends Model
             'domain' => null,
             'jumlah_domain' => null,
             'punya_riwayat' => null,
+            'period' => null,
         ], $fillters);
 
         return $query->select(['*'])
@@ -668,6 +715,13 @@ class Desa extends Model
             })
             ->when($fillters['akses'] == 9, function ($query) {
                 $query->whereRaw('greatest(coalesce(tgl_akses_lokal, 0), coalesce(tgl_akses_hosting, 0)) < now() - interval 6 month');
+            })
+            // Rentang akses terakhir; rumus identik dengan kolom "aktif" di scopeJumlahDesa
+            ->when(self::parsePeriode($fillters['period']), function ($query, $range) {
+                $query->whereRaw(
+                    "greatest(coalesce(tgl_akses_lokal, '1970-01-01 00:00:00'), coalesce(tgl_akses_hosting, '1970-01-01 00:00:00')) between ? and ?",
+                    $range
+                );
             })
             ->when($fillters['versi_lokal'], function ($query, $versi) {
                 $query->where('versi_lokal', $versi);
