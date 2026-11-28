@@ -110,10 +110,12 @@ class TrackController extends Controller
                     $request->merge(['desa_id' => $desa->id])->only(['desa_id', 'url_referrer', 'request_uri', 'client_ip', 'external_ip', 'opensid_version', 'tgl'])
                 );
             }
+            DB::commit();
+
+            // Notifikasi dibaca dan ditandai setelah transaksi selesai, agar koneksi
+            // tidak tertahan selama proses per notifikasi berjalan.
             $notifikasi = Notifikasi::semuaNotifDesa($desa->id);
             NotifikasiDesa::nonAktifkan(collect($notifikasi), $desa->id);
-
-            DB::commit();
 
             if ($desa->isPemdaHosting() && $desa->isNew()) {
                 $userIdTelegram = Cache::get('id_telegram');
@@ -136,7 +138,9 @@ STR;
             return response()->json($notifikasi);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
 
             return response()->json('Failed', 422);
         }

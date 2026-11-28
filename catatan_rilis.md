@@ -1,4 +1,4 @@
-Di rilis v2611.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
+Di rilis v2612.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penambahan Fitur
 
@@ -10,3 +10,4 @@ Di rilis v2611.0.0 berisi perbaikan yang diminta Komunitas Open Desa.
 
 #### Penyesuaian Teknis
 
+1. [#734](https://github.com/OpenSID/pantau/issues/734) Too many connections di MySQL production akibat endpoint track desa.
